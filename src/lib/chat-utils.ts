@@ -1,0 +1,42 @@
+import type { ChatStatus } from "ai";
+import type { PromptInputMessage } from "@/components/ai-elements/prompt-input";
+import type { MyUIMessage } from "@/types/ui-message";
+
+export const canSubmitPromptMessage = (message: PromptInputMessage): boolean => {
+  const hasText = Boolean(message.text?.trim());
+  const hasAttachments = Boolean(message.files?.length);
+  return hasText || hasAttachments;
+};
+
+/**
+ * Returns true when a loading shimmer should be displayed for the assistant.
+ *
+ * Covers two cases:
+ *  1. status is "submitted" (request sent, no stream open yet)
+ *  2. status is "streaming" but the last assistant message has no text or
+ *     reasoning parts with actual content (stream is open, first token
+ *     hasn't arrived yet)
+ */
+export function shouldShowLoadingShimmer(status: ChatStatus, messages: MyUIMessage[]): boolean {
+  if (status === "submitted") return true;
+
+  if (status === "streaming") {
+    const lastAssistant = findLast(messages, (m) => m.role === "assistant");
+    if (!lastAssistant) return true;
+
+    const hasContent = lastAssistant.parts.some(
+      (part) => (part.type === "text" || part.type === "reasoning") && part.text.length > 0,
+    );
+
+    return !hasContent;
+  }
+
+  return false;
+}
+
+function findLast<T>(arr: T[], predicate: (item: T) => boolean): T | undefined {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (predicate(arr[i])) return arr[i];
+  }
+  return undefined;
+}
