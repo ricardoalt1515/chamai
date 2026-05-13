@@ -1,17 +1,12 @@
-import { createAmazonBedrock } from "@ai-sdk/amazon-bedrock";
 import { stepCountIs, ToolLoopAgent } from "ai";
 import { WATER_SECTOR_SYSTEM_PROMPT } from "@/ai/prompts/water-sector";
 import { loadSkillTool } from "@/ai/tools/load-skill";
+import { createBedrockProvider } from "@/lib/bedrock-provider";
 
 const MODEL_ID = "us.anthropic.claude-sonnet-4-6";
 
 export const courtReporterAgent = new ToolLoopAgent({
-  model: (() => {
-    const bedrock = createAmazonBedrock({
-      region: process.env.AWS_REGION || "us-east-1",
-    });
-    return bedrock(MODEL_ID);
-  })(),
+  model: createBedrockProvider()(MODEL_ID),
   instructions: `${WATER_SECTOR_SYSTEM_PROMPT}
 
 ## Available Skills

@@ -1,9 +1,9 @@
-import { createAmazonBedrock } from "@ai-sdk/amazon-bedrock";
 import { stepCountIs, ToolLoopAgent } from "ai";
 import { ASSISTANT_SYSTEM_PROMPT } from "@/ai/prompts/assistant";
 import { loadSkillTool } from "@/ai/tools/load-skill";
 import { getEnv } from "@/config/env";
 import { createGenerateDiscoveryReportBundleTool } from "@/lib/agents/tools/generate-discovery-report-bundle";
+import { createBedrockProvider } from "@/lib/bedrock-provider";
 import { renderPdfFromHtml } from "@/lib/reporting/playwright-renderer";
 import { renderExecutiveReportHtml } from "@/lib/reporting/templates/executive-report-template";
 import type { BlobStore } from "@/lib/storage/blob-store";
@@ -47,12 +47,7 @@ const generateDiscoveryReportBundleTool = createGenerateDiscoveryReportBundleToo
 });
 
 export const discoveryAgent = new ToolLoopAgent({
-  model: (() => {
-    const bedrock = createAmazonBedrock({
-      region: process.env.AWS_REGION || "us-east-1",
-    });
-    return bedrock(MODEL_ID);
-  })(),
+  model: createBedrockProvider()(MODEL_ID),
   instructions: `${ASSISTANT_SYSTEM_PROMPT}
 
 ## Available Skills

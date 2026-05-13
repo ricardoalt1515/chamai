@@ -1,4 +1,3 @@
-import { createAmazonBedrock } from "@ai-sdk/amazon-bedrock";
 import {
   convertToModelMessages,
   createUIMessageStream,
@@ -11,6 +10,7 @@ import { getEnv } from "@/config/env";
 import { MODELS } from "@/config/models";
 import type { StreamAgent } from "@/lib/agents/registry";
 import { getCurrentOwner, type OwnerContext } from "@/lib/auth/server";
+import { createBedrockProvider } from "@/lib/bedrock-provider";
 import {
   ATTACHMENT_ERROR_CODES,
   ChatRequestValidationError,
@@ -35,9 +35,7 @@ import type { MyUIMessage } from "@/types/ui-message";
 
 type GenerateTextFn = typeof generateText;
 
-const BEDROCK_PROVIDER = createAmazonBedrock({
-  region: process.env.AWS_REGION || "us-east-1",
-});
+const BEDROCK_PROVIDER = createBedrockProvider();
 
 const DEFAULT_BEDROCK_MODEL_ID = MODELS[0].runtimeModelId;
 
