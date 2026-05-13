@@ -15,19 +15,19 @@ Run this before archive/release. Local tests prove adapter wiring and fail-fast 
 
 ## Creating invited users
 
-For one-off manual setup, create users in the AWS Cognito console for the User Pool listed in `amplify_outputs.json` at `auth.user_pool_id`.
+For one-off manual setup, create users in the AWS Cognito console for the User Pool listed in `amplify_outputs.json` at `auth.user_pool_id`. For production operations, follow `docs/production-user-management.md`.
 
 For repeatable team setup, use the repo script:
 
 ```bash
 bun run auth:create-user user@example.com --dry-run
-bun run auth:create-user user@example.com --yes
+bun run auth:create-user user@example.com --env sandbox --yes
 ```
 
 The script reads `auth.aws_region` and `auth.user_pool_id` from `amplify_outputs.json`, calls Cognito `AdminCreateUser`, and lets Cognito generate and email the temporary password. Do not print or share temporary passwords manually. If the invitation needs to be resent, run:
 
 ```bash
-bun run auth:create-user user@example.com --resend --yes
+bun run auth:create-user user@example.com --env sandbox --resend --yes
 ```
 
 The caller's AWS credentials must have least-privilege access to `cognito-idp:AdminCreateUser` for this sandbox/deployed User Pool.

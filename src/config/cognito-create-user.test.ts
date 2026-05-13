@@ -18,7 +18,10 @@ describe("parseCreateCognitoUserArgs", () => {
     expect(parseCreateCognitoUserArgs(["User@Example.COM", "--resend"])).toEqual({
       dryRun: false,
       email: "user@example.com",
+      env: "outputs",
+      region: undefined,
       resend: true,
+      userPoolId: undefined,
       yes: false,
     });
   });
@@ -27,8 +30,32 @@ describe("parseCreateCognitoUserArgs", () => {
     expect(parseCreateCognitoUserArgs(["user@example.com", "--dry-run", "--yes"])).toEqual({
       dryRun: true,
       email: "user@example.com",
+      env: "outputs",
+      region: undefined,
       resend: false,
+      userPoolId: undefined,
       yes: true,
+    });
+  });
+
+  it("supports explicit production target flags", () => {
+    expect(
+      parseCreateCognitoUserArgs([
+        "user@example.com",
+        "--env",
+        "prod",
+        "--region=us-east-1",
+        "--user-pool-id",
+        "us-east-1_prod",
+      ]),
+    ).toEqual({
+      dryRun: false,
+      email: "user@example.com",
+      env: "prod",
+      region: "us-east-1",
+      resend: false,
+      userPoolId: "us-east-1_prod",
+      yes: false,
     });
   });
 
@@ -43,7 +70,7 @@ describe("describeCreateCognitoUserPlan", () => {
   it("prints the target environment before mutating Cognito", () => {
     expect(
       describeCreateCognitoUserPlan(
-        { dryRun: false, email: "user@example.com", resend: false, yes: true },
+        { env: "outputs", dryRun: false, email: "user@example.com", resend: false, yes: true },
         { region: "us-east-1", userPoolId: "pool-id" },
       ),
     ).toContain("User Pool: pool-id");
@@ -53,19 +80,48 @@ describe("describeCreateCognitoUserPlan", () => {
 describe("getCognitoUserPoolConfig", () => {
   it("extracts region and user pool id from Amplify outputs", () => {
     expect(
-      getCognitoUserPoolConfig({
-        auth: {
-          aws_region: "us-east-1",
-          user_pool_id: "us-east-1_example",
+      getCognitoUserPoolConfig(
+        {
+          env: "outputs",
         },
-      }),
+        {
+          auth: {
+            aws_region: "us-east-1",
+            user_pool_id: "us-east-1_example",
+          },
+        },
+      ),
     ).toEqual({ region: "us-east-1", userPoolId: "us-east-1_example" });
   });
 
+  it("uses explicit CLI config before Amplify outputs", () => {
+    expect(
+      getCognitoUserPoolConfig(
+        { env: "prod", region: "us-east-2", userPoolId: "us-east-2_prod" },
+        {
+          auth: {
+            aws_region: "us-east-1",
+            user_pool_id: "us-east-1_sandbox",
+          },
+        },
+      ),
+    ).toEqual({ region: "us-east-2", userPoolId: "us-east-2_prod" });
+  });
+
+  it("can read production config from environment variables", () => {
+    expect(
+      getCognitoUserPoolConfig(
+        { env: "prod" },
+        {},
+        { PROD_AWS_REGION: "us-east-1", PROD_COGNITO_USER_POOL_ID: "us-east-1_prod" },
+      ),
+    ).toEqual({ region: "us-east-1", userPoolId: "us-east-1_prod" });
+  });
+
   it("throws a clear error when Auth outputs are missing", () => {
-    expect(() => getCognitoUserPoolConfig({ auth: { aws_region: "us-east-1" } })).toThrow(
-      /auth\.aws_region, auth\.user_pool_id/,
-    );
+    expect(() =>
+      getCognitoUserPoolConfig({ env: "outputs" }, { auth: { aws_region: "us-east-1" } }),
+    ).toThrow(/explicit CLI\/env config/);
   });
 });
 
@@ -75,6 +131,7 @@ describe("buildAdminCreateUserInput", () => {
       buildAdminCreateUserInput({
         dryRun: false,
         email: "user@example.com",
+        env: "outputs",
         resend: false,
         userPoolId: "pool-id",
         yes: true,
@@ -96,6 +153,7 @@ describe("buildAdminCreateUserInput", () => {
       buildAdminCreateUserInput({
         dryRun: false,
         email: "user@example.com",
+        env: "outputs",
         resend: true,
         userPoolId: "pool-id",
         yes: true,
