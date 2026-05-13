@@ -6,11 +6,11 @@ import {
   validateUIMessages,
 } from "ai";
 import { nanoid } from "nanoid";
+import type { Agent } from "@/ai/agents/agent";
 import { getEnv } from "@/config/env";
 import { MODELS } from "@/config/models";
-import type { StreamAgent } from "@/lib/agents/registry";
 import { getCurrentOwner, type OwnerContext } from "@/lib/auth/server";
-import { createBedrockProvider } from "@/lib/bedrock-provider";
+import { bedrockProvider } from "@/lib/bedrock-provider";
 import {
   ATTACHMENT_ERROR_CODES,
   ChatRequestValidationError,
@@ -35,26 +35,18 @@ import type { MyUIMessage } from "@/types/ui-message";
 
 type GenerateTextFn = typeof generateText;
 
-const BEDROCK_PROVIDER = createBedrockProvider();
-
-const DEFAULT_BEDROCK_MODEL_ID = MODELS[0].runtimeModelId;
+const titleModel = bedrockProvider(MODELS[0].runtimeModelId);
 
 type Dependencies = {
   chatStore: ChatStore;
   blobStore: BlobStore;
-  agent: StreamAgent;
+  agent: Agent;
   generateText: GenerateTextFn;
   getOwner: () => Promise<OwnerContext>;
 };
 
 const titlePrompt = (text: string): string =>
   `Genera un título breve de máximo 6 palabras para esta conversación:\n\n${text}`;
-
-// Title generation model - using same model as main agent for consistency
-const createTitleModel = () => {
-  // Use Claude Sonnet 4.6 for title generation (same as main agent)
-  return BEDROCK_PROVIDER(DEFAULT_BEDROCK_MODEL_ID);
-};
 
 const sanitizeTitle = (title: string): string => {
   const next = title.replace(/[\n\r]+/g, " ").trim();
@@ -350,7 +342,7 @@ export const createChatPostHandler = (deps: Dependencies) => {
                 if (isNewThread && mustGenerateTitle) {
                   try {
                     const titleResult = await deps.generateText({
-                      model: createTitleModel(),
+                      model: titleModel,
                       prompt: titlePrompt(generatedText),
                     });
 
@@ -408,14 +400,12 @@ const getDefaultHandler = async (): Promise<ReturnType<typeof createChatPostHand
       })
     : (await import("@/lib/storage/amplify-blob-store")).createAmplifyBlobStore();
 
-  const { COURT_REPORTER_AGENT_ID } = await import("@/lib/agents/court-reporter-agent");
-  const { createDefaultAgentRegistry } = await import("@/lib/agents/registry");
-  const agentRegistry = await createDefaultAgentRegistry();
+  const { agent } = await import("@/ai/agents/agent");
 
   cachedHandler = createChatPostHandler({
     chatStore,
     blobStore,
-    agent: agentRegistry.get(COURT_REPORTER_AGENT_ID),
+    agent,
     generateText,
     getOwner: getCurrentOwner,
   });

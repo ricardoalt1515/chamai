@@ -16,7 +16,7 @@
 - Frontend routes: `app/page.tsx`, `app/c/[threadId]/page.tsx`, `app/layout.tsx`.
 - Chat API endpoint: `POST /api/chat` in `app/api/chat/route.ts`.
 - Server Actions used by UI live in `app/actions/*.ts` (`threads`, `messages`, `memory`).
-- Chat runtime uses AI SDK `ToolLoopAgent` (`src/lib/agents/discovery-agent.ts`, Court Reporter via `src/lib/agents/court-reporter-runtime.ts`), not Mastra workflows.
+- Chat runtime uses a single AI SDK `ToolLoopAgent` defined in `src/ai/agents/agent.ts`, wired into `src/lib/chat-handler.ts`. Not Mastra workflows.
 
 ## Commands
 
@@ -51,10 +51,7 @@
 
 ## Skill and Agent Wiring Gotchas
 
-- The active assistant toolchain is `loadSkill` only (`src/lib/agents/discovery-agent.ts`).
+- The active assistant toolchain is `loadSkill` only (`src/ai/agents/agent.ts`). System prompt lives in `src/ai/prompts/water-sector.md`.
 - `webSearchEnabled` is in request/draft types, but composer currently always sends `false` and no web-search tool is wired into the active agent.
 - UI supports `tool-updateWorkingMemory` rendering, but the active agent does not currently expose that tool.
-- If you add/remove skills, keep these in sync:
-  - skill list in `src/lib/agents/discovery-agent.ts`
-  - fallback error list in `src/ai/tools/load-skill.ts`
-  - `EXPECTED_SKILLS` in `src/ai/skills/skills-integration.test.ts`
+- Skills live under `src/ai/skills/<name>/SKILL.md`. The `loadSkillTool` (`src/ai/tools/load-skill.ts`) resolves them by directory name at runtime — no static list to keep in sync.

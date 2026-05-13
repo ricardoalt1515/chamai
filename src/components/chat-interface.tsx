@@ -16,7 +16,6 @@ import {
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
 import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
-import { DiscoveryReportBundle } from "@/components/ai-elements/discovery-report-bundle";
 import {
   Message,
   MessageAction,
@@ -333,22 +332,6 @@ export function ChatInterface({
                                     state={part.state}
                                     input={
                                       part.state !== "input-streaming" ? part.input : undefined
-                                    }
-                                  />
-                                );
-                              case "tool-generateDiscoveryReportBundle":
-                                return (
-                                  <DiscoveryReportBundle
-                                    key={`${message.id}-${i}`}
-                                    state={part.state}
-                                    input={
-                                      part.state === "input-available" ||
-                                      part.state === "output-available"
-                                        ? part.input
-                                        : undefined
-                                    }
-                                    output={
-                                      part.state === "output-available" ? part.output : undefined
                                     }
                                   />
                                 );

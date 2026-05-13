@@ -1,6 +1,5 @@
 import type { UIMessage } from "ai";
 import type { WorkingMemory } from "@/config/working-memory";
-import type { ReportBundleManifest, ReportBundleRequest } from "@/lib/reporting/schemas";
 
 // AI SDK 6 verification note (checked in node_modules/ai/src + docs):
 // - Tool definitions use `tool({ inputSchema, execute })`.
@@ -35,18 +34,6 @@ export type MyUIMessage = UIMessage<
     updateWorkingMemory: {
       input: { memory: WorkingMemory };
       output: { success: boolean };
-    };
-    generateDiscoveryReportBundle: {
-      input: ReportBundleRequest;
-      output: {
-        snapshotInline: string;
-        manifest: ReportBundleManifest;
-        presentFiles: Array<{
-          filename: string;
-          mediaType: string;
-          url: string;
-        }>;
-      };
     };
   }
 >;

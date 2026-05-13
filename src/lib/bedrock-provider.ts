@@ -6,3 +6,5 @@ export const createBedrockProvider = () =>
     region: process.env.AWS_REGION || "us-east-1",
     credentialProvider: fromNodeProviderChain(),
   });
+
+export const bedrockProvider = createBedrockProvider();

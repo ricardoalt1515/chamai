@@ -1,5 +1,6 @@
-import type { ToolLoopAgent, UIMessage } from "ai";
+import type { UIMessage } from "ai";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { Agent } from "@/ai/agents/agent";
 import type { BlobStore } from "@/lib/storage/blob-store";
 import type { ChatStore } from "@/lib/storage/chat-store";
 
@@ -60,7 +61,7 @@ vi.mock("ai", () => ({
 }));
 
 // Create a mock agent factory
-const createMockAgent = (responseText: string): ToolLoopAgent => {
+const createMockAgent = (responseText: string): Agent => {
   return {
     stream: vi.fn().mockImplementation(async ({ onFinish }: MockAgentStreamOptions) => {
       await onFinish?.({
@@ -92,7 +93,7 @@ const createMockAgent = (responseText: string): ToolLoopAgent => {
           }),
       };
     }),
-  } as unknown as ToolLoopAgent;
+  } as unknown as Agent;
 };
 
 const { createChatPostHandler } = await import("@/lib/chat-handler");
@@ -364,7 +365,7 @@ describe("api/chat handler", () => {
 
     const mockAgent = {
       stream: vi.fn().mockRejectedValue(new Error("bedrock timeout")),
-    } as unknown as ToolLoopAgent;
+    } as unknown as Agent;
 
     const handler = createChatPostHandler({
       chatStore: store,
@@ -394,7 +395,7 @@ describe("api/chat handler", () => {
     expect(replaceAssistantMessageAfter).not.toHaveBeenCalled();
   });
 
-  it("persiste respuesta de tool generateDiscoveryReportBundle cuando hay resultado", async () => {
+  it("persiste respuesta de tool updateWorkingMemory cuando hay resultado", async () => {
     const saveMessage = vi.fn<ChatStore["saveMessage"]>().mockResolvedValue(undefined);
     const store = {
       saveMessage,
@@ -452,24 +453,11 @@ describe("api/chat handler", () => {
                   role: "assistant",
                   parts: [
                     {
-                      type: "tool-generateDiscoveryReportBundle",
+                      type: "tool-updateWorkingMemory",
                       toolCallId: "tool-call-1",
                       state: "output-available",
-                      input: {},
-                      output: {
-                        snapshotInline: "Snapshot inline",
-                        presentFiles: [
-                          {
-                            filename: "report.pdf",
-                            mediaType: "application/pdf",
-                            url: "https://example/report.pdf",
-                          },
-                        ],
-                        manifest: {
-                          bundleId: "bundle-1",
-                          files: [],
-                        },
-                      },
+                      input: { memory: { name: "Ada" } },
+                      output: { success: true },
                     },
                   ],
                 },
@@ -482,7 +470,7 @@ describe("api/chat handler", () => {
             },
           }),
       })),
-    } as unknown as ToolLoopAgent;
+    } as unknown as Agent;
 
     const handler = createChatPostHandler({
       chatStore: store,
@@ -500,7 +488,7 @@ describe("api/chat handler", () => {
           {
             id: "u-1",
             role: "user",
-            parts: [{ type: "text", text: "genera reporte" }],
+            parts: [{ type: "text", text: "guarda mi nombre" }],
           } satisfies TestMessage,
         ],
       }),
@@ -515,7 +503,7 @@ describe("api/chat handler", () => {
         role: "assistant",
         parts: expect.arrayContaining([
           expect.objectContaining({
-            type: "tool-generateDiscoveryReportBundle",
+            type: "tool-updateWorkingMemory",
             state: "output-available",
           }),
         ]),
