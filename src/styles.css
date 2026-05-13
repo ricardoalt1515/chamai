@@ -253,3 +253,20 @@ code {
     @apply m-0 font-sans bg-background text-foreground antialiased;
   }
 }
+
+/*
+ * Honor prefers-reduced-motion globally. Users with vestibular disorders or
+ * who've explicitly opted out of animations get a near-instant variant for
+ * all transitions, animations, and scroll-behavior — without us having to
+ * gate every motion.div / transition utility individually.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -3,7 +3,10 @@ import { LoginView } from "./login-view";
 
 export default function LoginPage(): React.JSX.Element {
   return (
-    <main className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-background px-4 py-10">
+    <main
+      id="main-content"
+      className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-background px-4 py-10"
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--brand-600)_0%,transparent_55%),radial-gradient(ellipse_at_bottom_right,var(--brand-400)_0%,transparent_50%)] opacity-15"

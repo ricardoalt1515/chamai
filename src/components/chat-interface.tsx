@@ -15,6 +15,7 @@ import {
   ConversationContent,
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
+import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
 import { DiscoveryReportBundle } from "@/components/ai-elements/discovery-report-bundle";
 import {
   Message,
@@ -217,18 +218,16 @@ export function ChatInterface({
               textareaClassName="min-h-16 text-lg"
             />
 
-            <div className="grid w-full grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
+            <Suggestions className="w-full">
               {EMPTY_STATE_SUGGESTIONS.map((suggestion) => (
-                <button
+                <Suggestion
                   key={suggestion}
-                  type="button"
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  className="group rounded-2xl border border-primary/15 bg-card/60 px-4 py-3 text-left text-muted-foreground text-sm backdrop-blur-sm transition-[background-color,border-color,box-shadow,color] hover:border-primary/35 hover:bg-primary/5 hover:text-foreground hover:shadow-[0_4px_24px_-12px_color-mix(in_oklch,var(--primary)_45%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                >
-                  {suggestion}
-                </button>
+                  suggestion={suggestion}
+                  onClick={handleSuggestionClick}
+                  className="border-primary/15 text-muted-foreground hover:border-primary/35 hover:bg-primary/5 hover:text-foreground hover:shadow-[0_4px_24px_-12px_color-mix(in_oklch,var(--primary)_45%,transparent)]"
+                />
               ))}
-            </div>
+            </Suggestions>
           </motion.div>
         ) : (
           <motion.div
@@ -359,7 +358,7 @@ export function ChatInterface({
                           })}
                         </MessageContent>
                         {message.role === "assistant" && (
-                          <MessageActions className="opacity-0 transition-opacity group-hover:opacity-100">
+                          <MessageActions className="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(pointer:coarse)]:opacity-100">
                             <CopyButton
                               text={message.parts
                                 .filter((p) => p.type === "text")

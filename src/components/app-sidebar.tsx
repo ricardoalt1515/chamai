@@ -51,6 +51,17 @@ type SidebarActionItem = {
   icon: React.ComponentType<{ className?: string }>;
 };
 
+/**
+ * Splits a display name on common separators (`.`, `@`, `_`, `-`, whitespace)
+ * and returns up to 2 uppercase initials. Falls back to the first 2 chars.
+ */
+function computeInitials(displayName: string): string {
+  const tokens = displayName.split(/[._@\-\s]+/).filter(Boolean);
+  if (tokens.length === 0) return "??";
+  if (tokens.length === 1) return tokens[0].slice(0, 2).toUpperCase();
+  return (tokens[0][0] + tokens[1][0]).toUpperCase();
+}
+
 const SIDEBAR_ACTIONS: ReadonlyArray<SidebarActionItem> = [
   {
     id: "new-chat",
@@ -132,7 +143,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>): React.J
   };
 
   const displayName = user?.signInDetails?.loginId ?? user?.username ?? "Signed in";
-  const initials = displayName.slice(0, 2).toUpperCase();
+  const initials = computeInitials(displayName);
 
   const handleSignOut = () => {
     signOut();
