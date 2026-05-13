@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { runWithAmplifyServerContext } from "@/lib/auth/amplify-server";
 
 const PUBLIC_FILE_PATTERN = /\.(?:css|gif|ico|jpg|jpeg|js|png|svg|txt|webmanifest|woff2?)$/;
-const AUTH_BYPASS_PREFIXES = ["/api/chat", "/_next", "/favicon.ico"];
+const AUTH_BYPASS_PREFIXES = ["/api/chat", "/api/stream-canary", "/_next", "/favicon.ico"];
 const LOGIN_PATH = "/login";
 
 export function isAuthBypassPath(pathname: string): boolean {

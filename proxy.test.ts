@@ -30,6 +30,7 @@ describe("auth route protection", () => {
   it("bypasses public auth, API, and static asset routes", () => {
     expect(isAuthBypassPath("/login")).toBe(true);
     expect(isAuthBypassPath("/api/chat")).toBe(true);
+    expect(isAuthBypassPath("/api/stream-canary")).toBe(true);
     expect(isAuthBypassPath("/_next/static/chunk.js")).toBe(true);
     expect(isAuthBypassPath("/logo-dark.svg")).toBe(true);
     expect(isAuthBypassPath("/amplify_outputs.json")).toBe(true);
