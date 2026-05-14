@@ -281,9 +281,9 @@ The synthetic `streaming-canary` Function URL is **retained** until real Cognito
 
 ### TDD Evidence (post-deploy CORS fix)
 
-| Task | Test File | Layer | Safety Net | RED | GREEN | TRIANGULATE | REFACTOR |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Lambda streaming POST CORS metadata and origin rejection | `amplify/functions/chat-streaming/handler.test.ts` | Unit | ✅ 13/13 existing handler/runtime tests passed before edits | ✅ Added tests failed: approved POST lacked ACAO metadata; evil origin still invoked chat; auth-error lacked ACAO | ✅ `bun run test amplify/functions/chat-streaming/handler.test.ts` passed 4/4 after implementation | ✅ Covered success stream, auth-error stream, and disallowed-origin rejection before chat execution | ✅ Extracted CORS helpers in `runtime-adapter.ts`; Biome check/write made no further changes |
+| Task                                                     | Test File                                          | Layer | Safety Net                                                  | RED                                                                                                               | GREEN                                                                                              | TRIANGULATE                                                                                         | REFACTOR                                                                                     |
+| -------------------------------------------------------- | -------------------------------------------------- | ----- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Lambda streaming POST CORS metadata and origin rejection | `amplify/functions/chat-streaming/handler.test.ts` | Unit  | ✅ 13/13 existing handler/runtime tests passed before edits | ✅ Added tests failed: approved POST lacked ACAO metadata; evil origin still invoked chat; auth-error lacked ACAO | ✅ `bun run test amplify/functions/chat-streaming/handler.test.ts` passed 4/4 after implementation | ✅ Covered success stream, auth-error stream, and disallowed-origin rejection before chat execution | ✅ Extracted CORS helpers in `runtime-adapter.ts`; Biome check/write made no further changes |
 
 ### Test Commands Run (post-deploy CORS fix)
 
@@ -327,8 +327,8 @@ The synthetic `streaming-canary` Function URL is **retained** until real Cognito
 
 ### TDD Evidence (duplicate ACAO hotfix)
 
-| Task | Test File | Layer | Safety Net | RED | GREEN | TRIANGULATE | REFACTOR |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+| Task                                                            | Test File                 | Layer                           | Safety Net                                                        | RED                                                                        | GREEN                                                                | TRIANGULATE                                                                                                             | REFACTOR                                                   |
+| --------------------------------------------------------------- | ------------------------- | ------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | Remove duplicate Function URL CORS injection for chat streaming | `amplify/backend.test.ts` | Unit/infrastructure composition | ✅ `bun run test amplify/backend.test.ts` passed 2/2 before edits | ✅ Updated test failed because chat Function URL still had `cors` metadata | ✅ Removed chat Function URL `cors`; focused backend test passed 2/2 | ✅ Asserted both Function URL calls remain `authType: NONE` + `RESPONSE_STREAM`, and chat config has no `cors` property | ✅ Removed unused `HttpMethod` import; checks stayed green |
 
 ### Test Commands Run (duplicate ACAO hotfix)
@@ -376,8 +376,8 @@ The synthetic `streaming-canary` Function URL is **retained** until real Cognito
 
 ### TDD Evidence (preflight CORS hotfix)
 
-| Task | Test File | Layer | Safety Net | RED | GREEN | TRIANGULATE | REFACTOR |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+| Task                                                         | Test File                                                                     | Layer                           | Safety Net                                                                                                                                                                    | RED                                                                                                         | GREEN                                                                                                       | TRIANGULATE                                                                                                                          | REFACTOR                                                                          |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
 | Restore Function URL CORS and remove handler-owned POST ACAO | `amplify/backend.test.ts`, `amplify/functions/chat-streaming/handler.test.ts` | Unit/infrastructure composition | ✅ `bun run test amplify/backend.test.ts amplify/functions/chat-streaming/handler.test.ts amplify/functions/chat-streaming/runtime-adapter.test.ts` passed 16/16 before edits | ✅ Updated tests failed: chat Function URL lacked `cors`; handler still injected ACAO on success/auth paths | ✅ Restored Function URL `cors` and removed handler CORS wrappers; focused backend+handler tests passed 6/6 | ✅ Re-ran runtime adapter tests with backend+handler tests; 16/16 passed, preserving preflight helper and streaming adapter behavior | ✅ Removed unused `withCorsResponseHeaders`; TypeScript/Biome/checks stayed green |
 
 ### Test Commands Run (preflight CORS hotfix)
@@ -405,3 +405,46 @@ The synthetic `streaming-canary` Function URL is **retained** until real Cognito
 ### Workload / PR Boundary
 
 - Boundary: minimal CORS ownership correction only; no frontend, auth, storage, chat semantics, or model behavior changes.
+
+## Post-Deploy Fix Slice — Allow Accept Preflight Header
+
+### Completed Tasks
+
+- Added `accept` to chat Lambda Function URL CORS `allowedHeaders` so Safari/browser preflight requests that include `Accept: */*` can receive CORS headers.
+- Updated backend infrastructure test expectations to lock the CORS allowlist to `accept`, `authorization`, `content-type`, and `x-request-id`.
+- Kept `InvokeMode.RESPONSE_STREAM`, `authType: NONE`, allowed origins, exposed headers, and max age unchanged.
+
+### Files Changed
+
+- `amplify/backend.ts` — added `accept` to chat Function URL CORS allowed headers.
+- `amplify/backend.test.ts` — updated Function URL CORS assertion.
+- `openspec/changes/port-chat-streaming-to-lambda/apply-progress.md` — recorded this hotfix evidence.
+
+### TDD Cycle Evidence (accept preflight hotfix)
+
+| Task                                                   | Test File                 | Layer                           | Safety Net                                                        | RED                                                                          | GREEN                                                                      | TRIANGULATE                                                                                                                              | REFACTOR                                                  |
+| ------------------------------------------------------ | ------------------------- | ------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| Add `accept` to chat Function URL CORS allowed headers | `amplify/backend.test.ts` | Unit/infrastructure composition | ✅ `bun run test amplify/backend.test.ts` passed 2/2 before edits | ✅ Updated test failed because chat Function URL CORS did not allow `accept` | ✅ Added `accept` in `amplify/backend.ts`; focused backend test passed 2/2 | ➖ Skipped: structural one-output CDK config allowlist change; existing assertion also preserves authorization/content-type/x-request-id | ✅ No refactor needed; only minimal allowlist/test update |
+
+### Test Commands Run (accept preflight hotfix)
+
+- `bun run test amplify/backend.test.ts` — ✅ baseline 2/2 passed before edits.
+- `bun run test amplify/backend.test.ts` — ❌ RED: expected `accept` in `allowedHeaders`, but implementation omitted it.
+- `bun run test amplify/backend.test.ts` — ✅ GREEN: 2/2 passed after adding `accept`.
+- `bunx tsc --noEmit` — ✅ passed.
+- `bun run verify:amplify-config` — ✅ passed.
+- `bun run check` — ✅ passed, 141 files checked.
+
+### Deviations From Design
+
+- None. This follows R7 CORS/origin controls by adding a browser-required request header to the restrictive Function URL allowlist without using wildcard production origins.
+
+### Remaining Tasks
+
+- Deploy this hotfix to production.
+- Retry preflight with `Access-Control-Request-Headers: accept,authorization,content-type`; expected response should include `Access-Control-Allow-Origin` and `Access-Control-Allow-Headers` containing `accept`.
+- Retry browser chat from Safari/production origin.
+
+### Workload / PR Boundary
+
+- Boundary: minimal infrastructure CORS allowlist hotfix only; no frontend, handler, auth, storage, chat semantics, or model behavior changes.
