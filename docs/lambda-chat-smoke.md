@@ -45,12 +45,9 @@ Pass condition: AI SDK UI message chunks arrive progressively rather than all at
 
 ## Browser validation
 
-Set public frontend config for a sandbox build/session:
+The production frontend uses the production `ChatStreamingFunctionUrl` directly as the default chat transport. No `NEXT_PUBLIC_CHAT_TRANSPORT` or `NEXT_PUBLIC_CHAT_LAMBDA_URL` flag is required.
 
-```bash
-NEXT_PUBLIC_CHAT_TRANSPORT=lambda
-NEXT_PUBLIC_CHAT_LAMBDA_URL=<ChatStreamingFunctionUrl>
-```
+For sandbox/browser validation, temporarily point `CHAT_LAMBDA_URL` in `src/components/chat-interface.tsx` at the sandbox `ChatStreamingFunctionUrl`, then rebuild/redeploy that environment.
 
 Then validate:
 
@@ -62,13 +59,7 @@ Then validate:
 
 ## Rollback
 
-Set:
-
-```bash
-NEXT_PUBLIC_CHAT_TRANSPORT=same-origin
-```
-
-or remove `NEXT_PUBLIC_CHAT_TRANSPORT` entirely. The UI will use `/api/chat` again.
+Revert the frontend transport commit so `src/components/chat-interface.tsx` uses `/api/chat` again. The same-origin Next route remains implemented and can be restored without backend changes.
 
 ## Canary retention decision
 

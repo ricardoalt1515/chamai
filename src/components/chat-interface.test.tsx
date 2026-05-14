@@ -53,22 +53,20 @@ describe("canSubmitPromptMessage", () => {
 });
 
 describe("chat transport configuration", () => {
-  it("defaults to same-origin /api/chat", () => {
-    expect(getChatTransportApi({})).toBe("/api/chat");
-  });
-
-  it("uses the configured Lambda Function URL in lambda mode", () => {
-    expect(
-      getChatTransportApi({
-        NEXT_PUBLIC_CHAT_TRANSPORT: "lambda",
-        NEXT_PUBLIC_CHAT_LAMBDA_URL: "https://chat.lambda-url.us-east-1.on.aws/",
-      }),
-    ).toBe("https://chat.lambda-url.us-east-1.on.aws/");
+  it("uses the production Lambda Function URL by default", () => {
+    expect(getChatTransportApi()).toBe(
+      "https://ywyhxx4rlpppfkmqvnrh7ujlia0ydkxp.lambda-url.us-east-1.on.aws/",
+    );
   });
 });
 
 describe("prepareChatSendMessagesRequest", () => {
   it("serializes AI SDK v6 send options into the chat route payload contract", async () => {
+    fetchAuthSessionMock.mockResolvedValueOnce({
+      tokens: {
+        accessToken: { toString: () => "access-token" },
+      },
+    } as Awaited<ReturnType<typeof fetchAuthSession>>);
     const messages: MyUIMessage[] = [
       {
         id: "message-1",
@@ -99,7 +97,7 @@ describe("prepareChatSendMessagesRequest", () => {
     expect(parseChatRequest(prepared.body).threadId).toBe("thread-1");
   });
 
-  it("adds a Cognito access-token Authorization header in lambda mode", async () => {
+  it("adds a Cognito access-token Authorization header", async () => {
     fetchAuthSessionMock.mockResolvedValueOnce({
       tokens: {
         accessToken: { toString: () => "access-token" },
@@ -117,7 +115,6 @@ describe("prepareChatSendMessagesRequest", () => {
       body: {
         threadId: "thread-1",
         modelId: "claude-sonnet-4-6",
-        transportMode: "lambda",
       },
       messageId: undefined,
       messages,
@@ -129,6 +126,11 @@ describe("prepareChatSendMessagesRequest", () => {
   });
 
   it("preserves regenerate message ids for server-side regeneration", async () => {
+    fetchAuthSessionMock.mockResolvedValueOnce({
+      tokens: {
+        accessToken: { toString: () => "access-token" },
+      },
+    } as Awaited<ReturnType<typeof fetchAuthSession>>);
     const messages: MyUIMessage[] = [
       {
         id: "message-1",

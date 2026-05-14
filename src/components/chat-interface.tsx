@@ -46,30 +46,14 @@ type ChatSendRequestInput = Pick<
   "body" | "messageId" | "messages" | "trigger"
 >;
 
-type ChatTransportEnv = {
-  NEXT_PUBLIC_CHAT_TRANSPORT?: string;
-  NEXT_PUBLIC_CHAT_LAMBDA_URL?: string;
-};
+const CHAT_LAMBDA_URL = "https://ywyhxx4rlpppfkmqvnrh7ujlia0ydkxp.lambda-url.us-east-1.on.aws/";
 
 type PreparedChatRequest = {
   body: object;
   headers?: Record<string, string>;
 };
 
-const chatTransportMode = (
-  env: ChatTransportEnv = process.env as unknown as ChatTransportEnv,
-): "lambda" | "same-origin" =>
-  env.NEXT_PUBLIC_CHAT_TRANSPORT === "lambda" ? "lambda" : "same-origin";
-
-export const getChatTransportApi = (
-  env: ChatTransportEnv = process.env as unknown as ChatTransportEnv,
-): string => {
-  if (chatTransportMode(env) !== "lambda") {
-    return "/api/chat";
-  }
-
-  return env.NEXT_PUBLIC_CHAT_LAMBDA_URL?.trim() || "/api/chat";
-};
+export const getChatTransportApi = (): string => CHAT_LAMBDA_URL;
 
 const getAccessToken = async (): Promise<string> => {
   const session = await fetchAuthSession();
@@ -96,10 +80,6 @@ export const prepareChatSendMessagesRequest = ({
     webSearchEnabled:
       typeof requestBody.webSearchEnabled === "boolean" ? requestBody.webSearchEnabled : false,
   };
-
-  if (requestBody.transportMode !== "lambda") {
-    return { body: preparedBody };
-  }
 
   return getAccessToken().then((token) => ({
     body: preparedBody,
@@ -179,7 +159,6 @@ export function ChatInterface({
       api: getChatTransportApi(),
       body: {
         threadId,
-        transportMode: chatTransportMode(),
       },
       prepareSendMessagesRequest: prepareChatSendMessagesRequest,
     }),
