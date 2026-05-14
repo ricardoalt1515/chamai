@@ -153,11 +153,15 @@ const assistantMessage = (id: string, text = id): MyUIMessage => ({
 
 describe("Lambda DynamoDB ChatStore", () => {
   it("creates and reads a thread with resourceId equal to the owner userId", async () => {
-    const { store } = createStore();
+    const { client, store } = createStore();
 
     const created = await store.createThread("thread-1", "user-1", "My thread");
 
     expect(created).toMatchObject({ id: "thread-1", resourceId: "user-1", title: "My thread" });
+    expect(client.sessions.get("thread-1")).toMatchObject({
+      __typename: "Session",
+      owner: "user-1::user-1",
+    });
     await expect(store.getThreadById("thread-1")).resolves.toMatchObject({
       id: "thread-1",
       resourceId: "user-1",
@@ -166,12 +170,20 @@ describe("Lambda DynamoDB ChatStore", () => {
   });
 
   it("appends messages and reads them in position order", async () => {
-    const { store } = createStore();
+    const { client, store } = createStore();
     await store.createThread("thread-1", "user-1");
 
     await store.saveMessage("thread-1", userMessage("msg-1"));
     await store.saveMessage("thread-1", assistantMessage("msg-2"));
 
+    expect(client.messages.get("msg-1")).toMatchObject({
+      __typename: "Message",
+      owner: "user-1::user-1",
+    });
+    expect(client.messages.get("msg-2")).toMatchObject({
+      __typename: "Message",
+      owner: "user-1::user-1",
+    });
     await expect(store.getThreadMessages("thread-1")).resolves.toEqual([
       userMessage("msg-1"),
       assistantMessage("msg-2"),
@@ -200,7 +212,7 @@ describe("Lambda DynamoDB ChatStore", () => {
   });
 
   it("replaces assistant message after a target message and truncates later messages", async () => {
-    const { store } = createStore();
+    const { client, store } = createStore();
     await store.createThread("thread-1", "user-1");
     await store.saveMessage("thread-1", userMessage("user-1"));
     await store.saveMessage("thread-1", assistantMessage("assistant-old"));
@@ -212,6 +224,10 @@ describe("Lambda DynamoDB ChatStore", () => {
       assistantMessage("assistant-new"),
     );
 
+    expect(client.messages.get("assistant-new")).toMatchObject({
+      __typename: "Message",
+      owner: "user-1::user-1",
+    });
     await expect(store.getThreadMessages("thread-1")).resolves.toEqual([
       userMessage("user-1"),
       assistantMessage("assistant-new"),

@@ -448,3 +448,55 @@ The synthetic `streaming-canary` Function URL is **retained** until real Cognito
 ### Workload / PR Boundary
 
 - Boundary: minimal infrastructure CORS allowlist hotfix only; no frontend, handler, auth, storage, chat semantics, or model behavior changes.
+
+## Post-Deploy Fix Slice — Safari CORS and AppSync Owner Metadata
+
+### Completed Tasks
+
+- Added `user-agent` and `accept-language` to chat Lambda Function URL CORS `allowedHeaders` so Safari/WebKit preflights triggered by AI SDK/browser request headers can receive service-level CORS headers.
+- Updated Lambda direct DynamoDB Session writes to include AppSync-compatible owner-auth metadata: `owner: "{userId}::{userId}"` and `__typename: "Session"`.
+- Updated Lambda direct DynamoDB Message writes, including replacement batch writes, to include AppSync-compatible `owner`, `__typename: "Message"`, and `updatedAt` metadata.
+- Preserved the AI SDK v6 `DefaultChatTransport` usage and AI Elements message rendering path; no UI protocol or component behavior was changed.
+
+### Files Changed
+
+- `amplify/backend.ts` — added concrete Safari/browser-request headers to the restrictive Function URL CORS allowlist.
+- `amplify/backend.test.ts` — updated Function URL CORS assertion.
+- `src/lib/storage/lambda-chat-store.ts` — added AppSync owner-auth metadata to Lambda direct DynamoDB writes.
+- `src/lib/storage/lambda-chat-store.test.ts` — added assertions for Session/Message owner metadata and replacement writes.
+- `openspec/changes/port-chat-streaming-to-lambda/apply-progress.md` — recorded this hotfix evidence.
+
+### TDD Cycle Evidence (Safari preflight and AppSync owner metadata hotfix)
+
+| Task | Test File | Layer | Safety Net | RED | GREEN | TRIANGULATE | REFACTOR |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Allow Safari/WebKit AI SDK preflight headers without wildcard origins | `amplify/backend.test.ts` | Unit/infrastructure composition | ✅ `bun run test amplify/backend.test.ts src/lib/storage/lambda-chat-store.test.ts` passed 9/9 before edits | ✅ Updated backend test failed because `accept-language` and `user-agent` were missing from `allowedHeaders` | ✅ Added the two concrete headers; focused backend/store tests passed 9/9 | ➖ Skipped: structural Function URL CORS allowlist change with one intended output | ✅ Biome formatted changed files; checks stayed green |
+| Make Lambda direct DynamoDB writes visible to AppSync owner-auth reads | `src/lib/storage/lambda-chat-store.test.ts` | Unit/storage adapter | ✅ `bun run test amplify/backend.test.ts src/lib/storage/lambda-chat-store.test.ts` passed 9/9 before edits | ✅ New metadata assertions failed for created Sessions, saved Messages, and replacement batch Messages | ✅ Added AppSync-compatible `owner`, `__typename`, and Message `updatedAt`; focused backend/store tests passed 9/9 | ✅ Covered normal `saveMessage` and `replaceAssistantMessageAfter` batch rewrite paths | ✅ Extracted `appSyncOwner(userId)` helper; Biome/checks stayed green |
+
+### Test Commands Run (Safari preflight and owner metadata hotfix)
+
+- `bun run test amplify/backend.test.ts src/lib/storage/lambda-chat-store.test.ts` — ✅ baseline 9/9 passed before edits.
+- `bun run test amplify/backend.test.ts src/lib/storage/lambda-chat-store.test.ts` — ❌ RED: 4 failures for missing CORS headers and missing AppSync owner metadata.
+- `bun run test amplify/backend.test.ts src/lib/storage/lambda-chat-store.test.ts` — ✅ GREEN: 9/9 passed after implementation.
+- `bunx tsc --noEmit` — ✅ passed.
+- `bun run verify:amplify-config` — ✅ passed.
+- `bun run check` — ❌ format failure in `src/lib/storage/lambda-chat-store.ts` after implementation.
+- `bunx biome check --write amplify/backend.ts amplify/backend.test.ts src/lib/storage/lambda-chat-store.ts src/lib/storage/lambda-chat-store.test.ts openspec/changes/port-chat-streaming-to-lambda/apply-progress.md` — ✅ formatted changed files.
+- `bun run check` — ✅ passed, 141 files checked.
+- `bun run test amplify/backend.test.ts src/lib/storage/lambda-chat-store.test.ts` — ✅ post-format focused tests passed 9/9.
+- `bun run test` — ✅ passed, 31 files / 133 tests.
+
+### Deviations From Design
+
+- Direct DynamoDB remains the chosen Lambda ChatStore path from the earlier PR3 decision, but it now writes the AppSync owner-auth metadata required by the existing Amplify Data read path. This is a compatibility hardening of that decision, not a change to the transport or AI SDK protocol.
+
+### Remaining Tasks
+
+- Deploy this hotfix to production.
+- Retry Safari preflight with `Access-Control-Request-Headers` containing `user-agent` and/or `accept-language`.
+- Retry Safari browser chat.
+- Backfill existing Lambda-created Session/Message rows that lack `owner`/`__typename` so sidebar/reload can read them via AppSync owner auth.
+
+### Workload / PR Boundary
+
+- Boundary: minimal CORS compatibility and persistence metadata hotfix only; no frontend, AI SDK stream protocol, AI Elements rendering, auth token contract, blob storage, model, or Bedrock behavior changes.

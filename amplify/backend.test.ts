@@ -149,7 +149,14 @@ describe("Amplify backend", () => {
     expect(chatFunctionUrlConfig).toEqual({
       authType: "NONE",
       cors: {
-        allowedHeaders: ["accept", "authorization", "content-type", "x-request-id"],
+        allowedHeaders: [
+          "accept",
+          "accept-language",
+          "authorization",
+          "content-type",
+          "user-agent",
+          "x-request-id",
+        ],
         allowedMethods: ["POST"],
         allowedOrigins: ["https://main.d22icjbzj7x471.amplifyapp.com", "http://localhost:3000"],
         exposedHeaders: ["x-error-code", "x-request-id"],

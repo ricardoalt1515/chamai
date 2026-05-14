@@ -112,7 +112,14 @@ chatStreamingFunction.addToRolePolicy(
 const chatStreamingUrl = chatStreamingFunction.addFunctionUrl({
   authType: FunctionUrlAuthType.NONE,
   cors: {
-    allowedHeaders: ["accept", "authorization", "content-type", "x-request-id"],
+    allowedHeaders: [
+      "accept",
+      "accept-language",
+      "authorization",
+      "content-type",
+      "user-agent",
+      "x-request-id",
+    ],
     allowedMethods: [HttpMethod.POST],
     allowedOrigins: chatStreamingAllowedOrigins,
     exposedHeaders: ["x-error-code", "x-request-id"],

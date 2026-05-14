@@ -39,6 +39,8 @@ type SessionItem = {
   title?: string | null;
   createdAt: string;
   updatedAt: string;
+  owner?: string;
+  __typename?: "Session";
 };
 
 type MessageItem = {
@@ -48,6 +50,9 @@ type MessageItem = {
   role: string;
   payloadJson: string;
   createdAt: string;
+  updatedAt?: string;
+  owner?: string;
+  __typename?: "Message";
 };
 
 const isStoredUIMessage = (value: unknown): value is MyUIMessage => {
@@ -69,6 +74,8 @@ const toThread = (session: SessionItem): StoredThread => ({
   createdAt: session.createdAt,
   updatedAt: session.updatedAt,
 });
+
+const appSyncOwner = (userId: string): string => `${userId}::${userId}`;
 
 const parseMessagePayload = (message: MessageItem): MyUIMessage | null => {
   try {
@@ -126,7 +133,11 @@ export const createLambdaDynamoDbChatStore = ({
       .sort((a, b) => Number(a.position ?? 0) - Number(b.position ?? 0));
   };
 
-  const putMessageRows = async (threadId: string, messages: MyUIMessage[]): Promise<void> => {
+  const putMessageRows = async (
+    threadId: string,
+    userId: string,
+    messages: MyUIMessage[],
+  ): Promise<void> => {
     if (messages.length === 0) {
       return;
     }
@@ -134,18 +145,24 @@ export const createLambdaDynamoDbChatStore = ({
     await client.send(
       new BatchWriteItemCommand({
         RequestItems: {
-          [messageTableName]: messages.map((message, position) => ({
-            PutRequest: {
-              Item: marshall({
-                createdAt: nowIso(),
-                id: message.id,
-                payloadJson: JSON.stringify(message),
-                position,
-                role: message.role,
-                sessionId: threadId,
-              } satisfies MessageItem),
-            },
-          })),
+          [messageTableName]: messages.map((message, position) => {
+            const timestamp = nowIso();
+            return {
+              PutRequest: {
+                Item: marshall({
+                  __typename: "Message",
+                  createdAt: timestamp,
+                  id: message.id,
+                  owner: appSyncOwner(userId),
+                  payloadJson: JSON.stringify(message),
+                  position,
+                  role: message.role,
+                  sessionId: threadId,
+                  updatedAt: timestamp,
+                } satisfies MessageItem),
+              },
+            };
+          }),
         },
       }),
     );
@@ -186,16 +203,25 @@ export const createLambdaDynamoDbChatStore = ({
     },
 
     async saveMessage(threadId: string, message: MyUIMessage): Promise<void> {
+      const thread = await getThreadById(threadId);
+      if (!thread) {
+        return;
+      }
+
       const messages = await listMessageRows(threadId);
+      const timestamp = nowIso();
       await client.send(
         new PutItemCommand({
           Item: marshall({
-            createdAt: nowIso(),
+            __typename: "Message",
+            createdAt: timestamp,
             id: message.id,
+            owner: appSyncOwner(thread.resourceId),
             payloadJson: JSON.stringify(message),
             position: messages.length,
             role: message.role,
             sessionId: threadId,
+            updatedAt: timestamp,
           } satisfies MessageItem),
           TableName: messageTableName,
         }),
@@ -206,8 +232,10 @@ export const createLambdaDynamoDbChatStore = ({
     async createThread(id: string, resourceId: string, title?: string): Promise<StoredThread> {
       const timestamp = nowIso();
       const session: SessionItem = {
+        __typename: "Session",
         createdAt: timestamp,
         id,
+        owner: appSyncOwner(resourceId),
         title: title ?? null,
         updatedAt: timestamp,
         userId: resourceId,
@@ -280,6 +308,11 @@ export const createLambdaDynamoDbChatStore = ({
       messageId: string,
       nextAssistantMessage: MyUIMessage,
     ): Promise<void> {
+      const thread = await getThreadById(threadId);
+      if (!thread) {
+        return;
+      }
+
       const messageRows = await listMessageRows(threadId);
       const targetIndex = messageRows.findIndex((message) => message.id === messageId);
       if (targetIndex === -1) {
@@ -306,7 +339,7 @@ export const createLambdaDynamoDbChatStore = ({
         nextAssistantMessage,
       ];
 
-      await putMessageRows(threadId, nextMessages);
+      await putMessageRows(threadId, thread.resourceId, nextMessages);
       await bumpUpdatedAt(threadId);
     },
 
