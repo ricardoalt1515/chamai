@@ -309,3 +309,48 @@ The synthetic `streaming-canary` Function URL is **retained** until real Cognito
 
 - Delivery path remains stacked-to-main/post-deploy hotfix slice.
 - Boundary: minimal Lambda CORS fix only; no frontend transport or infrastructure behavior changes.
+
+## Post-Deploy Fix Slice — Remove Function URL CORS Duplication
+
+### Completed Tasks
+
+- Removed CDK-managed CORS from the chat streaming Function URL so handler-owned streaming response metadata is the single source for `access-control-allow-origin`.
+- Preserved `InvokeMode.RESPONSE_STREAM` and `authType: NONE` for the chat Function URL.
+- Preserved the existing streaming canary Function URL configuration.
+- Updated backend infrastructure tests to assert the chat Function URL has no `cors` property.
+
+### Files Changed
+
+- `amplify/backend.ts` — removed `cors` from `chatStreamingFunction.addFunctionUrl` and dropped the unused `HttpMethod` import.
+- `amplify/backend.test.ts` — updated Function URL expectations to verify both canary and chat URLs remain response-streaming and chat URL has no CDK CORS config.
+- `openspec/changes/port-chat-streaming-to-lambda/apply-progress.md` — recorded this second CORS hotfix evidence.
+
+### TDD Evidence (duplicate ACAO hotfix)
+
+| Task | Test File | Layer | Safety Net | RED | GREEN | TRIANGULATE | REFACTOR |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Remove duplicate Function URL CORS injection for chat streaming | `amplify/backend.test.ts` | Unit/infrastructure composition | ✅ `bun run test amplify/backend.test.ts` passed 2/2 before edits | ✅ Updated test failed because chat Function URL still had `cors` metadata | ✅ Removed chat Function URL `cors`; focused backend test passed 2/2 | ✅ Asserted both Function URL calls remain `authType: NONE` + `RESPONSE_STREAM`, and chat config has no `cors` property | ✅ Removed unused `HttpMethod` import; checks stayed green |
+
+### Test Commands Run (duplicate ACAO hotfix)
+
+- `bun run test amplify/backend.test.ts` — ✅ baseline 2/2 passed before edits.
+- `bun run test amplify/backend.test.ts` — ❌ RED: expected chat Function URL config to omit `cors`, but existing config included it.
+- `bun run test amplify/backend.test.ts` — ✅ GREEN: 2/2 passed after removing chat Function URL CORS.
+- `bun run test amplify/backend.test.ts` — ✅ TRIANGULATE/REFACTOR: 2/2 passed after precise call-order assertions.
+- `bunx tsc --noEmit` — ✅ passed.
+- `bun run check` — ✅ passed, 141 files checked.
+- `bun run verify:amplify-config` — ✅ passed.
+
+### Deviations From Design
+
+- The original CDK-level Function URL CORS allowlist is intentionally removed for the chat streaming URL because production showed duplicate ACAO when both AWS Function URL CORS and handler-owned streaming metadata inject CORS headers. Handler-owned CORS remains allowlist-based via `CHAT_STREAM_ALLOWED_ORIGINS`.
+
+### Remaining Tasks
+
+- Deploy this second CORS hotfix to production and retry invalid-token/browser smoke.
+- Confirm the POST response has exactly one `access-control-allow-origin` and one `vary: origin` value.
+- If CORS passes, continue validating progressive chunk delivery.
+
+### Workload / PR Boundary
+
+- Boundary: minimal infrastructure metadata hotfix only; no chat handler, frontend transport, storage, auth, or model behavior changes.

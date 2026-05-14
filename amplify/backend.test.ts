@@ -139,21 +139,18 @@ describe("Amplify backend", () => {
         timeout: { seconds: 60 },
       }),
     );
-    expect(addFunctionUrlMock).toHaveBeenCalledWith({
+    expect(addFunctionUrlMock).toHaveBeenCalledTimes(2);
+    const canaryFunctionUrlConfig = addFunctionUrlMock.mock.calls.at(0)?.at(0) as unknown;
+    const chatFunctionUrlConfig = addFunctionUrlMock.mock.calls.at(1)?.at(0) as unknown;
+    expect(canaryFunctionUrlConfig).toEqual({
       authType: "NONE",
       invokeMode: "RESPONSE_STREAM",
     });
-    expect(addFunctionUrlMock).toHaveBeenCalledWith({
+    expect(chatFunctionUrlConfig).toEqual({
       authType: "NONE",
-      cors: {
-        allowedHeaders: ["authorization", "content-type", "x-request-id"],
-        allowedMethods: ["POST"],
-        allowedOrigins: ["https://main.d22icjbzj7x471.amplifyapp.com", "http://localhost:3000"],
-        exposedHeaders: ["x-error-code", "x-request-id"],
-        maxAge: { seconds: 600 },
-      },
       invokeMode: "RESPONSE_STREAM",
     });
+    expect(chatFunctionUrlConfig).not.toHaveProperty("cors");
     expect(cfnOutputMock).toHaveBeenCalledWith(
       { stackName: "streaming-canary" },
       "StreamingCanaryFunctionUrl",

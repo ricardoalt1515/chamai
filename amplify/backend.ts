@@ -1,7 +1,7 @@
 import { defineBackend } from "@aws-amplify/backend";
 import { Aws, CfnOutput, Duration } from "aws-cdk-lib";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { FunctionUrlAuthType, HttpMethod, InvokeMode, Runtime } from "aws-cdk-lib/aws-lambda";
+import { FunctionUrlAuthType, InvokeMode, Runtime } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction, OutputFormat } from "aws-cdk-lib/aws-lambda-nodejs";
 import { auth } from "./auth/resource";
 import { data } from "./data/resource";
@@ -111,13 +111,6 @@ chatStreamingFunction.addToRolePolicy(
 
 const chatStreamingUrl = chatStreamingFunction.addFunctionUrl({
   authType: FunctionUrlAuthType.NONE,
-  cors: {
-    allowedHeaders: ["authorization", "content-type", "x-request-id"],
-    allowedMethods: [HttpMethod.POST],
-    allowedOrigins: chatStreamingAllowedOrigins,
-    exposedHeaders: ["x-error-code", "x-request-id"],
-    maxAge: Duration.seconds(600),
-  },
   invokeMode: InvokeMode.RESPONSE_STREAM,
 });
 
