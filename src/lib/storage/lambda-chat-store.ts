@@ -48,7 +48,7 @@ type MessageItem = {
   sessionId: string;
   position: number;
   role: string;
-  payloadJson: string;
+  payloadJson: MyUIMessage | string;
   createdAt: string;
   updatedAt?: string;
   owner?: string;
@@ -78,12 +78,18 @@ const toThread = (session: SessionItem): StoredThread => ({
 const appSyncOwner = (userId: string): string => `${userId}::${userId}`;
 
 const parseMessagePayload = (message: MessageItem): MyUIMessage | null => {
-  try {
-    const parsed = JSON.parse(message.payloadJson) as unknown;
-    return isStoredUIMessage(parsed) ? structuredClone(parsed) : null;
-  } catch {
-    return null;
-  }
+  const parsed =
+    typeof message.payloadJson === "string"
+      ? (() => {
+          try {
+            return JSON.parse(message.payloadJson) as unknown;
+          } catch {
+            return null;
+          }
+        })()
+      : message.payloadJson;
+
+  return isStoredUIMessage(parsed) ? structuredClone(parsed) : null;
 };
 
 const requiredEnv = (env: LambdaDynamoDbChatStoreEnv, name: keyof LambdaDynamoDbChatStoreEnv) => {
@@ -154,7 +160,7 @@ export const createLambdaDynamoDbChatStore = ({
                   createdAt: timestamp,
                   id: message.id,
                   owner: appSyncOwner(userId),
-                  payloadJson: JSON.stringify(message),
+                  payloadJson: message,
                   position,
                   role: message.role,
                   sessionId: threadId,
@@ -217,7 +223,7 @@ export const createLambdaDynamoDbChatStore = ({
             createdAt: timestamp,
             id: message.id,
             owner: appSyncOwner(thread.resourceId),
-            payloadJson: JSON.stringify(message),
+            payloadJson: message,
             position: messages.length,
             role: message.role,
             sessionId: threadId,

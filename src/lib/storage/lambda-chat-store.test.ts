@@ -1,3 +1,5 @@
+import type { AttributeValue } from "@aws-sdk/client-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { describe, expect, it } from "vitest";
 import type { MyUIMessage } from "@/types/ui-message";
 import { createLambdaDynamoDbChatStore, type LambdaDynamoDbClient } from "./lambda-chat-store";
@@ -19,7 +21,7 @@ class FakeDynamoDbClient implements LambdaDynamoDbClient {
 
     if (name === "PutItemCommand") {
       const table = String(input.TableName);
-      const item = unmarshallRecord(input.Item as Record<string, { S?: string; N?: string }>);
+      const item = unmarshallRecord(input.Item as Record<string, AttributeValue>);
       if (table === "sessions") this.sessions.set(String(item.id), item);
       if (table === "messages") this.messages.set(String(item.id), item);
       return {};
@@ -27,7 +29,7 @@ class FakeDynamoDbClient implements LambdaDynamoDbClient {
 
     if (name === "GetItemCommand") {
       const table = String(input.TableName);
-      const key = unmarshallRecord(input.Key as Record<string, { S?: string; N?: string }>);
+      const key = unmarshallRecord(input.Key as Record<string, AttributeValue>);
       const item =
         table === "sessions"
           ? this.sessions.get(String(key.id))
@@ -37,18 +39,18 @@ class FakeDynamoDbClient implements LambdaDynamoDbClient {
 
     if (name === "DeleteItemCommand") {
       const table = String(input.TableName);
-      const key = unmarshallRecord(input.Key as Record<string, { S?: string; N?: string }>);
+      const key = unmarshallRecord(input.Key as Record<string, AttributeValue>);
       if (table === "sessions") this.sessions.delete(String(key.id));
       if (table === "messages") this.messages.delete(String(key.id));
       return {};
     }
 
     if (name === "UpdateItemCommand") {
-      const key = unmarshallRecord(input.Key as Record<string, { S?: string; N?: string }>);
+      const key = unmarshallRecord(input.Key as Record<string, AttributeValue>);
       const session = this.sessions.get(String(key.id));
       if (session) {
         const values = unmarshallRecord(
-          input.ExpressionAttributeValues as Record<string, { S?: string; N?: string }>,
+          input.ExpressionAttributeValues as Record<string, AttributeValue>,
         );
         session.title = values[":title"] ?? null;
         session.updatedAt = values[":updatedAt"];
@@ -60,7 +62,7 @@ class FakeDynamoDbClient implements LambdaDynamoDbClient {
     if (name === "QueryCommand") {
       const table = String(input.TableName);
       const values = unmarshallRecord(
-        input.ExpressionAttributeValues as Record<string, { S?: string; N?: string }>,
+        input.ExpressionAttributeValues as Record<string, AttributeValue>,
       );
       if (table === "sessions") {
         const userId = String(values[":userId"]);
@@ -83,8 +85,8 @@ class FakeDynamoDbClient implements LambdaDynamoDbClient {
       const requestItems = input.RequestItems as Record<
         string,
         Array<{
-          DeleteRequest?: { Key: Record<string, { S?: string; N?: string }> };
-          PutRequest?: { Item: Record<string, { S?: string; N?: string }> };
+          DeleteRequest?: { Key: Record<string, AttributeValue> };
+          PutRequest?: { Item: Record<string, AttributeValue> };
         }>
       >;
       for (const [table, writes] of Object.entries(requestItems)) {
@@ -106,27 +108,11 @@ class FakeDynamoDbClient implements LambdaDynamoDbClient {
   }
 }
 
-const marshallRecord = (
-  record: Record<string, unknown>,
-): Record<string, { S?: string; N?: string; NULL?: boolean }> =>
-  Object.fromEntries(
-    Object.entries(record).map(([key, value]) => {
-      if (value === null || value === undefined) return [key, { NULL: true }];
-      if (typeof value === "number") return [key, { N: String(value) }];
-      return [key, { S: String(value) }];
-    }),
-  );
+const marshallRecord = (record: Record<string, unknown>) =>
+  marshall(record, { removeUndefinedValues: true });
 
-const unmarshallRecord = (
-  record: Record<string, { S?: string; N?: string; NULL?: boolean }>,
-): Record<string, unknown> =>
-  Object.fromEntries(
-    Object.entries(record).map(([key, value]) => {
-      if (value.NULL) return [key, null];
-      if (value.N !== undefined) return [key, Number(value.N)];
-      return [key, value.S];
-    }),
-  );
+const unmarshallRecord = (record: Parameters<typeof unmarshall>[0]): Record<string, unknown> =>
+  unmarshall(record);
 
 const createStore = (client = new FakeDynamoDbClient()) => ({
   client,
@@ -179,15 +165,36 @@ describe("Lambda DynamoDB ChatStore", () => {
     expect(client.messages.get("msg-1")).toMatchObject({
       __typename: "Message",
       owner: "user-1::user-1",
+      payloadJson: userMessage("msg-1"),
     });
+    expect(typeof client.messages.get("msg-1")?.payloadJson).toBe("object");
     expect(client.messages.get("msg-2")).toMatchObject({
       __typename: "Message",
       owner: "user-1::user-1",
+      payloadJson: assistantMessage("msg-2"),
     });
     await expect(store.getThreadMessages("thread-1")).resolves.toEqual([
       userMessage("msg-1"),
       assistantMessage("msg-2"),
     ]);
+  });
+
+  it("reads legacy string payloadJson rows while writing native JSON payloads", async () => {
+    const { client, store } = createStore();
+    await store.createThread("thread-1", "user-1");
+    client.messages.set("legacy-msg", {
+      __typename: "Message",
+      createdAt: new Date().toISOString(),
+      id: "legacy-msg",
+      owner: "user-1::user-1",
+      payloadJson: JSON.stringify(userMessage("legacy-msg")),
+      position: 0,
+      role: "user",
+      sessionId: "thread-1",
+      updatedAt: new Date().toISOString(),
+    });
+
+    await expect(store.getThreadMessages("thread-1")).resolves.toEqual([userMessage("legacy-msg")]);
   });
 
   it("lists only threads for the requested user", async () => {
@@ -227,7 +234,9 @@ describe("Lambda DynamoDB ChatStore", () => {
     expect(client.messages.get("assistant-new")).toMatchObject({
       __typename: "Message",
       owner: "user-1::user-1",
+      payloadJson: assistantMessage("assistant-new"),
     });
+    expect(typeof client.messages.get("assistant-new")?.payloadJson).toBe("object");
     await expect(store.getThreadMessages("thread-1")).resolves.toEqual([
       userMessage("user-1"),
       assistantMessage("assistant-new"),

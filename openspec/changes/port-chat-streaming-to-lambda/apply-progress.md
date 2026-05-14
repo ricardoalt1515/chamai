@@ -500,3 +500,49 @@ The synthetic `streaming-canary` Function URL is **retained** until real Cognito
 ### Workload / PR Boundary
 
 - Boundary: minimal CORS compatibility and persistence metadata hotfix only; no frontend, AI SDK stream protocol, AI Elements rendering, auth token contract, blob storage, model, or Bedrock behavior changes.
+
+## Post-Deploy Fix Slice — Native JSON Message Payloads for Lambda ChatStore
+
+### Completed Tasks
+
+- Updated Lambda direct DynamoDB Message writes to store `payloadJson` as native JSON/map data instead of a JSON string so Amplify Data/AppSync `a.json()` reads hydrate messages correctly.
+- Preserved backwards-compatible reads for older Lambda-created rows where `payloadJson` was stored as a string.
+- Updated `saveMessage` and `replaceAssistantMessageAfter` batch rewrite paths.
+- Updated the Lambda ChatStore test fake to use AWS SDK `marshall`/`unmarshall` so nested DynamoDB JSON/map shapes are represented in tests.
+
+### Files Changed
+
+- `src/lib/storage/lambda-chat-store.ts` — writes native JSON payloads and parses both native object and legacy string payload shapes.
+- `src/lib/storage/lambda-chat-store.test.ts` — asserts native payload storage, legacy string read compatibility, and batch replacement native payload storage.
+- `openspec/changes/port-chat-streaming-to-lambda/apply-progress.md` — recorded this focused hotfix evidence.
+
+### TDD Cycle Evidence (native JSON payload hotfix)
+
+| Task | Test File | Layer | Safety Net | RED | GREEN | TRIANGULATE | REFACTOR |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Store Lambda Message `payloadJson` as native JSON while reading legacy string rows | `src/lib/storage/lambda-chat-store.test.ts` | Unit/storage adapter | ✅ `bun run test src/lib/storage/lambda-chat-store.test.ts` passed 7/7 before edits | ✅ New assertions failed because `saveMessage` and replacement batch writes stored `payloadJson` as a string | ✅ Changed Message writes to store the `MyUIMessage` object and parser to accept object or string; focused tests passed 8/8 | ✅ Covered normal `saveMessage`, replacement batch write, and legacy string read compatibility | ✅ Reused AWS SDK `marshall`/`unmarshall` in the test fake for nested JSON fidelity; Biome formatted tests |
+
+### Test Commands Run (native JSON payload hotfix)
+
+- `bun run test src/lib/storage/lambda-chat-store.test.ts` — ✅ baseline 7/7 passed before edits.
+- `bun run test src/lib/storage/lambda-chat-store.test.ts` — ❌ RED: expected native object payloads, received JSON strings.
+- `bun run test src/lib/storage/lambda-chat-store.test.ts` — ✅ GREEN: 8/8 passed after implementation.
+- `bunx tsc --noEmit` — ✅ passed.
+- `bun run check` — ❌ format failure in `src/lib/storage/lambda-chat-store.test.ts` after implementation.
+- `bunx biome check --write src/lib/storage/lambda-chat-store.ts src/lib/storage/lambda-chat-store.test.ts openspec/changes/port-chat-streaming-to-lambda/apply-progress.md` — ✅ formatted changed files.
+- `bun run test src/lib/storage/lambda-chat-store.test.ts` — ✅ post-format focused tests passed 8/8.
+- `bun run check` — ✅ passed, 141 files checked.
+
+### Deviations From Design
+
+- None. This keeps the direct DynamoDB fallback path but aligns `Message.payloadJson` with the Amplify Data schema (`a.json()`) used by the AppSync/SSR read path.
+
+### Remaining Tasks
+
+- Run deployment after parent review/commit.
+- Backfill existing Lambda-created Message rows whose `payloadJson` is still a DynamoDB string so existing sidebar entries load their messages through AppSync.
+- Re-test clicking a newly-created sidebar session and a backfilled pre-fix Lambda session.
+
+### Workload / PR Boundary
+
+- Boundary: minimal Lambda ChatStore payload-shape compatibility hotfix only; no CORS, frontend transport, AI SDK stream protocol, AI Elements rendering, auth, blob storage, model, or Bedrock behavior changes.
