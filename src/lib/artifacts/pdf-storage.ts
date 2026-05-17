@@ -1,4 +1,5 @@
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
@@ -20,6 +21,13 @@ export interface ArtifactPdfStorage {
     key: string;
   }>;
   get(input: { userId: string; threadId: string; kind: ArtifactKind }): Promise<Buffer | null>;
+  // Delete is used to clean up orphan PDF objects when artifact persistence
+  // fails AFTER the S3 PUT succeeds (e.g. DynamoDB write rejected). The
+  // deterministic key means future retries overwrite the row anyway, but for
+  // a kind that is never retried the orphan would persist forever — so we
+  // best-effort delete here. Implementations must NOT throw if the key
+  // doesn't exist (treat NoSuchKey/NotFound as success).
+  delete(input: { userId: string; threadId: string; kind: ArtifactKind }): Promise<void>;
 }
 
 export const buildPdfStorageKey = ({
@@ -103,6 +111,27 @@ export class S3ArtifactPdfStorage implements ArtifactPdfStorage {
       throw error;
     }
   }
+
+  async delete({
+    userId,
+    threadId,
+    kind,
+  }: {
+    userId: string;
+    threadId: string;
+    kind: ArtifactKind;
+  }): Promise<void> {
+    const key = buildPdfStorageKey({ prefix: this.prefix, userId, threadId, kind });
+    try {
+      await this.client.send(new DeleteObjectCommand({ Bucket: this.bucket, Key: key }));
+    } catch (error) {
+      const name = (error as { name?: string } | null)?.name;
+      if (name === "NoSuchKey" || name === "NotFound") {
+        return;
+      }
+      throw error;
+    }
+  }
 }
 
 export class InMemoryArtifactPdfStorage implements ArtifactPdfStorage {
@@ -135,6 +164,19 @@ export class InMemoryArtifactPdfStorage implements ArtifactPdfStorage {
   }): Promise<Buffer | null> {
     const key = buildPdfStorageKey({ prefix: "", userId, threadId, kind });
     return this.store.get(key) ?? null;
+  }
+
+  async delete({
+    userId,
+    threadId,
+    kind,
+  }: {
+    userId: string;
+    threadId: string;
+    kind: ArtifactKind;
+  }): Promise<void> {
+    const key = buildPdfStorageKey({ prefix: "", userId, threadId, kind });
+    this.store.delete(key);
   }
 }
 

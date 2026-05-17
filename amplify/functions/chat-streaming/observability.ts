@@ -2,7 +2,8 @@ export type ChatStreamLogEvent =
   | "request_start"
   | "auth_result"
   | "handler_result"
-  | "stream_event";
+  | "stream_event"
+  | "stream_write";
 
 export type ChatStreamLogger = {
   info(event: ChatStreamLogEvent, details?: Record<string, unknown>): void;

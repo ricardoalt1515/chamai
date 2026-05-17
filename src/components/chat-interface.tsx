@@ -1,16 +1,17 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
+import { getThreadMessages } from "@app/actions/messages";
 import { cloneThread, type Thread } from "@app/actions/threads";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DefaultChatTransport, type PrepareSendMessagesRequest } from "ai";
 import { fetchAuthSession } from "aws-amplify/auth";
-import { DownloadIcon, FileTextIcon, GitBranchIcon, GlobeIcon, RefreshCcwIcon } from "lucide-react";
+import { DownloadIcon, FileTextIcon, GitBranchIcon, RefreshCcwIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type * as React from "react";
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import {
   Conversation,
   ConversationContent,
@@ -26,12 +27,11 @@ import {
 import type { PromptInputMessage } from "@/components/ai-elements/prompt-input";
 import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-elements/reasoning";
 import { Shimmer } from "@/components/ai-elements/shimmer";
-import { Source, SourceContent, SourceTrigger } from "@/components/ai-elements/sources";
 import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
 import { Tool, ToolContent, ToolHeader, ToolInput } from "@/components/ai-elements/tool";
-import { WorkingMemoryUpdate } from "@/components/ai-elements/working-memory-update";
 import { ChatPromptComposer } from "@/components/chat-prompt-composer";
 import { useDraftInput } from "@/hooks/use-draft-input";
+import { reconcileThreadAfterStream } from "@/lib/chat-reconciliation";
 import { canSubmitPromptMessage, shouldShowLoadingShimmer } from "@/lib/chat-utils";
 import type { ArtifactToolUIResult, MyUIMessage } from "@/types/ui-message";
 import { CopyButton } from "./copy-button";
@@ -179,6 +179,8 @@ export function ChatInterface({
   const router = useRouter();
   const queryClient = useQueryClient();
   const draft = useDraftInput();
+  const reconciliationRequestRef = useRef(0);
+  const reconcileAfterStreamRef = useRef<() => void>(() => undefined);
 
   const branchMutation = useMutation({
     mutationFn: (upToMessageId: string) => cloneThread({ sourceThreadId: threadId, upToMessageId }),
@@ -188,50 +190,76 @@ export function ChatInterface({
     },
   });
 
-  const { messages, sendMessage, status, regenerate, error, clearError } = useChat<MyUIMessage>({
-    id: threadId,
-    messages: initialMessages,
-    onFinish: () => {
-      queryClient.invalidateQueries({ queryKey: ["threads"] });
-    },
-    onData: (dataPart) => {
-      if (dataPart.type === "data-new-thread-created" && isNewThreadCreatedData(dataPart.data)) {
-        const newThread = dataPart.data;
-        window.history.replaceState(window.history.state, "", `/c/${newThread.threadId}`);
-        queryClient.setQueryData<{ threads: Thread[] }>(["threads"], (old) => {
-          const thread: Thread = {
-            id: newThread.threadId,
-            title: newThread.title,
-            resourceId: newThread.resourceId,
-            createdAt: newThread.createdAt,
-            updatedAt: newThread.updatedAt,
-          };
-          if (!old) return { threads: [thread] };
-          if (old.threads.some((existingThread) => existingThread.id === thread.id)) {
-            return old;
-          }
-          return { threads: [thread, ...old.threads] };
-        });
-        queryClient.invalidateQueries({ queryKey: ["threads"] });
-      }
-      if (dataPart.type === "data-conversation-title" && isConversationTitleData(dataPart.data)) {
-        const title = dataPart.data.title;
-        queryClient.setQueryData<{ threads: Thread[] }>(["threads"], (old) => {
-          if (!old) return old;
-          return {
-            threads: old.threads.map((t) => (t.id === threadId ? { ...t, title } : t)),
-          };
-        });
-      }
-    },
-    transport: new DefaultChatTransport({
-      api: getChatTransportApi(),
-      body: {
-        threadId,
+  const { messages, setMessages, sendMessage, status, regenerate, error, clearError } =
+    useChat<MyUIMessage>({
+      id: threadId,
+      messages: initialMessages,
+      onFinish: () => {
+        reconcileAfterStreamRef.current();
       },
-      prepareSendMessagesRequest: prepareChatSendMessagesRequest,
-    }),
-  });
+      onData: (dataPart) => {
+        if (dataPart.type === "data-new-thread-created" && isNewThreadCreatedData(dataPart.data)) {
+          const newThread = dataPart.data;
+          window.history.replaceState(window.history.state, "", `/c/${newThread.threadId}`);
+          queryClient.setQueryData<{ threads: Thread[] }>(["threads"], (old) => {
+            const thread: Thread = {
+              id: newThread.threadId,
+              title: newThread.title,
+              resourceId: newThread.resourceId,
+              createdAt: newThread.createdAt,
+              updatedAt: newThread.updatedAt,
+            };
+            if (!old) return { threads: [thread] };
+            if (old.threads.some((existingThread) => existingThread.id === thread.id)) {
+              return old;
+            }
+            return { threads: [thread, ...old.threads] };
+          });
+          queryClient.invalidateQueries({ queryKey: ["threads"] });
+        }
+        if (dataPart.type === "data-conversation-title" && isConversationTitleData(dataPart.data)) {
+          const title = dataPart.data.title;
+          queryClient.setQueryData<{ threads: Thread[] }>(["threads"], (old) => {
+            if (!old) return old;
+            return {
+              threads: old.threads.map((t) => (t.id === threadId ? { ...t, title } : t)),
+            };
+          });
+        }
+      },
+      transport: new DefaultChatTransport({
+        api: getChatTransportApi(),
+        body: {
+          threadId,
+        },
+        prepareSendMessagesRequest: prepareChatSendMessagesRequest,
+      }),
+    });
+
+  const reconcilePersistedMessages = useCallback(() => {
+    const requestId = reconciliationRequestRef.current + 1;
+    reconciliationRequestRef.current = requestId;
+    void reconcileThreadAfterStream({
+      fetchMessages: getThreadMessages,
+      onError: (reconciliationError) => {
+        console.warn("Failed to reconcile persisted chat messages", reconciliationError);
+      },
+      queryClient,
+      setMessages,
+      shouldApply: () => reconciliationRequestRef.current === requestId,
+      threadId,
+    });
+  }, [queryClient, setMessages, threadId]);
+
+  useEffect(() => {
+    reconcileAfterStreamRef.current = reconcilePersistedMessages;
+  }, [reconcilePersistedMessages]);
+
+  useEffect(() => {
+    if (error) {
+      reconcilePersistedMessages();
+    }
+  }, [error, reconcilePersistedMessages]);
 
   const isEmptyState = messages.length === 0;
 
@@ -241,6 +269,7 @@ export function ChatInterface({
         return;
       }
 
+      reconciliationRequestRef.current += 1;
       clearError();
 
       await sendMessage(message, {
@@ -388,43 +417,6 @@ export function ChatInterface({
                                     {part.text}
                                   </MessageResponse>
                                 );
-                              case "tool-webSearch":
-                                return part.state === "output-available" ? (
-                                  <div
-                                    key={`${message.id}-${i}`}
-                                    className="not-prose mb-4 flex flex-wrap gap-2"
-                                  >
-                                    {part.output.map((source, index) => (
-                                      <Source key={source.url} href={source.url}>
-                                        <SourceTrigger showFavicon label={index + 1} />
-                                        <SourceContent
-                                          title={source.title ?? source.url}
-                                          description={source.content}
-                                        />
-                                      </Source>
-                                    ))}
-                                  </div>
-                                ) : (
-                                  <div
-                                    key={`${message.id}-${i}`}
-                                    className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/8 px-3 py-1.5"
-                                  >
-                                    <GlobeIcon className="size-3.5 text-primary" />
-                                    <Shimmer as="span" className="text-foreground/85 text-sm">
-                                      {`Searching for: ${part.state === "input-available" ? part.input.query : "…"}`}
-                                    </Shimmer>
-                                  </div>
-                                );
-                              case "tool-updateWorkingMemory":
-                                return (
-                                  <WorkingMemoryUpdate
-                                    key={`${message.id}-${i}`}
-                                    state={part.state}
-                                    input={
-                                      part.state !== "input-streaming" ? part.input : undefined
-                                    }
-                                  />
-                                );
                               default: {
                                 if (!isArtifactToolPart(part)) {
                                   return null;
@@ -478,6 +470,7 @@ export function ChatInterface({
                             <MessageAction
                               tooltip="Regenerate"
                               onClick={() => {
+                                reconciliationRequestRef.current += 1;
                                 regenerate({ messageId: message.id });
                               }}
                             >

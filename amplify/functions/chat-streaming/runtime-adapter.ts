@@ -1,3 +1,5 @@
+import { once } from "node:events";
+
 export type LambdaFunctionUrlEvent = {
   version?: string;
   rawPath?: string;
@@ -27,14 +29,49 @@ type ResponseStreamMetadata = {
   headers?: Record<string, string>;
 };
 
+type StreamWriteTelemetry = {
+  chunkIndex: number;
+  byteLength: number;
+  totalBytes: number;
+  waitedForDrain: boolean;
+};
+
 type PipeOptions = {
   decorateResponseStream?: (
     responseStream: LambdaResponseStream,
     metadata: ResponseStreamMetadata,
   ) => LambdaResponseStream;
+  onChunkWritten?: (telemetry: StreamWriteTelemetry) => void;
+  // Lambda Function URL response streaming has a ~20s idle timeout: if no
+  // bytes flow for that window, AWS severs the TCP connection client-side.
+  // The AI SDK tool execute() (PDF render + S3 + DDB) can block the SSE
+  // stream for 20-30s between events, which trips the cut. We write an SSE
+  // comment line ":" every keepaliveIntervalMs to keep the pipe warm.
+  // Comments are part of the SSE spec and silently ignored by EventSource
+  // / @ai-sdk/react. Only applied to text/event-stream responses — other
+  // content types (text/plain errors, CORS preflight) are short and don't
+  // need it. Pass 0 to disable.
+  keepaliveIntervalMs?: number;
 };
 
+const DEFAULT_SSE_KEEPALIVE_MS = 10_000;
+const SSE_KEEPALIVE_BYTES = Buffer.from(": keepalive\n\n");
+
 const DEFAULT_ALLOWED_HEADERS = ["authorization", "content-type", "x-request-id"];
+
+type DrainableWritable = LambdaResponseStream & NodeJS.EventEmitter;
+
+const writeResponseChunk = async (
+  stream: LambdaResponseStream,
+  chunk: Buffer | string,
+): Promise<boolean> => {
+  const canContinue = stream.write(chunk);
+  if (canContinue === false) {
+    await once(stream as DrainableWritable, "drain");
+    return true;
+  }
+  return false;
+};
 const DEFAULT_ALLOWED_METHODS = ["POST", "OPTIONS"];
 const DEFAULT_EXPOSED_HEADERS = ["x-error-code", "x-request-id"];
 
@@ -166,12 +203,47 @@ export const pipeResponseToStream = async (
     stream.setContentType?.(headers["content-type"]);
   }
 
+  const isSse = (headers["content-type"] ?? "").startsWith("text/event-stream");
+  const keepaliveMs = isSse ? (options.keepaliveIntervalMs ?? DEFAULT_SSE_KEEPALIVE_MS) : 0;
+  let keepaliveTimer: NodeJS.Timeout | undefined;
+  let keepaliveWriteInFlight = false;
+  if (keepaliveMs > 0) {
+    keepaliveTimer = setInterval(() => {
+      if (keepaliveWriteInFlight) {
+        return;
+      }
+      keepaliveWriteInFlight = true;
+      void writeResponseChunk(stream, SSE_KEEPALIVE_BYTES)
+        .catch(() => {
+          // stream may already be closing; nothing we can do here
+        })
+        .finally(() => {
+          keepaliveWriteInFlight = false;
+        });
+    }, keepaliveMs);
+  }
+
+  let chunkIndex = 0;
+  let totalBytes = 0;
+
+  const writeBodyChunk = async (chunk: Buffer): Promise<void> => {
+    const waitedForDrain = await writeResponseChunk(stream, chunk);
+    chunkIndex += 1;
+    totalBytes += chunk.byteLength;
+    options.onChunkWritten?.({
+      chunkIndex,
+      byteLength: chunk.byteLength,
+      totalBytes,
+      waitedForDrain,
+    });
+  };
+
   try {
     const reader = response.body?.getReader();
     if (!reader) {
       const bytes = await response.arrayBuffer();
       if (bytes.byteLength > 0) {
-        stream.write(Buffer.from(bytes));
+        await writeBodyChunk(Buffer.from(bytes));
       }
       return;
     }
@@ -183,10 +255,13 @@ export const pipeResponseToStream = async (
       }
 
       if (value) {
-        stream.write(Buffer.from(value));
+        await writeBodyChunk(Buffer.from(value));
       }
     }
   } finally {
+    if (keepaliveTimer) {
+      clearInterval(keepaliveTimer);
+    }
     stream.end();
   }
 };

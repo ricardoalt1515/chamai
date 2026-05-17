@@ -5,6 +5,7 @@ import { assertAmplifyOutputsConfigured } from "@/config/amplify-runtime";
 import type { OwnerContext } from "@/lib/auth/server";
 import type { FileRecord, GeneratedOutputRecord } from "@/lib/storage/chat-repository";
 import type { ChatStore, StoredThread } from "@/lib/storage/chat-store";
+import { parseStoredPayloadJson } from "@/lib/storage/parse-payload";
 import type { MyUIMessage } from "@/types/ui-message";
 import type { Schema } from "../../../amplify/data/resource";
 import outputs from "../../../amplify_outputs.json";
@@ -61,18 +62,6 @@ const isStoredUIMessage = (value: unknown): value is MyUIMessage => {
     (candidate.role === "user" || candidate.role === "assistant" || candidate.role === "system") &&
     Array.isArray(candidate.parts)
   );
-};
-
-const parseStoredPayloadJson = (value: unknown): unknown => {
-  if (typeof value !== "string") {
-    return value;
-  }
-
-  try {
-    return JSON.parse(value);
-  } catch {
-    return null;
-  }
 };
 
 const assertNoAmplifyErrors = <T>(operation: string, result: AmplifyOperationResult<T>): T => {

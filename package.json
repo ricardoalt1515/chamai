@@ -15,7 +15,9 @@
     "verify:amplify-config": "bun src/config/amplify-runtime.ts",
     "format": "biome format",
     "lint": "biome lint",
-    "check": "biome check"
+    "check": "biome check",
+    "prompts:generate": "bun scripts/generate-prompts.ts",
+    "prompts:check": "bun scripts/generate-prompts.ts --check"
   },
   "dependencies": {
     "@ai-sdk/amazon-bedrock": "^4.0.96",

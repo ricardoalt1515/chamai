@@ -1,3 +1,4 @@
+import { EventEmitter } from "node:events";
 import { describe, expect, it, vi } from "vitest";
 import {
   buildCorsPreflightResponse,
@@ -199,6 +200,103 @@ describe("Lambda Function URL runtime adapter", () => {
 
     expect(Buffer.concat(responseStream.chunks).toString()).toBe("created");
     expect(responseStream.ended).toBe(true);
+  });
+
+  it("emits SSE keepalive comments during idle gaps for text/event-stream responses", async () => {
+    let releaseSecondChunk!: () => void;
+    const gate = new Promise<void>((resolve) => {
+      releaseSecondChunk = resolve;
+    });
+    const source = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        controller.enqueue(new TextEncoder().encode("data: first\n\n"));
+        await gate;
+        controller.enqueue(new TextEncoder().encode("data: second\n\n"));
+        controller.close();
+      },
+    });
+    const response = new Response(source, {
+      status: 200,
+      headers: { "content-type": "text/event-stream" },
+    });
+    const responseStream = createResponseStream();
+
+    const pipe = pipeResponseToStream(response, responseStream, {
+      keepaliveIntervalMs: 5,
+    });
+    await new Promise((r) => setTimeout(r, 40));
+    releaseSecondChunk();
+    await pipe;
+
+    const written = responseStream.chunks.map((c) => c.toString()).join("");
+    expect(written).toContain("data: first\n\n");
+    expect(written).toContain(": keepalive\n\n");
+    expect(written).toContain("data: second\n\n");
+    expect(responseStream.ended).toBe(true);
+  });
+
+  it("waits for Lambda responseStream drain before writing more body chunks", async () => {
+    const source = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode("first"));
+        controller.enqueue(new TextEncoder().encode("second"));
+        controller.close();
+      },
+    });
+    const response = new Response(source, {
+      status: 200,
+      headers: { "content-type": "text/plain; charset=utf-8" },
+    });
+    const emitter = new EventEmitter();
+    let writeCount = 0;
+    const chunks: Buffer[] = [];
+    const responseStream = Object.assign(emitter, {
+      chunks,
+      ended: false,
+      write(chunk: Buffer | string) {
+        writeCount += 1;
+        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+        return writeCount !== 1;
+      },
+      end() {
+        this.ended = true;
+      },
+      setContentType() {},
+    }) as unknown as LambdaResponseStream & { chunks: Buffer[]; ended: boolean };
+
+    const pipe = pipeResponseToStream(response, responseStream);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(responseStream.chunks.map((chunk) => chunk.toString())).toEqual(["first"]);
+    expect(responseStream.ended).toBe(false);
+
+    emitter.emit("drain");
+    await pipe;
+
+    expect(responseStream.chunks.map((chunk) => chunk.toString())).toEqual(["first", "second"]);
+    expect(responseStream.ended).toBe(true);
+  });
+
+  it("does not emit keepalive comments for non-SSE responses", async () => {
+    const source = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        controller.enqueue(new TextEncoder().encode("first"));
+        await new Promise((r) => setTimeout(r, 30));
+        controller.enqueue(new TextEncoder().encode("second"));
+        controller.close();
+      },
+    });
+    const response = new Response(source, {
+      status: 200,
+      headers: { "content-type": "text/plain; charset=utf-8" },
+    });
+    const responseStream = createResponseStream();
+
+    await pipeResponseToStream(response, responseStream, { keepaliveIntervalMs: 5 });
+
+    const written = responseStream.chunks.map((c) => c.toString()).join("");
+    expect(written).not.toContain(": keepalive");
+    expect(written).toBe("firstsecond");
   });
 
   it("ends the Lambda responseStream when source stream reading fails", async () => {

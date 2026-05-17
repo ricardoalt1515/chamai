@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import { cookies } from "next/headers";
 import { assertAmplifyOutputsConfigured } from "@/config/amplify-runtime";
 import type { OwnerContext } from "@/lib/auth/owner-context";
+import { parseStoredPayloadJson } from "@/lib/storage/parse-payload";
 import type { Schema } from "../../../amplify/data/resource";
 import outputs from "../../../amplify_outputs.json";
 import {
@@ -49,7 +50,7 @@ const toArtifactRecord = (row: ArtifactRow): ArtifactRecord => ({
   title: String(row.title ?? "Artifact"),
   customerSlug: typeof row.customerSlug === "string" ? row.customerSlug : null,
   payloadVersion: Number(row.payloadVersion ?? 1),
-  payload: row.payload,
+  payload: parseStoredPayloadJson(row.payload),
   createdAtIso: String(row.createdAtIso ?? row.createdAt ?? new Date().toISOString()),
   updatedAtIso: String(
     row.updatedAtIso ?? row.updatedAt ?? row.createdAtIso ?? new Date().toISOString(),

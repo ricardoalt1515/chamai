@@ -1,5 +1,4 @@
 import type { UIMessage } from "ai";
-import type { WorkingMemory } from "@/config/working-memory";
 
 // AI SDK 6 verification note (checked in node_modules/ai/src + docs):
 // - Tool definitions use `tool({ inputSchema, execute })`.
@@ -38,19 +37,6 @@ export type MyUIMessage = UIMessage<
     };
   },
   {
-    webSearch: {
-      input: { query: string };
-      output: Array<{
-        title: string | null;
-        url: string;
-        content: string;
-        publishedDate?: string;
-      }>;
-    };
-    updateWorkingMemory: {
-      input: { memory: WorkingMemory };
-      output: { success: boolean };
-    };
     generateFieldBrief: {
       input: unknown;
       output: ArtifactToolUIResult;

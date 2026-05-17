@@ -171,6 +171,9 @@ export const handleChatStreamingRequest = async (
 
     await pipeResponseToStream(response, responseStream, {
       decorateResponseStream,
+      onChunkWritten: (telemetry) => {
+        logger.info("stream_write", telemetry);
+      },
     });
     logger.info("stream_event", { completed: true });
   } catch (error) {

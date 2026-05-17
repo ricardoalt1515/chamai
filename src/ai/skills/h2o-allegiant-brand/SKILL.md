@@ -1,13 +1,13 @@
 ---
 name: h2o-allegiant-brand
-description: H2O Allegiant visual identity system — colour palettes (primary brand, functional accents, chart tertiary), typography (Inter / Inter Tight / JetBrains Mono with Helvetica fallback), callout components (gate callout, flag callout, strategic insight, why-it-matters, theme header), cover block templates (Ideation, Analytical, Playbook), and table styles (comparison, decision-maker matrix, solution fit). Consumed by h2o-discovery-reporting to render the five-tier output (Snapshot + Ideation/Analytical/Playbook PDFs + Markdown annex). Not a primary user-facing skill — never triggered by user intent; only loaded by h2o-discovery-reporting when rendering PDFs. Read SKILL.md first for rationale and usage; then import primitives from brand.py.
+description: H2O Allegiant visual identity system — colour palettes (primary brand, functional accents, chart tertiary), typography (Inter / Inter Tight / JetBrains Mono with Helvetica fallback), callout components (gate callout, flag callout, strategic insight, why-it-matters, theme header), cover block templates (Field Brief, Playbook, Analytical Read, Proposal Shell), and table styles (comparison, decision-maker matrix, solution fit). Consumed by h2o-field-brief to render the four-artefact opportunity package (Field Brief, Playbook, Analytical Read, Proposal Shell — PDFs only, no Markdown mirrors). Not a primary user-facing skill — never triggered by user intent; only loaded by h2o-field-brief when rendering PDFs. Read SKILL.md first for rationale and usage; then import primitives from brand.py.
 ---
 
 # H2O Allegiant brand system
 
 ## What this skill is for
 
-This is the **visual identity primitive provider** for `h2o-discovery-reporting`. It is not user-triggered. The reporting skill loads `brand.py` when rendering PDFs and consumes the primitives defined here — colours, fonts, callout components, cover templates, table styles.
+This is the **visual identity primitive provider** for `h2o-field-brief`. It is not user-triggered. The reporting skill loads `brand.py` when rendering PDFs and consumes the primitives defined here — colours, fonts, callout components, cover templates, table styles.
 
 The design rationale lives in this SKILL.md. The Python implementation lives in `brand.py`. The reporting skill imports from `brand.py` directly:
 
@@ -238,7 +238,7 @@ For the solution-options × sub-stream fit table in the Analytical's Section 3.
 
 ## Usage rules
 
-- **Never define colours or fonts directly in `h2o-discovery-reporting`.** Always import from `brand.py`. If a needed primitive isn't there, add it to `brand.py` first, then consume it.
+- **Never define colours or fonts directly in `h2o-field-brief`.** Always import from `brand.py`. If a needed primitive isn't there, add it to `brand.py` first, then consume it.
 - **Brand navy and brand blue are not interchangeable with functional accents.** Headers and brand identity use navy/blue/cyan; gate status uses green/amber/red; flag severity uses red/amber/yellow-gold/slate.
 - **The chart palette is for data viz only.** Don't use chart palette colours as primary brand elements.
 - **Font fallback is acceptable but production deployments should install Inter and JetBrains Mono.** The reporting skill works with Helvetica/Courier fallback; the visual register is just plainer.
@@ -261,4 +261,4 @@ h2o-allegiant-brand/
 └── brand.py          (Python module — colours, fonts, callouts, styles)
 ```
 
-`h2o-discovery-reporting` imports primitives from `brand.py` directly. No other skill consumes this one.
+`h2o-field-brief` imports primitives from `brand.py` directly. No other skill consumes this one.

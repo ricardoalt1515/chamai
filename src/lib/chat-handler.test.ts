@@ -57,15 +57,37 @@ vi.mock("ai", () => ({
   createUIMessageStreamResponse: vi.fn(
     ({ stream }: { stream: ReadableStream }) => new Response(stream, { status: 200 }),
   ),
+  consumeStream: vi.fn(async () => undefined),
   generateText: vi.fn(),
   validateUIMessages: vi.fn(async ({ messages }: { messages: unknown[] }) => messages),
-  // chat-handler now imports H2O_AGENT_INSTRUCTIONS from agent.ts as a value,
-  // forcing the agent module (and its module-level `tool(...)` and
-  // `new ToolLoopAgent(...)` calls) to evaluate during this test file.
+  // The chat-handler module pulls in `@/ai/agents/agent` transitively, which
+  // evaluates `tool(...)`, `stepCountIs(...)`, and `new ToolLoopAgent(...)` at
+  // module load time. Stub those three exports so test-time evaluation succeeds
+  // without touching the real Bedrock provider.
   tool: vi.fn((config: unknown) => config),
   stepCountIs: vi.fn((count: number) => ({ __stopAt: count })),
   ToolLoopAgent: vi.fn(() => ({})),
 }));
+
+// Mock agent that signals isAborted=true with a message holding incomplete
+// tool parts — exercises the sanitize-on-abort path end-to-end.
+const createAbortingMockAgent = (responseMessage: UIMessage): Agent =>
+  ({
+    stream: vi.fn().mockImplementation(async () => ({
+      toUIMessageStream: ({ onFinish: onUiFinish }: MockUIStreamOptions = {}) =>
+        new ReadableStream({
+          async start(controller) {
+            await onUiFinish?.({
+              responseMessage,
+              messages: [],
+              isContinuation: false,
+              isAborted: true,
+            });
+            controller.close();
+          },
+        }),
+    })),
+  }) as unknown as Agent;
 
 // Create a mock agent factory
 const createMockAgent = (responseText: string): Agent => {
@@ -206,21 +228,13 @@ describe("api/chat handler", () => {
             parts: [{ type: "text", text: "hola" }],
           }),
         ]),
-        timeout: expect.objectContaining({ totalMs: 120_000 }),
+        timeout: expect.objectContaining({ totalMs: 240_000 }),
       }),
     );
-    // The first message must be a system message with Bedrock cachePoint so
-    // the H2O instructions hit Anthropic's prompt cache. Sonnet 4.6 supports
-    // 1-hour TTL.
+    // System prompt + cachePoint live in the agent's `instructions` slot
+    // (see agent.ts + agent.test.ts) — handler must NOT prepend a system message.
     const streamArgs = (mockAgent.stream as ReturnType<typeof vi.fn>).mock.calls[0][0];
-    expect(streamArgs.messages[0]).toEqual(
-      expect.objectContaining({
-        role: "system",
-        providerOptions: {
-          bedrock: { cachePoint: { type: "default", ttl: "1h" } },
-        },
-      }),
-    );
+    expect(streamArgs.messages.every((m: { role: string }) => m.role !== "system")).toBe(true);
     expect(saveMessage).toHaveBeenCalledTimes(2);
     expect(saveMessage).toHaveBeenLastCalledWith(
       "thread-1",
@@ -240,6 +254,116 @@ describe("api/chat handler", () => {
         }),
       }),
     );
+  });
+
+  it("sanitizes incomplete tool parts before persist when stream aborts", async () => {
+    const saveMessage = vi.fn<ChatStore["saveMessage"]>().mockResolvedValue(undefined);
+    const store = {
+      saveMessage,
+      getThreadById: vi.fn<ChatStore["getThreadById"]>().mockResolvedValue({
+        id: "thread-1",
+        resourceId: "user-id",
+        title: "Existing",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }),
+      createThread: vi.fn<ChatStore["createThread"]>().mockResolvedValue({
+        id: "thread-1",
+        resourceId: "user-id",
+        title: "Existing",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }),
+      updateThreadTitle: vi.fn<ChatStore["updateThreadTitle"]>().mockResolvedValue(undefined),
+      getThreadMessages: vi.fn<ChatStore["getThreadMessages"]>().mockResolvedValue([]),
+      listThreads: vi.fn<ChatStore["listThreads"]>().mockResolvedValue([]),
+      deleteThread: vi.fn<ChatStore["deleteThread"]>().mockResolvedValue(undefined),
+      replaceAssistantMessageAfter: vi
+        .fn<ChatStore["replaceAssistantMessageAfter"]>()
+        .mockResolvedValue(undefined),
+      cloneThread: vi.fn<ChatStore["cloneThread"]>().mockResolvedValue({
+        id: "thread-2",
+        resourceId: "user-id",
+        title: "cloned",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }),
+    } satisfies ChatStore;
+
+    const blobStore = {
+      put: vi.fn<BlobStore["put"]>().mockResolvedValue({
+        key: "k",
+        url: "https://example/k",
+        sizeBytes: 0,
+      }),
+      get: vi.fn<BlobStore["get"]>().mockResolvedValue(Buffer.from("", "utf8")),
+      delete: vi.fn<BlobStore["delete"]>().mockResolvedValue(undefined),
+    } satisfies BlobStore;
+
+    const partialResponse: UIMessage = {
+      id: "a-aborted",
+      role: "assistant",
+      parts: [
+        { type: "text", text: "preamble" },
+        {
+          type: "tool-generateFieldBrief",
+          state: "output-available",
+          input: { kind: "field-brief" },
+          output: { artifactId: "a-1", title: "FB" },
+          toolCallId: "t1",
+        } as unknown as UIMessage["parts"][number],
+        {
+          type: "tool-generatePlaybook",
+          state: "input-streaming",
+          input: { kind: "playbook" },
+          toolCallId: "t2",
+        } as unknown as UIMessage["parts"][number],
+      ],
+    };
+
+    const handler = createChatPostHandler({
+      chatStore: store,
+      blobStore,
+      agent: createAbortingMockAgent(partialResponse),
+      generateText: vi.fn(),
+      getOwner: getTestOwner,
+    });
+
+    const response = await handler({
+      request: buildRequest({
+        threadId: "thread-1",
+        modelId: "claude-sonnet-4-6",
+        messages: [
+          {
+            id: "u-1",
+            role: "user",
+            parts: [{ type: "text", text: "generate" }],
+          } satisfies TestMessage,
+        ],
+      }),
+    });
+
+    await response.text();
+
+    expect(saveMessage).toHaveBeenCalledTimes(2);
+    const [, persistedMessage] = saveMessage.mock.calls[1];
+    const parts = persistedMessage.parts as Array<{
+      type: string;
+      state?: string;
+      errorText?: string;
+      output?: unknown;
+    }>;
+    expect(parts[0]).toMatchObject({ type: "text", text: "preamble" });
+    expect(parts[1]).toMatchObject({
+      type: "tool-generateFieldBrief",
+      state: "output-available",
+    });
+    expect(parts[2]).toMatchObject({
+      type: "tool-generatePlaybook",
+      state: "output-error",
+    });
+    expect(parts[2].errorText).toMatch(/interrupted/i);
+    expect("output" in parts[2]).toBe(false);
   });
 
   it("en regeneración reemplaza mensaje asistente en vez de duplicar", async () => {
@@ -337,7 +461,7 @@ describe("api/chat handler", () => {
     expect(store.saveMessage).toHaveBeenCalledTimes(0);
   });
 
-  it("si falla generación no persiste respuesta parcial de asistente", async () => {
+  it("si falla generación persiste placeholder asistente para que el thread sea recuperable", async () => {
     const saveMessage = vi.fn<ChatStore["saveMessage"]>().mockResolvedValue(undefined);
     const replaceAssistantMessageAfter = vi
       .fn<ChatStore["replaceAssistantMessageAfter"]>()
@@ -411,38 +535,60 @@ describe("api/chat handler", () => {
 
     await response.text();
 
-    expect(saveMessage).toHaveBeenCalledTimes(1);
+    expect(saveMessage).toHaveBeenCalledTimes(2);
+    expect(saveMessage).toHaveBeenLastCalledWith(
+      "thread-1",
+      expect.objectContaining({
+        role: "assistant",
+        parts: expect.arrayContaining([
+          expect.objectContaining({
+            type: "text",
+            text: expect.stringMatching(/interrupted/i),
+          }),
+        ]),
+      }),
+    );
     expect(replaceAssistantMessageAfter).not.toHaveBeenCalled();
   });
 
-  it("persiste respuesta de tool updateWorkingMemory cuando hay resultado", async () => {
+  it("regenerate + stream failure writes interrupted placeholder via replaceAssistantMessageAfter, not saveMessage", async () => {
     const saveMessage = vi.fn<ChatStore["saveMessage"]>().mockResolvedValue(undefined);
+    const replaceAssistantMessageAfter = vi
+      .fn<ChatStore["replaceAssistantMessageAfter"]>()
+      .mockResolvedValue(undefined);
+
     const store = {
       saveMessage,
-      getThreadById: vi
-        .fn<ChatStore["getThreadById"]>()
-        .mockResolvedValueOnce(null)
-        .mockResolvedValue({
-          id: "thread-1",
-          resourceId: "user-id",
-          title: "New Chat",
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        }),
+      getThreadById: vi.fn<ChatStore["getThreadById"]>().mockResolvedValue({
+        id: "thread-1",
+        resourceId: "user-id",
+        title: "Título",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }),
       createThread: vi.fn<ChatStore["createThread"]>().mockResolvedValue({
         id: "thread-1",
         resourceId: "user-id",
-        title: "New Chat",
+        title: "Título",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }),
       updateThreadTitle: vi.fn<ChatStore["updateThreadTitle"]>().mockResolvedValue(undefined),
-      getThreadMessages: vi.fn<ChatStore["getThreadMessages"]>().mockResolvedValue([]),
+      getThreadMessages: vi.fn<ChatStore["getThreadMessages"]>().mockResolvedValue([
+        {
+          id: "u-1",
+          role: "user",
+          parts: [{ type: "text", text: "hola" }],
+        },
+        {
+          id: "a-1",
+          role: "assistant",
+          parts: [{ type: "text", text: "respuesta vieja" }],
+        },
+      ]),
       listThreads: vi.fn<ChatStore["listThreads"]>().mockResolvedValue([]),
       deleteThread: vi.fn<ChatStore["deleteThread"]>().mockResolvedValue(undefined),
-      replaceAssistantMessageAfter: vi
-        .fn<ChatStore["replaceAssistantMessageAfter"]>()
-        .mockResolvedValue(undefined),
+      replaceAssistantMessageAfter,
       cloneThread: vi.fn<ChatStore["cloneThread"]>().mockResolvedValue({
         id: "thread-2",
         resourceId: "user-id",
@@ -463,33 +609,7 @@ describe("api/chat handler", () => {
     } satisfies BlobStore;
 
     const mockAgent = {
-      stream: vi.fn().mockImplementation(async () => ({
-        toUIMessageStream: ({ onFinish }: MockUIStreamOptions = {}) =>
-          new ReadableStream({
-            async start(controller) {
-              await onFinish?.({
-                responseMessage: {
-                  id: "assistant-1",
-                  role: "assistant",
-                  parts: [
-                    {
-                      type: "tool-updateWorkingMemory",
-                      toolCallId: "tool-call-1",
-                      state: "output-available",
-                      input: { memory: { name: "Ada" } },
-                      output: { success: true },
-                    },
-                  ],
-                },
-                messages: [],
-                isContinuation: false,
-                isAborted: false,
-              });
-
-              controller.close();
-            },
-          }),
-      })),
+      stream: vi.fn().mockRejectedValue(new Error("bedrock timeout")),
     } as unknown as Agent;
 
     const handler = createChatPostHandler({
@@ -504,11 +624,13 @@ describe("api/chat handler", () => {
       request: buildRequest({
         threadId: "thread-1",
         modelId: "claude-sonnet-4-6",
+        trigger: "regenerate-message",
+        messageId: "a-1",
         messages: [
           {
             id: "u-1",
             role: "user",
-            parts: [{ type: "text", text: "guarda mi nombre" }],
+            parts: [{ type: "text", text: "hola" }],
           } satisfies TestMessage,
         ],
       }),
@@ -516,18 +638,23 @@ describe("api/chat handler", () => {
 
     await response.text();
 
-    expect(saveMessage).toHaveBeenCalledTimes(2);
-    expect(saveMessage).toHaveBeenLastCalledWith(
+    expect(replaceAssistantMessageAfter).toHaveBeenCalledTimes(1);
+    expect(replaceAssistantMessageAfter).toHaveBeenCalledWith(
       "thread-1",
+      "a-1",
       expect.objectContaining({
         role: "assistant",
         parts: expect.arrayContaining([
           expect.objectContaining({
-            type: "tool-updateWorkingMemory",
-            state: "output-available",
+            type: "text",
+            text: expect.stringMatching(/interrupted/i),
           }),
         ]),
       }),
+    );
+    expect(saveMessage).not.toHaveBeenCalledWith(
+      "thread-1",
+      expect.objectContaining({ role: "assistant" }),
     );
   });
 

@@ -2,6 +2,7 @@ import { fetchAuthSession } from "aws-amplify/auth";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { parseChatRequest } from "@/lib/chat-helpers";
+import { reconcileThreadAfterStream } from "@/lib/chat-reconciliation";
 import { canSubmitPromptMessage } from "@/lib/chat-utils";
 import type { MyUIMessage } from "@/types/ui-message";
 import {
@@ -153,6 +154,69 @@ describe("prepareChatSendMessagesRequest", () => {
       webSearchEnabled: false,
     });
     expect(parseChatRequest(prepared.body).regenerateMessageId).toBe("assistant-1");
+  });
+});
+
+describe("reconcileThreadAfterStream", () => {
+  it("invalidates thread list and replaces useChat messages from persisted thread history", async () => {
+    const invalidateQueries = vi.fn();
+    const setMessages = vi.fn();
+    const freshMessages: MyUIMessage[] = [
+      {
+        id: "assistant-1",
+        role: "assistant",
+        parts: [{ type: "text", text: "Persisted truth" }],
+      },
+    ];
+    const fetchMessages = vi.fn().mockResolvedValue({ messages: freshMessages });
+
+    await reconcileThreadAfterStream({
+      fetchMessages,
+      queryClient: { invalidateQueries },
+      setMessages,
+      settleMs: 0,
+      threadId: "thread-1",
+    });
+
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ["threads"] });
+    expect(fetchMessages).toHaveBeenCalledWith({ threadId: "thread-1" });
+    expect(setMessages).toHaveBeenCalledWith(freshMessages);
+  });
+
+  it("does not replace messages when a newer reconciliation supersedes the request", async () => {
+    const setMessages = vi.fn();
+    const fetchMessages = vi.fn().mockResolvedValue({
+      messages: [{ id: "assistant-1", role: "assistant", parts: [{ type: "text", text: "old" }] }],
+    });
+
+    await reconcileThreadAfterStream({
+      fetchMessages,
+      queryClient: { invalidateQueries: vi.fn() },
+      setMessages,
+      settleMs: 0,
+      shouldApply: () => false,
+      threadId: "thread-1",
+    });
+
+    expect(setMessages).not.toHaveBeenCalled();
+  });
+
+  it("reports persisted-message fetch errors without throwing", async () => {
+    const onError = vi.fn();
+    const fetchError = new Error("history unavailable");
+
+    await expect(
+      reconcileThreadAfterStream({
+        fetchMessages: vi.fn().mockRejectedValue(fetchError),
+        onError,
+        queryClient: { invalidateQueries: vi.fn() },
+        setMessages: vi.fn(),
+        settleMs: 0,
+        threadId: "thread-1",
+      }),
+    ).resolves.toBeUndefined();
+
+    expect(onError).toHaveBeenCalledWith(fetchError);
   });
 });
 

@@ -205,18 +205,36 @@ const persistArtifact = async <
     userId: ctx.owner.userId,
   });
 
-  const artifact = await ctx.artifactStore.putArtifact(
-    {
-      customerSlug,
-      kind,
-      payload,
-      payloadVersion: 1,
-      status: "ready",
-      threadId: ctx.threadId,
-      title,
-    },
-    ctx.owner,
-  );
+  // If the DynamoDB write rejects after S3 succeeded, delete the orphan
+  // PDF so a never-retried kind doesn't accumulate dead bytes in S3.
+  // The S3 key is deterministic per (user, thread, kind), so a successful
+  // retry would overwrite anyway — this only matters when no retry happens.
+  let artifact: Awaited<ReturnType<typeof ctx.artifactStore.putArtifact>>;
+  try {
+    artifact = await ctx.artifactStore.putArtifact(
+      {
+        customerSlug,
+        kind,
+        payload,
+        payloadVersion: 1,
+        status: "ready",
+        threadId: ctx.threadId,
+        title,
+      },
+      ctx.owner,
+    );
+  } catch (error) {
+    await ctx.pdfStorage
+      .delete({ kind, threadId: ctx.threadId, userId: ctx.owner.userId })
+      .catch((cleanupError) => {
+        console.error("[h2o-artifacts] s3-cleanup-failed", {
+          kind,
+          threadId: ctx.threadId,
+          message: cleanupError instanceof Error ? cleanupError.message : String(cleanupError),
+        });
+      });
+    throw error;
+  }
 
   const formats: ArtifactFormat[] = [
     {
@@ -240,28 +258,28 @@ const persistArtifact = async <
 export const createH2oArtifactTools = (ctx: ArtifactRequestContext) => ({
   generateFieldBrief: tool({
     description:
-      "Generate and persist the Field Brief PDF for the current opportunity. Returns a real PDF download URL.",
+      "Render and persist the H2O Field Brief PDF — the 1-2 page strategic decision aid (cover, win-win argument, fully-priced cost-of-alternative table, kill risks, do-this-next actions). Returns the PDF download URL.",
     inputSchema: fieldBriefInputSchema,
     execute: async (input) => persistArtifact(ctx, "field-brief", input),
   }),
 
   generatePlaybook: tool({
     description:
-      "Generate and persist the Conversation Playbook PDF for the current opportunity. Returns a real PDF download URL.",
+      "Render and persist the H2O Conversation Playbook PDF — themed question structure (1-2 pages) the field agent uses in the next customer conversation. Returns the PDF download URL.",
     inputSchema: playbookInputSchema,
     execute: async (input) => persistArtifact(ctx, "playbook", input),
   }),
 
   generateAnalyticalRead: tool({
     description:
-      "Generate and persist the Analytical Read PDF for the current opportunity. Returns a real PDF download URL.",
+      "Render and persist the H2O Analytical Read PDF — 3-6 page evidence-tagged write-up sent upward to leadership. Returns the PDF download URL.",
     inputSchema: analyticalReadInputSchema,
     execute: async (input) => persistArtifact(ctx, "analytical-read", input),
   }),
 
   generateProposalShell: tool({
     description:
-      "Generate and persist the Proposal Shell PDF for the current opportunity. Returns a real PDF download URL.",
+      "Render and persist the H2O Proposal Shell PDF — scoping-language seed (1-5 pages, depth scales with deal stage: one paragraph at Lead, full draft at Propose). Returns the PDF download URL.",
     inputSchema: proposalShellInputSchema,
     execute: async (input) => persistArtifact(ctx, "proposal-shell", input),
   }),

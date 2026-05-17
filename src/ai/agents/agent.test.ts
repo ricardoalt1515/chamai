@@ -29,23 +29,118 @@ describe("createAgent", () => {
     );
   });
 
-  it("caps step count and wires an onStepFinish callback", () => {
+  it("caps step count at 10 (8 worst-case + 2 for model self-recovery) and wires accounting callbacks", () => {
     createAgent();
 
-    expect(stepCountIsMock).toHaveBeenCalledWith(8);
+    expect(stepCountIsMock).toHaveBeenCalledWith(10);
     const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
     expect(settings).toEqual(
       expect.objectContaining({
-        stopWhen: { __stopAt: 8 },
+        stopWhen: { __stopAt: 10 },
         onStepFinish: expect.any(Function),
         maxOutputTokens: 32_768,
       }),
     );
+    expect(settings).not.toHaveProperty("experimental_repairToolCall");
   });
 
-  it("does not set `instructions` so the system message can be supplied per call with providerOptions", () => {
+  it("splits instructions into a cacheable static prompt + dynamic skills suffix", () => {
     createAgent();
     const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
-    expect(settings).not.toHaveProperty("instructions");
+    // Array shape lets the Bedrock cachePoint hash the static prompt prefix
+    // independently of the dynamic auto-discovered skills block. Editing any
+    // SKILL.md should not invalidate the static prefix cache.
+    expect(Array.isArray(settings.instructions)).toBe(true);
+    expect(settings.instructions).toHaveLength(2);
+
+    const [staticMsg, skillsMsg] = settings.instructions;
+
+    expect(staticMsg).toEqual(
+      expect.objectContaining({
+        role: "system",
+        content: expect.stringContaining("H2O Allegiant"),
+        providerOptions: {
+          bedrock: { cachePoint: { type: "default", ttl: "1h" } },
+        },
+      }),
+    );
+
+    // Dynamic suffix must NOT carry a cachePoint — it changes per SKILL.md edit.
+    expect(skillsMsg).toEqual(
+      expect.objectContaining({
+        role: "system",
+        content: expect.stringContaining("<available_skills>"),
+      }),
+    );
+    expect(skillsMsg.providerOptions).toBeUndefined();
+  });
+
+  it("auto-discovered skills suffix contains at least one known H2O skill name", () => {
+    createAgent();
+    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
+    const skillsMsg = settings.instructions[1];
+    const knownSkills = [
+      "h2o-evidence-and-context",
+      "h2o-stage-and-gaps",
+      "h2o-positioning",
+      "h2o-field-brief",
+      "h2o-allegiant-brand",
+    ];
+    expect(knownSkills.some((name) => skillsMsg.content.includes(name))).toBe(true);
+  });
+
+  it("static prompt encodes the trigger-condition contract (file attach + explicit phrases)", () => {
+    // Behavioral pin: if a future prompt edit drops the trigger semantics, this
+    // test fails loudly. The agent has no server-side reminder anymore, so the
+    // prompt itself must carry the contract.
+    createAgent();
+    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
+    const staticContent: string = settings.instructions[0].content;
+    // File attachment trigger
+    expect(staticContent.toLowerCase()).toMatch(/file attachment|attaches a file/);
+    // Explicit-request trigger phrases
+    expect(staticContent).toContain("give me the brief");
+    expect(staticContent).toContain("field brief please");
+    // The four tool names must be present so the model can resolve them
+    for (const tool of [
+      "generateFieldBrief",
+      "generatePlaybook",
+      "generateAnalyticalRead",
+      "generateProposalShell",
+    ]) {
+      expect(staticContent).toContain(tool);
+    }
+  });
+
+  it("onStepFinish logs structured usage", () => {
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+
+    createAgent();
+    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
+
+    settings.onStepFinish({
+      toolCalls: [{ toolName: "generateFieldBrief" }],
+      finishReason: "tool-calls",
+      usage: {
+        inputTokens: 5000,
+        outputTokens: 28_000,
+        totalTokens: 33_000,
+        inputTokenDetails: { cacheReadTokens: 4500, cacheWriteTokens: 0 },
+      },
+    });
+
+    expect(logSpy).toHaveBeenCalledWith(
+      "[agent] step:finish",
+      expect.objectContaining({
+        finishReason: "tool-calls",
+        tools: "generateFieldBrief",
+        usage: expect.objectContaining({ input: 5000, output: 28_000, cacheRead: 4500 }),
+      }),
+    );
+    expect(warnSpy).not.toHaveBeenCalled();
+
+    logSpy.mockRestore();
+    warnSpy.mockRestore();
   });
 });

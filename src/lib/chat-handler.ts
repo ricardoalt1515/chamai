@@ -1,4 +1,5 @@
 import {
+  consumeStream,
   convertToModelMessages,
   createUIMessageStream,
   createUIMessageStreamResponse,
@@ -6,11 +7,10 @@ import {
   validateUIMessages,
 } from "ai";
 import { nanoid } from "nanoid";
-import { type Agent, H2O_AGENT_INSTRUCTIONS } from "@/ai/agents/agent";
+import type { Agent } from "@/ai/agents/agent";
 import { createH2oArtifactTools } from "@/ai/tools/h2o-artifacts";
 import { MODELS } from "@/config/models";
 import type { ArtifactStore } from "@/lib/artifacts/artifact-store";
-import { buildArtifactTriggerReminder } from "@/lib/artifacts/artifact-trigger";
 import type { ArtifactPdfStorage } from "@/lib/artifacts/pdf-storage";
 import type { OwnerContext } from "@/lib/auth/owner-context";
 import { bedrockProvider } from "@/lib/bedrock-provider";
@@ -23,6 +23,8 @@ import {
   ensureServerMessageId,
   extractLastUserMessage,
   isStableThreadTitle,
+  sanitizeAbortedToolParts,
+  type ToolPartLike,
 } from "@/lib/chat-runtime";
 import {
   attachmentRefToPersistedPart,
@@ -359,39 +361,35 @@ export const createChatPostHandler = (deps: Dependencies) => {
       throw new Error("Chat handler requires an agent or createAgent dependency.");
     }
 
-    const artifactReminder = artifactTools
-      ? buildArtifactTriggerReminder({ messages: historyForModel })
-      : null;
-    const uiMessages = [
-      ...historyForModel.map(({ id: _id, ...rest }) => rest),
-      ...(artifactReminder
-        ? [
-            {
-              role: "user" as const,
-              parts: [{ type: "text" as const, text: artifactReminder }],
-            },
-          ]
-        : []),
-    ];
-    const convertedMessages = await convertToModelMessages(uiMessages);
-    // Prepend a system message with Bedrock cachePoint so the H2O instructions
-    // (large, stable per turn) hit Anthropic's prompt cache. Sonnet 4.6 supports
-    // a 1-hour TTL. The cache write happens on the first turn of a thread; every
-    // subsequent step in the same loop and every subsequent turn within the TTL
-    // reads the cache instead of paying the full input cost again.
-    const modelMessages = [
-      {
-        role: "system" as const,
-        content: H2O_AGENT_INSTRUCTIONS,
-        providerOptions: {
-          bedrock: { cachePoint: { type: "default", ttl: "1h" } },
-        },
-      },
-      ...convertedMessages,
-    ];
+    const uiMessages = historyForModel.map(({ id: _id, ...rest }) => rest);
+    // System prompt + cachePoint live in the agent's `instructions` slot
+    // (see src/ai/agents/agent.ts). Do NOT prepend a system message here —
+    // the AI SDK warns about system-in-messages and the canonical slot
+    // handles Bedrock providerOptions correctly.
+    //
+    // ignoreIncompleteToolCalls filters out tool parts in input-streaming or
+    // input-available states (AI SDK v6 only — not approval-requested or any
+    // other intermediate state) before sending to Bedrock. Without it, a
+    // prior turn that aborted mid-tool would feed a malformed conversation
+    // (tool_use without tool_result) and poison subsequent turns. The wider
+    // sanitization on persist (sanitizeAbortedToolParts) covers the gap by
+    // converting approval-requested + the same input-* states to
+    // output-error before they reach storage.
+    const modelMessages = await convertToModelMessages(uiMessages, {
+      ignoreIncompleteToolCalls: true,
+    });
 
     const stream = createUIMessageStream<MyUIMessage>({
       execute: async ({ writer }) => {
+        // Track whether onFinish persisted a response so the catch block can
+        // decide if it needs to write a placeholder. onFinish DOES fire on
+        // mid-stream abort (with isAborted=true), but it does NOT fire if
+        // requestAgent.stream() rejects before returning a result — that path
+        // (e.g. timeout that aborts the very first model call, network error)
+        // would otherwise leave the thread with a phantom user message and no
+        // assistant reply.
+        let assistantPersisted = false;
+
         try {
           if (createdThread) {
             writer.write({
@@ -409,31 +407,91 @@ export const createChatPostHandler = (deps: Dependencies) => {
 
           const result = await requestAgent.stream({
             messages: modelMessages,
-            // Lambda timeout is 5min; batch tool runs Promise.all (~1min worst-case),
-            // cap at 2min with 2× margin so we surface a clean timeout error
-            // to the client instead of an abrupt Lambda kill.
-            timeout: { totalMs: 120_000 },
+            // Lambda Duration.minutes(5) = 300s hard cap. Observed flow:
+            // loadSkill turn (~5s) → 4× loadSkill parallel turn (~5s) →
+            // model preamble + think + emit 4 generate* tool_use blocks
+            // (~30–90s — preamble text dominates) → 4× @react-pdf render in
+            // parallel (~30–60s) → S3 + DDB puts in parallel (~10s) →
+            // closing reply think + text (~20–30s). Realistic p95 ≈ 150–180s.
+            // Cap at 240s = ~33% headroom over p95 and 60s under Lambda hard
+            // cap (room for onFinish persistence to complete on abort).
+            timeout: { totalMs: 240_000 },
           });
 
           writer.merge(
             result.toUIMessageStream({
               originalMessages: persistedHistory,
               generateMessageId: nanoid,
-              onFinish: async ({ responseMessage }: { responseMessage: MyUIMessage }) => {
-                const persistedResponseMessage = ensureServerMessageId(responseMessage);
+              onError: (error) => {
+                console.error("[chat] stream:error", {
+                  message: error instanceof Error ? error.message : String(error),
+                });
+                return "We couldn't complete the response right now.";
+              },
+              onFinish: async ({
+                responseMessage,
+                isAborted,
+              }: {
+                responseMessage: MyUIMessage;
+                isAborted: boolean;
+              }) => {
+                // When the stream aborts (e.g. totalMs cap), tool parts can be
+                // left in input-streaming / input-available with no output.
+                // Persisting them as-is leaves stuck "Pending"/"Running" cards
+                // on refresh AND feeds a malformed history to subsequent
+                // turns. Sanitize before persist.
+                const sanitized = isAborted
+                  ? sanitizeAbortedToolParts(responseMessage)
+                  : responseMessage;
+                const persistedResponseMessage = ensureServerMessageId(sanitized);
 
-                if (
-                  params.trigger === "regenerate-message" &&
-                  params.regenerateMessageId &&
-                  persistedResponseMessage.role === "assistant"
-                ) {
-                  await deps.chatStore.replaceAssistantMessageAfter(
-                    params.threadId,
-                    params.regenerateMessageId,
-                    persistedResponseMessage,
-                  );
-                } else {
-                  await deps.chatStore.saveMessage(params.threadId, persistedResponseMessage);
+                const toolPartSummary = persistedResponseMessage.parts
+                  .map((p) => {
+                    const candidate = p as ToolPartLike;
+                    return candidate.type?.startsWith("tool-")
+                      ? `${candidate.type}:${candidate.state}`
+                      : candidate.type;
+                  })
+                  .join(",");
+                console.log("[chat] onFinish:before-save", {
+                  isAborted,
+                  messageId: persistedResponseMessage.id,
+                  partCount: persistedResponseMessage.parts.length,
+                  parts: toolPartSummary,
+                });
+
+                try {
+                  if (
+                    params.trigger === "regenerate-message" &&
+                    params.regenerateMessageId &&
+                    persistedResponseMessage.role === "assistant"
+                  ) {
+                    await deps.chatStore.replaceAssistantMessageAfter(
+                      params.threadId,
+                      params.regenerateMessageId,
+                      persistedResponseMessage,
+                    );
+                  } else {
+                    await deps.chatStore.saveMessage(params.threadId, persistedResponseMessage);
+                  }
+                  assistantPersisted = true;
+                  console.log("[chat] onFinish:saved", {
+                    messageId: persistedResponseMessage.id,
+                    threadId: params.threadId,
+                  });
+                } catch (saveError) {
+                  console.error("[chat] onFinish:save-failed", {
+                    messageId: persistedResponseMessage.id,
+                    message: saveError instanceof Error ? saveError.message : String(saveError),
+                  });
+                  throw saveError;
+                }
+
+                if (isAborted) {
+                  // Skip title generation on abort — partial text isn't
+                  // representative of the conversation. The persisted partial
+                  // message is enough to make the thread recoverable.
+                  return;
                 }
 
                 const generatedText = extractAssistantText(persistedResponseMessage);
@@ -472,6 +530,41 @@ export const createChatPostHandler = (deps: Dependencies) => {
           console.error("[chat] agent:error", {
             message: error instanceof Error ? error.message : String(error),
           });
+
+          if (!assistantPersisted) {
+            // requestAgent.stream() rejected before any partial response
+            // reached onFinish. Persist a placeholder so the thread isn't left
+            // with a user message and no reply — the user can retry instead of
+            // seeing a phantom message after refresh.
+            try {
+              const placeholder: MyUIMessage = ensureServerMessageId({
+                id: nanoid(),
+                role: "assistant",
+                parts: [
+                  {
+                    type: "text",
+                    text: "[Response interrupted. Please retry.]",
+                  },
+                ],
+              });
+
+              if (params.trigger === "regenerate-message" && params.regenerateMessageId) {
+                await deps.chatStore.replaceAssistantMessageAfter(
+                  params.threadId,
+                  params.regenerateMessageId,
+                  placeholder,
+                );
+              } else {
+                await deps.chatStore.saveMessage(params.threadId, placeholder);
+              }
+            } catch (persistError) {
+              console.error("[chat] placeholder:persist-failed", {
+                message:
+                  persistError instanceof Error ? persistError.message : String(persistError),
+              });
+            }
+          }
+
           writer.write({
             type: "error",
             errorText: "We couldn't complete the response right now.",
@@ -481,6 +574,12 @@ export const createChatPostHandler = (deps: Dependencies) => {
       onError: () => "Something went wrong while generating the response.",
     });
 
-    return createUIMessageStreamResponse({ stream });
+    // consumeSseStream tees the SSE stream and drains the copy server-side
+    // via consumeStream. This guarantees the source stream's flush() fires
+    // (which in turn calls onFinish + persistence) even if the HTTP response
+    // body is not fully read by the consumer — e.g. browser disconnect, fetch
+    // abort, or the Lambda Function URL idle cut. Without this, a partial
+    // assistant message can leak away unpersisted.
+    return createUIMessageStreamResponse({ stream, consumeSseStream: consumeStream });
   };
 };

@@ -28,6 +28,7 @@ vi.mock("ai", () => ({
   createUIMessageStreamResponse: vi.fn(
     ({ stream }: { stream: ReadableStream }) => new Response(stream, { status: 200 }),
   ),
+  consumeStream: vi.fn(async () => undefined),
   generateText: vi.fn(),
   tool: vi.fn((config: unknown) => config),
   validateUIMessages: vi.fn(async ({ messages }: { messages: unknown[] }) => messages),
@@ -121,7 +122,7 @@ const createAgent = (messagesSeen: unknown[]): ((input: unknown) => Agent) =>
   );
 
 describe("chat handler artifact wiring", () => {
-  it("builds request-scoped artifact tools and injects a server-authored trigger reminder", async () => {
+  it("builds request-scoped artifact tools and passes history directly to the agent", async () => {
     const messagesSeen: unknown[] = [];
     const agentFactory = createAgent(messagesSeen);
     const handler = createChatPostHandler({
@@ -148,8 +149,11 @@ describe("chat handler artifact wiring", () => {
         }),
       }),
     );
-    expect(JSON.stringify(messagesSeen)).toContain("triggerPhraseMatched: true");
-    expect(JSON.stringify(messagesSeen)).toContain("generateFieldBrief");
-    expect(JSON.stringify(messagesSeen)).toContain("in parallel");
+    // No server-authored reminder injected — trigger logic moved into the prompt
+    const serialized = JSON.stringify(messagesSeen);
+    expect(serialized).not.toContain("triggerPhraseMatched");
+    expect(serialized).not.toContain("system-reminder");
+    // The user message is passed through as-is
+    expect(serialized).toContain("What should I do here?");
   });
 });

@@ -1,49 +1,62 @@
-# Research: Lambda response streaming via Function URLs (May 2026)
+# Research: Amplify Gen 2 Lambda bundling for Markdown Agent Skills
 
 ## Summary
-
-Yes. For a minimal AWS-only validation of progressive HTTP response streaming, the modern standard path is a Node.js Lambda handler wrapped with `awslambda.streamifyResponse()` exposed through a Lambda Function URL configured with `InvokeMode=RESPONSE_STREAM`. It is simpler than API Gateway or CloudFront for direct validation, but it has important constraints: Function URL response streaming is not supported for Lambda functions in a VPC, streamed responses are billed for full function duration even if the client disconnects, and public `AuthType=NONE` requires deliberate resource-policy exposure.
+For SecondstreamAI, `next.config.js` `outputFileTracingIncludes` is not the right lever for `loadSkill`: the active skill loader runs inside the custom `ChatStreamingFunction` Lambda declared as a CDK `NodejsFunction` in `amplify/backend.ts`, not in the Next server bundle. Official docs support both esbuild loader configuration and CDK `commandHooks`, but with the current `readFile(process.cwd()/src/ai/skills/...)` implementation, the correct low-risk fix is to copy `src/ai/skills` into the Lambda asset during `NodejsFunction` bundling; `.md` text loaders only help after refactoring skills to be statically imported.
 
 ## Findings
+1. **Amplify Gen 2 functions are CDK-backed Lambda resources; this project’s chat streaming function is explicitly a `NodejsFunction`.** Amplify documents that Amplify Functions use the CDK `NodejsFunction` construct and that generated Lambda resources can be modified with CDK; SecondstreamAI already creates `ChatStreamingFunction` directly with `new NodejsFunction(...)` in `amplify/backend.ts`. [Amplify Gen 2: Modify Lambda resources with CDK](https://docs.amplify.aws/react/build-a-backend/functions/modify-resources-with-cdk/) [CDK NodejsFunction](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.NodejsFunction.html)
+2. **`NodejsFunction` bundles with esbuild, and its `bundling` options are the official place for Lambda bundling changes.** CDK says `NodejsFunction` performs automatic transpiling/bundling with esbuild and exposes `bundling` options including `loader`, `esbuildArgs`, `commandHooks`, `format`, `banner`, etc. [CDK aws-lambda-nodejs README](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html) [BundlingOptions](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.BundlingOptions.html)
+3. **Markdown-as-text via esbuild is valid in principle, but not sufficient for the current `loadSkill`.** CDK officially supports `bundling.loader` to “change how a given input file is interpreted” and `esbuildArgs` for additional esbuild flags; esbuild’s `text` loader loads a file as a string at build time and exports it as the default export. However, SecondstreamAI’s `loadSkill` dynamically calls `readFile(join(process.cwd(), "src/ai/skills", name, "SKILL.md"))`; esbuild loaders only apply to imported/required files, not arbitrary runtime filesystem reads. [CDK BundlingOptions: loader/esbuildArgs](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.BundlingOptions.html) [esbuild content types: text loader](https://esbuild.github.io/content-types/#text)
+4. **`bundling: { esbuildArgs: { '--loader:.md': 'text' } }` is plausibly valid, but `bundling.loader: { '.md': 'text' }` is the documented/cleaner CDK API.** CDK documents `esbuildArgs` as a map of extra flags and shows flags such as `"--log-limit": "0"`; esbuild documents CLI loader flags such as `--loader:.js=jsx`, and the `text` loader is valid. But CDK’s first-class `loader` property is explicitly documented for extension loaders and avoids relying on exact CLI serialization. [CDK README: configuring esbuild](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html#configuring-esbuild) [esbuild getting started loader flag](https://esbuild.github.io/getting-started/) [esbuild text loader](https://esbuild.github.io/content-types/#text)
+5. **`commandHooks` are valid exactly under `NodejsFunction` `bundling.commandHooks`, not Amplify Gen 1 CLI hooks.** CDK documents `beforeBundling`, `beforeInstall`, and `afterBundling`; each receives `inputDir` and `outputDir`, returns shell commands, and commands run in the bundling environment. This is the correct place to copy static Markdown assets into the Lambda deployment package. [CDK README: command hooks](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html#command-hooks)
+6. **Lambda packages can include arbitrary files beyond handler code, and `/var/task` is the decompressed package root.** AWS Lambda’s Node.js packaging docs describe deployment packages containing handler code plus dependencies/modules, custom modules/files, and note the package is decompressed and mounted at `/var/task`; bundled code is recommended where possible for dependencies, but package files are valid. [AWS Lambda Node.js zip packaging](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-package.html)
 
-1. **Function URLs + `RESPONSE_STREAM` are the direct Lambda-native HTTP streaming path** — AWS says Lambda can natively stream through Function URLs or `InvokeWithResponseStream`; setting a Function URL invoke mode to `RESPONSE_STREAM` causes Lambda to invoke the function with `InvokeWithResponseStream` and stream payload chunks as available. Buffered mode remains the default and has a 6 MB response cap. [AWS Lambda response streaming](https://docs.aws.amazon.com/lambda/latest/dg/configuration-response-streaming.html), [Function URL response streaming invoke mode](https://docs.aws.amazon.com/lambda/latest/dg/config-rs-invoke-furls.html)
+## Exact recommended implementation for SecondstreamAI
+Use CDK `NodejsFunction` `bundling.commandHooks.afterBundling` in `amplify/backend.ts` for `ChatStreamingFunction`:
 
-2. **Node.js managed runtimes are the simplest supported runtime path** — AWS documents `awslambda.streamifyResponse()` as the required handler wrapper for streaming functions; the `awslambda` global is provided by the Lambda Node.js runtime with no import required. AWS recommends using Node streams and `pipeline()` where possible, or explicitly calling `responseStream.end()`. [Writing response streaming-enabled Lambda functions](https://docs.aws.amazon.com/lambda/latest/dg/config-rs-write-functions.html)
+```ts
+bundling: {
+  banner: "import { createRequire } from 'module'; const require = createRequire(import.meta.url);",
+  format: OutputFormat.ESM,
+  commandHooks: {
+    beforeBundling() {
+      return [];
+    },
+    beforeInstall() {
+      return [];
+    },
+    afterBundling(inputDir: string, outputDir: string) {
+      return [
+        `mkdir -p ${outputDir}/src/ai/skills`,
+        `cp -R ${inputDir}/src/ai/skills/. ${outputDir}/src/ai/skills/`,
+      ];
+    },
+  },
+}
+```
 
-3. **CDK directly models this pattern** — `FunctionUrl` accepts `invokeMode`, and the CDK `InvokeMode` enum includes `RESPONSE_STREAM`; the CDK docs show `fn.addFunctionUrl({ authType: lambda.FunctionUrlAuthType.NONE, invokeMode: lambda.InvokeMode.RESPONSE_STREAM })`. This makes CDK deployment straightforward. [CDK FunctionUrl](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda.FunctionUrl.html), [CDK InvokeMode](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda.InvokeMode.html)
+This preserves the existing runtime contract: `process.cwd()` in Lambda resolves to the package root (`/var/task`), so `src/ai/skills/<name>/SKILL.md` exists for the current filesystem-based `loadSkill`.
 
-4. **Response size, bandwidth, timeout, and billing constraints matter** — Current Lambda docs list synchronous streamed responses up to 200 MB, with the first 6 MB uncapped and the remainder capped at 2 MB/s. Lambda timeout remains 900 seconds / 15 minutes. AWS also warns that streamed responses are not interrupted when the invoking client connection breaks, so customers are billed for the full function duration and should be careful with long timeouts. [Lambda response streaming](https://docs.aws.amazon.com/lambda/latest/dg/configuration-response-streaming.html), [Lambda quotas](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html)
+Optional future refactor: create a static skill registry that imports each `SKILL.md` and configure `bundling.loader: { '.md': 'text' }`. Do not use this as the immediate fix unless `loadSkill` is changed away from dynamic `readFile`.
 
-5. **VPC caveat is decisive** — AWS states that Lambda Function URLs do not support response streaming within a VPC environment. If VPC access is required, AWS directs users to invoke the function with the AWS SDK using `InvokeWithResponseStream` and appropriate Lambda interface VPC endpoints, not Function URLs. [VPC compatibility with response streaming](https://docs.aws.amazon.com/lambda/latest/dg/configuration-response-streaming.html#config-rs-vpc-compatibility)
+## Realistic validation test
+Best practical test: synthesize the Lambda bundle and inspect/run the produced asset, not `next build`.
 
-6. **Auth mode choice is simple but security-sensitive** — Function URLs support `AWS_IAM` and `NONE`. `AWS_IAM` requires IAM-authenticated callers and the relevant `lambda:InvokeFunctionUrl` / `lambda:InvokeFunction` permissions. `NONE` disables Lambda authentication but still requires a resource-based policy granting public access; AWS warns that anyone with the URL can invoke it. AWS notes that starting October 2025, new Function URLs require both `lambda:InvokeFunctionUrl` and `lambda:InvokeFunction` permissions. [Function URL access control](https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html)
+1. Add a small integration test or script that creates a temporary CDK `App/Stack` with a `NodejsFunction` using the same `entry` and `bundling.commandHooks` as `ChatStreamingFunction`.
+2. Run `app.synth()`; CDK bundling will execute esbuild/command hooks locally or in Docker, matching the Lambda asset build path.
+3. Locate the synthesized asset directory/zip under the temp `cdk.out` and assert that `src/ai/skills/<known-skill>/SKILL.md` exists in the asset.
+4. For stronger coverage, run a tiny fixture handler from inside the asset directory with `process.cwd()` set to the asset root and verify `readFile('src/ai/skills/<known-skill>/SKILL.md')` succeeds.
 
-7. **Function URLs are the fastest/simple path, API Gateway is for fuller API features** — AWS describes Function URLs as a simple, direct HTTP endpoint optimized for simplicity and cost-effectiveness, while API Gateway is for full API management features such as authorization models, throttling, request validation, custom domains, stages, and other API concerns. For validating progressive streaming, Function URLs avoid extra API Gateway configuration. [Choosing Function URLs vs API Gateway](https://docs.aws.amazon.com/lambda/latest/dg/furls-http-invoke-decision.html)
-
-8. **API Gateway response streaming is now available, but not the simplest validation route** — API Gateway can stream Lambda proxy integration responses by setting response transfer mode to `STREAM`, and supports use cases such as SSE/progress updates and exceeding the normal 10 MB/29s API Gateway limits. However, it is limited to REST APIs, only supports response streaming (not request streaming), can stream up to 15 minutes, has idle timeouts, and disables features requiring full buffering such as endpoint caching, content encoding, and VTL response transformation. [API Gateway response streaming](https://docs.aws.amazon.com/apigateway/latest/developerguide/response-transfer-mode.html), [Lambda proxy streaming setup](https://docs.aws.amazon.com/apigateway/latest/developerguide/response-transfer-mode-lambda.html)
-
-9. **CloudFront is useful for production hardening, not necessary for basic streaming validation** — CloudFront can use a Lambda Function URL as an origin and supports Origin Access Control (OAC) to restrict access. For OAC with Lambda Function URLs, AWS requires `AuthType=AWS_IAM`; CloudFront signs origin requests, and for PUT/POST clients must include a SHA256 payload hash in `x-amz-content-sha256` because Lambda does not support unsigned payloads. This adds security and edge behavior but also complexity. [CloudFront OAC for Lambda Function URL origins](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-lambda.html)
-
-10. **Minor documentation inconsistency to watch** — The Lambda Developer Guide and Lambda quotas pages currently state a 200 MB maximum streamed response size. The CDK `InvokeMode` API page still says 20 MB with quota increase. Prefer the Lambda service docs/quotas for current service behavior, but verify in the target Region and account before relying on a limit in production. [Lambda response streaming](https://docs.aws.amazon.com/lambda/latest/dg/configuration-response-streaming.html), [Lambda quotas](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html), [CDK InvokeMode](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda.InvokeMode.html)
+This validates the Lambda deployment artifact shape that `loadSkill` depends on. `next build` and `outputFileTracingIncludes` do not validate this Lambda bundle.
 
 ## Sources
-
-- Kept: AWS Lambda — Response streaming for Lambda functions (https://docs.aws.amazon.com/lambda/latest/dg/configuration-response-streaming.html) — primary service behavior, limits, VPC, billing warning, runtime support.
-- Kept: AWS Lambda — Invoking response streaming with Function URLs (https://docs.aws.amazon.com/lambda/latest/dg/config-rs-invoke-furls.html) — primary source for `InvokeMode=RESPONSE_STREAM` semantics.
-- Kept: AWS Lambda — Writing response streaming-enabled functions (https://docs.aws.amazon.com/lambda/latest/dg/config-rs-write-functions.html) — primary source for `awslambda.streamifyResponse()` and Node handler shape.
-- Kept: AWS Lambda quotas (https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html) — timeout, streamed response quota, bandwidth limits.
-- Kept: AWS CDK `FunctionUrl` and `InvokeMode` docs (https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda.FunctionUrl.html, https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda.InvokeMode.html) — confirms CDK support and syntax.
-- Kept: AWS Lambda Function URL auth docs (https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html) — auth mode and resource-policy requirements.
-- Kept: AWS Lambda Function URL vs API Gateway decision guide (https://docs.aws.amazon.com/lambda/latest/dg/furls-http-invoke-decision.html) — AWS guidance on simplest HTTP invocation choice.
-- Kept: API Gateway response streaming docs (https://docs.aws.amazon.com/apigateway/latest/developerguide/response-transfer-mode.html) — current API Gateway streaming capabilities and limitations.
-- Kept: CloudFront OAC for Lambda Function URLs (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-lambda.html) — production security pattern for Function URL origins.
-- Dropped: third-party blog posts and summaries — redundant once official AWS documentation covered the relevant behavior.
+- Kept: Amplify Gen 2 “Modify Amplify-generated Lambda resources with CDK” (https://docs.amplify.aws/react/build-a-backend/functions/modify-resources-with-cdk/) — confirms Amplify Functions use `NodejsFunction` and can be modified through CDK resources.
+- Kept: AWS CDK `aws-lambda-nodejs` README (https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html) — primary docs for esbuild bundling, loaders, and command hooks.
+- Kept: AWS CDK `BundlingOptions` API (https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.BundlingOptions.html) — exact property names/types: `loader`, `esbuildArgs`, `commandHooks`.
+- Kept: esbuild Content Types (https://esbuild.github.io/content-types/) — official behavior of `text` loader.
+- Kept: AWS Lambda Node.js packaging docs (https://docs.aws.amazon.com/lambda/latest/dg/nodejs-package.html) — validates Lambda package file/dependency layout and `/var/task` search/root behavior.
+- Dropped: Amplify Gen 1 command/build hooks docs — not applicable to Amplify Gen 2 CDK `NodejsFunction` bundling.
+- Dropped: SEO/blog posts — unnecessary because official Amplify/CDK/esbuild/Lambda docs answer the question.
 
 ## Gaps
-
-- Region availability is not universal; AWS points to the AWS Capabilities by Region page, so deployment should verify the exact target Region before implementation.
-- I did not run an empirical streaming test; this brief is documentation-based. A practical validation should deploy a small Node.js Lambda Function URL with `RESPONSE_STREAM`, `curl -N`, and observable delayed chunks.
-
-## Supervisor coordination
-
-No supervisor decision was needed.
+I did not find Amplify Gen 2 docs exposing `bundling` directly on `defineFunction`; the official path is either generated resource modification or, as in this project, direct CDK `NodejsFunction` construction. Engram save was requested if available, but no Engram memory tool is exposed in this subagent runtime.

@@ -141,6 +141,29 @@ describe("AmplifyArtifactStore", () => {
     });
   });
 
+  it("parses stringified payloads when Amplify a.json() returns serialized JSON", async () => {
+    const client = createClient([
+      {
+        createdAtIso: "2026-05-15T00:00:00.000Z",
+        customerSlug: "prairie-water",
+        id: "artifact-1",
+        kind: "field-brief",
+        payload: JSON.stringify({ customer: { name: "Acme" }, title: "Brief" }),
+        payloadVersion: 1,
+        status: "ready",
+        threadId: "thread-1",
+        title: "Brief",
+        updatedAtIso: "2026-05-15T00:00:00.000Z",
+        userId: "user-a",
+      },
+    ]);
+    const store = new AmplifyArtifactStore(client);
+
+    const active = await store.getActiveArtifact("thread-1", "field-brief", owner);
+
+    expect(active?.payload).toEqual({ customer: { name: "Acme" }, title: "Brief" });
+  });
+
   it("updates the existing active row for replacement semantics", async () => {
     const client = createClient([
       {

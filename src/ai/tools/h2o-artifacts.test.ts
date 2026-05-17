@@ -280,3 +280,32 @@ describe("propagates render failure", () => {
     renderSpy.mockRestore();
   });
 });
+
+describe("cleans up orphan S3 object when artifact persistence fails", () => {
+  it("deletes the just-written PDF from pdfStorage if putArtifact rejects", async () => {
+    const pdfStorage = new InMemoryArtifactPdfStorage();
+    const artifactStore: ArtifactStore = {
+      ...createStore(),
+      putArtifact: vi.fn().mockRejectedValueOnce(new Error("ddb conditional check failed")),
+    };
+
+    const tools = createH2oArtifactTools({
+      artifactStore,
+      pdfStorage,
+      owner,
+      threadId: "thread-1",
+    });
+
+    await expect(executeTool(tools.generateFieldBrief, fieldBriefInput)).rejects.toThrow(
+      "ddb conditional check failed",
+    );
+
+    // The orphan PDF must be gone — pdfStorage.get returns null after cleanup.
+    const stored = await pdfStorage.get({
+      kind: "field-brief",
+      threadId: "thread-1",
+      userId: owner.userId,
+    });
+    expect(stored).toBeNull();
+  }, 30_000);
+});
