@@ -1,17 +1,17 @@
 ---
 name: h2o-field-brief
-description: Render the four-artefact opportunity package — Field Brief, Playbook, Analytical Read, Proposal Shell — for any opportunity-advancing turn. Produced sequentially in priority order (Field Brief first, then Playbook, Analytical Read, Proposal Shell), one artifact tool per assistant turn/step. Content depth scales with deal stage — at Lead/Qualify the Proposal Shell is thin or "too early to draft"; at Position/Propose it's full. Also produces three lightweight non-PDF outputs on demand: follow-up email drafts, site-visit prep checklists, and objection responses. Uses brand kit primitives. Compose, don't re-reason — consume the upstream positioning record verbatim. Trigger after h2o-positioning. Does not produce markdown mirrors. Does not run on focused conversational questions (those use the fast path in the system prompt).
+description: Render requested opportunity artifacts — Field Brief, Playbook, Analytical Read, Proposal Shell — one artifact tool at a time. For full opportunity packages, produce them sequentially in priority order (Field Brief first, then Playbook, Analytical Read, Proposal Shell). For explicit single-artifact requests, produce only the requested artifact. Content depth scales with deal stage. Also produces three lightweight non-PDF outputs on demand: follow-up email drafts, site-visit prep checklists, and objection responses. Uses brand kit primitives. Compose, don't re-reason — consume the upstream positioning record verbatim. Trigger after h2o-positioning or explicit artifact request. Does not produce markdown mirrors. Does not run on focused conversational questions (those use the fast path in the system prompt).
 ---
 
-# Field Brief — render the four-artefact package sequentially, in priority order
+# Field Brief — render requested artifacts one at a time
 
-Your job is to render the **four-artefact opportunity package** that the field agent walks into the next customer conversation with. v3 produces all four PDFs every opportunity-advancing turn, with content depth scaled to the deal stage. You also produce three lightweight non-PDF outputs on demand.
+Your job is to render the requested artifact or the full four-artefact opportunity package that the field agent walks into the next customer conversation with. Full packages produce all four PDFs sequentially; explicit single-artifact requests produce only that artifact. You also produce three lightweight non-PDF outputs on demand.
 
 You are a composition layer, not a reasoning layer. Positioning has already done the customer-behaviour read, the recommended approach, the win-win argument, the cost-of-alternative table, the kill-risk ranking. Stage-and-gaps has already classified the stage and named the advance criteria. You assemble these into four artefacts using the runtime artifact tools.
 
 ## The four-artefact package
 
-Every opportunity-advancing turn produces these four PDFs:
+A full opportunity package produces these four PDFs:
 
 1. **Field Brief** — the strategic decision aid. 1-2 pages. Read in 3-5 minutes. The thing the field agent reads first.
 2. **Playbook** — the question structure for the next customer conversation. 1-2 pages. Reference tool the field agent has open during the call.
@@ -20,22 +20,22 @@ Every opportunity-advancing turn produces these four PDFs:
 
 No markdown mirrors. v2 produced them as a hedge against rendering failures and a copy-paste-into-CRM aid; in practice they added overhead without changing what the field agent did. v3 produces PDFs only.
 
-## Production order — Field Brief first, the rest in sequence
+## Production order — Field Brief first for full packages
 
-The single highest-leverage move you make is **producing the Field Brief first before the other three are generated**. The runtime artifact tools return persisted PDF metadata and download URLs directly.
+The single highest-leverage move in a full package is **producing the Field Brief first before the other three are generated**. The runtime artifact tools return persisted PDF metadata and download URLs directly.
 
-Execution order:
+Full-package execution order:
 
 1. Call `generateFieldBrief` and wait for the result
 2. Call `generatePlaybook` and wait for the result
 3. Call `generateAnalyticalRead` and wait for the result
 4. Call `generateProposalShell` and wait for the result (or one-paragraph "too early to draft" content at Lead/Qualify)
 
-Sequential generation is mandatory. **Use at most one artifact tool per assistant turn/step.** Do not batch multiple `generate*` artifact tools in a single assistant response. Continue to the next required artifact after each tool result until all four are ready.
+Use one artifact tool at a time. Do not batch multiple `generate*` artifact tools in a single assistant response. Inspect each tool result before deciding whether another artifact is needed. If a tool/schema/content issue is recoverable, retry once with corrected input; if render/storage/system failure is non-recoverable, stop and explain briefly without exposing customer payload.
 
 ## Stage-conditional depth — content scales with stage
 
-The four artefacts always run, but their content depth scales with stage. At Lead and Qualify, some artefacts have less to say; that's correct, not a defect. Don't pad to look thorough.
+For full packages, the four artefacts run with content depth scaled by stage. For single-artifact requests, render only the requested artifact at the correct stage depth. At Lead and Qualify, some artefacts have less to say; that's correct, not a defect. Don't pad to look thorough.
 
 ### Field Brief — same structure all stages, content varies
 

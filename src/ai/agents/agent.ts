@@ -1,4 +1,6 @@
 import {
+  generateText,
+  NoSuchToolError,
   type PrepareStepFunction,
   type SystemModelMessage,
   stepCountIs,
@@ -101,26 +103,19 @@ const isLoadedSkillPart = (part: StepContentPartLike, skillName: string): boolea
   part.toolName === "loadSkill" &&
   (loadSkillNameFrom(part.input) === skillName || loadSkillNameFrom(part.output) === skillName);
 
-const allowOnlyLoadSkillOrArtifact = (
-  toolName: ArtifactToolName,
+const activeToolsWithoutCompletedArtifacts = (
+  completedArtifacts: Set<ArtifactToolName>,
 ): ReturnType<PrepareStepFunction<ToolSet>> =>
   ({
-    activeTools: ["loadSkill", toolName],
-    toolChoice: "required",
+    activeTools: [
+      "loadSkill",
+      ...ARTIFACT_TOOL_SEQUENCE.filter((toolName) => !completedArtifacts.has(toolName)),
+    ],
   }) as ReturnType<PrepareStepFunction<ToolSet>>;
 
-const forceSingleArtifactTool = (
-  toolName: ArtifactToolName,
-): ReturnType<PrepareStepFunction<ToolSet>> =>
-  ({
-    activeTools: ["loadSkill", toolName],
-    toolChoice: { type: "tool", toolName },
-  }) as ReturnType<PrepareStepFunction<ToolSet>>;
-
-const artifactSequencePrepareStep: PrepareStepFunction<ToolSet> = ({ steps }) => {
+const minimalArtifactPrepareStep: PrepareStepFunction<ToolSet> = ({ steps }) => {
   let artifactStarted = false;
   let fieldBriefSkillLoaded = false;
-  let brandSkillLoaded = false;
   const completedArtifacts = new Set<ArtifactToolName>();
 
   for (const step of steps) {
@@ -128,10 +123,6 @@ const artifactSequencePrepareStep: PrepareStepFunction<ToolSet> = ({ steps }) =>
       if (isLoadedSkillPart(part, "h2o-field-brief")) {
         fieldBriefSkillLoaded = true;
       }
-      if (isLoadedSkillPart(part, "h2o-allegiant-brand")) {
-        brandSkillLoaded = true;
-      }
-
       if (!isArtifactToolName(part.toolName)) {
         continue;
       }
@@ -150,19 +141,66 @@ const artifactSequencePrepareStep: PrepareStepFunction<ToolSet> = ({ steps }) =>
     return undefined;
   }
 
-  const nextArtifact = ARTIFACT_TOOL_SEQUENCE.find((toolName) => !completedArtifacts.has(toolName));
-  if (!nextArtifact) {
+  if (completedArtifacts.size === ARTIFACT_TOOL_SEQUENCE.length) {
     return { toolChoice: "none" } as ReturnType<PrepareStepFunction<ToolSet>>;
   }
 
-  if (!artifactStarted && fieldBriefSkillLoaded && !brandSkillLoaded) {
-    return allowOnlyLoadSkillOrArtifact(nextArtifact);
-  }
-
-  return forceSingleArtifactTool(nextArtifact);
+  return activeToolsWithoutCompletedArtifacts(completedArtifacts);
 };
 
 type AgentToolSet = { loadSkill: typeof loadSkillTool } & ToolSet;
+
+const repairInvalidToolInput: NonNullable<
+  ConstructorParameters<typeof ToolLoopAgent<AgentToolSet>>[0]["experimental_repairToolCall"]
+> = async ({ toolCall, tools, error, messages, system }) => {
+  if (NoSuchToolError.isInstance(error)) {
+    return null;
+  }
+
+  const result = await generateText({
+    model: bedrockProvider(MODELS[0].runtimeModelId),
+    system,
+    messages: [
+      ...messages,
+      {
+        role: "assistant",
+        content: [
+          {
+            type: "tool-call",
+            toolCallId: toolCall.toolCallId,
+            toolName: toolCall.toolName,
+            input: toolCall.input,
+          },
+        ],
+      },
+      {
+        role: "tool" as const,
+        content: [
+          {
+            type: "tool-result",
+            toolCallId: toolCall.toolCallId,
+            toolName: toolCall.toolName,
+            output: { type: "text", value: error.message },
+          },
+        ],
+      },
+    ],
+    tools,
+  });
+
+  const repairedToolCall = result.toolCalls.find(
+    (candidate) => candidate.toolName === toolCall.toolName,
+  );
+
+  return repairedToolCall == null
+    ? null
+    : {
+        type: "tool-call" as const,
+        toolCallId: toolCall.toolCallId,
+        toolName: toolCall.toolName,
+        input: JSON.stringify(repairedToolCall.input),
+      };
+};
 
 type CreateAgentOptions = {
   tools?: ToolSet;
@@ -178,7 +216,8 @@ export const createAgent = ({ tools = {} }: CreateAgentOptions = {}) =>
       loadSkill: loadSkillTool,
       ...tools,
     },
-    prepareStep: artifactSequencePrepareStep as unknown as PrepareStepFunction<AgentToolSet>,
+    prepareStep: minimalArtifactPrepareStep as unknown as PrepareStepFunction<AgentToolSet>,
+    experimental_repairToolCall: repairInvalidToolInput,
     onStepFinish: ({ stepNumber, toolCalls, finishReason, usage }) => {
       const toolNames = toolCalls.map((call) => call.toolName).join(",") || "none";
       const outputTokens = usage.outputTokens ?? 0;

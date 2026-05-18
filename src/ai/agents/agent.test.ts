@@ -1,20 +1,27 @@
 import { readFileSync } from "node:fs";
 import type { ToolSet } from "ai";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const toolLoopAgentMock = vi.hoisted(() => vi.fn());
 const stepCountIsMock = vi.hoisted(() => vi.fn((count: number) => ({ __stopAt: count })));
+
+const generateTextMock = vi.hoisted(() => vi.fn());
 
 vi.mock("ai", () => ({
   ToolLoopAgent: toolLoopAgentMock,
   stepCountIs: stepCountIsMock,
   tool: vi.fn((config: unknown) => config),
+  generateText: generateTextMock,
+  NoSuchToolError: { isInstance: vi.fn(() => false) },
 }));
 vi.mock("@/lib/bedrock-provider", () => ({ bedrockProvider: vi.fn((id: string) => ({ id })) }));
 
 const { createAgent } = await import("./agent");
 
 describe("createAgent", () => {
+  beforeEach(() => {
+    generateTextMock.mockReset();
+  });
   it("preserves loadSkill while adding request-scoped artifact tools", () => {
     const artifactTool = { description: "artifact" } as unknown as ToolSet[string];
 
@@ -42,7 +49,7 @@ describe("createAgent", () => {
         maxOutputTokens: 32_768,
       }),
     );
-    expect(settings).not.toHaveProperty("experimental_repairToolCall");
+    expect(settings.experimental_repairToolCall).toEqual(expect.any(Function));
   });
 
   it("splits instructions into a cacheable static prompt + dynamic skills suffix", () => {
@@ -113,7 +120,7 @@ describe("createAgent", () => {
     }
   });
 
-  it("prevents initial artifact batching after the field brief skill loads", () => {
+  it("keeps artifact tools available after field brief skill load without forcing a named artifact", () => {
     createAgent();
     const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
 
@@ -131,33 +138,17 @@ describe("createAgent", () => {
     });
 
     expect(afterFieldBriefSkill).toEqual({
-      activeTools: ["loadSkill", "generateFieldBrief"],
-      toolChoice: "required",
-    });
-  });
-
-  it("forces the first artifact tool after field brief and brand skills load", () => {
-    createAgent();
-    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
-
-    const afterFieldBriefAndBrandSkills = settings.prepareStep({
-      steps: [
-        {
-          content: [
-            { type: "tool-result", toolName: "loadSkill", output: { name: "h2o-field-brief" } },
-            { type: "tool-result", toolName: "loadSkill", output: { name: "h2o-allegiant-brand" } },
-          ],
-        },
+      activeTools: [
+        "loadSkill",
+        "generateFieldBrief",
+        "generatePlaybook",
+        "generateAnalyticalRead",
+        "generateProposalShell",
       ],
     });
-
-    expect(afterFieldBriefAndBrandSkills).toEqual({
-      activeTools: ["loadSkill", "generateFieldBrief"],
-      toolChoice: { type: "tool", toolName: "generateFieldBrief" },
-    });
   });
 
-  it("restricts artifact generation to one next artifact tool after the sequence starts", () => {
+  it("removes completed artifact tools from the active set without forcing the next named tool", () => {
     createAgent();
     const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
 
@@ -173,21 +164,19 @@ describe("createAgent", () => {
     });
 
     expect(afterFieldBrief).toEqual({
-      activeTools: ["loadSkill", "generatePlaybook"],
-      toolChoice: { type: "tool", toolName: "generatePlaybook" },
+      activeTools: [
+        "loadSkill",
+        "generatePlaybook",
+        "generateAnalyticalRead",
+        "generateProposalShell",
+      ],
     });
 
     const afterPlaybook = settings.prepareStep({
       steps: [
         {
           content: [
-            { type: "tool-call", toolName: "generateFieldBrief" },
             { type: "tool-result", toolName: "generateFieldBrief" },
-          ],
-        },
-        {
-          content: [
-            { type: "tool-call", toolName: "generatePlaybook" },
             { type: "tool-result", toolName: "generatePlaybook" },
           ],
         },
@@ -195,8 +184,7 @@ describe("createAgent", () => {
     });
 
     expect(afterPlaybook).toEqual({
-      activeTools: ["loadSkill", "generateAnalyticalRead"],
-      toolChoice: { type: "tool", toolName: "generateAnalyticalRead" },
+      activeTools: ["loadSkill", "generateAnalyticalRead", "generateProposalShell"],
     });
   });
 
@@ -226,14 +214,76 @@ describe("createAgent", () => {
     ).toEqual({ toolChoice: "none" });
   });
 
+  it("repairs invalid tool input by re-asking for the same tool call", async () => {
+    generateTextMock.mockResolvedValueOnce({
+      toolCalls: [{ toolName: "generateFieldBrief", input: { title: "Fixed brief" } }],
+    });
+
+    createAgent();
+    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
+
+    const repaired = await settings.experimental_repairToolCall({
+      toolCall: {
+        type: "tool-call",
+        toolCallId: "call-1",
+        toolName: "generateFieldBrief",
+        input: "{bad json",
+      },
+      tools: { generateFieldBrief: { description: "brief" } },
+      error: new Error("Invalid tool input"),
+      messages: [{ role: "user", content: "build a field brief" }],
+      system: "system prompt",
+      inputSchema: vi.fn(),
+    });
+
+    expect(generateTextMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        system: "system prompt",
+        tools: { generateFieldBrief: { description: "brief" } },
+      }),
+    );
+    expect(repaired).toEqual({
+      type: "tool-call",
+      toolCallId: "call-1",
+      toolName: "generateFieldBrief",
+      input: JSON.stringify({ title: "Fixed brief" }),
+    });
+  });
+
+  it("does not repair invalid tool names", async () => {
+    const { NoSuchToolError } = await import("ai");
+    vi.mocked(NoSuchToolError.isInstance).mockReturnValueOnce(true);
+
+    createAgent();
+    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
+
+    const repaired = await settings.experimental_repairToolCall({
+      toolCall: {
+        type: "tool-call",
+        toolCallId: "call-2",
+        toolName: "unknownTool",
+        input: "{}",
+      },
+      tools: {},
+      error: new Error("No such tool"),
+      messages: [{ role: "user", content: "make a pdf" }],
+      system: "system prompt",
+      inputSchema: vi.fn(),
+    });
+
+    expect(repaired).toBeNull();
+    expect(generateTextMock).not.toHaveBeenCalled();
+  });
+
   it("static prompt and field brief skill describe sequential real artifact tools only", () => {
     createAgent();
     const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
     const staticContent: string = settings.instructions[0].content;
     const skillContent = readFileSync("src/ai/skills/h2o-field-brief/SKILL.md", "utf8");
 
-    expect(staticContent).toContain("one artifact tool per assistant turn");
-    expect(staticContent).toContain("generateFieldBrief` → wait for result");
+    expect(staticContent).toContain("one artifact tool at a time");
+    expect(staticContent).toContain("Direct Q&A");
+    expect(staticContent).toContain("Recoverable tool/schema/content issue");
     expect(staticContent).not.toContain("emit ALL FOUR tool_use calls");
     expect(staticContent).not.toContain("single parallel tool-call batch");
 
