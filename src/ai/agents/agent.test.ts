@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import type { ToolSet } from "ai";
 import { describe, expect, it, vi } from "vitest";
 
@@ -112,6 +113,136 @@ describe("createAgent", () => {
     }
   });
 
+  it("prevents initial artifact batching after the field brief skill loads", () => {
+    createAgent();
+    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
+
+    expect(settings.prepareStep({ steps: [] })).toBeUndefined();
+
+    const afterFieldBriefSkill = settings.prepareStep({
+      steps: [
+        {
+          content: [
+            { type: "tool-call", toolName: "loadSkill", input: { name: "h2o-field-brief" } },
+            { type: "tool-result", toolName: "loadSkill", output: { name: "h2o-field-brief" } },
+          ],
+        },
+      ],
+    });
+
+    expect(afterFieldBriefSkill).toEqual({
+      activeTools: ["loadSkill", "generateFieldBrief"],
+      toolChoice: "required",
+    });
+  });
+
+  it("forces the first artifact tool after field brief and brand skills load", () => {
+    createAgent();
+    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
+
+    const afterFieldBriefAndBrandSkills = settings.prepareStep({
+      steps: [
+        {
+          content: [
+            { type: "tool-result", toolName: "loadSkill", output: { name: "h2o-field-brief" } },
+            { type: "tool-result", toolName: "loadSkill", output: { name: "h2o-allegiant-brand" } },
+          ],
+        },
+      ],
+    });
+
+    expect(afterFieldBriefAndBrandSkills).toEqual({
+      activeTools: ["loadSkill", "generateFieldBrief"],
+      toolChoice: { type: "tool", toolName: "generateFieldBrief" },
+    });
+  });
+
+  it("restricts artifact generation to one next artifact tool after the sequence starts", () => {
+    createAgent();
+    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
+
+    const afterFieldBrief = settings.prepareStep({
+      steps: [
+        {
+          content: [
+            { type: "tool-call", toolName: "generateFieldBrief" },
+            { type: "tool-result", toolName: "generateFieldBrief" },
+          ],
+        },
+      ],
+    });
+
+    expect(afterFieldBrief).toEqual({
+      activeTools: ["loadSkill", "generatePlaybook"],
+      toolChoice: { type: "tool", toolName: "generatePlaybook" },
+    });
+
+    const afterPlaybook = settings.prepareStep({
+      steps: [
+        {
+          content: [
+            { type: "tool-call", toolName: "generateFieldBrief" },
+            { type: "tool-result", toolName: "generateFieldBrief" },
+          ],
+        },
+        {
+          content: [
+            { type: "tool-call", toolName: "generatePlaybook" },
+            { type: "tool-result", toolName: "generatePlaybook" },
+          ],
+        },
+      ],
+    });
+
+    expect(afterPlaybook).toEqual({
+      activeTools: ["loadSkill", "generateAnalyticalRead"],
+      toolChoice: { type: "tool", toolName: "generateAnalyticalRead" },
+    });
+  });
+
+  it("keeps artifact tools unrestricted before field brief composition and disables tools after all artifacts finish", () => {
+    createAgent();
+    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
+
+    expect(
+      settings.prepareStep({
+        steps: [{ content: [{ type: "tool-call", toolName: "loadSkill" }] }],
+      }),
+    ).toBeUndefined();
+
+    expect(
+      settings.prepareStep({
+        steps: [
+          {
+            content: [
+              { type: "tool-result", toolName: "generateFieldBrief" },
+              { type: "tool-result", toolName: "generatePlaybook" },
+              { type: "tool-result", toolName: "generateAnalyticalRead" },
+              { type: "tool-result", toolName: "generateProposalShell" },
+            ],
+          },
+        ],
+      }),
+    ).toEqual({ toolChoice: "none" });
+  });
+
+  it("static prompt and field brief skill describe sequential real artifact tools only", () => {
+    createAgent();
+    const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
+    const staticContent: string = settings.instructions[0].content;
+    const skillContent = readFileSync("src/ai/skills/h2o-field-brief/SKILL.md", "utf8");
+
+    expect(staticContent).toContain("one artifact tool per assistant turn");
+    expect(staticContent).toContain("generateFieldBrief` → wait for result");
+    expect(staticContent).not.toContain("emit ALL FOUR tool_use calls");
+    expect(staticContent).not.toContain("single parallel tool-call batch");
+
+    expect(skillContent).toContain("generateFieldBrief");
+    expect(skillContent).toContain("generateProposalShell");
+    expect(skillContent).not.toContain("present_files");
+    expect(skillContent).not.toContain("/mnt/user-data/outputs");
+  });
+
   it("onStepFinish logs structured usage", () => {
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => undefined);
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => undefined);
@@ -120,6 +251,7 @@ describe("createAgent", () => {
     const settings = toolLoopAgentMock.mock.calls.at(-1)?.[0];
 
     settings.onStepFinish({
+      stepNumber: 3,
       toolCalls: [{ toolName: "generateFieldBrief" }],
       finishReason: "tool-calls",
       usage: {
@@ -133,6 +265,8 @@ describe("createAgent", () => {
     expect(logSpy).toHaveBeenCalledWith(
       "[agent] step:finish",
       expect.objectContaining({
+        event: "agent_step_finished",
+        stepNumber: 3,
         finishReason: "tool-calls",
         tools: "generateFieldBrief",
         usage: expect.objectContaining({ input: 5000, output: 28_000, cacheRead: 4500 }),

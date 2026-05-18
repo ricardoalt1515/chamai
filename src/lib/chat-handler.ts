@@ -407,15 +407,12 @@ export const createChatPostHandler = (deps: Dependencies) => {
 
           const result = await requestAgent.stream({
             messages: modelMessages,
-            // Lambda Duration.minutes(5) = 300s hard cap. Observed flow:
-            // loadSkill turn (~5s) → 4× loadSkill parallel turn (~5s) →
-            // model preamble + think + emit 4 generate* tool_use blocks
-            // (~30–90s — preamble text dominates) → 4× @react-pdf render in
-            // parallel (~30–60s) → S3 + DDB puts in parallel (~10s) →
-            // closing reply think + text (~20–30s). Realistic p95 ≈ 150–180s.
-            // Cap at 240s = ~33% headroom over p95 and 60s under Lambda hard
-            // cap (room for onFinish persistence to complete on abort).
-            timeout: { totalMs: 240_000 },
+            // Lambda Duration.minutes(5) = 300s hard cap. Keep totalMs below
+            // that cap so onFinish persistence/cleanup can complete on abort.
+            // Artifact generation is now sequentially guarded by prepareStep;
+            // stepMs gives each model/tool step (one artifact render + S3/DDB
+            // persist) its own budget instead of sharing only one long turn cap.
+            timeout: { totalMs: 240_000, stepMs: 120_000 },
           });
 
           writer.merge(

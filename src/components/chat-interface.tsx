@@ -4,7 +4,13 @@ import { useChat } from "@ai-sdk/react";
 import { getThreadMessages } from "@app/actions/messages";
 import { cloneThread, type Thread } from "@app/actions/threads";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DefaultChatTransport, type PrepareSendMessagesRequest } from "ai";
+import {
+  DefaultChatTransport,
+  isToolUIPart,
+  type DynamicToolUIPart,
+  type PrepareSendMessagesRequest,
+  type ToolUIPart,
+} from "ai";
 import { fetchAuthSession } from "aws-amplify/auth";
 import { DownloadIcon, FileTextIcon, GitBranchIcon, RefreshCcwIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -31,7 +37,10 @@ import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
 import { Tool, ToolContent, ToolHeader, ToolInput } from "@/components/ai-elements/tool";
 import { ChatPromptComposer } from "@/components/chat-prompt-composer";
 import { useDraftInput } from "@/hooks/use-draft-input";
-import { reconcileThreadAfterStream } from "@/lib/chat-reconciliation";
+import {
+  LONG_STREAM_RECONCILIATION_OPTIONS,
+  reconcileThreadAfterStream,
+} from "@/lib/chat-reconciliation";
 import { canSubmitPromptMessage, shouldShowLoadingShimmer } from "@/lib/chat-utils";
 import type { ArtifactToolUIResult, MyUIMessage } from "@/types/ui-message";
 import { CopyButton } from "./copy-button";
@@ -53,8 +62,107 @@ type ArtifactToolType = keyof typeof ARTIFACT_TOOL_TITLES;
 
 type ArtifactToolPart = Extract<MyUIMessage["parts"][number], { type: ArtifactToolType }>;
 
-const isArtifactToolPart = (part: MyUIMessage["parts"][number]): part is ArtifactToolPart =>
+type AnyToolPart = ToolUIPart | DynamicToolUIPart;
+
+type ToolRenderingMetadata = {
+  kind: "artifact-tool";
+  title: string;
+  defaultOpen: boolean;
+};
+
+const TERMINAL_TOOL_STATES = new Set(["output-available", "output-error"]);
+
+const isArtifactToolPart = (part: unknown): part is ArtifactToolPart =>
+  typeof part === "object" &&
+  part !== null &&
+  "type" in part &&
+  typeof part.type === "string" &&
   part.type in ARTIFACT_TOOL_TITLES;
+
+const asToolPart = (part: unknown): AnyToolPart | null => {
+  if (typeof part !== "object" || part === null || !("type" in part)) {
+    return null;
+  }
+
+  const candidate = part as AnyToolPart;
+  return typeof candidate.type === "string" && isToolUIPart(candidate) ? candidate : null;
+};
+
+export const getToolRenderingMetadata = (part: unknown): ToolRenderingMetadata | null => {
+  const state = typeof part === "object" && part !== null && "state" in part ? part.state : null;
+  const defaultOpen = typeof state === "string" && TERMINAL_TOOL_STATES.has(state);
+
+  if (isArtifactToolPart(part)) {
+    return {
+      kind: "artifact-tool",
+      title: ARTIFACT_TOOL_TITLES[part.type],
+      defaultOpen,
+    };
+  }
+
+  return null;
+};
+
+export const toolRenderKey = (messageId: string, partIndex: number, defaultOpen: boolean): string =>
+  `${messageId}-${partIndex}-${defaultOpen ? "terminal" : "active"}`;
+
+export const shouldShowArtifactPackageHeartbeat = (message: MyUIMessage): boolean => {
+  const artifactParts = message.parts.filter(isArtifactToolPart);
+  return (
+    artifactParts.length > 0 &&
+    artifactParts.some(
+      (part) => !(typeof part.state === "string" && TERMINAL_TOOL_STATES.has(part.state)),
+    )
+  );
+};
+
+export function ArtifactPackageHeartbeat(): React.JSX.Element {
+  return (
+    <div className="rounded-md border bg-muted/40 px-3 py-2 text-muted-foreground text-sm">
+      <Shimmer as="p">Generating artifact package… this can take a few minutes.</Shimmer>
+    </div>
+  );
+}
+
+export const summarizeMessagesForTelemetry = (messages: MyUIMessage[]) => {
+  const lastMessage = messages.at(-1);
+  let visiblePartCount = 0;
+  let genericToolCount = 0;
+  let artifactToolCount = 0;
+  let hiddenPartCount = 0;
+
+  for (const message of messages) {
+    for (const part of message.parts) {
+      if (part.type === "text" || part.type === "reasoning" || part.type === "file") {
+        visiblePartCount += 1;
+        continue;
+      }
+
+      const toolMetadata = getToolRenderingMetadata(part);
+      if (toolMetadata?.kind === "artifact-tool") {
+        artifactToolCount += 1;
+        visiblePartCount += 1;
+        continue;
+      }
+      const toolPart = asToolPart(part);
+      if (toolPart) {
+        genericToolCount += 1;
+      }
+
+      hiddenPartCount += 1;
+    }
+  }
+
+  return {
+    messageCount: messages.length,
+    lastMessageId: lastMessage?.id,
+    lastMessageRole: lastMessage?.role,
+    visiblePartCount,
+    genericToolCount,
+    artifactToolCount,
+    hiddenPartCount,
+  };
+};
 
 export function ArtifactDownloadCard({
   title,
@@ -169,6 +277,8 @@ function isConversationTitleData(data: unknown): data is { title: string } {
   return typeof data === "object" && data !== null && "title" in data;
 }
 
+type ReconciliationTrigger = "on_finish" | "error";
+
 export function ChatInterface({
   initialMessages = [],
   threadId,
@@ -179,8 +289,9 @@ export function ChatInterface({
   const router = useRouter();
   const queryClient = useQueryClient();
   const draft = useDraftInput();
+  const messagesRef = useRef(initialMessages);
   const reconciliationRequestRef = useRef(0);
-  const reconcileAfterStreamRef = useRef<() => void>(() => undefined);
+  const reconcileAfterStreamRef = useRef<(source: ReconciliationTrigger) => void>(() => undefined);
 
   const branchMutation = useMutation({
     mutationFn: (upToMessageId: string) => cloneThread({ sourceThreadId: threadId, upToMessageId }),
@@ -194,8 +305,18 @@ export function ChatInterface({
     useChat<MyUIMessage>({
       id: threadId,
       messages: initialMessages,
-      onFinish: () => {
-        reconcileAfterStreamRef.current();
+      onFinish: ({ messages: finishedMessages, isAbort, isDisconnect, isError, finishReason }) => {
+        messagesRef.current = finishedMessages;
+        console.info("[chat-ui] use_chat_finish", {
+          event: "use_chat_finish",
+          finishReason,
+          isAbort,
+          isDisconnect,
+          isError,
+          threadId,
+          ...summarizeMessagesForTelemetry(finishedMessages),
+        });
+        reconcileAfterStreamRef.current("on_finish");
       },
       onData: (dataPart) => {
         if (dataPart.type === "data-new-thread-created" && isNewThreadCreatedData(dataPart.data)) {
@@ -236,20 +357,62 @@ export function ChatInterface({
       }),
     });
 
-  const reconcilePersistedMessages = useCallback(() => {
-    const requestId = reconciliationRequestRef.current + 1;
-    reconciliationRequestRef.current = requestId;
-    void reconcileThreadAfterStream({
-      fetchMessages: getThreadMessages,
-      onError: (reconciliationError) => {
-        console.warn("Failed to reconcile persisted chat messages", reconciliationError);
-      },
-      queryClient,
-      setMessages,
-      shouldApply: () => reconciliationRequestRef.current === requestId,
+  const previousStatusRef = useRef(status);
+
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
+  useEffect(() => {
+    if (previousStatusRef.current === status) {
+      return;
+    }
+
+    console.info("[chat-ui] use_chat_status_changed", {
+      event: "use_chat_status_changed",
+      from: previousStatusRef.current,
       threadId,
+      to: status,
+      ...summarizeMessagesForTelemetry(messages),
     });
-  }, [queryClient, setMessages, threadId]);
+    previousStatusRef.current = status;
+  }, [messages, status, threadId]);
+
+  const reconcilePersistedMessages = useCallback(
+    (source: ReconciliationTrigger) => {
+      const requestId = reconciliationRequestRef.current + 1;
+      reconciliationRequestRef.current = requestId;
+      void reconcileThreadAfterStream({
+        fetchMessages: getThreadMessages,
+        getCurrentMessages: () => messagesRef.current,
+        onError: (reconciliationError) => {
+          console.warn("[chat-ui] reconciliation_error", {
+            event: "reconciliation_error",
+            message:
+              reconciliationError instanceof Error
+                ? reconciliationError.message
+                : String(reconciliationError),
+            source,
+            threadId,
+          });
+        },
+        onTelemetry: (telemetry) => {
+          console.info("[chat-ui] reconciliation_decision", {
+            event: "reconciliation_decision",
+            source,
+            ...telemetry,
+          });
+        },
+        queryClient,
+        ...LONG_STREAM_RECONCILIATION_OPTIONS,
+        setMessages,
+        shouldApply: () => reconciliationRequestRef.current === requestId,
+        threadId,
+        waitForTerminalArtifactTools: true,
+      });
+    },
+    [queryClient, setMessages, threadId],
+  );
 
   useEffect(() => {
     reconcileAfterStreamRef.current = reconcilePersistedMessages;
@@ -257,7 +420,7 @@ export function ChatInterface({
 
   useEffect(() => {
     if (error) {
-      reconcilePersistedMessages();
+      reconcilePersistedMessages("error");
     }
   }, [error, reconcilePersistedMessages]);
 
@@ -371,6 +534,9 @@ export function ChatInterface({
                     >
                       <Message from={message.role}>
                         <MessageContent>
+                          {shouldShowArtifactPackageHeartbeat(message) ? (
+                            <ArtifactPackageHeartbeat />
+                          ) : null}
                           {message.parts.map((part, i) => {
                             switch (part.type) {
                               case "file": {
@@ -418,35 +584,41 @@ export function ChatInterface({
                                   </MessageResponse>
                                 );
                               default: {
-                                if (!isArtifactToolPart(part)) {
+                                const toolMetadata = getToolRenderingMetadata(part);
+                                if (!toolMetadata) {
                                   return null;
                                 }
-                                const artifactTitle = ARTIFACT_TOOL_TITLES[part.type];
-                                return (
-                                  <Tool key={`${message.id}-${i}`} defaultOpen={false}>
-                                    <ToolHeader
-                                      state={part.state}
-                                      title={artifactTitle}
-                                      type={part.type}
-                                    />
-                                    <ToolContent>
-                                      {part.state === "output-available" ? (
-                                        <ArtifactDownloadCard
-                                          output={part.output}
-                                          title={artifactTitle}
-                                        />
-                                      ) : null}
-                                      {part.state !== "input-streaming" ? (
-                                        <ToolInput input={part.input} />
-                                      ) : null}
-                                      {part.state === "output-error" ? (
-                                        <p className="text-destructive text-sm">
-                                          {part.errorText ?? "Generation failed."}
-                                        </p>
-                                      ) : null}
-                                    </ToolContent>
-                                  </Tool>
-                                );
+
+                                if (isArtifactToolPart(part)) {
+                                  return (
+                                    <Tool
+                                      key={toolRenderKey(message.id, i, toolMetadata.defaultOpen)}
+                                      defaultOpen={toolMetadata.defaultOpen}
+                                    >
+                                      <ToolHeader
+                                        state={part.state}
+                                        title={toolMetadata.title}
+                                        type={part.type}
+                                      />
+                                      <ToolContent>
+                                        {part.state === "output-available" ? (
+                                          <ArtifactDownloadCard
+                                            output={part.output}
+                                            title={toolMetadata.title}
+                                          />
+                                        ) : null}
+                                        {part.state !== "input-streaming" ? (
+                                          <ToolInput input={part.input} />
+                                        ) : null}
+                                        {part.state === "output-error" ? (
+                                          <p className="text-destructive text-sm">
+                                            {part.errorText ?? "Generation failed."}
+                                          </p>
+                                        ) : null}
+                                      </ToolContent>
+                                    </Tool>
+                                  );
+                                }
                               }
                             }
                           })}

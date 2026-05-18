@@ -228,7 +228,7 @@ describe("api/chat handler", () => {
             parts: [{ type: "text", text: "hola" }],
           }),
         ]),
-        timeout: expect.objectContaining({ totalMs: 240_000 }),
+        timeout: { totalMs: 240_000, stepMs: 120_000 },
       }),
     );
     // System prompt + cachePoint live in the agent's `instructions` slot

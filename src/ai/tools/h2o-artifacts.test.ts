@@ -259,6 +259,90 @@ describe("generateProposalShell", () => {
   }, 30_000);
 });
 
+describe("artifact tool observability", () => {
+  it("logs structured execute, render, storage, and persist lifecycle events without payload content", async () => {
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const tools = createH2oArtifactTools({
+      artifactStore: createStore(),
+      pdfStorage: new InMemoryArtifactPdfStorage(),
+      owner,
+      threadId: "thread-1",
+    });
+
+    await executeTool(tools.generateFieldBrief, fieldBriefInput);
+
+    expect(logSpy).toHaveBeenCalledWith(
+      "[h2o-artifacts] artifact_tool_started",
+      expect.objectContaining({
+        event: "artifact_tool_started",
+        kind: "field-brief",
+        threadId: "thread-1",
+        toolCallId: "tool-call-1",
+      }),
+    );
+    expect(logSpy).toHaveBeenCalledWith(
+      "[h2o-artifacts] artifact_render_finished",
+      expect.objectContaining({
+        event: "artifact_render_finished",
+        kind: "field-brief",
+        byteLength: expect.any(Number),
+        durationMs: expect.any(Number),
+      }),
+    );
+    expect(logSpy).toHaveBeenCalledWith(
+      "[h2o-artifacts] artifact_pdf_storage_finished",
+      expect.objectContaining({ event: "artifact_pdf_storage_finished", kind: "field-brief" }),
+    );
+    expect(logSpy).toHaveBeenCalledWith(
+      "[h2o-artifacts] artifact_db_persist_finished",
+      expect.objectContaining({
+        event: "artifact_db_persist_finished",
+        kind: "field-brief",
+        artifactId: "artifact-1",
+      }),
+    );
+    expect(JSON.stringify(logSpy.mock.calls)).not.toContain("Lagoon pressure is the deal driver");
+
+    logSpy.mockRestore();
+  }, 30_000);
+
+  it("logs structured failure information without leaking error message payload content", async () => {
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const renderModule = await import("@/lib/artifacts/pdf-renderer-dispatch");
+    const renderSpy = vi
+      .spyOn(renderModule, "renderArtifactPdf")
+      .mockRejectedValueOnce(
+        new TypeError("render failure for Lagoon pressure is the deal driver"),
+      );
+    const tools = createH2oArtifactTools({
+      artifactStore: createStore(),
+      pdfStorage: new InMemoryArtifactPdfStorage(),
+      owner,
+      threadId: "thread-1",
+    });
+
+    await expect(executeTool(tools.generateFieldBrief, fieldBriefInput)).rejects.toThrow(
+      "render failure",
+    );
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      "[h2o-artifacts] artifact_tool_failed",
+      expect.objectContaining({
+        event: "artifact_tool_failed",
+        kind: "field-brief",
+        threadId: "thread-1",
+        toolCallId: "tool-call-1",
+        errorClass: "TypeError",
+        errorMessage: "redacted",
+      }),
+    );
+    expect(JSON.stringify(errorSpy.mock.calls)).not.toContain("Lagoon pressure is the deal driver");
+
+    renderSpy.mockRestore();
+    errorSpy.mockRestore();
+  });
+});
+
 describe("propagates render failure", () => {
   it("rejects when renderArtifactPdf throws", async () => {
     const renderModule = await import("@/lib/artifacts/pdf-renderer-dispatch");

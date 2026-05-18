@@ -1,4 +1,10 @@
-import { type SystemModelMessage, stepCountIs, ToolLoopAgent, type ToolSet } from "ai";
+import {
+  type PrepareStepFunction,
+  type SystemModelMessage,
+  stepCountIs,
+  ToolLoopAgent,
+  type ToolSet,
+} from "ai";
 import { h2oAllegiantPrompt } from "@/ai/prompts/h2o-allegiant";
 import { buildSkillsXmlBlock } from "@/ai/skills/discover";
 import { loadSkillTool } from "@/ai/tools/load-skill";
@@ -51,6 +57,113 @@ const AGENT_MAX_STEPS = 10;
 // without giving the model unlimited budget on a single step.
 const AGENT_MAX_OUTPUT_TOKENS = 32_768;
 
+const ARTIFACT_TOOL_SEQUENCE = [
+  "generateFieldBrief",
+  "generatePlaybook",
+  "generateAnalyticalRead",
+  "generateProposalShell",
+] as const;
+
+type ArtifactToolName = (typeof ARTIFACT_TOOL_SEQUENCE)[number];
+
+type StepContentPartLike = {
+  type?: string;
+  toolName?: string;
+  input?: unknown;
+  output?: unknown;
+};
+
+type LoadSkillInputLike = {
+  name?: unknown;
+  skill?: unknown;
+};
+
+const isArtifactToolName = (toolName: string | undefined): toolName is ArtifactToolName =>
+  typeof toolName === "string" && ARTIFACT_TOOL_SEQUENCE.includes(toolName as ArtifactToolName);
+
+const loadSkillNameFrom = (value: unknown): string | null => {
+  if (typeof value !== "object" || value === null) {
+    return null;
+  }
+
+  const input = value as LoadSkillInputLike;
+  if (typeof input.name === "string") {
+    return input.name;
+  }
+  if (typeof input.skill === "string") {
+    return input.skill;
+  }
+
+  return null;
+};
+
+const isLoadedSkillPart = (part: StepContentPartLike, skillName: string): boolean =>
+  part.toolName === "loadSkill" &&
+  (loadSkillNameFrom(part.input) === skillName || loadSkillNameFrom(part.output) === skillName);
+
+const allowOnlyLoadSkillOrArtifact = (
+  toolName: ArtifactToolName,
+): ReturnType<PrepareStepFunction<ToolSet>> =>
+  ({
+    activeTools: ["loadSkill", toolName],
+    toolChoice: "required",
+  }) as ReturnType<PrepareStepFunction<ToolSet>>;
+
+const forceSingleArtifactTool = (
+  toolName: ArtifactToolName,
+): ReturnType<PrepareStepFunction<ToolSet>> =>
+  ({
+    activeTools: ["loadSkill", toolName],
+    toolChoice: { type: "tool", toolName },
+  }) as ReturnType<PrepareStepFunction<ToolSet>>;
+
+const artifactSequencePrepareStep: PrepareStepFunction<ToolSet> = ({ steps }) => {
+  let artifactStarted = false;
+  let fieldBriefSkillLoaded = false;
+  let brandSkillLoaded = false;
+  const completedArtifacts = new Set<ArtifactToolName>();
+
+  for (const step of steps) {
+    for (const part of step.content as StepContentPartLike[]) {
+      if (isLoadedSkillPart(part, "h2o-field-brief")) {
+        fieldBriefSkillLoaded = true;
+      }
+      if (isLoadedSkillPart(part, "h2o-allegiant-brand")) {
+        brandSkillLoaded = true;
+      }
+
+      if (!isArtifactToolName(part.toolName)) {
+        continue;
+      }
+
+      if (part.type === "tool-call" || part.type === "tool-result" || part.type === "tool-error") {
+        artifactStarted = true;
+      }
+
+      if (part.type === "tool-result") {
+        completedArtifacts.add(part.toolName);
+      }
+    }
+  }
+
+  if (!artifactStarted && !fieldBriefSkillLoaded) {
+    return undefined;
+  }
+
+  const nextArtifact = ARTIFACT_TOOL_SEQUENCE.find((toolName) => !completedArtifacts.has(toolName));
+  if (!nextArtifact) {
+    return { toolChoice: "none" } as ReturnType<PrepareStepFunction<ToolSet>>;
+  }
+
+  if (!artifactStarted && fieldBriefSkillLoaded && !brandSkillLoaded) {
+    return allowOnlyLoadSkillOrArtifact(nextArtifact);
+  }
+
+  return forceSingleArtifactTool(nextArtifact);
+};
+
+type AgentToolSet = { loadSkill: typeof loadSkillTool } & ToolSet;
+
 type CreateAgentOptions = {
   tools?: ToolSet;
 };
@@ -65,11 +178,14 @@ export const createAgent = ({ tools = {} }: CreateAgentOptions = {}) =>
       loadSkill: loadSkillTool,
       ...tools,
     },
-    onStepFinish: ({ toolCalls, finishReason, usage }) => {
+    prepareStep: artifactSequencePrepareStep as unknown as PrepareStepFunction<AgentToolSet>,
+    onStepFinish: ({ stepNumber, toolCalls, finishReason, usage }) => {
       const toolNames = toolCalls.map((call) => call.toolName).join(",") || "none";
       const outputTokens = usage.outputTokens ?? 0;
 
       console.log("[agent] step:finish", {
+        event: "agent_step_finished",
+        stepNumber,
         finishReason,
         tools: toolNames,
         usage: {
