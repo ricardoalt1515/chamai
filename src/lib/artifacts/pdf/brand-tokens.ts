@@ -16,7 +16,7 @@ export const h2oBrand = {
     white: "#FFFFFF",
     stage: {
       lead: "#64748B",
-      qualify: "#03045E",
+      qualify: "#475569",
       scope: "#0090F0",
       position: "#0D9488",
       propose: "#15803D",
@@ -42,8 +42,8 @@ export const h2oBrand = {
     footerY: 752,
   },
   logo: {
-    width: 62,
-    height: 25,
+    width: 72,
+    height: 29,
   },
 };
 

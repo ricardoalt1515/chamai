@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { ProposalShellPayload } from "../payloads";
-import { renderProposalShellPdf } from "./proposal-shell-document";
+import {
+  proposalCommitBorderColor,
+  proposalExecSummaryAccentColor,
+  renderProposalShellPdf,
+} from "./proposal-shell-document";
+import { h2oBrand } from "./brand-tokens";
 
 const payload: ProposalShellPayload = {
   customer: { location: "Prairie, TX", name: "Prairie Water", slug: "prairie-water" },
@@ -23,5 +28,23 @@ describe("renderProposalShellPdf", () => {
 
     expect(pdf.byteLength).toBeGreaterThan(1000);
     expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+  });
+});
+
+describe("proposalCommitBorderColor", () => {
+  it("returns v3 green for commitTo cards", () => {
+    expect(proposalCommitBorderColor("commitTo")).toBe(h2oBrand.colors.green);
+  });
+
+  it("returns v3 amber for doNotCommitYet cards", () => {
+    expect(proposalCommitBorderColor("doNotCommitYet")).toBe(h2oBrand.colors.amber);
+  });
+});
+
+// ─── Slice 3b RED ─────────────────────────────────────────────────────────────
+
+describe("proposalExecSummaryAccentColor", () => {
+  it("returns the v3 blue for the executive summary left accent bar", () => {
+    expect(proposalExecSummaryAccentColor()).toBe(h2oBrand.colors.blue);
   });
 });

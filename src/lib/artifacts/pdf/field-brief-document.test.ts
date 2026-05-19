@@ -7,7 +7,11 @@ import {
   riskRankColor,
   renderFieldBriefPdf,
   sectionMarkerColor,
+  splitCostRowsForTwoPageBrief,
 } from "./field-brief-document";
+
+const countPdfPages = (pdf: Buffer): number =>
+  pdf.toString("latin1").match(/\/Type\s*\/Page\b/g)?.length ?? 0;
 
 const payload: FieldBriefPayload = {
   customer: { location: "Prairie, TX", name: "Prairie Water", slug: "prairie-water" },
@@ -58,6 +62,104 @@ const payload: FieldBriefPayload = {
   },
 };
 
+const richPayload: FieldBriefPayload = {
+  ...payload,
+  customer: {
+    location: "Reeves County, TX",
+    name: "Llano Vista Midstream — Pecos East Station",
+    slug: "llano-vista",
+  },
+  stopFlags: [
+    {
+      title: "H2S active worker safety hazard",
+      summary:
+        "Portable monitor detected H2S at offload bay and EQ tanks. No fixed detection on site. Active inhalation pathway creates safety and liability exposure.",
+    },
+    {
+      title: "Unpermitted surface discharge",
+      summary:
+        "Stormwater pond emergency spillway released produced-water-contaminated effluent to ephemeral drainage with multiple off-site exceedances.",
+    },
+  ],
+  sections: {
+    ...payload.sections,
+    whatThisIs: {
+      insight:
+        "This isn't three discrete incidents — it is a systemic produced-water management failure across five systems, with brine and BTEX confirmed in off-site drainage right now.",
+      body: `${payload.sections.whatThisIs.body} The facility has no TPDES/NPDES authorization for any surface discharge, and the enforcement exposure is live across TCEQ, RRC, and OSHA.`,
+    },
+    whatWeWouldPropose: {
+      ...payload.sections.whatWeWouldPropose,
+      recommendedApproach:
+        "Phase 1: transfer-line integrity investigation, stormwater remediation, NORM characterization, H2S controls, manifest audit, and regulatory disclosure. Phase 2: separation, filtration, dosing automation, closed-loop segregation, disposal-well remediation, SCADA rationalization, training, and SOP package.",
+      winWinArguments: [
+        ...payload.sections.whatWeWouldPropose.winWinArguments,
+        {
+          lead: "Close safety exposure",
+          body: "Fixed detection and controls remove the fastest-moving OSHA risk.",
+        },
+      ],
+      costOfAlternativeRows: [
+        {
+          component: "Phase 1 point fix",
+          theirPath: "$200K–$400K",
+          ourProposal: "$800K–$2M integrated stabilization",
+        },
+        {
+          component: "Civil penalties",
+          theirPath: "$3M–$10M+ risk",
+          ourProposal: "Mitigated through proactive disclosure",
+        },
+        {
+          component: "NORM soil",
+          theirPath: "$500K–$2M forced scope",
+          ourProposal: "$200K–$600K controlled scope",
+        },
+        {
+          component: "H2S incident",
+          theirPath: "Material, uncapped",
+          ourProposal: "$50K–$150K controls",
+        },
+        {
+          component: "Reuse rejection",
+          theirPath: "$300K–$800K/yr",
+          ourProposal: "Eliminated after remediation",
+        },
+        {
+          component: "5-year total",
+          theirPath: "$5M–$15M+ uncapped",
+          ourProposal: "$4M–$11.5M closed",
+          isTotal: true,
+        },
+      ],
+    },
+    whatCouldKillIt: {
+      insight:
+        "Speed is the variable. The enforcement clock is running and point-fix contractors are the default.",
+      risks: [
+        {
+          name: "Enforcement-forced fast path",
+          mechanism:
+            "If regulators issue formal written notice before we engage, legal counsel directs a minimum corrective-action procurement.",
+          mitigation: "Engage immediately and lead with the regulatory disclosure package.",
+        },
+        {
+          name: "No capital-authority decision maker",
+          mechanism:
+            "Facility EHS managers typically cannot commit remediation capex without corporate approval.",
+          mitigation: "Map the approval chain in the first call.",
+        },
+        {
+          name: "Point-fix contractors frame the scope",
+          mechanism:
+            "Pipeline and pond-liner contractors are faster to mobilize and cheaper on the visible scope.",
+          mitigation: "Use the five-year cost table to show why point fixes are not cheaper.",
+        },
+      ],
+    },
+  },
+};
+
 describe("Field Brief v3 visual helpers", () => {
   it("maps section marker colors to the v3 reference categories", () => {
     expect(sectionMarkerColor("what-this-is")).toBe(h2oBrand.colors.blue);
@@ -83,6 +185,15 @@ describe("Field Brief v3 visual helpers", () => {
       "Llano Vista Midstream · Field Brief (continued)",
     );
   });
+
+  it("splits dense cost rows so page 1 keeps only a compact table opening", () => {
+    const rows = richPayload.sections.whatWeWouldPropose.costOfAlternativeRows;
+
+    expect(splitCostRowsForTwoPageBrief(rows)).toMatchObject({
+      pageOneRows: rows.slice(0, 2),
+      pageTwoRows: rows.slice(2),
+    });
+  });
 });
 
 describe("renderFieldBriefPdf", () => {
@@ -91,5 +202,11 @@ describe("renderFieldBriefPdf", () => {
 
     expect(pdf.byteLength).toBeGreaterThan(1000);
     expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+  });
+
+  it("keeps a dense reference-like Field Brief to two rendered PDF pages", async () => {
+    const pdf = await renderFieldBriefPdf(richPayload);
+
+    expect(countPdfPages(pdf)).toBeLessThanOrEqual(2);
   });
 });

@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import type { AnalyticalReadPayload } from "../payloads";
-import { renderAnalyticalReadPdf } from "./analytical-read-document";
+import {
+  analyticalEvidenceTagBorderColor,
+  analyticalSectionDefaultColor,
+  collectTableHeaders,
+  renderAnalyticalReadPdf,
+} from "./analytical-read-document";
+import { h2oBrand } from "./brand-tokens";
 
 const payload: AnalyticalReadPayload = {
   customer: { location: "Prairie, TX", name: "Prairie Water", slug: "prairie-water" },
@@ -29,5 +35,33 @@ describe("renderAnalyticalReadPdf", () => {
 
     expect(pdf.byteLength).toBeGreaterThan(1000);
     expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+  });
+});
+
+describe("analyticalSectionDefaultColor", () => {
+  it("returns the v3 brand blue for default section markers", () => {
+    expect(analyticalSectionDefaultColor()).toBe(h2oBrand.colors.blue);
+  });
+});
+
+describe("collectTableHeaders", () => {
+  it("extracts all unique keys from an array of row objects in order", () => {
+    const rows: Array<Record<string, string>> = [
+      { Metric: "ADF", Value: "3.4" },
+      { Metric: "Permit", Value: "2027", Source: "TCEQ" },
+    ];
+    expect(collectTableHeaders(rows)).toEqual(["Metric", "Value", "Source"]);
+  });
+
+  it("returns empty array for empty input", () => {
+    expect(collectTableHeaders([])).toEqual([]);
+  });
+});
+
+// ─── Slice 3b RED ─────────────────────────────────────────────────────────────
+
+describe("analyticalEvidenceTagBorderColor", () => {
+  it("returns the v3 line color for evidence tag chip border", () => {
+    expect(analyticalEvidenceTagBorderColor()).toBe(h2oBrand.colors.line);
   });
 });

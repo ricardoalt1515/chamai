@@ -14,14 +14,14 @@ const styles = StyleSheet.create({
   page: {
     color: h2oBrand.colors.ink,
     fontFamily: h2oBrand.font.family,
-    fontSize: 9.3,
-    lineHeight: 1.35,
-    paddingBottom: 52,
+    fontSize: 8.4,
+    lineHeight: 1.18,
+    paddingBottom: 34,
     paddingHorizontal: h2oBrand.page.paddingX,
     paddingTop: h2oBrand.page.paddingY,
   },
   pageWithContinuation: {
-    paddingTop: 62,
+    paddingTop: 48,
   },
   continuationHeader: {
     alignItems: "center",
@@ -31,49 +31,49 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     left: h2oBrand.page.paddingX,
-    paddingBottom: 5,
+    paddingBottom: 4,
     position: "absolute",
     right: h2oBrand.page.paddingX,
-    top: 20,
+    top: 16,
   },
   continuationMiddle: {
     color: h2oBrand.colors.navy,
     flex: 1,
     fontFamily: h2oBrand.font.bold,
-    fontSize: 8,
-    marginHorizontal: 12,
+    fontSize: 7.5,
+    marginHorizontal: 10,
     textAlign: "center",
   },
   section: {
-    marginBottom: 13,
+    marginBottom: 7,
   },
   body: {
-    fontSize: 9.3,
-    lineHeight: 1.38,
-    marginBottom: 7,
+    fontSize: 8.2,
+    lineHeight: 1.18,
+    marginBottom: 3,
   },
   subhead: {
     color: h2oBrand.colors.navy,
     fontFamily: h2oBrand.font.bold,
-    fontSize: 9.5,
-    marginBottom: 4,
-    marginTop: 3,
+    fontSize: 8.4,
+    marginBottom: 2,
+    marginTop: 1,
   },
   bullet: {
     display: "flex",
     flexDirection: "row",
-    gap: 5,
-    marginBottom: 4,
+    gap: 4,
+    marginBottom: 2,
   },
   bulletDot: {
     color: h2oBrand.colors.blue,
-    width: 7,
+    width: 6,
   },
   bulletText: {
     flex: 1,
   },
   table: {
-    marginTop: 6,
+    marginTop: 3,
   },
   tableRow: {
     borderBottomColor: h2oBrand.colors.line,
@@ -89,13 +89,13 @@ const styles = StyleSheet.create({
   tableTotal: {
     backgroundColor: h2oBrand.colors.panelBlue,
     borderBottomWidth: 0,
-    paddingVertical: 2,
+    paddingVertical: 1,
   },
   tableCell: {
-    fontSize: 7.7,
-    lineHeight: 1.25,
-    paddingHorizontal: 5,
-    paddingVertical: 4,
+    fontSize: 6.7,
+    lineHeight: 1.08,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
   },
   componentCell: {
     width: "30%",
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   totalText: {
     fontFamily: h2oBrand.font.bold,
-    fontSize: 8.2,
+    fontSize: 7.2,
   },
   totalNegative: {
     color: h2oBrand.colors.red,
@@ -122,21 +122,21 @@ const styles = StyleSheet.create({
   riskCard: {
     display: "flex",
     flexDirection: "row",
-    gap: 8,
-    marginBottom: 9,
-    paddingTop: 1,
+    gap: 6,
+    marginBottom: 5,
+    paddingTop: 0,
   },
   rankBadge: {
     alignItems: "center",
     borderRadius: 999,
-    height: 22,
+    height: 19,
     justifyContent: "center",
-    width: 22,
+    width: 19,
   },
   rankBadgeText: {
     color: h2oBrand.colors.white,
     fontFamily: h2oBrand.font.bold,
-    fontSize: 11,
+    fontSize: 9.5,
   },
   cardContent: {
     flex: 1,
@@ -144,29 +144,29 @@ const styles = StyleSheet.create({
   cardTitle: {
     color: h2oBrand.colors.navy,
     fontFamily: h2oBrand.font.bold,
-    fontSize: 9.8,
-    marginBottom: 2,
+    fontSize: 8.6,
+    marginBottom: 1,
   },
   mitigation: {
     color: h2oBrand.colors.muted,
-    fontSize: 8.8,
+    fontSize: 7.5,
     fontStyle: "italic",
-    lineHeight: 1.25,
+    lineHeight: 1.12,
   },
   actionCard: {
     display: "flex",
     flexDirection: "row",
-    gap: 8,
-    marginBottom: 9,
-    paddingTop: 1,
+    gap: 6,
+    marginBottom: 5,
+    paddingTop: 0,
   },
   actionNumber: {
     alignItems: "center",
     backgroundColor: h2oBrand.colors.blue,
     borderRadius: 4,
-    height: 22,
+    height: 19,
     justifyContent: "center",
-    width: 22,
+    width: 19,
   },
   timeframe: {
     color: h2oBrand.colors.blue,
@@ -176,12 +176,12 @@ const styles = StyleSheet.create({
     borderColor: h2oBrand.colors.red,
     borderRadius: 5,
     borderWidth: 0.8,
-    marginBottom: 6,
-    padding: 7,
+    marginBottom: 4,
+    padding: 5,
   },
   muted: {
     color: h2oBrand.colors.muted,
-    fontSize: 8.6,
+    fontSize: 7.5,
   },
 });
 
@@ -206,6 +206,18 @@ export const fieldBriefContinuationLabel = (customerName: string): string =>
 
 export type CostColumn = "component" | "theirPath" | "ourProposal";
 export type CostRowStyleRole = "body" | "total-label" | "total-negative" | "total-positive";
+
+type CostRows = FieldBriefPayload["sections"]["whatWeWouldPropose"]["costOfAlternativeRows"];
+
+export const splitCostRowsForTwoPageBrief = (
+  rows: CostRows,
+): {
+  pageOneRows: CostRows;
+  pageTwoRows: CostRows;
+} => {
+  if (rows.length <= 3) return { pageOneRows: rows, pageTwoRows: [] };
+  return { pageOneRows: rows.slice(0, 2), pageTwoRows: rows.slice(2) };
+};
 
 export const costRowStyleRole = ({
   column,
@@ -246,11 +258,7 @@ const Bullet = ({ lead, body }: { lead: string; body: string }) => (
   </View>
 );
 
-const CostTable = ({
-  rows,
-}: {
-  rows: FieldBriefPayload["sections"]["whatWeWouldPropose"]["costOfAlternativeRows"];
-}) => (
+const CostTable = ({ rows }: { rows: CostRows }) => (
   <View style={styles.table}>
     <View style={[styles.tableRow, styles.tableHeader]}>
       <Text style={[styles.tableCell, styles.componentCell, styles.headerText]}>
@@ -339,6 +347,7 @@ export const FieldBriefDocument = ({ payload }: { payload: FieldBriefPayload }) 
   const proposal = payload.sections.whatWeWouldPropose;
   const risks = payload.sections.whatCouldKillIt.risks;
   const actions = payload.sections.doThisNext.actions;
+  const { pageOneRows, pageTwoRows } = splitCostRowsForTwoPageBrief(proposal.costOfAlternativeRows);
 
   return (
     <Document
@@ -376,8 +385,8 @@ export const FieldBriefDocument = ({ payload }: { payload: FieldBriefPayload }) 
             <Bullet key={argument.lead} lead={argument.lead} body={argument.body} />
           ))}
           <Text style={styles.subhead}>Cost of the alternative — fully priced over 5 years</Text>
-          <CostTable rows={proposal.costOfAlternativeRows} />
-          {proposal.dealSizeSensitivity ? (
+          <CostTable rows={pageOneRows} />
+          {proposal.dealSizeSensitivity && !pageTwoRows.length ? (
             <Text style={[styles.body, styles.muted]}>
               Sensitivity: {proposal.dealSizeSensitivity}
             </Text>
@@ -388,6 +397,16 @@ export const FieldBriefDocument = ({ payload }: { payload: FieldBriefPayload }) 
 
       <Page size={h2oBrand.page.size} style={[styles.page, styles.pageWithContinuation]}>
         <ContinuationHeader customerName={payload.customer.name} stage={payload.stage} />
+        {pageTwoRows.length ? (
+          <View style={styles.section}>
+            <CostTable rows={pageTwoRows} />
+            {proposal.dealSizeSensitivity ? (
+              <Text style={[styles.body, styles.muted]}>
+                Sensitivity: {proposal.dealSizeSensitivity}
+              </Text>
+            ) : null}
+          </View>
+        ) : null}
         <View style={styles.section}>
           <SectionHeader color={sectionMarkerColor("what-could-kill-it")}>
             What could kill it
