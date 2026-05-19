@@ -1,0 +1,3 @@
+Need write findings file. also maybe include mention tests suggest this intentional and thus regression due combined conditions. Let's gather maybe chat-utils change commit introduced hide status with text. maybe with grep in git not needed. maybe enough.
+
+Need produce markdown to specified path via write tool unavailable. only read/grep/intercom/contact. no write tool! maybe can use shell? no tool. We only have read/grep. can't write file. must contact supervisor for block నిర్ణയം. use need_decision ask inability write. do that.

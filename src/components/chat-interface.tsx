@@ -175,6 +175,36 @@ export const summarizeMessagesForTelemetry = (messages: MyUIMessage[]) => {
   };
 };
 
+const summarizeToolPartsForTelemetry = (messages: MyUIMessage[]) =>
+  messages.flatMap((message, messageIndex) =>
+    message.parts.flatMap((part, partIndex) => {
+      const toolPart = asToolPart(part);
+      if (!toolPart) return [];
+
+      const output =
+        "output" in toolPart && typeof toolPart.output === "object" && toolPart.output !== null
+          ? (toolPart.output as Record<string, unknown>)
+          : undefined;
+
+      return [
+        {
+          messageIndex,
+          messageId: message.id,
+          role: message.role,
+          partIndex,
+          type: toolPart.type,
+          state: toolPart.state,
+          toolCallId: "toolCallId" in toolPart ? toolPart.toolCallId : undefined,
+          preliminary: "preliminary" in toolPart ? toolPart.preliminary : undefined,
+          outputStatus: typeof output?.status === "string" ? output.status : undefined,
+          outputArtifactType:
+            typeof output?.artifactType === "string" ? output.artifactType : undefined,
+          rendersAsArtifact: getToolRenderingMetadata(part)?.kind === "artifact-tool",
+        },
+      ];
+    }),
+  );
+
 type ChatSendRequestInput = Pick<
   Parameters<PrepareSendMessagesRequest<MyUIMessage>>[0],
   "body" | "messageId" | "messages" | "trigger"
@@ -303,6 +333,7 @@ export function ChatInterface({
   const draft = useDraftInput();
   const messagesRef = useRef(initialMessages);
   const [agentStatus, setAgentStatus] = useState<AgentStatusData | null>(null);
+  const toolTelemetrySignatureRef = useRef("");
   const reconciliationRequestRef = useRef(0);
   const reconcileAfterStreamRef = useRef<(source: ReconciliationTrigger) => void>(() => undefined);
 
@@ -334,6 +365,15 @@ export function ChatInterface({
       },
       onData: (dataPart) => {
         if (dataPart.type === "data-agent-status" && isAgentStatusData(dataPart.data)) {
+          console.info("[chat-ui] agent_status_data", {
+            event: "agent_status_data",
+            threadId,
+            receivedAtMs: performance.now(),
+            phase: dataPart.data.phase,
+            artifactKind: dataPart.data.artifactKind,
+            label: dataPart.data.label,
+            elapsedMs: dataPart.data.elapsedMs,
+          });
           setAgentStatus(dataPart.data);
           return;
         }
@@ -380,6 +420,26 @@ export function ChatInterface({
   useEffect(() => {
     messagesRef.current = messages;
   }, [messages]);
+
+  useEffect(() => {
+    const toolParts = summarizeToolPartsForTelemetry(messages);
+    const signature = JSON.stringify(toolParts);
+    if (signature === toolTelemetrySignatureRef.current) {
+      return;
+    }
+
+    toolTelemetrySignatureRef.current = signature;
+    console.info("[chat-ui] tool_part_state_changed", {
+      event: "tool_part_state_changed",
+      threadId,
+      status,
+      agentStatusPhase: agentStatus?.phase,
+      agentStatusArtifactKind: agentStatus?.artifactKind,
+      lastMessageId: messages.at(-1)?.id,
+      lastMessageRole: messages.at(-1)?.role,
+      toolParts,
+    });
+  }, [agentStatus?.artifactKind, agentStatus?.phase, messages, status, threadId]);
 
   useEffect(() => {
     if (previousStatusRef.current === status) {

@@ -95,6 +95,65 @@ const agentStatusChunk = (data: AgentStatusData) => ({
   transient: true,
 });
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null;
+
+const getStringField = (value: Record<string, unknown>, key: string): string | undefined =>
+  typeof value[key] === "string" ? value[key] : undefined;
+
+const summarizeUiChunkForTelemetry = (chunk: unknown): Record<string, unknown> | null => {
+  if (!isRecord(chunk)) return null;
+
+  const type = getStringField(chunk, "type");
+  if (!type) return null;
+
+  const shouldLog =
+    type === "tool-input-start" ||
+    type === "tool-input-available" ||
+    type === "tool-output-available" ||
+    type === "tool-output-error" ||
+    type === "finish" ||
+    type === "error" ||
+    type === "data-agent-status";
+
+  if (!shouldLog) return null;
+
+  const output = isRecord(chunk.output) ? chunk.output : undefined;
+  const data = isRecord(chunk.data) ? chunk.data : undefined;
+
+  return {
+    type,
+    toolCallId: getStringField(chunk, "toolCallId"),
+    toolName: getStringField(chunk, "toolName"),
+    preliminary: typeof chunk.preliminary === "boolean" ? chunk.preliminary : undefined,
+    outputStatus: output ? getStringField(output, "status") : undefined,
+    outputArtifactType: output ? getStringField(output, "artifactType") : undefined,
+    dataPhase: data ? getStringField(data, "phase") : undefined,
+    dataArtifactKind: data ? getStringField(data, "artifactKind") : undefined,
+  };
+};
+
+const withUiChunkTelemetry = <T>(
+  stream: ReadableStream<T>,
+  params: { requestStartedAt: number; threadId: string },
+): ReadableStream<T> =>
+  stream.pipeThrough(
+    new TransformStream<T, T>({
+      transform(chunk, controller) {
+        const summary = summarizeUiChunkForTelemetry(chunk);
+        if (summary) {
+          console.log("[chat] ui_chunk", {
+            event: "ui_chunk",
+            threadId: params.threadId,
+            elapsedMs: Date.now() - params.requestStartedAt,
+            ...summary,
+          });
+        }
+        controller.enqueue(chunk);
+      },
+    }),
+  );
+
 const extractAssistantText = (message: MyUIMessage): string =>
   message.parts
     .filter(
@@ -506,122 +565,128 @@ export const createChatPostHandler = (deps: Dependencies) => {
           });
 
           writer.merge(
-            result.toUIMessageStream({
-              originalMessages: persistedHistory,
-              generateMessageId: nanoid,
-              onError: (error) => {
-                console.error("[chat] stream:error", {
-                  message: error instanceof Error ? error.message : String(error),
-                });
-                return "We couldn't complete the response right now.";
-              },
-              onFinish: async ({
-                responseMessage,
-                isAborted,
-              }: {
-                responseMessage: MyUIMessage;
-                isAborted: boolean;
-              }) => {
-                // When the stream aborts (e.g. totalMs cap), tool parts can be
-                // left in input-streaming / input-available with no output.
-                // Persisting them as-is leaves stuck "Pending"/"Running" cards
-                // on refresh AND feeds a malformed history to subsequent
-                // turns. Sanitize before persist.
-                const sanitized = isAborted
-                  ? sanitizeAbortedToolParts(responseMessage)
-                  : responseMessage;
-                const persistedResponseMessage = ensureServerMessageId(sanitized);
-
-                const toolPartSummary = persistedResponseMessage.parts
-                  .map((p) => {
-                    const candidate = p as ToolPartLike;
-                    return candidate.type?.startsWith("tool-")
-                      ? `${candidate.type}:${candidate.state}`
-                      : candidate.type;
-                  })
-                  .join(",");
-                stopHeartbeat();
-                console.log("[chat] agent_stream_finished", {
-                  event: "agent_stream_finished",
+            withUiChunkTelemetry(
+              result.toUIMessageStream({
+                originalMessages: persistedHistory,
+                generateMessageId: nanoid,
+                onError: (error) => {
+                  console.error("[chat] stream:error", {
+                    message: error instanceof Error ? error.message : String(error),
+                  });
+                  return "We couldn't complete the response right now.";
+                },
+                onFinish: async ({
+                  responseMessage,
                   isAborted,
-                  threadId: params.threadId,
-                  durationMs: Date.now() - requestStartedAt,
-                  messageId: persistedResponseMessage.id,
-                  partCount: persistedResponseMessage.parts.length,
-                  parts: toolPartSummary,
-                });
-                console.log("[chat] onFinish:before-save", {
-                  isAborted,
-                  messageId: persistedResponseMessage.id,
-                  partCount: persistedResponseMessage.parts.length,
-                  parts: toolPartSummary,
-                });
+                }: {
+                  responseMessage: MyUIMessage;
+                  isAborted: boolean;
+                }) => {
+                  // When the stream aborts (e.g. totalMs cap), tool parts can be
+                  // left in input-streaming / input-available with no output.
+                  // Persisting them as-is leaves stuck "Pending"/"Running" cards
+                  // on refresh AND feeds a malformed history to subsequent
+                  // turns. Sanitize before persist.
+                  const sanitized = isAborted
+                    ? sanitizeAbortedToolParts(responseMessage)
+                    : responseMessage;
+                  const persistedResponseMessage = ensureServerMessageId(sanitized);
 
-                try {
-                  if (
-                    params.trigger === "regenerate-message" &&
-                    params.regenerateMessageId &&
-                    persistedResponseMessage.role === "assistant"
-                  ) {
-                    await deps.chatStore.replaceAssistantMessageAfter(
-                      params.threadId,
-                      params.regenerateMessageId,
-                      persistedResponseMessage,
-                    );
-                  } else {
-                    await deps.chatStore.saveMessage(params.threadId, persistedResponseMessage);
-                  }
-                  assistantPersisted = true;
-                  console.log("[chat] onFinish:saved", {
-                    messageId: persistedResponseMessage.id,
+                  const toolPartSummary = persistedResponseMessage.parts
+                    .map((p) => {
+                      const candidate = p as ToolPartLike;
+                      return candidate.type?.startsWith("tool-")
+                        ? `${candidate.type}:${candidate.state}`
+                        : candidate.type;
+                    })
+                    .join(",");
+                  stopHeartbeat();
+                  console.log("[chat] agent_stream_finished", {
+                    event: "agent_stream_finished",
+                    isAborted,
                     threadId: params.threadId,
-                  });
-                } catch (saveError) {
-                  console.error("[chat] onFinish:save-failed", {
+                    durationMs: Date.now() - requestStartedAt,
                     messageId: persistedResponseMessage.id,
-                    message: saveError instanceof Error ? saveError.message : String(saveError),
+                    partCount: persistedResponseMessage.parts.length,
+                    parts: toolPartSummary,
                   });
-                  throw saveError;
-                }
+                  console.log("[chat] onFinish:before-save", {
+                    isAborted,
+                    messageId: persistedResponseMessage.id,
+                    partCount: persistedResponseMessage.parts.length,
+                    parts: toolPartSummary,
+                  });
 
-                if (isAborted) {
-                  // Skip title generation on abort — partial text isn't
-                  // representative of the conversation. The persisted partial
-                  // message is enough to make the thread recoverable.
-                  return;
-                }
-
-                const generatedText = extractAssistantText(persistedResponseMessage);
-                if (!generatedText) {
-                  return;
-                }
-
-                const currentThread = await deps.chatStore.getThreadById(params.threadId);
-                const mustGenerateTitle = !isStableThreadTitle(currentThread?.title);
-
-                if (isNewThread && mustGenerateTitle) {
                   try {
-                    const titleResult = await deps.generateText({
-                      model: titleModel,
-                      prompt: titlePrompt(generatedText),
+                    if (
+                      params.trigger === "regenerate-message" &&
+                      params.regenerateMessageId &&
+                      persistedResponseMessage.role === "assistant"
+                    ) {
+                      await deps.chatStore.replaceAssistantMessageAfter(
+                        params.threadId,
+                        params.regenerateMessageId,
+                        persistedResponseMessage,
+                      );
+                    } else {
+                      await deps.chatStore.saveMessage(params.threadId, persistedResponseMessage);
+                    }
+                    assistantPersisted = true;
+                    console.log("[chat] onFinish:saved", {
+                      messageId: persistedResponseMessage.id,
+                      threadId: params.threadId,
                     });
-
-                    const finalTitle = sanitizeTitle(titleResult.text);
-                    await deps.chatStore.updateThreadTitle(params.threadId, finalTitle);
-
-                    writer.write({
-                      id: `conversation-title-${params.threadId}`,
-                      type: "data-conversation-title",
-                      data: {
-                        title: finalTitle,
-                      },
+                  } catch (saveError) {
+                    console.error("[chat] onFinish:save-failed", {
+                      messageId: persistedResponseMessage.id,
+                      message: saveError instanceof Error ? saveError.message : String(saveError),
                     });
-                  } catch {
-                    // keep chat response successful even if title generation fails
+                    throw saveError;
                   }
-                }
+
+                  if (isAborted) {
+                    // Skip title generation on abort — partial text isn't
+                    // representative of the conversation. The persisted partial
+                    // message is enough to make the thread recoverable.
+                    return;
+                  }
+
+                  const generatedText = extractAssistantText(persistedResponseMessage);
+                  if (!generatedText) {
+                    return;
+                  }
+
+                  const currentThread = await deps.chatStore.getThreadById(params.threadId);
+                  const mustGenerateTitle = !isStableThreadTitle(currentThread?.title);
+
+                  if (isNewThread && mustGenerateTitle) {
+                    try {
+                      const titleResult = await deps.generateText({
+                        model: titleModel,
+                        prompt: titlePrompt(generatedText),
+                      });
+
+                      const finalTitle = sanitizeTitle(titleResult.text);
+                      await deps.chatStore.updateThreadTitle(params.threadId, finalTitle);
+
+                      writer.write({
+                        id: `conversation-title-${params.threadId}`,
+                        type: "data-conversation-title",
+                        data: {
+                          title: finalTitle,
+                        },
+                      });
+                    } catch {
+                      // keep chat response successful even if title generation fails
+                    }
+                  }
+                },
+              }),
+              {
+                requestStartedAt,
+                threadId: params.threadId,
               },
-            }),
+            ),
           );
         } catch (error) {
           const durationMs = Date.now() - requestStartedAt;
