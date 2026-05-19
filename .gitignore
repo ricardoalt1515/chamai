@@ -46,3 +46,4 @@ playwright-report/
 
 # Session scratch (subagent outputs, exploratory notes)
 tmp/
+openspec/

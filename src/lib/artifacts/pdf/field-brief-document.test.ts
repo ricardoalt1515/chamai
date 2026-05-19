@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import type { FieldBriefPayload } from "../payloads";
-import { renderFieldBriefPdf } from "./field-brief-document";
+import { h2oBrand } from "./brand-tokens";
+import {
+  costRowStyleRole,
+  fieldBriefContinuationLabel,
+  riskRankColor,
+  renderFieldBriefPdf,
+  sectionMarkerColor,
+} from "./field-brief-document";
 
 const payload: FieldBriefPayload = {
   customer: { location: "Prairie, TX", name: "Prairie Water", slug: "prairie-water" },
@@ -50,6 +57,33 @@ const payload: FieldBriefPayload = {
     },
   },
 };
+
+describe("Field Brief v3 visual helpers", () => {
+  it("maps section marker colors to the v3 reference categories", () => {
+    expect(sectionMarkerColor("what-this-is")).toBe(h2oBrand.colors.blue);
+    expect(sectionMarkerColor("what-we-would-propose")).toBe(h2oBrand.colors.green);
+    expect(sectionMarkerColor("what-could-kill-it")).toBe(h2oBrand.colors.red);
+    expect(sectionMarkerColor("do-this-next")).toBe(h2oBrand.colors.navy);
+  });
+
+  it("uses stop severity for the first risk and amber severity for follow-up risks", () => {
+    expect(riskRankColor(1)).toBe(h2oBrand.colors.severity.stop);
+    expect(riskRankColor(2)).toBe(h2oBrand.colors.severity.specialist);
+    expect(riskRankColor(3)).toBe(h2oBrand.colors.severity.specialist);
+  });
+
+  it("classifies cost table rows so total cells get red/green emphasis", () => {
+    expect(costRowStyleRole({ isTotal: false, column: "theirPath" })).toBe("body");
+    expect(costRowStyleRole({ isTotal: true, column: "theirPath" })).toBe("total-negative");
+    expect(costRowStyleRole({ isTotal: true, column: "ourProposal" })).toBe("total-positive");
+  });
+
+  it("builds the page-2 continuation header label from the customer name", () => {
+    expect(fieldBriefContinuationLabel("Llano Vista Midstream")).toBe(
+      "Llano Vista Midstream · Field Brief (continued)",
+    );
+  });
+});
 
 describe("renderFieldBriefPdf", () => {
   it("renders a non-empty PDF from the typed Field Brief payload", async () => {

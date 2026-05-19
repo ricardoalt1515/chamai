@@ -17,6 +17,14 @@ export type ArtifactToolCardProps = {
   errorText?: string;
 };
 
+export const artifactViewUrl = (downloadUrl: string): string => {
+  const url = new URL(downloadUrl, "http://artifact.local");
+  url.searchParams.set("disposition", "inline");
+  const path = `${url.pathname}${url.search}${url.hash}`;
+
+  return url.origin === "http://artifact.local" ? path : url.toString();
+};
+
 export function ArtifactToolCard({
   Icon,
   title,
@@ -85,6 +93,7 @@ export function ArtifactToolCard({
   if (state === "output-available" && pdf?.downloadUrl) {
     const displayTitle = output?.title ?? title;
     const filename = pdf.filename;
+    const viewUrl = artifactViewUrl(pdf.downloadUrl);
     return (
       <div className="not-prose w-full rounded-lg border bg-card px-3 py-3 sm:max-w-sm">
         <div className="flex items-start gap-3">
@@ -100,7 +109,7 @@ export function ArtifactToolCard({
           <a
             aria-label={`View ${filename} in a new tab`}
             className="inline-flex items-center gap-1 rounded-md border px-2.5 py-1.5 font-medium text-xs transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            href={pdf.downloadUrl}
+            href={viewUrl}
             rel="noopener noreferrer"
             target="_blank"
             title={`View ${filename}`}

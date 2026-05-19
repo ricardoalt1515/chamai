@@ -249,6 +249,56 @@ describe("artifact download route", () => {
     expect(new TextDecoder().decode(bytes.slice(0, 4))).toBe("%PDF");
   });
 
+  it("renders Field Brief PDF with inline headers when requested", async () => {
+    const GET = createArtifactDownloadHandler({
+      artifactStore: createStore(),
+      pdfStorage: new InMemoryArtifactPdfStorage(),
+      getOwner: async () => owner,
+      getThread: async () => ownedThread,
+    });
+
+    const response = await GET(
+      new Request(
+        "https://example.test/api/threads/thread-1/artifacts/field-brief/pdf?disposition=inline",
+      ),
+      {
+        params: Promise.resolve({ format: "pdf", kind: "field-brief", threadId: "thread-1" }),
+      },
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe("application/pdf");
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
+    expect(response.headers.get("content-disposition")).toBe(
+      'inline; filename="prairie-water_field-brief.pdf"',
+    );
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    expect(new TextDecoder().decode(bytes.slice(0, 4))).toBe("%PDF");
+  });
+
+  it("keeps attachment headers for unknown disposition values", async () => {
+    const GET = createArtifactDownloadHandler({
+      artifactStore: createStore(),
+      pdfStorage: new InMemoryArtifactPdfStorage(),
+      getOwner: async () => owner,
+      getThread: async () => ownedThread,
+    });
+
+    const response = await GET(
+      new Request(
+        "https://example.test/api/threads/thread-1/artifacts/field-brief/pdf?disposition=preview",
+      ),
+      {
+        params: Promise.resolve({ format: "pdf", kind: "field-brief", threadId: "thread-1" }),
+      },
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-disposition")).toBe(
+      'attachment; filename="prairie-water_field-brief.pdf"',
+    );
+  });
+
   it("renders Playbook PDF from the active artifact payload with attachment headers", async () => {
     const GET = createArtifactDownloadHandler({
       artifactStore: createStore(playbookArtifact),

@@ -41,14 +41,21 @@ const textResponse = (body: string, status: number, code: string): Response =>
     },
   });
 
-const pdfHeaders = (filename: string): Record<string, string> => ({
+type PdfDisposition = "attachment" | "inline";
+
+const pdfDispositionFor = (request: Request): PdfDisposition => {
+  const { searchParams } = new URL(request.url);
+  return searchParams.get("disposition") === "inline" ? "inline" : "attachment";
+};
+
+const pdfHeaders = (filename: string, disposition: PdfDisposition): Record<string, string> => ({
   "cache-control": "private, no-store",
-  "content-disposition": `attachment; filename="${filename}"`,
+  "content-disposition": `${disposition}; filename="${filename}"`,
   "content-type": "application/pdf",
 });
 
 export const createArtifactDownloadHandler = (deps: ArtifactDownloadDeps) => {
-  return async (_request: Request, context: RouteContext): Promise<Response> => {
+  return async (request: Request, context: RouteContext): Promise<Response> => {
     let owner: OwnerContext;
     try {
       owner = await deps.getOwner();
@@ -75,6 +82,7 @@ export const createArtifactDownloadHandler = (deps: ArtifactDownloadDeps) => {
     }
 
     const filename = pdfFilename(artifact.customerSlug, artifact.kind);
+    const disposition = pdfDispositionFor(request);
 
     // Fast path: tool execute already rendered and uploaded the PDF to S3.
     // Stream those bytes back without touching @react-pdf/renderer.
@@ -86,7 +94,7 @@ export const createArtifactDownloadHandler = (deps: ArtifactDownloadDeps) => {
     if (stored) {
       return new Response(new Uint8Array(stored), {
         status: 200,
-        headers: pdfHeaders(filename),
+        headers: pdfHeaders(filename, disposition),
       });
     }
 
@@ -114,7 +122,7 @@ export const createArtifactDownloadHandler = (deps: ArtifactDownloadDeps) => {
     const pdf = await renderArtifactPdf(artifact.kind, parsed.data);
     return new Response(new Uint8Array(pdf), {
       status: 200,
-      headers: pdfHeaders(filename),
+      headers: pdfHeaders(filename, disposition),
     });
   };
 };

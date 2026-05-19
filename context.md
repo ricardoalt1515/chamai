@@ -1,137 +1,283 @@
 # Code Context
 
 ## Files Retrieved
-1. `package.json` (lines 1-84) - script/dependency source of truth; `test` is `vitest run`, no `@react-pdf/renderer` dependency yet.
-2. `docs/agent-audit-and-artifact-plan.md` (lines 259-318) - §6 PDF stack/route/Field Brief visual gate.
-3. `openspec/changes/add-h2o-downloadable-artifacts/tasks.md` (lines 1-111) - corrective PR3A scope and test expectations.
-4. `openspec/changes/add-h2o-downloadable-artifacts/design.md` (lines 150-184) - affected files and slice plan; broader items must be deferred.
-5. `openspec/changes/add-h2o-downloadable-artifacts/specs/h2o-downloadable-artifacts/spec.md` (lines 1-119) - PDF-first requirements and explicit non-goals.
-6. `src/ai/tools/h2o-artifacts.ts` (lines 1-250) - artifact schemas, tool result contract, and current Markdown-only URLs.
-7. `src/lib/artifacts/artifact-store.ts` (lines 1-101) - artifact kinds/store API; no PDF metadata needed for on-demand route rendering.
-8. `src/lib/artifacts/markdown-renderers.ts` (lines 1-321) - Field Brief payload type and filename helper usable for `.pdf` names.
-9. `app/api/threads/[threadId]/artifacts/[kind]/[format]/route.ts` (lines 1-93) - download handler; currently returns 501 for all PDFs.
-10. `app/api/threads/[threadId]/artifacts/[kind]/[format]/route.test.ts` (lines 1-187) - route coverage; last test asserts PDF 501 and must flip for Field Brief only.
-11. `src/ai/tools/h2o-artifacts.test.ts` (lines 120-173) - tool test currently asserts Markdown-only and no PDF.
-12. `src/lib/artifacts/markdown-renderers.test.ts` (lines 1-58) and `src/lib/artifacts/markdown-renderers.pr2.test.ts` (lines 1-112) - existing markdown tests; mostly leave as mirror coverage.
-13. `next.config.ts` (lines 1-12) - may need `serverExternalPackages` if React-PDF fails under Next App Router.
-14. `H2O Allegiant Discovery Agent v3/Reference/render_field_brief.py` (lines 1-290) - canonical Field Brief structure/content flow.
-15. `H2O Allegiant Discovery Agent v3/h2o-allegiant-brand-brand.py` (lines 1-220, 825-1496 by grep) - brand tokens and Field Brief primitives to port conceptually.
-16. `/Users/ricardoaltamirano/Developer/SecondStream/backend/app/services/pdf_renderer.py` (lines 1-52) - older server-side PDF precedent, but WeasyPrint/Jinja not the selected implementation here.
-17. `/Users/ricardoaltamirano/Developer/SecondStream/frontend/components/chat-ui/pdf-document-card.tsx` (lines 1-220) - older UI precedent only; out of PR3A scope unless tool output card becomes necessary later.
+1. `src/ai/tools/h2o-artifacts.ts` (lines 1-422) - defines the four H2O artifact tool schemas, tool entry points, eager PDF rendering, S3/storage write, metadata persistence, and result URLs.
+2. `src/lib/artifacts/pdf-renderer-dispatch.ts` (lines 1-32) - central kind-to-renderer switch used by the eager generation path.
+3. `src/lib/artifacts/pdf/brand-tokens.ts` (lines 1-43) - current React/@react-pdf brand token source.
+4. `src/lib/artifacts/pdf/shared-document.tsx` (lines 1-142) - shared React PDF primitives: logo mark, cover block, section header, insight box, footer.
+5. `src/lib/artifacts/payloads.ts` (lines 1-89) - TypeScript payload shapes and filename helper for all four PDFs.
+6. `src/lib/artifacts/pdf/field-brief-document.tsx` (lines 1-256) - current Field Brief renderer structure.
+7. `src/lib/artifacts/pdf/playbook-document.tsx` (lines 1-141) - current Conversation Playbook renderer structure.
+8. `src/lib/artifacts/pdf/analytical-read-document.tsx` (lines 1-166) - current Analytical Read renderer structure.
+9. `src/lib/artifacts/pdf/proposal-shell-document.tsx` (lines 1-147) - current Proposal Shell renderer structure.
+10. `src/ai/skills/h2o-allegiant-brand/SKILL.md` (lines 1-264) - design rationale, ideal brand palette, typography, callouts, cover blocks, tables, and usage rules.
+11. `H2O Allegiant Discovery Agent v3/h2o-allegiant-brand-brand.py` (lines 1-1633) - Python ReportLab reference implementation for the H2O Allegiant brand primitives.
 
 ## Key Code
 
-### Current route behavior to change
-`app/api/threads/[threadId]/artifacts/[kind]/[format]/route.ts` currently authenticates owner, checks thread ownership, fetches the active artifact, then hard-fails PDF:
+### Generation flow
+
+`src/ai/tools/h2o-artifacts.ts` defines four tool schemas and four AI SDK tools:
 
 ```ts
-if (format === "pdf") {
-  return textResponse(
-    "PDF rendering is not available for this artifact yet.",
-    501,
-    "ARTIFACT_FORMAT_UNAVAILABLE",
-  );
-}
+export const ARTIFACT_INPUT_SCHEMAS: Record<ArtifactKind, ZodTypeAny> = {
+  "field-brief": fieldBriefInputSchema,
+  playbook: playbookInputSchema,
+  "analytical-read": analyticalReadInputSchema,
+  "proposal-shell": proposalShellInputSchema,
+};
 ```
 
-For corrective PR3A, change only `kind === "field-brief" && format === "pdf"` to render a real PDF. Keep Playbook/Analytical/Proposal PDF paths unavailable.
-
-### Current Field Brief tool contract to change
-`src/ai/tools/h2o-artifacts.ts` has a generic `persistArtifact()` returning only Markdown:
+The important path is `persistArtifact` (lines 216-342):
 
 ```ts
-formats: [{
-  format: "md",
-  mediaType: "text/markdown",
-  filename: filename(...),
-  downloadUrl: artifactUrl(ctx, kind),
-}]
+yield { artifactType: kind, title, status: "rendering", message: "Rendering PDF…" };
+const pdfBytes = await renderArtifactPdf(kind, payload);
+
+await ctx.pdfStorage.put({ bytes: pdfBytes, kind, threadId: ctx.threadId, userId: ctx.owner.userId });
+
+artifact = await ctx.artifactStore.putArtifact({
+  customerSlug,
+  kind,
+  payload,
+  payloadVersion: 1,
+  status: "ready",
+  threadId: ctx.threadId,
+  title,
+}, ctx.owner);
 ```
 
-`generateFieldBrief.description` also says PDF is not available. For PR3A, update Field Brief result only to include PDF (`/api/threads/${threadId}/artifacts/field-brief/pdf`, `application/pdf`, `.pdf`). Do not advertise PDF for other artifact kinds yet.
+Behavior:
+- render is eager inside the tool, before persistence;
+- PDF bytes are stored before DB metadata;
+- DB failure triggers cleanup of the deterministic PDF key;
+- the result returns a download URL under `/api/threads/:threadId/artifacts/:kind/pdf`.
 
-### Typed Field Brief payload exists
-`src/lib/artifacts/markdown-renderers.ts` defines `FieldBriefPayload` with:
-- `customer`, `stage`, optional `confidence/date/stopFlags`
-- four fixed sections: `whatThisIs`, `whatWeWouldPropose`, `whatCouldKillIt`, `doThisNext`
-- cost table rows, kill risks, and exactly three action cards by schema in `h2o-artifacts.ts`
+`src/lib/artifacts/pdf-renderer-dispatch.ts` (lines 16-28) routes by `ArtifactKind`:
 
-Use this payload directly for PDF rendering. Do not introduce Markdown-to-PDF conversion.
+```ts
+case "field-brief": return renderFieldBriefPdf(payload as FieldBriefPayload);
+case "playbook": return renderPlaybookPdf(payload as PlaybookPayload);
+case "analytical-read": return renderAnalyticalReadPdf(payload as AnalyticalReadPayload);
+case "proposal-shell": return renderProposalShellPdf(payload as ProposalShellPayload);
+```
 
-### H2O v3 Field Brief reference
-Reference implementation is `H2O Allegiant Discovery Agent v3/Reference/render_field_brief.py`:
-- cover: `cover_block(customer_name, location, stage, date_str)` (lines 92-97)
-- sections: What this is, What we'd propose, What could kill it, Do this next (lines 99-290)
-- mandatory elements: `InsightBox`, `cost_of_alternative_table`, `kill_risk_card`, `action_card`, page break before sections 3/4
+### Payload contracts
 
-Brand primitives/tokens are in `H2O Allegiant Discovery Agent v3/h2o-allegiant-brand-brand.py`:
-- colors/font fallback: lines 35-142
-- Field Brief primitives: `LogoMark` 825, `StageBadge` 888, `InsightBox` 945, `section_header` 1005, `kill_risk_card` 1061, `action_card` 1152, `cost_of_alternative_table` 1229, `cover_block` 1343, `later_page_header` 1438, `build_field_brief_templates` 1494.
+`src/lib/artifacts/payloads.ts` is the cross-renderer contract:
+- `FieldBriefPayload` (lines 9-38): customer, stage, confidence/date/stopFlags, and four required sections.
+- `PlaybookPayload` (lines 40-51): customer, optional stage/title/orientation, 1-11 themes.
+- `AnalyticalReadPayload` (lines 53-63): customer, title, summary, sections with evidence tags and optional generic tables.
+- `ProposalShellPayload` (lines 65-80): executive summary, scope, sizing/pricing, schedule, commitments, optional funding/risk fields.
+- `pdfFilename` (line 88) slugifies customer/kind into `<customer>_<kind>.pdf`.
+
+### Current shared React PDF tokens/primitives
+
+`src/lib/artifacts/pdf/brand-tokens.ts` currently uses a small token set:
+
+```ts
+colors: {
+  ink: "#111827", muted: "#6B7280", line: "#D8DEE8",
+  panel: "#F7FAFC", panelBlue: "#EEF7FF",
+  navy: "#0B1F3A", blue: "#2563EB", cyan: "#0EA5E9",
+  green: "#15803D", amber: "#B45309", red: "#B91C1C", white: "#FFFFFF",
+},
+font: { family: "Helvetica", bold: "Helvetica-Bold" },
+page: { size: "LETTER", paddingX: 44, paddingY: 40, footerY: 752 }
+```
+
+`src/lib/artifacts/pdf/shared-document.tsx` provides:
+- `LogoMark` (lines 92-100): navy rounded square with text `H2O`, not the real H2O Allegiant logo.
+- `CoverBlock` (lines 102-126): pale blue rounded rectangle with logo, artifact label, title, stage badge, location/date metadata.
+- `SectionHeader` (lines 128-130): navy text with bottom rule.
+- `InsightBox` (lines 132-134): light panel box with cyan left border.
+- `Footer` (lines 136-142): fixed page count footer.
+
+### Per-PDF renderer structure
+
+#### Field Brief
+
+`src/lib/artifacts/pdf/field-brief-document.tsx`:
+- Styles: lines 6-111.
+- `Bullet`: lines 113-121.
+- `CostTable`: lines 123-154; fixed 3-column table: Component / Their path / Our proposal.
+- `StopFlags`: lines 156-170; optional simple red-outlined cards.
+- `FieldBriefDocument`: lines 173-253.
+
+Structure:
+1. Page 1: shared `CoverBlock`, optional stop flags, `What this is`, `What we'd propose`, win-win bullets, cost-of-alternative table, sensitivity note.
+2. Page 2: `What could kill it` risk cards and `Do this next` action cards.
+3. Both pages use the same footer.
+
+#### Conversation Playbook
+
+`src/lib/artifacts/pdf/playbook-document.tsx`:
+- Styles: lines 6-84.
+- `ThemeBlock`: lines 86-114; cycles `themePalette`, displays number/title/framing/substream chip/questions.
+- `PlaybookDocument`: lines 116-138.
+
+Structure: one page with shared cover, optional orientation callout, then all themes. Each theme is `wrap={false}`, so large themes may move as blocks rather than splitting gracefully.
+
+#### Analytical Read
+
+`src/lib/artifacts/pdf/analytical-read-document.tsx`:
+- Styles: lines 6-70.
+- `collectTableHeaders`: lines 72-82.
+- `SectionTable`: lines 84-125; generic table built from union of row keys.
+- `AnalyticalReadDocument`: lines 127-163.
+
+Structure: one page with shared cover, summary insight box, then arbitrary sections with body, evidence tag chips, and optional generic table.
+
+#### Proposal Shell
+
+`src/lib/artifacts/pdf/proposal-shell-document.tsx`:
+- Styles: lines 6-64.
+- `BulletList`: lines 66-75.
+- `ProposalShellDocument`: lines 77-144.
+
+Structure: one page with shared cover, executive summary insight box, proposed scope bullets, sizing/pricing, schedule, commitments grid, optional funding pathway and risk allocation.
+
+### Python reference brand module
+
+`src/ai/skills/h2o-allegiant-brand/SKILL.md` specifies the intended identity:
+- Primary colors: `BRAND_NAVY #03045E`, `BRAND_BLUE #0090F0`, `BRAND_CYAN #ADFDFF` (lines 38-53).
+- Functional accents: gate/flag/text/background/border tokens (lines 55-74).
+- Chart palette (lines 76-83).
+- Fonts: Inter Tight / Inter / JetBrains Mono with Helvetica/Courier fallback (lines 85-118).
+- Callouts: gate, flag, strategic insight, why-it-matters, theme header (lines 120-184).
+- Cover templates: ideation/analytical/playbook (lines 186-206).
+- Tables: comparison, decision-maker matrix, solution fit (lines 208-237).
+- Usage rule: never define colors/fonts directly in the reporting skill; import from brand primitives (line 241).
+
+`H2O Allegiant Discovery Agent v3/h2o-allegiant-brand-brand.py` implements this in ReportLab:
+- Color constants: lines 45-77.
+- Font discovery/registration: lines 148-208.
+- Type scale/styles: lines 226-310.
+- Gate callout: lines 336-383.
+- Flag callout: lines 385-440.
+- Strategic insight callout: lines 442-471.
+- Why-it-matters callout: lines 473-509.
+- Playbook theme header: lines 511-559.
+- Cover templates: lines 574-662.
+- Table styles: lines 665-738.
+- Field Brief v2 primitives: `LogoMark` lines 825-886, `StageBadge` lines 888-943, `InsightBox` lines 945-1003, `section_header` lines 1005-1059, `kill_risk_card` lines 1061-1150, `action_card` lines 1152-1227, `cost_of_alternative_table` lines 1229-1341, `cover_block` lines 1343-1431, page-2 header/templates lines 1438-1539.
 
 ## Architecture
 
-- Artifact generation tools persist typed JSON payloads through `ArtifactStore`; downloads are generated on demand by the Next route.
-- The route owns authentication/authorization: `getCurrentOwner()`, `getThread(threadId)`, then `artifactStore.getActiveArtifact(threadId, kind, owner)`.
-- Markdown mirror is generated on demand from the same payload; PR3A should add a parallel PDF renderer boundary under `src/lib/artifacts/pdf/*`.
-- Keep `@react-pdf/renderer` imports out of chat Lambda/tool code. Route can import a small seam such as `renderArtifactPdf()` or `renderFieldBriefPdf()` from `src/lib/artifacts/pdf`.
+The current app does not call Python. The Python brand file is a reference/legacy/ideal implementation. Runtime PDF generation is entirely TypeScript + React + `@react-pdf/renderer`:
 
-## Exact Files / Functions to Edit
+1. Agent invokes one of four tools from `createH2oArtifactTools`.
+2. Tool input is validated by Zod schema in `src/ai/tools/h2o-artifacts.ts`.
+3. `persistArtifact` calls `renderArtifactPdf(kind, payload)`.
+4. Dispatch maps kind to one of four React document renderers.
+5. Renderer returns `Buffer` via `renderToBuffer(<Document />)`.
+6. PDF bytes are written through `ArtifactPdfStorage`.
+7. Artifact metadata/payload is persisted through `ArtifactStore`.
+8. Tool returns PDF download metadata.
 
-1. `package.json` (+ `bun.lock`) - add runtime dependency `@react-pdf/renderer`.
-2. `next.config.ts` - only if spike/test shows Next 16 App Router bundling requires externalization; likely setting is `serverExternalPackages: ["@react-pdf/renderer"]` but validate after install.
-3. Add `src/lib/artifacts/pdf/brand-tokens.ts` - H2O colors, page constants, Helvetica typography.
-4. Add `src/lib/artifacts/pdf/shared-document.tsx` - shared React-PDF primitives needed for Field Brief only: logo/fallback mark, footer/page number, cover block, stage badge, insight box, section header.
-5. Add `src/lib/artifacts/pdf/field-brief-document.tsx` - `FieldBriefDocument` and `renderFieldBriefPdf(payload)` or equivalent.
-6. Optional/add seam `src/lib/artifacts/pdf/render-artifact-pdf.ts` - dispatch `field-brief` only; throw/return unavailable for other kinds.
-7. `app/api/threads/[threadId]/artifacts/[kind]/[format]/route.ts` - replace PDF 501 for `field-brief` with PDF response; keep auth, thread, and artifact checks unchanged.
-8. `src/ai/tools/h2o-artifacts.ts` - update `ArtifactToolResult` format union and Field Brief URL/filename/media type. Keep other tools Markdown-only/unimplemented for PDF in this slice.
-9. Tests listed below.
+Renderer dependencies are shallow:
+- all four renderers import payload types from `payloads.ts`;
+- all four renderers import `h2oBrand` and some shared primitives;
+- only Playbook imports `themePalette`;
+- Field Brief has the most bespoke local components; Analytical/Proposal are generic and comparatively thin.
 
-## Tests to Add / Change
+## Gaps vs Python Reference / Ideal Brand
 
-Use scripts from `package.json`: `bun run test <file>`, then `bun run test`; optionally `bunx tsc --noEmit`, `bun run check`.
+No screenshot files were provided/read in this scouting pass, so screenshot gaps are inferred from the Python reference and brand skill.
 
-1. `app/api/threads/[threadId]/artifacts/[kind]/[format]/route.test.ts`
-   - Replace `returns 501 for PDF until PR3 implements the renderer` with Field Brief PDF success.
-   - Use a valid typed `FieldBriefPayload`, not the current generic `{title, sections, body}` fixture, for the PDF test.
-   - Assert `200`, `content-type` starts/equals `application/pdf`, `content-disposition` is `attachment; filename="prairie-water_field-brief.pdf"`, `cache-control: private, no-store`, and response bytes start with `%PDF` if buffer-based.
-   - Add/keep one test that e.g. `kind=playbook&format=pdf` still returns `501 ARTIFACT_FORMAT_UNAVAILABLE` for PR3A.
-2. `src/ai/tools/h2o-artifacts.test.ts`
-   - Rename Markdown-only test.
-   - Assert `generateFieldBrief` returns PDF format/media/url/filename.
-   - Assert no fake PDF for `generatePlaybook`, `generateAnalyticalRead`, or `generateProposalShell` if adding coverage.
-3. Add `src/lib/artifacts/pdf/field-brief-document.test.ts` or `pdf-renderers.test.ts`
-   - Minimal renderer smoke: `renderFieldBriefPdf(validPayload)` returns non-empty bytes beginning `%PDF`.
-   - Structural smoke should exercise stop flags, cost table, risks, and three actions. Do not binary snapshot PDFs.
-4. Existing markdown tests can remain, but do not let them imply Markdown primary output.
+1. Brand colors do not match the reference.
+   - Current navy/blue/cyan: `#0B1F3A`, `#2563EB`, `#0EA5E9`.
+   - Reference navy/blue/cyan: `#03045E`, `#0090F0`, `#ADFDFF`.
+   - Current muted/body/border/background tokens also differ from `MUTED_TEXT #64748B`, `BODY_TEXT #0F172A`, `BORDER_NEUTRAL #CBD5E1`, `LIGHT_BG_NAVY #E8E9F4`, `LIGHT_BG_CYAN #F0FDFF`.
 
-## @react-pdf/renderer Gotchas in This Next Route
+2. Typography is much simpler.
+   - Current renderer uses Helvetica/Helvetica-Bold only.
+   - Reference expects Inter Tight for headings, Inter for body, JetBrains Mono for evidence tags/IDs, with fallback.
+   - Current renderer has no font registration path.
 
-- Dependency is not installed now. Install before coding and verify actual API (`renderToBuffer`, `renderToStream`, or `pdf(<Doc />).toBuffer()`) against React 19 / Next 16.
-- App Router/RSC bundling risk is documented in `artifact-plan-pdf-research.md`; errors may require `serverExternalPackages` in `next.config.ts`.
-- Keep PDF code server-only and isolated under `src/lib/artifacts/pdf/*`; never import React-PDF from `src/ai/tools/h2o-artifacts.ts` or chat Lambda paths.
-- `renderToStream` returns a Node stream; Web `Response` may need `Readable.toWeb(stream)` from `node:stream`. Buffer-based rendering is simpler for tests (`%PDF` byte assertion) but less stream-oriented.
-- React-PDF styling is not CSS/HTML. Port visual primitives conceptually from ReportLab: use `View`, `Text`, `StyleSheet`, fixed footer, and Helvetica. Do not attempt to reuse Python/ReportLab or WeasyPrint templates.
-- PDF binaries are not deterministic; avoid snapshots. Test headers and magic bytes, then rely on manual Prairie visual gate.
+3. Logo is a placeholder.
+   - Current `LogoMark` is a navy square containing `H2O`.
+   - Reference `LogoMark` embeds actual PNG/SVG logo with fallback text.
 
-## Narrow Implementation Sequence
+4. Shared cover block is not the reference Field Brief cover.
+   - Current cover is a large rounded blue panel with artifact label, title, pill, metadata.
+   - Reference Field Brief v2 cover is a compact top row: real logo left, stage badge right, customer name, meta line, horizontal rule.
+   - Reference later pages include a page-2+ top anchor header; current React renderer only uses fixed footers.
 
-1. RED: update route/tool tests for Field Brief PDF success and Markdown-only contract removal.
-2. Install `@react-pdf/renderer`; run the smallest renderer smoke in route/test context.
-3. Add PDF boundary and Field Brief-only brand primitives/doc.
-4. Wire `field-brief/pdf` route after existing auth/artifact checks; return private attachment headers.
-5. Update `generateFieldBrief` result to PDF-first. Leave follow-on artifact tools/routes untouched except keeping their PDF unavailable.
-6. Run targeted tests, then full `bun run test`, `bunx tsc --noEmit`, and `bun run check`.
-7. Record/manual-check Prairie structural comparison against `H2O Allegiant Discovery Agent v3/Reference/prairie_field_brief_example.pdf` before declaring PR3A complete.
+5. Field Brief card components are visually weaker/different.
+   - Current risk cards use a left amber border for all risks; reference uses ranked colored circles, red for rank 1 and amber for others.
+   - Current action cards use simple numbered titles; reference uses blue numbered boxes and inline blue timeframe.
+   - Current section headers are bottom-rule headers; reference uses marker-dot section headers with category colors.
+   - Current insight boxes are close in concept but use different colors, rounded box, and regular text; reference uses light navy tint, 3pt brand-blue left line, bold brand-navy text.
 
-## Risks / Blockers
+6. Cost-of-alternative table is similar structurally but not equivalent.
+   - Both are 3-column tables.
+   - Current table uses navy header, rounded border, generic total-row background.
+   - Reference uses compact padding, light grey header, light navy total row, red/green total values, separator lines instead of full grid, and specific width ratios.
 
-- `@react-pdf/renderer` compatibility with Next 16 + React 19 is the main blocker; spike first.
-- Current route PDF test fixture is not a valid typed Field Brief payload, so renderer tests must not reuse it unchanged.
-- Review budget risk: porting all brand primitives can balloon. PR3A should implement Field Brief only; do not expand to Playbook/Analytical/Proposal, preview panel, section streaming, trigger package behavior, or KB injection.
-- Logo asset handling may be tricky in route runtime. Use SVG/PNG only if easy; a text/vector fallback `LogoMark` is acceptable for first Field Brief structural pass.
-- If choosing on-demand PDF, no `ArtifactStore` schema change is needed. Do not add PDF metadata/storage fields unless on-demand rendering fails and a storage design is explicitly chosen.
+7. Gate/flag callouts are absent from React renderers.
+   - Python reference has `gate_callout` and `flag_callout` for ideation/analytical covers.
+   - Current schemas only expose `stopFlags` for Field Brief; no gate state/content or structured flag severity exists in current payloads.
+
+8. Strategic/why-it-matters callouts are absent or underspecified.
+   - Python has `strategic_insight_callout` and `why_it_matters_callout`.
+   - Current Playbook only has orientation and question lists; no `whyItMatters` payload field.
+   - Current Analytical/Proposal use generic `InsightBox`; no closing strategic insight field.
+
+9. Analytical Read and Proposal Shell are generic shells, not deeply branded domain artifacts.
+   - Analytical sections are arbitrary body/evidence/table blocks; no gate/flag cover, decision-maker matrix, solution-fit table, or strategic closing callout.
+   - Proposal Shell has no specific Python cover primitive in the reference file beyond shared/report primitives; current renderer is serviceable but minimal.
+
+10. Page count/layout behavior may diverge from requested artifact lengths.
+   - Tool descriptions say Field Brief 1-2 pages, Playbook 1-2 pages, Analytical 3-6 pages, Proposal 1-5 pages.
+   - Current Playbook/Analytical/Proposal render all content under a single `<Page>` and rely on React PDF wrapping; Field Brief is always exactly two declared pages.
+   - No later-page headers except footers.
+
+## Concrete Implementation Levers
+
+1. Replace `brand-tokens.ts` values with reference token names/values.
+   - Add direct equivalents for `BRAND_NAVY`, `BRAND_BLUE`, `BRAND_CYAN`, gate colors, flag colors, text colors, light backgrounds, border, chart palette.
+   - Keep backward-compatible aliases (`navy`, `blue`, etc.) if minimizing diff.
+
+2. Add font registration for React PDF.
+   - Use `Font.register` from `@react-pdf/renderer` if font assets are packaged.
+   - Mirror Python fallback semantics: Inter/Inter Tight/JetBrains Mono when available, Helvetica/Courier fallback otherwise.
+   - Update evidence tags to use mono font.
+
+3. Port Python primitives into `shared-document.tsx` or split by primitive category.
+   - `RealLogoMark` / improved `LogoMark`.
+   - `StageBadge` with stage-to-color mapping.
+   - Field Brief `CoverBlock` variant matching Python `cover_block`.
+   - `LaterPageHeader` equivalent may require per-page fixed top header components in React PDF.
+   - `SectionHeader` with marker-dot and category color.
+   - `InsightBox` with reference tint/left accent/bold text.
+   - `RiskCard`, `ActionCard`, `CostOfAlternativeTable` as shared Field Brief primitives.
+
+4. Expand payload schemas only where required by target visuals.
+   - Gate/flag callouts require payload fields for gate state/content and flag severity/list.
+   - Playbook why-it-matters requires per-theme `whyItMatters?: string[]` or similar.
+   - Analytical strategic closing/gate/flag/structured matrix tables require schema additions.
+   - Any schema change must update both `src/ai/tools/h2o-artifacts.ts` Zod schemas and `src/lib/artifacts/payloads.ts` types.
+
+5. Migrate Field Brief first.
+   - It has the richest Python v2 primitives and the current React renderer is closest structurally.
+   - High-impact files: `brand-tokens.ts`, `shared-document.tsx`, `field-brief-document.tsx`.
+   - No schema change is necessary for initial visual parity except maybe better logo/date/regression support; gate/flag expansion can be a later pass.
+
+6. Then migrate Playbook theme/header/callout.
+   - `themePalette` should match Python chart palette.
+   - Theme header is already structurally similar; update colors/typography and optionally add `whyItMatters` payload support.
+
+7. Treat Analytical Read as a schema/design decision, not just styling.
+   - Current generic sections cannot reproduce Python-specific gate/flag cover, decision-maker matrix, solution-fit table, or strategic insight without more structured payload fields.
+
+8. Add visual regression fixtures if screenshots are the acceptance target.
+   - Generate PDFs from deterministic payload fixtures.
+   - Compare rendered page images or at least inspect snapshot PDFs manually.
+   - Existing code has no visible screenshot-based test harness in the files read.
 
 ## Start Here
 
-Open `app/api/threads/[threadId]/artifacts/[kind]/[format]/route.ts` first. It is the narrow PR3A integration point: auth/thread/artifact flow already exists, and the only behavioral gap is replacing the Field Brief PDF 501 with a real renderer response.
+Start with `src/lib/artifacts/pdf/brand-tokens.ts`, then `src/lib/artifacts/pdf/shared-document.tsx`, then `src/lib/artifacts/pdf/field-brief-document.tsx`.
+
+Reason: most visual gaps are token/shared-primitive gaps. Updating these first gives all four PDFs a common brand foundation and lets the Field Brief become the first concrete parity target against the Python v2 primitives.

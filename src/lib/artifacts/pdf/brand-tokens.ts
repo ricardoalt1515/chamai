@@ -1,27 +1,49 @@
 export const h2oBrand = {
   colors: {
-    ink: "#111827",
-    muted: "#6B7280",
-    line: "#D8DEE8",
-    panel: "#F7FAFC",
-    panelBlue: "#EEF7FF",
-    navy: "#0B1F3A",
-    blue: "#2563EB",
-    cyan: "#0EA5E9",
+    ink: "#0F172A",
+    muted: "#64748B",
+    line: "#CBD5E1",
+    panel: "#F8FAFC",
+    panelBlue: "#E8E9F4",
+    lightCyan: "#F0FDFF",
+    navy: "#03045E",
+    blue: "#0090F0",
+    cyan: "#ADFDFF",
     green: "#15803D",
-    amber: "#B45309",
+    amber: "#D97706",
+    gold: "#CA8A04",
     red: "#B91C1C",
     white: "#FFFFFF",
+    stage: {
+      lead: "#64748B",
+      qualify: "#03045E",
+      scope: "#0090F0",
+      position: "#0D9488",
+      propose: "#15803D",
+      close: "#7C3AED",
+      default: "#64748B",
+    },
+    severity: {
+      stop: "#B91C1C",
+      specialist: "#D97706",
+      attention: "#CA8A04",
+      clear: "#64748B",
+    },
   },
   font: {
     family: "Helvetica",
     bold: "Helvetica-Bold",
+    mono: "Courier",
   },
   page: {
     size: "LETTER" as const,
     paddingX: 44,
-    paddingY: 40,
+    paddingY: 34,
     footerY: 752,
+  },
+  logo: {
+    width: 62,
+    height: 25,
   },
 };
 
@@ -33,11 +55,11 @@ export const artifactLabels = {
 };
 
 export const themePalette = [
-  "#2563EB",
-  "#0EA5E9",
-  "#15803D",
-  "#B45309",
-  "#B91C1C",
+  "#0090F0",
+  "#0D9488",
+  "#475569",
   "#7C3AED",
-  "#0F766E",
+  "#CA8A04",
+  "#E11D48",
+  "#15803D",
 ];
