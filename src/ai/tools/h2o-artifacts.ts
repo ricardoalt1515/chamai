@@ -567,8 +567,8 @@ export const createH2oArtifactTools = (ctx: ArtifactRequestContext) => ({
   generateFieldBrief: tool({
     description:
       "Render and persist the H2O Field Brief PDF — the 1-2 page strategic decision aid (cover, win-win argument, fully-priced cost-of-alternative table, kill risks, do-this-next actions). Returns the PDF download URL. " +
-      "Populate customer.county, customer.state, and customer.basin when you know the site location — they appear in the MinimalHeader metadata line as '{County}, {State} ({Basin})'. " +
-      "Use narrativeRiskCallouts when stop-flag risks should be woven into the prose of whatThisIs / whatWeWouldPropose instead of rendered as separate bordered stop-flag blocks; both fields can coexist and the renderer applies suppression at display time.",
+      "Set customer.location to the SITE / sub-asset name ONLY (e.g. 'Pecos East Station'). Do NOT include city, state, or basin in customer.location — those belong in customer.county / customer.state / customer.basin and are rendered in the metadata line as '{County}, {State} ({Basin})'. " +
+      "Prefer narrativeRiskCallouts to weave risk context into the prose of 'What this is' / 'What we'd propose'. Stop-flag risks belong in the kill-risk section, not as separate bordered blocks.",
     inputSchema: fieldBriefInputSchema,
     execute: (input, { toolCallId }) =>
       runArtifactTool({ ctx, kind: "field-brief", input, toolCallId }),

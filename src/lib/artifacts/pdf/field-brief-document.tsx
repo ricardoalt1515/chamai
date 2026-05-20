@@ -3,109 +3,120 @@ import type { FieldBriefPayload } from "../payloads";
 import { h2oBrand } from "./brand-tokens";
 import { Footer, InsightBox, LogoMark, SectionHeader, StageBadge } from "./shared-document";
 
+// Type scale and layout mirror the canonical reference render_field_brief.py + brand.py +
+// h2o-field-brief-SPEC.md from `H2O Allegiant Discovery Agent v3/`. Page margins 0.75" L/R,
+// 0.45" T/B; body 9.5pt @ 1.26 leading; cover title 14pt navy; insight 10.5pt bold navy
+// (rendered by shared-document.tsx InsightBox).
+const FIELD_BRIEF_PAGE_PADDING_X = 54; // 0.75" * 72pt
+const FIELD_BRIEF_PAGE_PADDING_Y = 32.4; // 0.45" * 72pt
+
 const styles = StyleSheet.create({
   page: {
     color: h2oBrand.colors.ink,
     fontFamily: h2oBrand.font.family,
-    fontSize: 8.4,
-    lineHeight: 1.18,
-    paddingBottom: 34,
-    paddingHorizontal: h2oBrand.page.paddingX,
-    paddingTop: h2oBrand.page.paddingY,
+    fontSize: 9,
+    lineHeight: 1.2,
+    paddingBottom: FIELD_BRIEF_PAGE_PADDING_Y,
+    paddingHorizontal: FIELD_BRIEF_PAGE_PADDING_X,
+    paddingTop: FIELD_BRIEF_PAGE_PADDING_Y,
   },
   pageWithContinuation: {
-    paddingTop: 48,
+    paddingTop: 32,
   },
   continuationHeader: {
     alignItems: "center",
     borderBottomColor: h2oBrand.colors.line,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    left: h2oBrand.page.paddingX,
-    paddingBottom: 4,
+    left: FIELD_BRIEF_PAGE_PADDING_X,
+    paddingBottom: 3,
     position: "absolute",
-    right: h2oBrand.page.paddingX,
-    top: 16,
+    right: FIELD_BRIEF_PAGE_PADDING_X,
+    top: 14,
   },
   continuationMiddle: {
     color: h2oBrand.colors.navy,
     flex: 1,
     fontFamily: h2oBrand.font.bold,
-    fontSize: 7.5,
+    fontSize: 9,
     marginHorizontal: 10,
     textAlign: "center",
   },
+  continuationStageText: {
+    color: h2oBrand.colors.muted,
+    fontFamily: h2oBrand.font.bold,
+    fontSize: 9,
+  },
   section: {
-    marginBottom: 7,
+    marginBottom: 2,
   },
   body: {
-    fontSize: 8.2,
-    lineHeight: 1.18,
-    marginBottom: 3,
+    fontSize: 9,
+    lineHeight: 1.2,
+    marginBottom: 2,
   },
+  // Subhead — sits on the line above body with minimal margin (matches boss's compact subhead density).
   subhead: {
     color: h2oBrand.colors.navy,
     fontFamily: h2oBrand.font.bold,
-    fontSize: 8.4,
-    marginBottom: 2,
+    fontSize: 9.5,
+    marginBottom: 0,
     marginTop: 1,
   },
-  bullet: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 4,
+  winWinParagraph: {
+    fontSize: 9,
+    lineHeight: 1.2,
     marginBottom: 2,
   },
-  bulletDot: {
-    color: h2oBrand.colors.blue,
-    width: 6,
-  },
-  bulletText: {
-    flex: 1,
+  // Inline bold lead used as a paragraph-start label (e.g. "Recommended approach:").
+  inlineLead: {
+    color: h2oBrand.colors.navy,
+    fontFamily: h2oBrand.font.bold,
   },
   table: {
-    marginTop: 3,
+    marginTop: 4,
   },
   tableRow: {
     borderBottomColor: h2oBrand.colors.line,
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0.25,
     display: "flex",
     flexDirection: "row",
   },
-  // Plain text header — no background panel, no navy border (R6)
+  // Header row carries a thicker brand-navy underline per brand.py cost_of_alternative_table.
   tableHeaderPlain: {
-    borderBottomColor: h2oBrand.colors.line,
+    backgroundColor: h2oBrand.colors.panel,
+    borderBottomColor: h2oBrand.colors.navy,
     borderBottomWidth: 0.5,
   },
   tableTotal: {
     backgroundColor: h2oBrand.colors.panelBlue,
     borderBottomWidth: 0,
-    paddingVertical: 1,
-  },
-  tableCell: {
-    fontSize: 6.7,
-    lineHeight: 1.08,
-    paddingHorizontal: 4,
     paddingVertical: 2,
   },
+  tableCell: {
+    fontSize: 8.5,
+    lineHeight: 1.15,
+    paddingHorizontal: 5,
+    paddingVertical: 2.5,
+  },
   componentCell: {
-    width: "30%",
+    width: "24%",
   },
   pathCell: {
     borderLeftColor: h2oBrand.colors.line,
     borderLeftWidth: 0.5,
-    width: "35%",
+    width: "38%",
   },
-  // Plain column header text — navy bold, no inverted background
   headerText: {
     color: h2oBrand.colors.navy,
     fontFamily: h2oBrand.font.bold,
+    fontSize: 9.5,
   },
   totalText: {
     fontFamily: h2oBrand.font.bold,
-    fontSize: 7.2,
+    fontSize: 10,
   },
   totalNegative: {
     color: h2oBrand.colors.red,
@@ -113,20 +124,35 @@ const styles = StyleSheet.create({
   totalPositive: {
     color: h2oBrand.colors.green,
   },
-  // Shared card row layout — risk and action cards both use flat numeral pattern (R6)
   cardRow: {
     display: "flex",
     flexDirection: "row",
     gap: 6,
-    marginBottom: 5,
+    marginBottom: 3,
   },
-  // Flat numeral — large navy, no background, no border (R6: replaces circle + rounded box)
-  flatNumeral: {
-    color: h2oBrand.colors.navy,
+  // 18×18 circle — severity-coloured for risks (slightly smaller than spec 22pt to keep 2-page density).
+  rankCircle: {
+    alignItems: "center",
+    borderRadius: 9,
+    height: 18,
+    justifyContent: "center",
+    width: 18,
+  },
+  // 18×18 rounded rect — BRAND_BLUE for actions.
+  rankBox: {
+    alignItems: "center",
+    backgroundColor: h2oBrand.colors.blue,
+    borderRadius: 3,
+    height: 18,
+    justifyContent: "center",
+    width: 18,
+  },
+  rankLabel: {
+    color: h2oBrand.colors.white,
     fontFamily: h2oBrand.font.bold,
-    fontSize: 14,
+    fontSize: 9.5,
     lineHeight: 1.0,
-    width: 16,
+    textAlign: "center",
   },
   cardContent: {
     flex: 1,
@@ -134,79 +160,69 @@ const styles = StyleSheet.create({
   cardTitle: {
     color: h2oBrand.colors.navy,
     fontFamily: h2oBrand.font.bold,
-    fontSize: 8.6,
-    marginBottom: 1,
-  },
-  // Italic colored body line for risk mechanism (R6)
-  // @react-pdf base fonts: use "Helvetica-Oblique" for italic (not fontStyle on Helvetica)
-  riskMechanism: {
-    fontFamily: "Helvetica-Oblique",
-    fontSize: 8.2,
+    fontSize: 9.5,
     lineHeight: 1.18,
-    marginBottom: 2,
+    marginBottom: 0,
   },
-  mitigation: {
+  // Risk body: mechanism + inline italic muted Mitigation in a SINGLE paragraph.
+  riskBody: {
+    fontSize: 9,
+    lineHeight: 1.18,
+  },
+  mitigationInline: {
     color: h2oBrand.colors.muted,
-    fontSize: 7.5,
-    fontStyle: "italic",
-    lineHeight: 1.12,
+    fontFamily: "Helvetica-Oblique",
   },
-  // Italic timeframe for action cards (R6)
   timeframe: {
     color: h2oBrand.colors.blue,
     fontFamily: "Helvetica-Oblique",
   },
-  stopFlag: {
-    borderColor: h2oBrand.colors.red,
-    borderRadius: 5,
-    borderWidth: 0.8,
-    marginBottom: 4,
-    padding: 5,
-  },
   muted: {
     color: h2oBrand.colors.muted,
-    fontSize: 7.5,
+    fontSize: 9,
   },
-  // R6: italic sensitivity caption under cost table total
   sensitivityCaption: {
     color: h2oBrand.colors.muted,
     fontFamily: "Helvetica-Oblique",
-    fontSize: 7.5,
+    fontSize: 8.5,
+    lineHeight: 1.2,
+    marginTop: 2,
   },
-  // Narrative risk callout block (R6, Option A)
-  narrativeCallout: {
-    marginBottom: 6,
-  },
+  // Narrative callouts now live INSIDE 'What this is' as plain body paragraphs — no own header.
   narrativeCalloutItem: {
-    fontSize: 8.2,
+    fontSize: 9,
     lineHeight: 1.2,
     marginBottom: 3,
   },
-  // R3: Field Brief cover block (local — avoids modifying shared-document.tsx in Slice C)
   cover: {
-    marginBottom: 10,
+    marginBottom: 4,
   },
   coverTop: {
     alignItems: "center",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 5,
+    marginBottom: 2,
   },
   coverTitle: {
     color: h2oBrand.colors.navy,
     fontFamily: h2oBrand.font.bold,
-    fontSize: 15,
-    lineHeight: 1.04,
-    marginBottom: 1,
+    fontSize: 14,
+    lineHeight: 1.18,
+    marginBottom: 0,
   },
   coverMetadata: {
     borderBottomColor: h2oBrand.colors.line,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     color: h2oBrand.colors.muted,
-    fontSize: 7.5,
-    lineHeight: 1.15,
-    paddingBottom: 3,
+    fontSize: 9,
+    lineHeight: 1.2,
+    paddingBottom: 2,
+  },
+  // Bold inline 'Field Brief' token inside the metadata line (per cover_block in brand.py).
+  coverMetadataBold: {
+    color: h2oBrand.colors.muted,
+    fontFamily: h2oBrand.font.bold,
   },
 });
 
@@ -258,9 +274,10 @@ export const costRowStyleRole = ({
 };
 
 /**
- * Builds the Field Brief H1 title (R3).
- * Format: `{customer.name} — {customer.location}` when location is present;
- * falls back to `{customer.name}` when location is absent or empty (R11 backward compat).
+ * Builds the Field Brief H1 title.
+ * Format: `{customer.name} — {site}` when location is present; falls back to `{customer.name}`.
+ * Strips any city/state suffix that may have been appended to `location` — the H1 carries
+ * only the site/sub-asset name; county/state/basin live in the metadata line.
  */
 export const buildFieldBriefTitle = ({
   name,
@@ -269,10 +286,11 @@ export const buildFieldBriefTitle = ({
   name: string;
   location?: string;
 }): string => {
-  if (location && location.trim().length > 0) {
-    return `${name} — ${location}`;
-  }
-  return name;
+  const trimmed = location?.trim();
+  if (!trimmed) return name;
+  const site = trimmed.split(" — ")[0].split(", ")[0].trim();
+  if (!site) return name;
+  return `${name} — ${site}`;
 };
 
 /**
@@ -360,18 +378,32 @@ const FieldBriefCover = ({
       <StageBadge stage={stage} />
     </View>
     <Text style={styles.coverTitle}>{title}</Text>
-    <Text style={styles.coverMetadata}>{metadataLine}</Text>
+    <Text style={styles.coverMetadata}>{renderCoverMetadataLine(metadataLine)}</Text>
   </View>
 );
 
-const Bullet = ({ lead, body }: { lead: string; body: string }) => (
-  <View style={styles.bullet}>
-    <Text style={styles.bulletDot}>•</Text>
-    <Text style={styles.bulletText}>
-      <Text style={{ fontFamily: h2oBrand.font.bold }}>{lead}: </Text>
-      {body}
-    </Text>
-  </View>
+// Splits the metadata line so "Field Brief" renders bold inline (matches brand.py cover_block).
+const renderCoverMetadataLine = (line: string) => {
+  const token = "Field Brief";
+  const idx = line.indexOf(token);
+  if (idx === -1) return line;
+  const before = line.slice(0, idx);
+  const after = line.slice(idx + token.length);
+  return (
+    <>
+      {before}
+      <Text style={styles.coverMetadataBold}>{token}</Text>
+      {after}
+    </>
+  );
+};
+
+// Win-win argument paragraph — bold lead followed by body, all inline (no bullet).
+const WinWinParagraph = ({ lead, body }: { lead: string; body: string }) => (
+  <Text style={styles.winWinParagraph}>
+    <Text style={{ fontFamily: h2oBrand.font.bold }}>{lead}: </Text>
+    {body}
+  </Text>
 );
 
 // R6: Plain text column headers, thin row separators, bold last-row total + italic sensitivity
@@ -397,45 +429,42 @@ const CostTable = ({ rows }: { rows: CostRows }) => (
   </View>
 );
 
-const StopFlags = ({ flags }: { flags: NonNullable<FieldBriefPayload["stopFlags"]> }) => {
-  if (!flags.length) return null;
+// Narrative risk callouts rendered as plain body paragraphs INSIDE 'What this is'.
+// Boss-reference Field Briefs weave risk into the section body — no separate "Risk context" header.
+const NarrativeCallouts = ({ callouts }: { callouts: string[] }) =>
+  callouts.map((item, i) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey: narrative items have no stable key
+    <Text key={i} style={styles.narrativeCalloutItem}>
+      {item}
+    </Text>
+  ));
 
+// Continuation header: small logo + customer—site text + "Stage: X · Field Brief (continued)" as
+// right-aligned plain text. Mirrors the boss reference page-2 strip (no badge pill).
+const ContinuationHeader = ({
+  customerName,
+  site,
+  stage,
+}: {
+  customerName: string;
+  site?: string;
+  stage: string;
+}) => {
+  const left = site ? `${customerName} — ${site}` : customerName;
   return (
-    <View style={styles.section}>
-      <SectionHeader color={sectionMarkerColor("what-could-kill-it")}>Stop flags</SectionHeader>
-      {flags.map((flag) => (
-        <View key={flag.title} style={styles.stopFlag} wrap={false}>
-          <Text style={styles.cardTitle}>{flag.title}</Text>
-          <Text>{flag.summary}</Text>
-        </View>
-      ))}
+    <View fixed style={styles.continuationHeader}>
+      <LogoMark size="xs" />
+      <Text style={styles.continuationMiddle}>{left}</Text>
+      <Text
+        style={styles.continuationStageText}
+      >{`Stage: ${stage} · Field Brief (continued)`}</Text>
     </View>
   );
 };
 
-// R6, Option A: inline prose narrative risk callouts (suppress stopFlags when populated)
-const NarrativeCallouts = ({ callouts }: { callouts: string[] }) => (
-  <View style={styles.narrativeCallout}>
-    <SectionHeader color={sectionMarkerColor("what-could-kill-it")}>Risk context</SectionHeader>
-    {callouts.map((item, i) => (
-      // biome-ignore lint/suspicious/noArrayIndexKey: narrative items have no stable key
-      <Text key={i} style={styles.narrativeCalloutItem}>
-        {item}
-      </Text>
-    ))}
-  </View>
-);
-
-// R5: Continuation header retains logo (small) + customer + "Field Brief (continued)" + stage badge
-const ContinuationHeader = ({ customerName, stage }: { customerName: string; stage: string }) => (
-  <View fixed style={styles.continuationHeader}>
-    <LogoMark size="sm" />
-    <Text style={styles.continuationMiddle}>{fieldBriefContinuationLabel(customerName)}</Text>
-    <StageBadge stage={stage} />
-  </View>
-);
-
-// R6: Risk card with flat numeral (no circle), bold title, italic colored mechanism, italic muted mitigation
+// Risk card per H2O brand spec: 22pt severity-coloured circle (FLAG_STOP red for rank 1,
+// FLAG_SPECIALIST amber for rank 2-3) with white numeral; bold navy title; body paragraph
+// combining mechanism + inline italic muted "Mitigation: ..." in a single text block.
 const RiskCard = ({
   rank,
   risk,
@@ -444,16 +473,20 @@ const RiskCard = ({
   risk: FieldBriefPayload["sections"]["whatCouldKillIt"]["risks"][number];
 }) => (
   <View style={styles.cardRow} wrap={false}>
-    <Text style={styles.flatNumeral}>{rank}</Text>
+    <View style={[styles.rankCircle, { backgroundColor: riskRankColor(rank) }]}>
+      <Text style={styles.rankLabel}>{rank}</Text>
+    </View>
     <View style={styles.cardContent}>
       <Text style={styles.cardTitle}>{risk.name}</Text>
-      <Text style={[styles.riskMechanism, { color: riskRankColor(rank) }]}>{risk.mechanism}</Text>
-      <Text style={styles.mitigation}>Mitigation: {risk.mitigation}</Text>
+      <Text style={styles.riskBody}>
+        {risk.mechanism} <Text style={styles.mitigationInline}>Mitigation: {risk.mitigation}</Text>
+      </Text>
     </View>
   </View>
 );
 
-// R6: Action card with flat numeral (no rounded box), bold title, italic timeframe, body paragraph
+// Action card per H2O brand spec: 22pt BRAND_BLUE rounded box with white numeral; bold navy
+// title with inline brand-blue italic "· {timeframe}"; supporting body paragraph.
 const ActionCard = ({
   action,
   index,
@@ -462,7 +495,9 @@ const ActionCard = ({
   index: number;
 }) => (
   <View style={styles.cardRow} wrap={false}>
-    <Text style={styles.flatNumeral}>{index + 1}</Text>
+    <View style={styles.rankBox}>
+      <Text style={styles.rankLabel}>{index + 1}</Text>
+    </View>
     <View style={styles.cardContent}>
       <Text style={styles.cardTitle}>
         {action.title} <Text style={styles.timeframe}>· {action.timeframe}</Text>
@@ -472,19 +507,26 @@ const ActionCard = ({
   </View>
 );
 
+// Extracts the site/sub-asset portion of customer.location for the continuation header,
+// using the same trimming rules as buildFieldBriefTitle.
+const extractSite = (location?: string): string | undefined => {
+  const trimmed = location?.trim();
+  if (!trimmed) return undefined;
+  const site = trimmed.split(" — ")[0].split(", ")[0].trim();
+  return site || undefined;
+};
+
 export const FieldBriefDocument = ({ payload }: { payload: FieldBriefPayload }) => {
   const proposal = payload.sections.whatWeWouldPropose;
   const risks = payload.sections.whatCouldKillIt.risks;
   const actions = payload.sections.doThisNext.actions;
-  const { pageOneRows, pageTwoRows } = splitCostRowsForTwoPageBrief(proposal.costOfAlternativeRows);
 
-  // R3: H1 = `{customer.name} — {customer.location}` with name-only fallback
   const title = buildFieldBriefTitle({
     name: payload.customer.name,
     location: payload.customer.location,
   });
+  const site = extractSite(payload.customer.location);
 
-  // R3: Metadata line via pure helper
   const metadataLine = buildFieldBriefMetadataLine({
     county: payload.customer.county,
     state: payload.customer.state,
@@ -492,11 +534,8 @@ export const FieldBriefDocument = ({ payload }: { payload: FieldBriefPayload }) 
     date: payload.date,
   });
 
-  // R6, Option A: choose stop-flag presentation mode
-  const stopFlagMode = chooseStopFlagPresentation({
-    narrativeRiskCallouts: payload.narrativeRiskCallouts,
-    stopFlags: payload.stopFlags,
-  });
+  const showNarrative = payload.narrativeRiskCallouts && payload.narrativeRiskCallouts.length > 0;
+  const { pageOneRows, pageTwoRows } = splitCostRowsForTwoPageBrief(proposal.costOfAlternativeRows);
 
   return (
     <Document
@@ -505,19 +544,15 @@ export const FieldBriefDocument = ({ payload }: { payload: FieldBriefPayload }) 
       title={`${payload.customer.name} Field Brief`}
     >
       <Page size={h2oBrand.page.size} style={styles.page}>
-        {/* R3: FieldBriefCover — H1 = customer name only, small logo, metadata from helper */}
         <FieldBriefCover title={title} metadataLine={metadataLine} stage={payload.stage} />
-
-        {/* R6, Option A: narrative callouts woven between "What this is" and "What we'd propose" */}
-        {stopFlagMode === "narrative" && payload.narrativeRiskCallouts ? (
-          <NarrativeCallouts callouts={payload.narrativeRiskCallouts} />
-        ) : null}
-        {stopFlagMode === "blocks" ? <StopFlags flags={payload.stopFlags ?? []} /> : null}
 
         <View style={styles.section}>
           <SectionHeader color={sectionMarkerColor("what-this-is")}>What this is</SectionHeader>
           <InsightBox>{payload.sections.whatThisIs.insight}</InsightBox>
           <Text style={styles.body}>{payload.sections.whatThisIs.body}</Text>
+          {showNarrative && payload.narrativeRiskCallouts ? (
+            <NarrativeCallouts callouts={payload.narrativeRiskCallouts} />
+          ) : null}
         </View>
 
         <View style={styles.section}>
@@ -525,15 +560,17 @@ export const FieldBriefDocument = ({ payload }: { payload: FieldBriefPayload }) 
             What we'd propose
           </SectionHeader>
           <InsightBox>{proposal.insight}</InsightBox>
-          <Text style={styles.subhead}>Recommended approach</Text>
-          <Text style={styles.body}>{proposal.recommendedApproach}</Text>
+          <Text style={styles.body}>
+            <Text style={styles.inlineLead}>Recommended approach: </Text>
+            {proposal.recommendedApproach}
+          </Text>
           <Text style={styles.subhead}>
-            Why the customer should want this — the win-win argument
+            Why the customer should want this — the win-win argument:
           </Text>
           {proposal.winWinArguments.map((argument) => (
-            <Bullet key={argument.lead} lead={argument.lead} body={argument.body} />
+            <WinWinParagraph key={argument.lead} lead={argument.lead} body={argument.body} />
           ))}
-          <Text style={styles.subhead}>Cost of the alternative — fully priced over 5 years</Text>
+          <Text style={styles.subhead}>Cost of the alternative — fully priced over 5 years:</Text>
           <CostTable rows={pageOneRows} />
           {proposal.dealSizeSensitivity && !pageTwoRows.length ? (
             <Text style={styles.sensitivityCaption}>
@@ -541,12 +578,15 @@ export const FieldBriefDocument = ({ payload }: { payload: FieldBriefPayload }) 
             </Text>
           ) : null}
         </View>
-        {/* R4: Footer text-only, no label prop */}
-        <Footer />
+        <Footer paddingX={FIELD_BRIEF_PAGE_PADDING_X} />
       </Page>
 
       <Page size={h2oBrand.page.size} style={[styles.page, styles.pageWithContinuation]}>
-        <ContinuationHeader customerName={payload.customer.name} stage={payload.stage} />
+        <ContinuationHeader
+          customerName={payload.customer.name}
+          site={site}
+          stage={payload.stage}
+        />
         {pageTwoRows.length ? (
           <View style={styles.section}>
             <CostTable rows={pageTwoRows} />
@@ -574,8 +614,7 @@ export const FieldBriefDocument = ({ payload }: { payload: FieldBriefPayload }) 
             <ActionCard key={action.title} action={action} index={index} />
           ))}
         </View>
-        {/* R4: Footer text-only, no label prop */}
-        <Footer />
+        <Footer paddingX={FIELD_BRIEF_PAGE_PADDING_X} />
       </Page>
     </Document>
   );

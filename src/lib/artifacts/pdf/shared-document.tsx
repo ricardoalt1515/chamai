@@ -114,11 +114,11 @@ const styles = StyleSheet.create({
     borderLeftWidth: 3,
     color: h2oBrand.colors.navy,
     fontFamily: h2oBrand.font.bold,
-    fontSize: 8.3,
+    fontSize: 10,
     lineHeight: 1.2,
-    marginBottom: 5,
-    paddingHorizontal: 7,
-    paddingVertical: 5,
+    marginBottom: 3,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
   },
   footer: {
     alignItems: "center",
@@ -139,12 +139,17 @@ const styles = StyleSheet.create({
 
 /**
  * H2O Allegiant logo mark.
- * `size="sm"` keeps the same sidebar-logo aspect ratio at continuation-header scale.
+ * - `md` = full size (102×20) — used by Tier 2 docs that still want the original cover scale.
+ * - `sm` = compact (71×14) — Field Brief cover, sized to roughly match the boss reference visual weight.
+ * - `xs` = micro (51×10) — Field Brief continuation strip; same visual weight as the boss page-2 mark.
+ *
+ * The PNG asset (`public/h2o-allegiant.png`) is a wordmark with ~5:1 aspect ratio (1696×333).
+ * Each preset preserves that ratio.
  */
-export const LogoMark = ({ size = "md" }: { size?: "sm" | "md" }) => {
+export const LogoMark = ({ size = "md" }: { size?: "xs" | "sm" | "md" }) => {
   const logoSource = resolveH2oPdfLogoSource();
-  const width = size === "sm" ? 82 : h2oBrand.logo.width;
-  const height = size === "sm" ? 16 : h2oBrand.logo.height;
+  const width = size === "xs" ? 38 : size === "sm" ? 55 : h2oBrand.logo.width;
+  const height = size === "xs" ? 8 : size === "sm" ? 11 : h2oBrand.logo.height;
 
   if (logoSource) {
     return <Image src={logoSource} style={[styles.logoImage, { width, height }]} />;
@@ -205,15 +210,23 @@ export const InsightBox = ({ children }: { children: ReactNode }) => (
 );
 
 /**
- * Text-only footer: left `H2O Allegiant Discovery Agent · Internal handover`, right `Page N`.
- * No image, no logo. Applies to all four document types per R4.
- * The `label` prop is retained for legacy callers but ignored — footer text is now canonical.
- * @deprecated passing `label` has no effect; remove the prop in Slice C/D/E/F.
+ * Text-only footer: left `H2O Allegiant Discovery Agent · Internal handover`, right `Page N of N`.
+ * `paddingX` overrides the default left/right anchor (defaults to brand-tokens.paddingX). Pass it
+ * when a document uses a different page margin (e.g. Field Brief uses 54pt instead of 44pt).
+ * The `label` prop is retained as a no-op for legacy callers.
  */
-export const Footer = (_props?: { label?: string }) => (
-  <View fixed style={styles.footer}>
+export const Footer = ({ paddingX }: { label?: string; paddingX?: number } = {}) => (
+  <View
+    fixed
+    style={
+      paddingX !== undefined ? [styles.footer, { left: paddingX, right: paddingX }] : styles.footer
+    }
+  >
     <Text style={styles.footerText}>H2O Allegiant Discovery Agent · Internal handover</Text>
-    <Text render={({ pageNumber }) => `Page ${pageNumber}`} style={styles.footerText} />
+    <Text
+      render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
+      style={styles.footerText}
+    />
   </View>
 );
 
