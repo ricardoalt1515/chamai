@@ -135,6 +135,29 @@ const subStreamLensRows = (rows: NonNullable<AnalyticalReadPayload["subStreamLen
 const stageGapRows = (rows: NonNullable<AnalyticalReadPayload["stageGapAnalysis"]>) =>
   rows.map((row) => ({ Required: row.required, Status: row.status, Source: row.source }));
 
+/**
+ * Maps a section heading to the kind of specialty table that should render inline
+ * inside that section (after the body). Boss reference inlines the lens table inside
+ * "Lens classification", the flag inventory inside "Active flag inventory", etc.
+ */
+export type AnalyticalTableKind =
+  | "subStreamLens"
+  | "flagInventory"
+  | "stageGap"
+  | "costAlternative"
+  | null;
+
+export const matchAnalyticalSectionTable = (heading: string): AnalyticalTableKind => {
+  const h = heading.toLowerCase();
+  if (/(lens|sub.?stream).*(classification|decomposition|lens)/.test(h)) return "subStreamLens";
+  if (/(flag inventory|active flag|compliance.*safety|safety.*compliance)/.test(h))
+    return "flagInventory";
+  if (/(stage.*(classification|gap)|gap.*analysis)/.test(h)) return "stageGap";
+  if (/(cost.*alternative|alternative.*basis|cost.of.alternative)/.test(h))
+    return "costAlternative";
+  return null;
+};
+
 export const analyticalReadPagePaddingTop = tier2ContinuationTopReserve;
 
 /**
@@ -247,61 +270,135 @@ const styles = StyleSheet.create({
     fontFamily: h2oBrand.font.bold,
     textTransform: "uppercase",
   },
+  flagHeaderRow: {
+    backgroundColor: h2oBrand.colors.navy,
+    borderTopWidth: 0,
+  },
+  flagHeaderCell: {
+    color: h2oBrand.colors.white,
+    fontFamily: h2oBrand.font.bold,
+  },
+  flagIdCell: {
+    fontFamily: h2oBrand.font.mono,
+    fontSize: 6.5,
+  },
 });
 
 // ─── Components ───────────────────────────────────────────────────────────────
 
-const TableBlock = ({ title, rows }: { title: string; rows: Array<Record<string, string>> }) => {
-  if (!rows.length) {
-    return null;
-  }
+// Inline table renderers for content that lives INSIDE numbered sections (boss reference).
+// Each is a minimal block — no own section heading; relies on the parent section's heading.
+
+const InlineSubStreamLensTable = ({
+  rows,
+}: {
+  rows: NonNullable<AnalyticalReadPayload["subStreamLens"]>;
+}) => {
+  if (!rows.length) return null;
+  const formattedRows = subStreamLensRows(rows);
   return (
-    <View style={styles.section}>
-      <Text style={styles.tableSectionTitle}>{title}</Text>
-      <DataTable columns={dataTableColumnsFor(rows)} rows={rows} headerStyle="navy-light" />
+    <DataTable
+      columns={dataTableColumnsFor(formattedRows)}
+      rows={formattedRows}
+      headerStyle="navy-dark"
+    />
+  );
+};
+
+const InlineFlagInventoryTable = ({
+  flags,
+}: {
+  flags: NonNullable<AnalyticalReadPayload["flags"]>;
+}) => {
+  if (!flags.length) return null;
+  return (
+    <View style={styles.costTable}>
+      <View style={[styles.costRow, styles.flagHeaderRow]}>
+        <Text style={[styles.costCell, styles.flagHeaderCell, { flex: 2 }]}>Flag ID</Text>
+        <Text style={[styles.costCell, styles.flagHeaderCell, { flex: 1 }]}>Severity</Text>
+        <Text style={[styles.costCell, styles.flagHeaderCell, { flex: 3, borderRightWidth: 0 }]}>
+          Status / next action
+        </Text>
+      </View>
+      {flags.map((flag) => (
+        <View key={flag.id} style={styles.costRow}>
+          <Text style={[styles.costCell, styles.flagIdCell, { flex: 2 }]}>{flag.id}</Text>
+          <Text
+            style={[
+              styles.costCell,
+              styles.costConfidenceCell,
+              { flex: 1, color: flagSeverityColor(flag.severity) },
+            ]}
+          >
+            {flag.severity.toUpperCase()}
+          </Text>
+          <Text style={[styles.costCell, { flex: 3, borderRightWidth: 0 }]}>
+            {flag.status ?? flag.evidence}
+          </Text>
+        </View>
+      ))}
     </View>
   );
 };
 
-const CostRowsTable = ({ rows }: { rows: NonNullable<AnalyticalReadPayload["costRows"]> }) => {
-  if (!rows.length) {
-    return null;
-  }
+const InlineStageGapTables = ({
+  rows,
+}: {
+  rows: NonNullable<AnalyticalReadPayload["stageGapAnalysis"]>;
+}) => {
+  if (!rows.length) return null;
+  const formatted = stageGapRows(rows);
   return (
-    <View style={styles.section}>
-      <Text style={styles.tableSectionTitle}>Cost of alternative</Text>
-      <View style={styles.costTable}>
-        <View style={[styles.costRow, styles.costHeaderRow]}>
-          <Text style={[styles.costCell, styles.costHeaderCell]}>Row</Text>
-          <Text style={[styles.costCell, styles.costHeaderCell]}>Basis</Text>
-          <Text style={[styles.costCell, styles.costHeaderCell, { borderRightWidth: 0 }]}>
-            Confidence
+    <DataTable columns={dataTableColumnsFor(formatted)} rows={formatted} headerStyle="navy-dark" />
+  );
+};
+
+const InlineCostRowsTable = ({
+  rows,
+}: {
+  rows: NonNullable<AnalyticalReadPayload["costRows"]>;
+}) => {
+  if (!rows.length) return null;
+  return (
+    <View style={styles.costTable}>
+      <View style={[styles.costRow, styles.flagHeaderRow]}>
+        <Text style={[styles.costCell, styles.flagHeaderCell]}>Row</Text>
+        <Text style={[styles.costCell, styles.flagHeaderCell]}>Basis</Text>
+        <Text style={[styles.costCell, styles.flagHeaderCell, { borderRightWidth: 0 }]}>
+          Confidence
+        </Text>
+      </View>
+      {rows.map((row) => (
+        <View key={`${row.row}-${row.basis}`} style={styles.costRow}>
+          <Text style={styles.costCell}>{row.row}</Text>
+          <Text style={styles.costCell}>{row.basis}</Text>
+          <Text
+            style={[
+              styles.costCell,
+              styles.costConfidenceCell,
+              { borderRightWidth: 0, color: costConfidenceColor(row.confidence) },
+            ]}
+          >
+            {row.confidence}
           </Text>
         </View>
-        {rows.map((row) => (
-          <View key={`${row.row}-${row.basis}`} style={styles.costRow}>
-            <Text style={styles.costCell}>{row.row}</Text>
-            <Text style={styles.costCell}>{row.basis}</Text>
-            <Text
-              style={[
-                styles.costCell,
-                styles.costConfidenceCell,
-                { borderRightWidth: 0, color: costConfidenceColor(row.confidence) },
-              ]}
-            >
-              {row.confidence}
-            </Text>
-          </View>
-        ))}
-      </View>
+      ))}
     </View>
   );
+};
+
+/** Flag severity to brand color mapping. */
+export const flagSeverityColor = (severity: string): string => {
+  const normalized = severity.toLowerCase();
+  if (normalized.includes("stop")) return h2oBrand.colors.red;
+  if (normalized.includes("specialist")) return h2oBrand.colors.amber;
+  if (normalized.includes("attention")) return h2oBrand.colors.gold;
+  return h2oBrand.colors.muted;
 };
 
 export const AnalyticalReadDocument = ({ payload }: { payload: AnalyticalReadPayload }) => {
   const banners = shouldRenderAnalyticalBanners(payload);
   const gateBanner = gateStateToBanner(payload.gateState);
-  const legacySectionTables = payload.sections.flatMap((section) => section.table ?? []);
 
   // Build metadata line for TopHeader
   const customer = payload.customer;
@@ -350,30 +447,9 @@ export const AnalyticalReadDocument = ({ payload }: { payload: AnalyticalReadPay
             ))}
           </StatusBanner>
         ) : null}
-        <View style={styles.section}>
-          <Text style={styles.sectionHeadingText}>Summary</Text>
-          <Text style={styles.body}>{payload.summary}</Text>
-        </View>
-        {payload.subStreamLens?.length ? (
-          <TableBlock title="Sub-stream lens" rows={subStreamLensRows(payload.subStreamLens)} />
-        ) : null}
-        {payload.flags?.length ? (
-          <TableBlock
-            title="Active flag inventory"
-            rows={payload.flags.map((flag) => ({
-              ID: flag.id,
-              Severity: flag.severity,
-              Evidence: flag.evidence,
-              Status: flag.status ?? "",
-            }))}
-          />
-        ) : null}
-        {payload.stageGapAnalysis?.length ? (
-          <TableBlock title="Stage gap analysis" rows={stageGapRows(payload.stageGapAnalysis)} />
-        ) : null}
-        {payload.costRows?.length ? <CostRowsTable rows={payload.costRows} /> : null}
         {payload.sections.map((section, arrayIndex) => {
           const sectionNum = section.index ?? arrayIndex + 1;
+          const tableKind = matchAnalyticalSectionTable(section.heading);
           return (
             <View key={section.heading} style={styles.section}>
               <Text style={styles.sectionHeadingText}>
@@ -388,15 +464,6 @@ export const AnalyticalReadDocument = ({ payload }: { payload: AnalyticalReadPay
                   </>
                 ) : null}
               </Text>
-              {section.evidenceTags?.length ? (
-                <View style={styles.tagRow}>
-                  {section.evidenceTags.map((tag) => (
-                    <Text key={tag} style={styles.tag}>
-                      {tag}
-                    </Text>
-                  ))}
-                </View>
-              ) : null}
               {section.subsections?.map((sub, subIndex) => (
                 <View key={sub.heading} style={styles.section}>
                   <Text style={styles.subsectionHeading}>
@@ -413,12 +480,21 @@ export const AnalyticalReadDocument = ({ payload }: { payload: AnalyticalReadPay
                   </Text>
                 </View>
               ))}
+              {tableKind === "subStreamLens" && payload.subStreamLens?.length ? (
+                <InlineSubStreamLensTable rows={payload.subStreamLens} />
+              ) : null}
+              {tableKind === "flagInventory" && payload.flags?.length ? (
+                <InlineFlagInventoryTable flags={payload.flags} />
+              ) : null}
+              {tableKind === "stageGap" && payload.stageGapAnalysis?.length ? (
+                <InlineStageGapTables rows={payload.stageGapAnalysis} />
+              ) : null}
+              {tableKind === "costAlternative" && payload.costRows?.length ? (
+                <InlineCostRowsTable rows={payload.costRows} />
+              ) : null}
             </View>
           );
         })}
-        {legacySectionTables.length ? (
-          <TableBlock title="Legacy evidence table" rows={legacySectionTables} />
-        ) : null}
         {payload.closingInsight ? (
           <StrategicInsightCallout>{payload.closingInsight}</StrategicInsightCallout>
         ) : null}
