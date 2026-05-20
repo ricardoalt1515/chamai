@@ -158,6 +158,13 @@ export const matchAnalyticalSectionTable = (heading: string): AnalyticalTableKin
   return null;
 };
 
+/**
+ * Strips a leading numeric prefix (e.g. "1. ", "1.1 ", "1.1. ", "#1 — ") from an agent-supplied
+ * heading so the renderer's own auto-numbering doesn't double up ("7.1 1. Risk name").
+ */
+export const stripLeadingHeadingNumber = (heading: string): string =>
+  heading.replace(/^\s*#?\s*\d+(\.\d+)*\.?\s*[—–-]?\s*/, "").trim();
+
 export const analyticalReadPagePaddingTop = tier2ContinuationTopReserve;
 
 /**
@@ -450,10 +457,11 @@ export const AnalyticalReadDocument = ({ payload }: { payload: AnalyticalReadPay
         {payload.sections.map((section, arrayIndex) => {
           const sectionNum = section.index ?? arrayIndex + 1;
           const tableKind = matchAnalyticalSectionTable(section.heading);
+          const cleanSectionHeading = stripLeadingHeadingNumber(section.heading);
           return (
             <View key={section.heading} style={styles.section}>
               <Text style={styles.sectionHeadingText}>
-                {sectionNum}. {section.heading}
+                {sectionNum}. {cleanSectionHeading}
               </Text>
               <Text style={styles.body}>
                 {section.body}
@@ -467,7 +475,7 @@ export const AnalyticalReadDocument = ({ payload }: { payload: AnalyticalReadPay
               {section.subsections?.map((sub, subIndex) => (
                 <View key={sub.heading} style={styles.section}>
                   <Text style={styles.subsectionHeading}>
-                    {sectionNum}.{subIndex + 1} {sub.heading}
+                    {sectionNum}.{subIndex + 1} {stripLeadingHeadingNumber(sub.heading)}
                   </Text>
                   <Text style={styles.body}>
                     {sub.body}

@@ -610,12 +610,17 @@ export const createH2oArtifactTools = (ctx: ArtifactRequestContext) => ({
   generateAnalyticalRead: tool({
     description:
       "Render and persist the H2O Analytical Read PDF — 3-6 page evidence-tagged write-up sent upward to leadership. Returns the PDF download URL. " +
+      "Subtitle (optional) should be a short evidenced framing line e.g. 'Evidenced read on the produced-water management failure at Pecos East'. " +
+      "Populate subStreamsLine with the comma-separated sub-stream summary rendered as an italic muted line below the subtitle (e.g. 'Sub-streams: pipeline integrity, treatment train, stormwater segregation, H2S management, NORM streams, reuse spec, SWD integrity'). " +
       "Populate gateState and gateContent when this Analytical Read should open with a Qualification Gate amber banner ('OPEN', 'OPEN_WITH_CONDITIONS', 'CONDITIONALLY_OPEN', or 'CLOSED'). " +
       "Populate flags when this Analytical Read should open with a Compliance & Safety red banner listing flag IDs and severities (STOP, SPECIALIST, ATTENTION, CLEAR); gate banner renders above compliance banner when both are present. " +
-      "Populate subStreamLens rows to render a sub-stream lens DataTable mapping each sub-stream to its active condition and primary evidence anchor. " +
-      "Populate stageGapAnalysis rows to render a stage gap DataTable showing what is required, its current status, and the data source. " +
-      "Populate costRows with a row, basis, and confidence (HIGH/MEDIUM/LOW/QUALITATIVE) for each line — confidence cells are color-coded in the rendered table. " +
-      "Populate sections[].evidenceSource with the inline evidence anchor reference (e.g. '[PW-01]') rendered in small-caps after the section body. " +
+      "Populate subStreamLens rows — the renderer auto-inlines this table inside the section whose heading matches 'Lens classification' / 'Sub-stream decomposition'. " +
+      "Populate stageGapAnalysis rows — auto-inlines inside the section whose heading matches 'Stage classification' / 'Gap analysis'. " +
+      "Populate costRows with row, basis, and confidence (HIGH/MEDIUM/LOW/QUALITATIVE) — auto-inlines inside the section whose heading matches 'Cost of the alternative' / 'Alternative basis'. Confidence cells are color-coded. " +
+      "Populate flags — the structured flag inventory table auto-inlines inside the section whose heading matches 'Active flag inventory' / 'Compliance & safety'. " +
+      "Section headings: DO NOT pre-number them (no '1.', '#1', etc.). The renderer adds its own numbering. Same for subsections — pass the bare title only. " +
+      "Inline evidence anchors: pass the anchor ID via `sections[].evidenceSource` (and `subsections[].evidenceSource`) which renders as monospace `[ID]` after the body — DO NOT embed `[[...]]` notation in the body string. " +
+      "Closing: populate `closingInsight` (1-2 sentences) to render a centered italic cyan-bordered callout at the very end of the document. " +
       "Populate sections[].confidenceTier (HIGH/MEDIUM/LOW) when the section's evidence quality should be tagged with a colored badge.",
     inputSchema: analyticalReadInputSchema,
     execute: (input, { toolCallId }) =>
