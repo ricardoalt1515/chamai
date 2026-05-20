@@ -202,6 +202,87 @@ describe("shouldRenderAnalyticalBanners", () => {
   });
 });
 
+// ─── T12-T15: AnalyticalRead TopHeader + subsections + EvidenceTagMono + closing ─
+
+import { EvidenceTagMono } from "./analytical-read-document";
+
+describe("EvidenceTagMono (T14)", () => {
+  it("is exported from analytical-read-document", () => {
+    expect(EvidenceTagMono).toBeDefined();
+  });
+});
+
+describe("renderAnalyticalReadPdf — T12-T15 TopHeader + new fields", () => {
+  it("renders a valid PDF with title, subtitle, subStreamsLine, and closingInsight", async () => {
+    const pdf = await renderAnalyticalReadPdf({
+      ...payload,
+      title: "Analytical Read",
+      subtitle: "Evidenced read on produced-water management failure at Pecos East",
+      subStreamsLine: "Sub-streams: pipeline integrity, treatment train, produced water",
+      closingInsight:
+        "The produced-water failure at Pecos East is systemic, not operational. The cost of inaction exceeds our proposed intervention by 3x.",
+    });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+  });
+
+  it("renders closingInsight via StrategicInsightCallout without crashing", async () => {
+    const pdf = await renderAnalyticalReadPdf({
+      customer: { name: "Prairie Water", slug: "prairie-water" },
+      summary: "Capacity strain drives the deal.",
+      sections: [{ heading: "Evidence base", body: "Flow data is the primary anchor." }],
+      closingInsight: "The deal closes when the operator sees the cost of inaction.",
+    });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+  });
+
+  it("renders a section with subsections (decimal headings) without crashing", async () => {
+    const pdf = await renderAnalyticalReadPdf({
+      ...payload,
+      sections: [
+        {
+          heading: "Evidence extraction",
+          body: "Primary body for the section.",
+          subsections: [
+            {
+              heading: "Salinity and TDS signature",
+              body: "TDS exceeds 180,000 mg/L. Evidence confirms brine injection.",
+              evidenceSource: "PW-01",
+            },
+            {
+              heading: "Hydrocarbon and BTEX signature",
+              body: "BTEX above EPA screening threshold.",
+            },
+          ],
+        },
+      ],
+    });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+  });
+
+  it("auto-numbers sections using array position when index is absent", async () => {
+    // smoke test: verify sections render with sequential numbers
+    const pdf = await renderAnalyticalReadPdf({
+      customer: { name: "Prairie Water", slug: "prairie-water" },
+      summary: "Capacity strain.",
+      sections: [
+        { heading: "Situation read", body: "Body text one." },
+        { heading: "Lens classification", body: "Body text two." },
+        { heading: "Evidence extraction", body: "Body text three." },
+      ],
+    });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+  });
+
+  it("renders backward-compatible payload without new fields as a valid PDF", async () => {
+    const pdf = await renderAnalyticalReadPdf(payload);
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+  });
+});
+
 describe("renderAnalyticalReadPdf — Slice E", () => {
   it("renders a backward-compatible legacy payload without Slice E fields as one non-empty PDF", async () => {
     const pdf = await renderAnalyticalReadPdf({

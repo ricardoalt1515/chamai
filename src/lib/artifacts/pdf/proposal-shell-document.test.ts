@@ -186,3 +186,46 @@ describe("commitment helpers", () => {
     expect(proposalCommitmentMetaLine({})).toBeUndefined();
   });
 });
+
+// ─── T8-T11: Proposal Shell TopHeader + phase2Prize ──────────────────────────
+
+describe("renderProposalShellPdf — T8-T11 TopHeader + new fields", () => {
+  it("renders a valid PDF when title and subtitle are provided via payload", async () => {
+    const pdf = await renderProposalShellPdf({
+      ...payload,
+      title: "Proposal Shell — directional scoping",
+      subtitle: "Stage: Lead · Intent-only · Not for customer delivery",
+    });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+  });
+
+  it("renders a valid PDF when phase2Prize is populated", async () => {
+    const pdf = await renderProposalShellPdf({
+      ...payload,
+      phase2Prize:
+        "Phase 2 prize (months 12-30): residuals management and digital monitoring layer.",
+    });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+  });
+
+  it("renders without phase2Prize section when field is absent (backward compat)", async () => {
+    const pdf = await renderProposalShellPdf({
+      customer: { name: "Legacy Corp", slug: "legacy-corp" },
+      executiveSummary: "Keep scope narrow.",
+      proposedScope: ["Phase 1 design"],
+      sizingAndPricing: "$1M estimate.",
+      schedule: "Q3 2026.",
+      commitments: [],
+    });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+  });
+
+  it("renders big navy bold section headings without dot markers", async () => {
+    // smoke test: PDF renders OK with the new SectionTitle style
+    const pdf = await renderProposalShellPdf(payload);
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+  });
+});

@@ -210,7 +210,7 @@ export const InsightBox = ({ children }: { children: ReactNode }) => (
 );
 
 /**
- * Text-only footer: left `H2O Allegiant Discovery Agent · Internal handover`, right `Page N of N`.
+ * Text-only footer: left `H2O Allegiant Discovery Agent · Internal handover`, right `Page N`.
  * `paddingX` overrides the default left/right anchor (defaults to brand-tokens.paddingX). Pass it
  * when a document uses a different page margin (e.g. Field Brief uses 54pt instead of 44pt).
  * The `label` prop is retained as a no-op for legacy callers.
@@ -223,10 +223,7 @@ export const Footer = ({ paddingX }: { label?: string; paddingX?: number } = {})
     }
   >
     <Text style={styles.footerText}>H2O Allegiant Discovery Agent · Internal handover</Text>
-    <Text
-      render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
-      style={styles.footerText}
-    />
+    <Text render={({ pageNumber }) => `Page ${pageNumber}`} style={styles.footerText} />
   </View>
 );
 
@@ -864,5 +861,108 @@ export const WhyItMattersCallout = ({
         <Text style={newStyles.whyCalloutText}>{item}</Text>
       </View>
     ))}
+  </View>
+);
+
+// ─── T2: TopHeader — Tier 2 document header ───────────────────────────────────
+
+const topHeaderStyles = StyleSheet.create({
+  wrap: {
+    marginBottom: 8,
+  },
+  metadataLine: {
+    color: h2oBrand.colors.muted,
+    fontSize: 8,
+    lineHeight: 1.15,
+    marginBottom: 2,
+  },
+  title: {
+    color: h2oBrand.colors.navy,
+    fontFamily: h2oBrand.font.bold,
+    fontSize: 22,
+    lineHeight: 1.05,
+    marginBottom: 2,
+  },
+  subtitle: {
+    color: h2oBrand.colors.muted,
+    fontFamily: "Helvetica-Oblique",
+    fontSize: 10,
+    lineHeight: 1.2,
+    marginBottom: 2,
+  },
+  subStreamsLine: {
+    color: h2oBrand.colors.muted,
+    fontFamily: "Helvetica-Oblique",
+    fontSize: 9,
+    lineHeight: 1.15,
+    marginBottom: 3,
+  },
+  hr: {
+    borderBottomColor: h2oBrand.colors.line,
+    borderBottomWidth: 0.5,
+    marginBottom: 6,
+    marginTop: 2,
+  },
+});
+
+/**
+ * Tier 2 document header. Renders:
+ * - 8pt muted metadata line
+ * - 22pt navy bold title
+ * - 10pt italic muted subtitle (optional)
+ * - 9pt italic muted sub-streams line (optional)
+ * - 0.5pt neutral hr rule
+ *
+ * Used by Call Playbook, Proposal Shell, and Analytical Read.
+ * `paddingX` is unused here (layout is flow-relative) but accepted for forward-compat.
+ */
+export const TopHeader = ({
+  metadataLine,
+  title,
+  subtitle,
+  subStreamsLine,
+}: {
+  metadataLine: string;
+  title: string;
+  subtitle?: string;
+  subStreamsLine?: string;
+  paddingX?: number;
+}) => (
+  <View style={topHeaderStyles.wrap}>
+    <Text style={topHeaderStyles.metadataLine}>{metadataLine}</Text>
+    <Text style={topHeaderStyles.title}>{title}</Text>
+    {subtitle ? <Text style={topHeaderStyles.subtitle}>{subtitle}</Text> : null}
+    {subStreamsLine ? <Text style={topHeaderStyles.subStreamsLine}>{subStreamsLine}</Text> : null}
+    <View style={topHeaderStyles.hr} />
+  </View>
+);
+
+// ─── T3: StrategicInsightCallout ─────────────────────────────────────────────
+
+const strategicInsightStyles = StyleSheet.create({
+  wrap: {
+    backgroundColor: h2oBrand.colors.lightCyan,
+    borderColor: h2oBrand.colors.blue,
+    borderWidth: 1,
+    marginBottom: 6,
+    marginTop: 4,
+    padding: 12,
+  },
+  text: {
+    color: h2oBrand.colors.navy,
+    fontFamily: "Helvetica-Oblique",
+    fontSize: 11,
+    lineHeight: 1.3,
+    textAlign: "center",
+  },
+});
+
+/**
+ * Closing strategic insight callout. Centered italic 11pt navy text on lightCyan background
+ * with brand-blue 1pt border. Used as the closing element in Analytical Read (boss ref §8).
+ */
+export const StrategicInsightCallout = ({ children }: { children: ReactNode }) => (
+  <View style={strategicInsightStyles.wrap}>
+    <Text style={strategicInsightStyles.text}>{children}</Text>
   </View>
 );

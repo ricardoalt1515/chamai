@@ -53,7 +53,8 @@ export type PlaybookPayload = {
   customer: ArtifactCustomer;
   stage?: string;
   title?: string;
-  /** Document-level header fields for MinimalHeader rendering. */
+  subtitle?: string;
+  /** Document-level header fields for TopHeader rendering. */
   header?: {
     /** Rendered as comma-separated sub-stream summary when populated. */
     subStreams?: string[];
@@ -61,6 +62,10 @@ export type PlaybookPayload = {
     stageIntro?: string;
     /** Rendered as the opening insight box when populated. */
     insight?: string;
+    /** Orientation callout — grey-bordered italic block below TopHeader. */
+    orientationLine?: string;
+    /** Italic intro paragraph below the orientation callout. */
+    introLine?: string;
   };
   themes: Array<{
     title: string;
@@ -77,6 +82,9 @@ export type PlaybookPayload = {
 export type AnalyticalReadPayload = {
   customer: ArtifactCustomer;
   title?: string;
+  subtitle?: string;
+  subStreamsLine?: string;
+  closingInsight?: string;
   summary: string;
   /** Qualification Gate state. Renders amber QUALIFICATION GATE banner when present. */
   gateState?: "OPEN" | "OPEN_WITH_CONDITIONS" | "CONDITIONALLY_OPEN" | "CLOSED";
@@ -116,12 +124,22 @@ export type AnalyticalReadPayload = {
     evidenceSource?: string;
     /** Evidence quality tier for colored badge rendering. */
     confidenceTier?: "HIGH" | "MEDIUM" | "LOW";
+    /** Explicit 1-based section number. When absent uses array position. */
+    index?: number;
+    /** Decimal subsections e.g. "3.1 Title". */
+    subsections?: Array<{
+      heading: string;
+      body: string;
+      evidenceSource?: string;
+    }>;
   }>;
 };
 
 export type ProposalShellPayload = {
   customer: ArtifactCustomer;
   title?: string;
+  subtitle?: string;
+  phase2Prize?: string;
   executiveSummary: string;
   proposedScope: string[];
   sizingAndPricing: string;

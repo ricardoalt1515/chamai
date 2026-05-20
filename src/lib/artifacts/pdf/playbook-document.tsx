@@ -1,14 +1,7 @@
 import { Document, Page, renderToBuffer, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { PlaybookPayload } from "../payloads";
-import { themeAccentByIndex } from "./brand-tokens";
-import {
-  Footer,
-  InsightBox,
-  MinimalContinuationHeader,
-  MinimalHeader,
-  tier2ContinuationTopReserve,
-  WhyItMattersCallout,
-} from "./shared-document";
+import { h2oBrand, themeAccentByIndex } from "./brand-tokens";
+import { Footer, TopHeader, tier2ContinuationTopReserve } from "./shared-document";
 
 // ─── Pure helpers (testable, no React) ───────────────────────────────────────
 
@@ -51,6 +44,8 @@ export type ResolvedPlaybookHeaderFields = {
   subStreamsLine?: string;
   stageIntro?: string;
   insight?: string;
+  orientationLine?: string;
+  introLine?: string;
 };
 
 export const resolvePlaybookHeaderFields = (
@@ -59,6 +54,8 @@ export const resolvePlaybookHeaderFields = (
   subStreamsLine: header?.subStreams?.length ? header.subStreams.join(", ") : undefined,
   stageIntro: header?.stageIntro,
   insight: header?.insight,
+  orientationLine: header?.orientationLine,
+  introLine: header?.introLine,
 });
 
 export const resolvePlaybookThemeAccent = (
@@ -118,9 +115,9 @@ const styles = StyleSheet.create({
   },
   themeNumber: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 14,
-    lineHeight: 1.1,
-    width: 20,
+    fontSize: 24,
+    lineHeight: 1.0,
+    width: 30,
   },
   themeTitleColumn: {
     flex: 1,
@@ -160,6 +157,26 @@ const styles = StyleSheet.create({
     fontSize: 8.2,
     lineHeight: 1.22,
   },
+  // Orientation callout — grey-bordered italic block
+  orientationCallout: {
+    borderColor: h2oBrand.colors.line,
+    borderWidth: 1,
+    fontFamily: "Helvetica-Oblique",
+    fontSize: 8.2,
+    lineHeight: 1.3,
+    marginBottom: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    color: h2oBrand.colors.ink,
+  },
+  // Intro italic paragraph
+  introLine: {
+    color: h2oBrand.colors.muted,
+    fontFamily: "Helvetica-Oblique",
+    fontSize: 8.2,
+    lineHeight: 1.25,
+    marginBottom: 6,
+  },
   // Sub-prompt: typographically muted, indented one level
   subPrompt: {
     display: "flex",
@@ -194,7 +211,6 @@ const ThemeBlock = ({
 }) => {
   // Use explicit accentIndex when provided; fall back to position-based index
   const accent = resolvePlaybookThemeAccent(theme, index);
-  const whyItMatters = theme.whyItMatters;
 
   return (
     <View style={styles.themeBlock} wrap={false}>
@@ -202,9 +218,11 @@ const ThemeBlock = ({
         <Text style={[styles.themeNumber, { color: accent }]}>{index + 1}</Text>
         <View style={styles.themeTitleColumn}>
           <Text style={styles.themeTitle}>{theme.title}</Text>
-          {/* Framing renders as italic why-line in accent color */}
+          {/* Framing renders as italic why-line in muted color (boss ref: not accent) */}
           {theme.framing ? (
-            <Text style={[styles.themeWhyLine, { color: accent }]}>{theme.framing}</Text>
+            <Text style={[styles.themeWhyLine, { color: h2oBrand.colors.muted }]}>
+              {theme.framing}
+            </Text>
           ) : null}
         </View>
       </View>
@@ -227,9 +245,6 @@ const ThemeBlock = ({
           </View>
         );
       })}
-      {shouldRenderWhyItMatters(whyItMatters) && whyItMatters ? (
-        <WhyItMattersCallout items={whyItMatters} accentColor={accent} />
-      ) : null}
     </View>
   );
 };
@@ -237,49 +252,48 @@ const ThemeBlock = ({
 export const PlaybookDocument = ({ payload }: { payload: PlaybookPayload }) => {
   const resolvedHeader = resolvePlaybookHeaderFields(payload.header);
 
+  // Build metadata line: "Customer — Site · County, State · Date" pattern
+  const customer = payload.customer;
+  const metadataParts: string[] = [customer.name];
+  if (customer.location) metadataParts.push(customer.location);
+  const locationParts: string[] = [];
+  if (customer.county && customer.state)
+    locationParts.push(`${customer.county}, ${customer.state}`);
+  if (customer.basin) locationParts.push(customer.basin);
+  if (locationParts.length) metadataParts.push(locationParts.join(" · "));
+  metadataParts.push("Internal handover");
+  const metadataLine = metadataParts.join(" · ");
+
+  const docTitle = payload.title ?? "Call Playbook";
+  const docSubtitle = payload.subtitle ?? "Question structure for the first operator conversation";
+
   return (
     <Document
       author="SecondstreamAI"
       subject="H2O Allegiant Conversation Playbook"
-      title={`${payload.customer.name} Playbook`}
+      title={`${customer.name} Playbook`}
     >
       <Page size="LETTER" style={styles.page}>
-        {/* Tier 2 text-only continuation header: no logo, no stage badge (R5) */}
-        <View
-          fixed
-          render={({ pageNumber }) =>
-            pageNumber === 1 ? null : (
-              <MinimalContinuationHeader
-                customerName={payload.customer.name}
-                site={payload.customer.location}
-                artifactLabel="Playbook"
-                pageNumber={pageNumber}
-              />
-            )
+        <TopHeader
+          metadataLine={metadataLine}
+          title={docTitle}
+          subtitle={docSubtitle}
+          subStreamsLine={
+            resolvedHeader.subStreamsLine
+              ? `Sub-streams: ${resolvedHeader.subStreamsLine}`
+              : undefined
           }
         />
-        {/* Tier 2 text-only header: no logo, no stage badge (R1, R2) */}
-        <MinimalHeader
-          customerName={payload.customer.name}
-          site={payload.customer.location}
-          county={payload.customer.county ?? ""}
-          state={payload.customer.state ?? ""}
-          basin={payload.customer.basin}
-          date=""
-          artifactLabel="Playbook"
-        />
-        {resolvedHeader.subStreamsLine ? (
-          <Text style={styles.subStreamsLine}>{resolvedHeader.subStreamsLine}</Text>
+        {resolvedHeader.orientationLine ? (
+          <Text style={styles.orientationCallout}>{resolvedHeader.orientationLine}</Text>
         ) : null}
-        {resolvedHeader.stageIntro ? (
-          <Text style={styles.stageIntro}>{resolvedHeader.stageIntro}</Text>
+        {resolvedHeader.introLine ? (
+          <Text style={styles.introLine}>{resolvedHeader.introLine}</Text>
         ) : null}
-        {/* Stage insight box (R7) */}
-        {resolvedHeader.insight ? <InsightBox>{resolvedHeader.insight}</InsightBox> : null}
         {payload.themes.map((theme, index) => (
           <ThemeBlock key={theme.title} index={index} theme={theme} />
         ))}
-        <Footer />
+        <Footer paddingX={h2oBrand.page.paddingX} />
       </Page>
     </Document>
   );

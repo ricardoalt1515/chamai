@@ -1,16 +1,13 @@
 import { Document, Page, renderToBuffer, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { AnalyticalReadPayload } from "../payloads";
-import { artifactLabels, h2oBrand } from "./brand-tokens";
+import { h2oBrand } from "./brand-tokens";
 import {
   DataTable,
-  EvidenceAnchorInline,
   FlagListItem,
   Footer,
-  InsightBox,
-  MinimalContinuationHeader,
-  MinimalHeader,
-  SectionHeader,
   StatusBanner,
+  StrategicInsightCallout,
+  TopHeader,
   tier2ContinuationTopReserve,
 } from "./shared-document";
 
@@ -140,6 +137,17 @@ const stageGapRows = (rows: NonNullable<AnalyticalReadPayload["stageGapAnalysis"
 
 export const analyticalReadPagePaddingTop = tier2ContinuationTopReserve;
 
+/**
+ * Monospace evidence anchor `[ID]` — plain inline text in Courier font.
+ * Replaces the chip-style EvidenceAnchorInline per boss ref: inline `[PW-01]` text.
+ * Must be nested inside a Text parent for @react-pdf inline flow.
+ */
+export const EvidenceTagMono = ({ id }: { id: string }) => (
+  <Text style={{ fontFamily: h2oBrand.font.mono, fontSize: 7, color: h2oBrand.colors.muted }}>
+    [{id}]
+  </Text>
+);
+
 // ─── Styles ───────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
@@ -187,6 +195,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     paddingVertical: 1.5,
     textTransform: "uppercase",
+  },
+  // Section heading: BIG navy bold "N. Title"
+  sectionHeadingText: {
+    color: h2oBrand.colors.navy,
+    fontFamily: h2oBrand.font.bold,
+    fontSize: 12,
+    lineHeight: 1.1,
+    marginBottom: 3,
+    marginTop: 2,
+  },
+  // Subsection heading: "N.M Title" navy bold, smaller
+  subsectionHeading: {
+    color: h2oBrand.colors.navy,
+    fontFamily: h2oBrand.font.bold,
+    fontSize: 9.5,
+    lineHeight: 1.1,
+    marginBottom: 2,
+    marginTop: 3,
   },
   costTable: {
     borderColor: h2oBrand.colors.line,
@@ -277,34 +303,32 @@ export const AnalyticalReadDocument = ({ payload }: { payload: AnalyticalReadPay
   const gateBanner = gateStateToBanner(payload.gateState);
   const legacySectionTables = payload.sections.flatMap((section) => section.table ?? []);
 
+  // Build metadata line for TopHeader
+  const customer = payload.customer;
+  const metadataParts: string[] = [customer.name];
+  if (customer.location) metadataParts.push(customer.location);
+  const locationParts: string[] = [];
+  if (customer.county && customer.state)
+    locationParts.push(`${customer.county}, ${customer.state}`);
+  if (customer.basin) locationParts.push(customer.basin);
+  if (locationParts.length) metadataParts.push(locationParts.join(" · "));
+  metadataParts.push("Internal handover");
+  const metadataLine = metadataParts.join(" · ");
+
+  const docTitle = payload.title ?? "Analytical Read";
+
   return (
     <Document
       author="SecondstreamAI"
       subject="H2O Allegiant Analytical Read"
-      title={`${payload.customer.name} Analytical Read`}
+      title={`${customer.name} Analytical Read`}
     >
       <Page size={h2oBrand.page.size} style={styles.page}>
-        <View
-          fixed
-          render={({ pageNumber }) =>
-            pageNumber === 1 ? null : (
-              <MinimalContinuationHeader
-                customerName={payload.customer.name}
-                site={payload.customer.location}
-                artifactLabel="Analytical Read"
-                pageNumber={pageNumber}
-              />
-            )
-          }
-        />
-        <MinimalHeader
-          customerName={payload.customer.name}
-          site={payload.customer.location}
-          county={payload.customer.county ?? ""}
-          state={payload.customer.state ?? ""}
-          basin={payload.customer.basin}
-          date=""
-          artifactLabel={artifactLabels.analyticalRead}
+        <TopHeader
+          metadataLine={metadataLine}
+          title={docTitle}
+          subtitle={payload.subtitle}
+          subStreamsLine={payload.subStreamsLine}
         />
         {banners.gate ? (
           <StatusBanner
@@ -327,8 +351,8 @@ export const AnalyticalReadDocument = ({ payload }: { payload: AnalyticalReadPay
           </StatusBanner>
         ) : null}
         <View style={styles.section}>
-          <SectionHeader color={analyticalSectionDefaultColor()}>Summary</SectionHeader>
-          <InsightBox>{payload.summary}</InsightBox>
+          <Text style={styles.sectionHeadingText}>Summary</Text>
+          <Text style={styles.body}>{payload.summary}</Text>
         </View>
         {payload.subStreamLens?.length ? (
           <TableBlock title="Sub-stream lens" rows={subStreamLensRows(payload.subStreamLens)} />
@@ -348,33 +372,57 @@ export const AnalyticalReadDocument = ({ payload }: { payload: AnalyticalReadPay
           <TableBlock title="Stage gap analysis" rows={stageGapRows(payload.stageGapAnalysis)} />
         ) : null}
         {payload.costRows?.length ? <CostRowsTable rows={payload.costRows} /> : null}
-        {payload.sections.map((section) => (
-          <View key={section.heading} style={styles.section}>
-            <SectionHeader color={analyticalSectionDefaultColor()}>{section.heading}</SectionHeader>
-            <Text style={styles.body}>
-              {section.body}
-              {section.evidenceSource ? (
-                <>
-                  {" "}
-                  <EvidenceAnchorInline id={section.evidenceSource} />
-                </>
+        {payload.sections.map((section, arrayIndex) => {
+          const sectionNum = section.index ?? arrayIndex + 1;
+          return (
+            <View key={section.heading} style={styles.section}>
+              <Text style={styles.sectionHeadingText}>
+                {sectionNum}. {section.heading}
+              </Text>
+              <Text style={styles.body}>
+                {section.body}
+                {section.evidenceSource ? (
+                  <>
+                    {" "}
+                    <EvidenceTagMono id={section.evidenceSource} />
+                  </>
+                ) : null}
+              </Text>
+              {section.evidenceTags?.length ? (
+                <View style={styles.tagRow}>
+                  {section.evidenceTags.map((tag) => (
+                    <Text key={tag} style={styles.tag}>
+                      {tag}
+                    </Text>
+                  ))}
+                </View>
               ) : null}
-            </Text>
-            {section.evidenceTags?.length ? (
-              <View style={styles.tagRow}>
-                {section.evidenceTags.map((tag) => (
-                  <Text key={tag} style={styles.tag}>
-                    {tag}
+              {section.subsections?.map((sub, subIndex) => (
+                <View key={sub.heading} style={styles.section}>
+                  <Text style={styles.subsectionHeading}>
+                    {sectionNum}.{subIndex + 1} {sub.heading}
                   </Text>
-                ))}
-              </View>
-            ) : null}
-          </View>
-        ))}
+                  <Text style={styles.body}>
+                    {sub.body}
+                    {sub.evidenceSource ? (
+                      <>
+                        {" "}
+                        <EvidenceTagMono id={sub.evidenceSource} />
+                      </>
+                    ) : null}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          );
+        })}
         {legacySectionTables.length ? (
           <TableBlock title="Legacy evidence table" rows={legacySectionTables} />
         ) : null}
-        <Footer />
+        {payload.closingInsight ? (
+          <StrategicInsightCallout>{payload.closingInsight}</StrategicInsightCallout>
+        ) : null}
+        <Footer paddingX={h2oBrand.page.paddingX} />
       </Page>
     </Document>
   );

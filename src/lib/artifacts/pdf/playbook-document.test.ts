@@ -248,3 +248,93 @@ describe("resolvePlaybookHeaderFields", () => {
     expect(resolvePlaybookHeaderFields(undefined).insight).toBeUndefined();
   });
 });
+
+// ─── T4-T7: Playbook TopHeader + OrientationCallout + intro + theme updates ───
+
+describe("renderPlaybookPdf — T4-T7 TopHeader + new fields", () => {
+  it("renders a valid PDF when title and subtitle are provided via payload", async () => {
+    const pdf = await renderPlaybookPdf({
+      ...payload,
+      title: "Call Playbook",
+      subtitle: "Question structure for the first operator conversation",
+    });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+  });
+
+  it("renders a valid PDF with orientationLine and introLine in header", async () => {
+    const pdf = await renderPlaybookPdf({
+      ...payload,
+      header: {
+        subStreams: ["pipeline integrity", "treatment train"],
+        orientationLine:
+          "Lead-stage call. No customer relationship yet. Goal is to anchor the systemic frame.",
+        introLine: "Use the themes in roughly this order to guide the conversation.",
+      },
+    });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+  });
+
+  it("renders without InsightBox when insight field is absent (TopHeader replaces it)", async () => {
+    const pdf = await renderPlaybookPdf({
+      customer: { name: "Acme Water", slug: "acme-water" },
+      title: "Call Playbook",
+      themes: [{ title: "Theme A", questions: ["What is the primary concern?"] }],
+    });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+  });
+
+  it("renders a valid PDF with theme number size upgrade (24pt) without crashing", async () => {
+    const pdf = await renderPlaybookPdf({
+      customer: { name: "Prairie Water", slug: "prairie-water" },
+      themes: [
+        {
+          title: "Service area, flow, and scale",
+          framing: "Anchor the conversation on capacity strain.",
+          questions: ["What is current average daily flow?"],
+        },
+        {
+          title: "Permit and regulatory pressure",
+          framing: "Probe the schedule the customer is racing.",
+          questions: ["What is the NPDES renewal date?"],
+        },
+      ],
+    });
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+  });
+
+  it("renders a valid PDF using legacy payload without new optional fields (backward compat)", async () => {
+    const pdf = await renderPlaybookPdf(legacyPayload);
+    expect(pdf.byteLength).toBeGreaterThan(1000);
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+  });
+});
+
+describe("resolvePlaybookHeaderFields — new fields (T4)", () => {
+  it("resolves orientationLine from header", () => {
+    expect(
+      resolvePlaybookHeaderFields({
+        orientationLine: "Lead-stage call. No relationship yet.",
+      }),
+    ).toMatchObject({
+      orientationLine: "Lead-stage call. No relationship yet.",
+    });
+  });
+
+  it("resolves introLine from header", () => {
+    expect(
+      resolvePlaybookHeaderFields({
+        introLine: "Use the themes in roughly this order.",
+      }),
+    ).toMatchObject({
+      introLine: "Use the themes in roughly this order.",
+    });
+  });
+
+  it("returns undefined for orientationLine and introLine when header is absent", () => {
+    const result = resolvePlaybookHeaderFields(undefined);
+    expect(result.orientationLine).toBeUndefined();
+    expect(result.introLine).toBeUndefined();
+  });
+});

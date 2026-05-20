@@ -91,13 +91,18 @@ export const playbookInputSchema = z
   .object({
     customer: customerSchema,
     stage: stageSchema.optional(),
-    title: z.string().default("Conversation Playbook"),
-    /** Optional document-level header fields for MinimalHeader rendering. */
+    title: z.string().default("Call Playbook"),
+    subtitle: z.string().optional(),
+    /** Optional document-level header fields for TopHeader rendering. */
     header: z
       .object({
         subStreams: z.array(z.string()).optional(),
         stageIntro: z.string().optional(),
         insight: z.string().optional(),
+        /** Orientation callout block rendered below TopHeader. */
+        orientationLine: z.string().optional(),
+        /** Italic intro paragraph rendered below the orientation callout. */
+        introLine: z.string().optional(),
       })
       .strict()
       .optional(),
@@ -135,6 +140,9 @@ const confidenceTierSchema = z.enum(["HIGH", "MEDIUM", "LOW", "QUALITATIVE"]);
 export const analyticalReadInputSchema = z.object({
   customer: customerSchema,
   title: z.string().default("Analytical Read"),
+  subtitle: z.string().optional(),
+  subStreamsLine: z.string().optional(),
+  closingInsight: z.string().optional(),
   summary: z.string().min(1),
   /**
    * Qualification Gate state. Populate to open the document with an amber
@@ -210,6 +218,18 @@ export const analyticalReadInputSchema = z.object({
         evidenceSource: z.string().optional(),
         /** Confidence tier for this section's evidence quality. Rendered as a colored badge. */
         confidenceTier: z.enum(["HIGH", "MEDIUM", "LOW"]).optional(),
+        /** Explicit 1-based section number. When absent uses array position. */
+        index: z.number().int().positive().optional(),
+        /** Decimal subsections e.g. "3.1 Title". */
+        subsections: z
+          .array(
+            z.object({
+              heading: z.string().min(1),
+              body: z.string().min(1),
+              evidenceSource: z.string().optional(),
+            }),
+          )
+          .optional(),
       }),
     )
     .min(1),
@@ -217,7 +237,9 @@ export const analyticalReadInputSchema = z.object({
 
 export const proposalShellInputSchema = z.object({
   customer: customerSchema,
-  title: z.string().default("Proposal Shell"),
+  title: z.string().default("Proposal Shell — directional scoping"),
+  subtitle: z.string().optional(),
+  phase2Prize: z.string().optional(),
   executiveSummary: z.string().min(1),
   proposedScope: z.array(z.string().min(1)).min(1),
   sizingAndPricing: z.string().min(1),

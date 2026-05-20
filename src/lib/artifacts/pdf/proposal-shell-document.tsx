@@ -6,9 +6,7 @@ import {
   Footer,
   FullWidthBanner,
   KVTable,
-  MinimalContinuationHeader,
-  MinimalHeader,
-  SectionHeader,
+  TopHeader,
   tier2ContinuationTopReserve,
 } from "./shared-document";
 
@@ -131,6 +129,15 @@ const styles = StyleSheet.create({
     fontSize: 7,
     marginTop: 1,
   },
+  // Big navy bold section title (boss ref: no dot, no bullet)
+  sectionTitle: {
+    color: h2oBrand.colors.navy,
+    fontFamily: h2oBrand.font.bold,
+    fontSize: 12,
+    lineHeight: 1.1,
+    marginBottom: 4,
+    marginTop: 2,
+  },
   // Commit cards — tighter internal spacing
   commitGrid: {
     display: "flex",
@@ -154,6 +161,13 @@ const styles = StyleSheet.create({
 });
 
 // ─── Components ───────────────────────────────────────────────────────────────
+
+/**
+ * Big navy bold section heading (no dot marker). Boss ref: plain bold text at ~12pt navy.
+ */
+const SectionTitle = ({ children }: { children: string }) => (
+  <Text style={styles.sectionTitle}>{children}</Text>
+);
 
 const BulletList = ({ items }: { items: string[] }) => (
   <View>
@@ -184,50 +198,54 @@ const Commitments = ({ items }: { items: ProposalCommitment[] }) => (
 export const ProposalShellDocument = ({ payload }: { payload: ProposalShellPayload }) => {
   const commitments = payload.commitments;
   const gatesColumns = buildGatesToCloseColumns(payload.gatesToClose ?? []);
+
+  // Build metadata line for TopHeader
+  const customer = payload.customer;
+  const metadataParts: string[] = [customer.name];
+  if (customer.location) metadataParts.push(customer.location);
+  const locationParts: string[] = [];
+  if (customer.county && customer.state)
+    locationParts.push(`${customer.county}, ${customer.state}`);
+  if (customer.basin) locationParts.push(customer.basin);
+  if (locationParts.length) metadataParts.push(locationParts.join(" · "));
+  metadataParts.push("Internal handover");
+  const metadataLine = metadataParts.join(" · ");
+
+  const docTitle = payload.title ?? "Proposal Shell — directional scoping";
+  // Build subtitle: use payload.subtitle or compose from stage field
+  const docSubtitle = payload.subtitle ?? "Stage: Lead · Intent-only · Not for customer delivery";
+
   return (
     <Document
       author="SecondstreamAI"
       subject="H2O Allegiant Proposal Shell"
-      title={`${payload.customer.name} Proposal Shell`}
+      title={`${customer.name} Proposal Shell`}
     >
       <Page size={h2oBrand.page.size} style={styles.page}>
-        <View
-          fixed
-          render={({ pageNumber }) =>
-            pageNumber === 1 ? null : (
-              <MinimalContinuationHeader
-                artifactLabel="Proposal Shell"
-                customerName={payload.customer.name}
-                site={payload.customer.location}
-              />
-            )
-          }
-        />
-        <MinimalHeader
-          artifactLabel="Proposal Shell"
-          basin={payload.customer.basin}
-          county={payload.customer.county ?? ""}
-          customerName={payload.customer.name}
-          date=""
-          site={payload.customer.location}
-          state={payload.customer.state ?? ""}
-        />
+        <TopHeader metadataLine={metadataLine} title={docTitle} subtitle={docSubtitle} />
         {proposalBannerDefaultsToTrue(payload.draftIntentBanner) ? (
           <FullWidthBanner tone="red" text={PROPOSAL_TOP_BANNER_TEXT} />
         ) : null}
-        <View style={styles.section}>
-          <SectionHeader color={proposalExecSummaryAccentColor()}>Executive summary</SectionHeader>
-          <Text style={styles.execSummaryBlock}>{payload.executiveSummary}</Text>
-        </View>
         {payload.statusOfDocument ? (
           <View style={styles.section}>
-            <SectionHeader color={h2oBrand.colors.navy}>Status of this document</SectionHeader>
+            <SectionTitle>Status of this document</SectionTitle>
             <Text style={styles.statusBody}>{payload.statusOfDocument}</Text>
+          </View>
+        ) : null}
+        <View style={styles.section}>
+          <SectionTitle>Scope intent (phase 1)</SectionTitle>
+          <Text style={styles.execSummaryBlock}>{payload.executiveSummary}</Text>
+          <BulletList items={payload.proposedScope} />
+        </View>
+        {payload.phase2Prize ? (
+          <View style={styles.section}>
+            <SectionTitle>Phase 2 prize</SectionTitle>
+            <Text style={styles.body}>{payload.phase2Prize}</Text>
           </View>
         ) : null}
         {payload.workPackages?.length ? (
           <View style={styles.section}>
-            <SectionHeader color={h2oBrand.colors.navy}>Work packages</SectionHeader>
+            <SectionTitle>Indicative commercial shape</SectionTitle>
             <DataTable
               columns={[
                 { key: "name", header: "Work package", flexBasis: 200 },
@@ -239,24 +257,17 @@ export const ProposalShellDocument = ({ payload }: { payload: ProposalShellPaylo
           </View>
         ) : null}
         <View style={styles.section}>
-          <SectionHeader color={h2oBrand.colors.green}>Proposed scope</SectionHeader>
-          <BulletList items={payload.proposedScope} />
-        </View>
-        <View style={styles.section}>
-          <SectionHeader color={h2oBrand.colors.navy}>Sizing and pricing</SectionHeader>
+          <SectionTitle>Indicative commercial shape</SectionTitle>
           {payload.sizingRows?.length ? (
             <KVTable rows={payload.sizingRows} />
           ) : (
             <Text style={styles.body}>{payload.sizingAndPricing}</Text>
           )}
-        </View>
-        <View style={styles.section}>
-          <SectionHeader color={h2oBrand.colors.navy}>Schedule</SectionHeader>
           <Text style={styles.body}>{payload.schedule}</Text>
         </View>
         {payload.outOfScope?.length ? (
           <View style={styles.section}>
-            <SectionHeader color={h2oBrand.colors.navy}>Out of scope</SectionHeader>
+            <SectionTitle>Explicitly out of scope (or deferred)</SectionTitle>
             {payload.outOfScope.map((item) => (
               <View key={item.heading} style={styles.outOfScopeItem}>
                 <Text style={styles.outOfScopeHeading}>{item.heading}</Text>
@@ -267,7 +278,7 @@ export const ProposalShellDocument = ({ payload }: { payload: ProposalShellPaylo
         ) : null}
         {payload.gatesToClose?.length ? (
           <View style={styles.section}>
-            <SectionHeader color={h2oBrand.colors.navy}>Gates to close</SectionHeader>
+            <SectionTitle>What needs to close before drafting a real proposal</SectionTitle>
             <DataTable
               columns={gatesColumns}
               headerStyle="navy-light"
@@ -277,13 +288,13 @@ export const ProposalShellDocument = ({ payload }: { payload: ProposalShellPaylo
         ) : null}
         {shouldRenderCommitments(commitments) ? (
           <View style={styles.section} wrap={false}>
-            <SectionHeader color={h2oBrand.colors.navy}>Commitments</SectionHeader>
+            <SectionTitle>Commitments</SectionTitle>
             <Commitments items={commitments} />
           </View>
         ) : null}
         {payload.fundingPathway ? (
           <View style={styles.section}>
-            <SectionHeader color={h2oBrand.colors.navy}>Funding pathway</SectionHeader>
+            <SectionTitle>Funding pathway</SectionTitle>
             <View style={styles.panelBlock}>
               <Text style={styles.panelBody}>{payload.fundingPathway}</Text>
             </View>
@@ -291,7 +302,7 @@ export const ProposalShellDocument = ({ payload }: { payload: ProposalShellPaylo
         ) : null}
         {payload.riskAllocation ? (
           <View style={styles.section}>
-            <SectionHeader color={h2oBrand.colors.red}>Risk allocation</SectionHeader>
+            <SectionTitle>Risk allocation</SectionTitle>
             <View
               style={[
                 styles.panelBlock,
@@ -309,7 +320,7 @@ export const ProposalShellDocument = ({ payload }: { payload: ProposalShellPaylo
         {proposalBannerDefaultsToTrue(payload.internalOnlyFooterBanner) ? (
           <FullWidthBanner tone="red" text={PROPOSAL_BOTTOM_BANNER_TEXT} />
         ) : null}
-        <Footer />
+        <Footer paddingX={h2oBrand.page.paddingX} />
       </Page>
     </Document>
   );
