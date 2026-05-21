@@ -45,6 +45,10 @@ type CreateAgentInput = {
     owner: OwnerContext;
     threadId: string;
   };
+  usageContext?: {
+    threadId: string;
+    userId: string;
+  };
   tools?: ReturnType<typeof createH2oArtifactTools>;
   // Fired by the agent's prepareStep when the next artifact kind is known.
   // The handler maps it to a `data-agent-status` chunk so the UI labels the
@@ -428,6 +432,7 @@ export const createChatPostHandler = (deps: Dependencies) => {
         const requestAgent = deps.createAgent
           ? deps.createAgent({
               artifactContext: { owner, threadId: params.threadId },
+              usageContext: { threadId: params.threadId, userId: owner.userId },
               tools: artifactTools,
               onNextArtifact: announceNextArtifact,
             })

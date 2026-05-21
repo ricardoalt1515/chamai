@@ -61,6 +61,28 @@ const AGENT_MAX_STEPS = 10;
 // without giving the model unlimited budget on a single step.
 const AGENT_MAX_OUTPUT_TOKENS = 32_768;
 
+const MODEL_TOKEN_PRICES_USD_PER_MILLION: Record<string, { input: number; output: number }> = {
+  "claude-sonnet-4-6": { input: 3, output: 15 },
+  "claude-opus-4-7": { input: 5, output: 25 },
+};
+
+const estimateTokenCostUsd = ({
+  modelId,
+  inputTokens,
+  outputTokens,
+}: {
+  modelId: string;
+  inputTokens: number;
+  outputTokens: number;
+}): number | null => {
+  const prices = MODEL_TOKEN_PRICES_USD_PER_MILLION[modelId];
+  if (!prices) {
+    return null;
+  }
+
+  return (inputTokens / 1_000_000) * prices.input + (outputTokens / 1_000_000) * prices.output;
+};
+
 const ARTIFACT_TOOL_SEQUENCE = [
   "generateFieldBrief",
   "generatePlaybook",
@@ -228,6 +250,10 @@ const repairInvalidToolInput: NonNullable<
 
 type CreateAgentOptions = {
   tools?: ToolSet;
+  usageContext?: {
+    threadId: string;
+    userId: string;
+  };
   // Fires once per step transition with the next artifact kind the agent is
   // about to invoke. The chat handler uses this to write a
   // `data-agent-status` chunk so the UI can label the silent model-thinking
@@ -235,7 +261,11 @@ type CreateAgentOptions = {
   onNextArtifact?: (kind: ArtifactKind) => void;
 };
 
-export const createAgent = ({ tools = {}, onNextArtifact }: CreateAgentOptions = {}) =>
+export const createAgent = ({
+  tools = {},
+  usageContext,
+  onNextArtifact,
+}: CreateAgentOptions = {}) =>
   new ToolLoopAgent({
     model: bedrockProvider(MODELS[0].runtimeModelId),
     instructions: H2O_AGENT_SYSTEM_MESSAGES,
@@ -251,7 +281,26 @@ export const createAgent = ({ tools = {}, onNextArtifact }: CreateAgentOptions =
     experimental_repairToolCall: repairInvalidToolInput,
     onStepFinish: ({ stepNumber, toolCalls, finishReason, usage }) => {
       const toolNames = toolCalls.map((call) => call.toolName).join(",") || "none";
+      const inputTokens = usage.inputTokens ?? 0;
       const outputTokens = usage.outputTokens ?? 0;
+
+      const model = MODELS[0];
+      const estimatedCostUsd = estimateTokenCostUsd({
+        modelId: model.id,
+        inputTokens,
+        outputTokens,
+      });
+
+      console.log("AI_USAGE", {
+        threadId: usageContext?.threadId,
+        userId: usageContext?.userId,
+        modelId: model.id,
+        runtimeModelId: model.runtimeModelId,
+        inputTokens,
+        outputTokens,
+        totalTokens: usage.totalTokens,
+        estimatedCostUsd,
+      });
 
       console.log("[agent] step:finish", {
         event: "agent_step_finished",
@@ -259,7 +308,7 @@ export const createAgent = ({ tools = {}, onNextArtifact }: CreateAgentOptions =
         finishReason,
         tools: toolNames,
         usage: {
-          input: usage.inputTokens,
+          input: inputTokens,
           output: outputTokens,
           cacheRead: usage.inputTokenDetails?.cacheReadTokens,
           cacheWrite: usage.inputTokenDetails?.cacheWriteTokens,
