@@ -874,11 +874,20 @@ const topHeaderStyles = StyleSheet.create({
   wrap: {
     marginBottom: 8,
   },
+  brandRow: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 4,
+  },
   metadataLine: {
     color: h2oBrand.colors.muted,
+    flex: 1,
     fontSize: 8,
     lineHeight: 1.15,
-    marginBottom: 2,
+    marginLeft: 12,
+    textAlign: "right",
   },
   title: {
     color: h2oBrand.colors.navy,
@@ -911,7 +920,7 @@ const topHeaderStyles = StyleSheet.create({
 
 /**
  * Tier 2 document header. Renders:
- * - 8pt muted metadata line
+ * - compact H2O Allegiant logo + 8pt muted metadata line
  * - 22pt navy bold title
  * - 10pt italic muted subtitle (optional)
  * - 9pt italic muted sub-streams line (optional)
@@ -933,7 +942,10 @@ export const TopHeader = ({
   paddingX?: number;
 }) => (
   <View style={topHeaderStyles.wrap}>
-    <Text style={topHeaderStyles.metadataLine}>{metadataLine}</Text>
+    <View style={topHeaderStyles.brandRow}>
+      <LogoMark size="sm" />
+      <Text style={topHeaderStyles.metadataLine}>{metadataLine}</Text>
+    </View>
     <Text style={topHeaderStyles.title}>{title}</Text>
     {subtitle ? <Text style={topHeaderStyles.subtitle}>{subtitle}</Text> : null}
     {subStreamsLine ? <Text style={topHeaderStyles.subStreamsLine}>{subStreamsLine}</Text> : null}
