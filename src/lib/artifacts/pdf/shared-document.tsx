@@ -17,11 +17,15 @@ const logoMimeType = (logoPath: string): string => {
 
 export const resolveH2oPdfLogoSource = (logoPath = DEFAULT_LOGO_PATH): string | null => {
   try {
-    if (!existsSync(logoPath)) return null;
+    if (!existsSync(logoPath)) {
+      console.warn(`H2O PDF logo not found at ${logoPath}`);
+      return null;
+    }
 
     const data = readFileSync(logoPath).toString("base64");
     return `data:${logoMimeType(logoPath)};base64,${data}`;
-  } catch {
+  } catch (error) {
+    console.warn("Failed to load H2O PDF logo", error);
     return null;
   }
 };

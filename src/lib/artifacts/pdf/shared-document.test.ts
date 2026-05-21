@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { bannerTone, h2oBrand, severityBg, themeAccentByIndex, themePalette } from "./brand-tokens";
 import {
   buildMinimalHeaderMetadataLine,
@@ -31,10 +31,14 @@ describe("resolveH2oPdfLogoSource", () => {
     expect(resolveH2oPdfLogoSource()).toMatch(/^data:image\/png;base64,/);
   });
 
-  it("returns null for missing assets so renderers can use the fallback mark", () => {
+  it("returns null and warns for missing assets so renderers can use the fallback mark", () => {
     const missingPath = join(process.cwd(), "public", "missing-h2o-logo.png");
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
 
     expect(resolveH2oPdfLogoSource(missingPath)).toBeNull();
+    expect(warn).toHaveBeenCalledWith(`H2O PDF logo not found at ${missingPath}`);
+
+    warn.mockRestore();
   });
 });
 
