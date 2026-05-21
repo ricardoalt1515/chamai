@@ -144,16 +144,16 @@ const styles = StyleSheet.create({
 /**
  * H2O Allegiant logo mark.
  * - `md` = full size (102×20) — used by Tier 2 docs that still want the original cover scale.
- * - `sm` = compact (71×14) — Field Brief cover, sized to roughly match the boss reference visual weight.
- * - `xs` = micro (51×10) — Field Brief continuation strip; same visual weight as the boss page-2 mark.
+ * - `sm` = compact (76×15) — Field Brief cover, sized to roughly match the sidebar wordmark's visual weight.
+ * - `xs` = micro (38×8) — Field Brief continuation strip; same visual weight as the boss page-2 mark.
  *
  * The PNG asset (`public/h2o-allegiant.png`) is a wordmark with ~5:1 aspect ratio (1696×333).
  * Each preset preserves that ratio.
  */
 export const LogoMark = ({ size = "md" }: { size?: "xs" | "sm" | "md" }) => {
   const logoSource = resolveH2oPdfLogoSource();
-  const width = size === "xs" ? 38 : size === "sm" ? 55 : h2oBrand.logo.width;
-  const height = size === "xs" ? 8 : size === "sm" ? 11 : h2oBrand.logo.height;
+  const width = size === "xs" ? 38 : size === "sm" ? 76 : h2oBrand.logo.width;
+  const height = size === "xs" ? 8 : size === "sm" ? 15 : h2oBrand.logo.height;
 
   if (logoSource) {
     return <Image src={logoSource} style={[styles.logoImage, { width, height }]} />;
