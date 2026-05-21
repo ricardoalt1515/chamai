@@ -56,6 +56,7 @@ const chatStreamingFunction = new NodejsFunction(chatStreamingStack, "ChatStream
       afterBundling: () => [],
       beforeBundling: (inputDir: string, outputDir: string) => [
         `mkdir -p ${outputDir}/src/ai && cp -R ${inputDir}/src/ai/skills ${outputDir}/src/ai/skills`,
+        `mkdir -p ${outputDir}/public && cp ${inputDir}/public/h2o-allegiant.png ${outputDir}/public/h2o-allegiant.png`,
       ],
       beforeInstall: () => [],
     },

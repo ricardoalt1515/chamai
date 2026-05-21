@@ -75,7 +75,7 @@ vi.mock("aws-cdk-lib/aws-iam", () => ({
 
 vi.mock("aws-cdk-lib/aws-lambda", () => ({
   FunctionUrlAuthType: { NONE: "NONE" },
-  HttpMethod: { POST: "POST" },
+  HttpMethod: { GET: "GET", POST: "POST" },
   InvokeMode: { RESPONSE_STREAM: "RESPONSE_STREAM" },
   Runtime: { NODEJS_22_X: "NODEJS_22_X" },
 }));
@@ -148,7 +148,7 @@ describe("Amplify backend", () => {
         }),
         memorySize: 1024,
         runtime: "NODEJS_22_X",
-        timeout: { minutes: 5 },
+        timeout: { minutes: 10 },
       }),
     );
     type ChatFunctionConfig = {
@@ -168,6 +168,7 @@ describe("Amplify backend", () => {
     );
     expect(copyCommands).toEqual([
       "mkdir -p /asset-output/src/ai && cp -R /asset-input/src/ai/skills /asset-output/src/ai/skills",
+      "mkdir -p /asset-output/public && cp /asset-input/public/h2o-allegiant.png /asset-output/public/h2o-allegiant.png",
     ]);
 
     expect(addFunctionUrlMock).toHaveBeenCalledTimes(2);
@@ -188,7 +189,7 @@ describe("Amplify backend", () => {
           "user-agent",
           "x-request-id",
         ],
-        allowedMethods: ["POST"],
+        allowedMethods: ["GET", "POST"],
         allowedOrigins: ["https://main.d22icjbzj7x471.amplifyapp.com", "http://localhost:3000"],
         exposedHeaders: ["x-error-code", "x-request-id"],
         maxAge: { seconds: 600 },
