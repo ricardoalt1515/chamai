@@ -37,10 +37,6 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   const response = NextResponse.next();
   const { pathname } = request.nextUrl;
 
-  if (pathname === LANDING_PATH) {
-    return NextResponse.rewrite(new URL("/landing.html", request.url));
-  }
-
   if (isAuthBypassPath(pathname)) {
     return response;
   }

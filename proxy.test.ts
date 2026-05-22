@@ -38,7 +38,7 @@ describe("auth route protection", () => {
     expect(isAuthBypassPath("/amplify_outputs.json")).toBe(true);
   });
 
-  it("rewrites the public root to the static landing page", async () => {
+  it("lets the public root render without server auth checks", async () => {
     fetchAuthSessionMock.mockResolvedValue({ tokens: undefined });
     runWithAmplifyServerContextMock.mockClear();
 
@@ -46,7 +46,7 @@ describe("auth route protection", () => {
 
     expect(fetchAuthSessionMock).not.toHaveBeenCalled();
     expect(runWithAmplifyServerContextMock).not.toHaveBeenCalled();
-    expect(response.headers.get("x-middleware-rewrite")).toBe("https://secondstream.test/landing.html");
+    expect(response.headers.get("location")).toBeNull();
   });
 
   it("lets /login bypass server auth checks and server-side redirects", async () => {
