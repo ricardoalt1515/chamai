@@ -130,13 +130,13 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>): React.J
     setThreadToDelete(null);
 
     if (isActive) {
-      router.push("/");
+      router.push("/chat");
     }
   };
 
   const handleAction = (actionId: SidebarActionItem["id"]) => {
     if (actionId === "new-chat") {
-      router.push(`/?new=${nanoid()}`);
+      router.push(`/chat?new=${nanoid()}`);
     } else if (actionId === "search-chats") {
       setSearchOpen(true);
     }

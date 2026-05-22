@@ -14,9 +14,7 @@ describe("Amplify auth resource", () => {
     await import("./resource");
 
     const config = defineAuthMock.mock.calls[0]?.[0];
-    expect(config.loginWith.email.userInvitation.emailSubject).toBe(
-      "Your SecondstreamAI invitation",
-    );
+    expect(config.loginWith.email.userInvitation.emailSubject).toBe("Welcome to H2O Allegiant");
     expect(
       config.loginWith.email.userInvitation.emailBody(
         () => "invited@example.com",

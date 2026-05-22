@@ -10,12 +10,12 @@ import { Providers } from "./providers";
 
 export function AppShell({ children }: { children: React.ReactNode }): React.JSX.Element {
   const pathname = usePathname();
-  const isLoginRoute = pathname === "/login";
+  const isPlainRoute = pathname === "/" || pathname === "/login";
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <Providers>
-        {isLoginRoute ? (
+        {isPlainRoute ? (
           children
         ) : (
           <SidebarProvider>

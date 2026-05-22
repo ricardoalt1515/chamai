@@ -23,17 +23,30 @@ function requestFor(pathname: string): NextRequest {
 
 describe("auth route protection", () => {
   it("protects private chat workspace routes", () => {
-    expect(isProtectedAppPath("/")).toBe(true);
+    expect(isProtectedAppPath("/chat")).toBe(true);
     expect(isProtectedAppPath("/c/thread-123")).toBe(true);
   });
 
-  it("bypasses public auth, API, and static asset routes", () => {
+  it("bypasses public landing, auth, API, and static asset routes", () => {
+    expect(isAuthBypassPath("/")).toBe(true);
     expect(isAuthBypassPath("/login")).toBe(true);
     expect(isAuthBypassPath("/api/chat")).toBe(true);
     expect(isAuthBypassPath("/api/stream-canary")).toBe(true);
     expect(isAuthBypassPath("/_next/static/chunk.js")).toBe(true);
+    expect(isAuthBypassPath("/assets/prairie-field-brief.pdf")).toBe(true);
     expect(isAuthBypassPath("/logo-dark.svg")).toBe(true);
     expect(isAuthBypassPath("/amplify_outputs.json")).toBe(true);
+  });
+
+  it("rewrites the public root to the static landing page", async () => {
+    fetchAuthSessionMock.mockResolvedValue({ tokens: undefined });
+    runWithAmplifyServerContextMock.mockClear();
+
+    const response = await proxy(requestFor("/"));
+
+    expect(fetchAuthSessionMock).not.toHaveBeenCalled();
+    expect(runWithAmplifyServerContextMock).not.toHaveBeenCalled();
+    expect(response.headers.get("x-middleware-rewrite")).toBe("https://secondstream.test/landing.html");
   });
 
   it("lets /login bypass server auth checks and server-side redirects", async () => {

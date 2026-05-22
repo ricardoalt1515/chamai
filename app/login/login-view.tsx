@@ -10,10 +10,10 @@ import { Button } from "@/components/ui/button";
 function SignedInRedirect(): React.JSX.Element {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") ?? "/";
+  const next = searchParams.get("next") ?? "/chat";
 
   useEffect(() => {
-    router.replace(next.startsWith("/") ? next : "/");
+    router.replace(next.startsWith("/") ? next : "/chat");
   }, [next, router]);
 
   return (
@@ -38,7 +38,7 @@ function SignedInRedirect(): React.JSX.Element {
       <Button
         className="mt-2 w-full bg-brand-600 text-white hover:bg-brand-500"
         type="button"
-        onClick={() => router.replace("/")}
+        onClick={() => router.replace("/chat")}
       >
         Go to workspace
       </Button>

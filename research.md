@@ -1,62 +1,45 @@
-# Research: Amplify Gen 2 Lambda bundling for Markdown Agent Skills
+# Research: AWS Bedrock and Vercel AI SDK token usage accounting for streaming chats in 2026
 
 ## Summary
-For SecondstreamAI, `next.config.js` `outputFileTracingIncludes` is not the right lever for `loadSkill`: the active skill loader runs inside the custom `ChatStreamingFunction` Lambda declared as a CDK `NodejsFunction` in `amplify/backend.ts`, not in the Next server bundle. Official docs support both esbuild loader configuration and CDK `commandHooks`, but with the current `readFile(process.cwd()/src/ai/skills/...)` implementation, the correct low-risk fix is to copy `src/ai/skills` into the Lambda asset during `NodejsFunction` bundling; `.md` text loaders only help after refactoring skills to be statically imported.
+For streaming Claude chats on Amazon Bedrock, the most reliable billing-grade signal is the final provider usage metadata emitted at stream completion: Bedrock `ConverseStream` sends a required `metadata` event containing `usage`, and Vercel AI SDK exposes final `usage`/`totalUsage` via `onFinish` or the `result.usage` promise. CloudWatch, Bedrock invocation logs, and Cost Explorer are useful for aggregate monitoring and reconciliation, but they are not sufficient as the sole source for per-message/session customer billing; persist app-level usage records keyed by message/session/request id.
 
 ## Findings
-1. **Amplify Gen 2 functions are CDK-backed Lambda resources; this project’s chat streaming function is explicitly a `NodejsFunction`.** Amplify documents that Amplify Functions use the CDK `NodejsFunction` construct and that generated Lambda resources can be modified with CDK; SecondstreamAI already creates `ChatStreamingFunction` directly with `new NodejsFunction(...)` in `amplify/backend.ts`. [Amplify Gen 2: Modify Lambda resources with CDK](https://docs.amplify.aws/react/build-a-backend/functions/modify-resources-with-cdk/) [CDK NodejsFunction](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.NodejsFunction.html)
-2. **`NodejsFunction` bundles with esbuild, and its `bundling` options are the official place for Lambda bundling changes.** CDK says `NodejsFunction` performs automatic transpiling/bundling with esbuild and exposes `bundling` options including `loader`, `esbuildArgs`, `commandHooks`, `format`, `banner`, etc. [CDK aws-lambda-nodejs README](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html) [BundlingOptions](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.BundlingOptions.html)
-3. **Markdown-as-text via esbuild is valid in principle, but not sufficient for the current `loadSkill`.** CDK officially supports `bundling.loader` to “change how a given input file is interpreted” and `esbuildArgs` for additional esbuild flags; esbuild’s `text` loader loads a file as a string at build time and exports it as the default export. However, SecondstreamAI’s `loadSkill` dynamically calls `readFile(join(process.cwd(), "src/ai/skills", name, "SKILL.md"))`; esbuild loaders only apply to imported/required files, not arbitrary runtime filesystem reads. [CDK BundlingOptions: loader/esbuildArgs](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.BundlingOptions.html) [esbuild content types: text loader](https://esbuild.github.io/content-types/#text)
-4. **`bundling: { esbuildArgs: { '--loader:.md': 'text' } }` is plausibly valid, but `bundling.loader: { '.md': 'text' }` is the documented/cleaner CDK API.** CDK documents `esbuildArgs` as a map of extra flags and shows flags such as `"--log-limit": "0"`; esbuild documents CLI loader flags such as `--loader:.js=jsx`, and the `text` loader is valid. But CDK’s first-class `loader` property is explicitly documented for extension loaders and avoids relying on exact CLI serialization. [CDK README: configuring esbuild](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html#configuring-esbuild) [esbuild getting started loader flag](https://esbuild.github.io/getting-started/) [esbuild text loader](https://esbuild.github.io/content-types/#text)
-5. **`commandHooks` are valid exactly under `NodejsFunction` `bundling.commandHooks`, not Amplify Gen 1 CLI hooks.** CDK documents `beforeBundling`, `beforeInstall`, and `afterBundling`; each receives `inputDir` and `outputDir`, returns shell commands, and commands run in the bundling environment. This is the correct place to copy static Markdown assets into the Lambda deployment package. [CDK README: command hooks](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html#command-hooks)
-6. **Lambda packages can include arbitrary files beyond handler code, and `/var/task` is the decompressed package root.** AWS Lambda’s Node.js packaging docs describe deployment packages containing handler code plus dependencies/modules, custom modules/files, and note the package is decompressed and mounted at `/var/task`; bundled code is recommended where possible for dependencies, but package files are valid. [AWS Lambda Node.js zip packaging](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-package.html)
+1. **Bedrock streaming usage is available only at the end of the stream, not per token.** — `ConverseStreamMetadataEvent` includes required `usage` and `metrics` fields; `usage` is a `TokenUsage` object with `inputTokens`, `outputTokens`, `totalTokens`, and optional cache fields (`cacheReadInputTokens`, `cacheWriteInputTokens`, `cacheDetails`). Design metering around stream-final metadata, not incremental text chunks. [ConverseStreamMetadataEvent](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ConverseStreamMetadataEvent.html), [TokenUsage](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_TokenUsage.html)
 
-## Exact recommended implementation for SecondstreamAI
-Use CDK `NodejsFunction` `bundling.commandHooks.afterBundling` in `amplify/backend.ts` for `ChatStreamingFunction`:
+2. **For Anthropic Claude on Bedrock, prefer Converse/ConverseStream for chat, but understand native Messages differences.** — AWS documents Anthropic Claude Messages API for `InvokeModel`/`InvokeModelWithResponseStream`, but explicitly recommends the Converse API for application message flows because it provides a unified messages interface across models. Claude multimodal inputs, system prompts, tools, thinking, and caching can affect usage; images count toward token usage. [Anthropic Claude Messages API](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html)
 
-```ts
-bundling: {
-  banner: "import { createRequire } from 'module'; const require = createRequire(import.meta.url);",
-  format: OutputFormat.ESM,
-  commandHooks: {
-    beforeBundling() {
-      return [];
-    },
-    beforeInstall() {
-      return [];
-    },
-    afterBundling(inputDir: string, outputDir: string) {
-      return [
-        `mkdir -p ${outputDir}/src/ai/skills`,
-        `cp -R ${inputDir}/src/ai/skills/. ${outputDir}/src/ai/skills/`,
-      ];
-    },
-  },
-}
-```
+3. **Cache accounting matters and can differ between provider abstractions.** — Bedrock `TokenUsage` separates normal input tokens from cache read/write tokens; AWS CloudWatch quota metrics define `InputTokenCount` as excluding cached tokens and say total quota input consumption should include `InputTokenCount + CacheWriteInputTokens`. A Vercel AI SDK 2026 issue shows reported usage differs between direct Anthropic and Bedrock providers for Claude caching: Anthropic included cache-write tokens in `inputTokens`, while Bedrock exposed them separately and `raw.totalTokens` included cache writes. Treat cache fields as first-class billing dimensions and persist raw provider usage for audit. [How tokens are counted in Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html), [Vercel AI issue #11532](https://github.com/vercel/ai/issues/11532)
 
-This preserves the existing runtime contract: `process.cwd()` in Lambda resolves to the package root (`/var/task`), so `src/ai/skills/<name>/SKILL.md` exists for the current filesystem-based `loadSkill`.
+4. **Quota usage is not the same as billed token usage.** — For Anthropic Claude 3.7 and later, Bedrock applies a 5x output-token burndown for quota/throttling, while AWS states billing is based on actual token usage. Example: 1,000 input + 100 output on Claude Sonnet 4 depletes 1,500 quota tokens but is billed for 1,100 tokens. Do not use quota burndown metrics as customer billing tokens. [How tokens are counted in Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html)
 
-Optional future refactor: create a static skill registry that imports each `SKILL.md` and configure `bundling.loader: { '.md': 'text' }`. Do not use this as the immediate fix unless `loadSkill` is changed away from dynamic `readFile`.
+5. **Vercel AI SDK exposes final usage for streaming via `onFinish` and promises.** — `streamText` provides `onFinish({ usage, totalUsage })`, `onStepFinish`, `result.usage`, and `result.totalUsage`. The usage shape includes `inputTokens`, `outputTokens`, `totalTokens`, cache details (`inputTokenDetails.cacheReadTokens/cacheWriteTokens/noCacheTokens`), and output details (`reasoningTokens`, `textTokens`). Vercel’s own token-usage example recommends recording usage in `onFinish` or awaiting `result.usage` after streaming. [streamText reference](https://sdk.vercel.ai/docs/reference/ai-sdk-core/stream-text), [Record Token Usage After Streaming Object](https://sdk.vercel.ai/examples/node/streaming-structured-data/token-usage)
 
-## Realistic validation test
-Best practical test: synthesize the Lambda bundle and inspect/run the produced asset, not `next build`.
+6. **CloudWatch is good for aggregate observability, not authoritative per-customer billing.** — CloudWatch GenAI observability dashboards track invocation count, latency, errors, and token counts by model; detailed request/response views require Bedrock model invocation logging. These metrics are account/region/model oriented and suitable for operations, quota tuning, anomaly detection, and reconciliation. They are not low-latency app-domain ledgers and do not naturally map to internal message/session/customer ids unless you propagate metadata and/or join logs. [CloudWatch Model Invocations](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/model-invocations.html)
 
-1. Add a small integration test or script that creates a temporary CDK `App/Stack` with a `NodejsFunction` using the same `entry` and `bundling.commandHooks` as `ChatStreamingFunction`.
-2. Run `app.synth()`; CDK bundling will execute esbuild/command hooks locally or in Docker, matching the Lambda asset build path.
-3. Locate the synthesized asset directory/zip under the temp `cdk.out` and assert that `src/ai/skills/<known-skill>/SKILL.md` exists in the asset.
-4. For stronger coverage, run a tiny fixture handler from inside the asset directory with `process.cwd()` set to the asset root and verify `readFile('src/ai/skills/<known-skill>/SKILL.md')` succeeds.
+7. **Bedrock invocation logging can capture request id, request metadata, and token counts, but has coverage and privacy limits.** — Invocation logging is disabled by default, region-scoped, and supports `Converse`, `ConverseStream`, `InvokeModel`, and `InvokeModelWithResponseStream` on the `bedrock-runtime` endpoint; AWS notes calls through other endpoints such as Responses API on `bedrock-mantle` are not currently captured. Logs can include input/output bodies and token counts (`input.inputTokenCount`, `output.outputTokenCount`), with large/binary payload handling via S3, so enable carefully with data masking/retention policies. [Model invocation logging](https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html)
 
-This validates the Lambda deployment artifact shape that `loadSkill` depends on. `next build` and `outputFileTracingIncludes` do not validate this Lambda bundle.
+8. **Request metadata is useful for attribution but does not flow directly into Cost Explorer/CUR.** — Bedrock request metadata can tag individual runtime calls via `requestMetadata` for `Converse/ConverseStream` or `X-Amzn-Bedrock-Request-Metadata` for Invoke APIs. AWS explicitly says request metadata is recorded only in invocation logs when logging is enabled and is not delivered as a cost allocation tag or shown in Cost Explorer/CUR; to analyze by metadata dimension, join invocation logs with CUR on `requestId` or aggregate token counts from logs and multiply by pricing. [Request metadata](https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html)
+
+9. **Cost Explorer/Bedrock cost attribution is useful for finance reconciliation, not per-message charging.** — AWS Bedrock costs vary by model, token type (input, output, cache read, cache write), routing, and inference tier. Bedrock offers IAM principal attribution, Projects, Workspaces, and Application Inference Profiles for native cost attribution, but these are coarser than per-message/session app billing and should be used alongside app-level metering. [Track usage and costs in Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/cost-management.html)
+
+10. **Recommended app-level metering pattern:** — On every chat completion, generate stable ids (`messageId`, `threadId/sessionId`, `userId/accountId`, `providerRequestId` where available), pass low-cardinality Bedrock `requestMetadata` plus a trace id, then persist a usage ledger row only after stream finish. Store normalized fields (`provider`, `modelId`, `region`, `api`, `inputTokens`, `outputTokens`, `totalTokens`, cache read/write tokens, reasoning/text output tokens, finish reason, latency, status, pricing version`) and raw provider/AI-SDK usage JSON. Use CloudWatch/invocation logs/CUR for daily reconciliation and dispute audit, not primary charging.
 
 ## Sources
-- Kept: Amplify Gen 2 “Modify Amplify-generated Lambda resources with CDK” (https://docs.amplify.aws/react/build-a-backend/functions/modify-resources-with-cdk/) — confirms Amplify Functions use `NodejsFunction` and can be modified through CDK resources.
-- Kept: AWS CDK `aws-lambda-nodejs` README (https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html) — primary docs for esbuild bundling, loaders, and command hooks.
-- Kept: AWS CDK `BundlingOptions` API (https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.BundlingOptions.html) — exact property names/types: `loader`, `esbuildArgs`, `commandHooks`.
-- Kept: esbuild Content Types (https://esbuild.github.io/content-types/) — official behavior of `text` loader.
-- Kept: AWS Lambda Node.js packaging docs (https://docs.aws.amazon.com/lambda/latest/dg/nodejs-package.html) — validates Lambda package file/dependency layout and `/var/task` search/root behavior.
-- Dropped: Amplify Gen 1 command/build hooks docs — not applicable to Amplify Gen 2 CDK `NodejsFunction` bundling.
-- Dropped: SEO/blog posts — unnecessary because official Amplify/CDK/esbuild/Lambda docs answer the question.
+- Kept: AWS ConverseStreamMetadataEvent (https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ConverseStreamMetadataEvent.html) — primary API evidence that streaming returns final usage metadata.
+- Kept: AWS TokenUsage (https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_TokenUsage.html) — primary schema for Bedrock usage fields and cache fields.
+- Kept: AWS Anthropic Claude Messages API (https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html) — primary Claude-on-Bedrock behavior and Converse recommendation.
+- Kept: Vercel AI SDK `streamText` reference (https://sdk.vercel.ai/docs/reference/ai-sdk-core/stream-text) — primary SDK usage/metadata surface for streaming.
+- Kept: Vercel token usage example (https://sdk.vercel.ai/examples/node/streaming-structured-data/token-usage) — practical recommended `onFinish`/`result.usage` capture pattern.
+- Kept: AWS token quota/burndown docs (https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html) — distinguishes quota metrics, cache tokens, and billed actual usage.
+- Kept: AWS model invocation logging (https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html) — primary log coverage, token count fields, and endpoint limitations.
+- Kept: AWS request metadata (https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html) — primary attribution and Cost Explorer/CUR limitation source.
+- Kept: AWS CloudWatch Model Invocations (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/model-invocations.html) — primary aggregate observability source.
+- Kept: AWS Bedrock cost management (https://docs.aws.amazon.com/bedrock/latest/userguide/cost-management.html) — primary pricing drivers and attribution mechanisms.
+- Kept: Vercel AI issue #11532 (https://github.com/vercel/ai/issues/11532) — direct 2026 practical evidence of cache usage differences between Anthropic and Bedrock providers.
+- Dropped: SEO/commentary blog posts about Bedrock cost optimization — lower authority than AWS/Vercel primary docs.
+- Dropped: generic Boto3 reference pages — redundant once AWS API reference pages were available.
 
 ## Gaps
-I did not find Amplify Gen 2 docs exposing `bundling` directly on `defineFunction`; the official path is either generated resource modification or, as in this project, direct CDK `NodejsFunction` construction. Engram save was requested if available, but no Engram memory tool is exposed in this subagent runtime.
+- I could not verify the exact current implementation behavior of this project’s installed `@ai-sdk/amazon-bedrock` version without inspecting dependencies/runtime; the Vercel issue indicates usage normalization is an active compatibility area.
+- AWS pricing rates change by model, region, routing, and cache type; billing implementation should snapshot a pricing table/version rather than hard-code rates from research.
+- Engram save was requested, but no Engram memory tool is available in this subagent toolset, so I could not save discoveries to project `secondstreamai` beyond writing this file.

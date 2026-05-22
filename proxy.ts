@@ -3,14 +3,17 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { runWithAmplifyServerContext } from "@/lib/auth/amplify-server";
 
-const PUBLIC_FILE_PATTERN = /\.(?:css|gif|ico|jpg|jpeg|js|png|svg|txt|webmanifest|woff2?)$/;
-const AUTH_BYPASS_PREFIXES = ["/api/chat", "/api/stream-canary", "/_next", "/favicon.ico"];
+const PUBLIC_FILE_PATTERN = /\.(?:css|gif|ico|jpg|jpeg|js|pdf|png|svg|txt|webmanifest|woff2?)$/;
+const AUTH_BYPASS_PREFIXES = ["/api/chat", "/api/stream-canary", "/_next", "/assets", "/favicon.ico"];
+const LANDING_PATH = "/";
 const LOGIN_PATH = "/login";
 
 export function isAuthBypassPath(pathname: string): boolean {
   return (
+    pathname === LANDING_PATH ||
     pathname === LOGIN_PATH ||
     pathname === "/amplify_outputs.json" ||
+    pathname === "/landing.html" ||
     PUBLIC_FILE_PATTERN.test(pathname) ||
     AUTH_BYPASS_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))
   );
@@ -33,6 +36,10 @@ async function hasServerSession(request: NextRequest, response: NextResponse): P
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   const response = NextResponse.next();
   const { pathname } = request.nextUrl;
+
+  if (pathname === LANDING_PATH) {
+    return NextResponse.rewrite(new URL("/landing.html", request.url));
+  }
 
   if (isAuthBypassPath(pathname)) {
     return response;

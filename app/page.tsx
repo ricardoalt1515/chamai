@@ -1,13 +1,5 @@
-import type * as React from "react";
-import { NewChatPage } from "@/components/new-chat-page";
+import { redirect } from "next/navigation";
 
-type PageProps = {
-  searchParams: Promise<{ new?: string }>;
-};
-
-export default async function Page({ searchParams }: PageProps): Promise<React.JSX.Element> {
-  const params = await searchParams;
-  const resetKey = params.new ?? "initial";
-
-  return <NewChatPage key={resetKey} />;
+export default function Page(): never {
+  redirect("/chat");
 }
