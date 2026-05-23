@@ -38,6 +38,8 @@ new CfnOutput(streamingCanaryStack, "StreamingCanaryFunctionUrl", {
 });
 
 const chatStreamingAllowedOrigins = [
+  "https://www.h2oassistant.com",
+  "https://h2oassistant.com",
   "https://main.d22icjbzj7x471.amplifyapp.com",
   "http://localhost:3000",
 ];
