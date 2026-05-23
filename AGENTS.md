@@ -14,9 +14,10 @@
 
 - Single-package app (not a monorepo): Next.js App Router + React 19 + TypeScript.
 - Frontend routes: `app/page.tsx`, `app/c/[threadId]/page.tsx`, `app/layout.tsx`.
-- Chat API endpoint: `POST /api/chat` in `app/api/chat/route.ts`.
+- Chat transport: the browser POSTs directly to the chat-streaming Lambda Function URL read from `amplify_outputs.json#custom.chatStreamingFunctionUrl`. There is no Next.js `/api/chat` route in production — it was removed as dead code.
+- Lambda handler entry: `amplify/functions/chat-streaming/handler.ts` (built via CDK in `amplify/backend.ts`).
 - Server Actions used by UI live in `app/actions/*.ts` (`threads`, `messages`, `memory`).
-- Chat runtime uses a single AI SDK `ToolLoopAgent` defined in `src/ai/agents/agent.ts`, wired into `src/lib/chat-handler.ts`. Not Mastra workflows.
+- Chat runtime uses a single AI SDK `ToolLoopAgent` defined in `src/ai/agents/agent.ts`, wired into `src/lib/chat-handler.ts` (`createChatPostHandler`). Not Mastra workflows.
 
 ## Commands
 
@@ -34,7 +35,8 @@
 ## Runtime Constraints You Can Easily Miss
 
 - `parseChatRequest` only accepts catalog model IDs from `src/config/models.ts` (currently `claude-sonnet-4-6`).
-- AI SDK v6 `DefaultChatTransport` must use `prepareSendMessagesRequest` so `/api/chat` receives `threadId`, `messages`, `trigger`, `messageId`, `modelId`, and `webSearchEnabled` in the shape parsed by `parseChatRequest`.
+- AI SDK v6 `DefaultChatTransport` must use `prepareSendMessagesRequest` so the chat Lambda receives `threadId`, `messages`, `trigger`, `messageId`, `modelId`, and `webSearchEnabled` in the shape parsed by `parseChatRequest`. Wiring lives in `src/components/chat-interface.tsx#prepareChatSendMessagesRequest`.
+- Lambda Function URL CORS allow-list is hardcoded in `amplify/backend.ts#chatStreamingAllowedOrigins`. Adding a new frontend domain requires updating this array and redeploying the backend, otherwise browser preflight is silently blocked and the chat UI hangs without an error.
 - Attachments: max 5 files, max 4 MB each, allowed MIME families are `text/*`, `image/*`, `application/pdf`.
 - PDF attachments require non-empty text in the same message (`DOCUMENT_TEXT_REQUIRED`).
 - Amplify outputs are intentionally fail-fast: root `amplify_outputs.json` must contain `auth`, `data`, and `storage`; do not bypass this for production paths.

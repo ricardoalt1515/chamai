@@ -4,7 +4,10 @@ import { NextResponse } from "next/server";
 import { runWithAmplifyServerContext } from "@/lib/auth/amplify-server";
 
 const PUBLIC_FILE_PATTERN = /\.(?:css|gif|ico|jpg|jpeg|js|pdf|png|svg|txt|webmanifest|woff2?)$/;
-const AUTH_BYPASS_PREFIXES = ["/api/chat", "/api/stream-canary", "/_next", "/assets", "/favicon.ico"];
+// Production chat does NOT go through /api/chat. The browser POSTs directly
+// to the Lambda Function URL exposed in amplify_outputs.json#custom.chatStreamingFunctionUrl.
+// Only /api/stream-canary remains as a server-side passthrough.
+const AUTH_BYPASS_PREFIXES = ["/api/stream-canary", "/_next", "/assets", "/favicon.ico"];
 const LANDING_PATH = "/";
 const LOGIN_PATH = "/login";
 

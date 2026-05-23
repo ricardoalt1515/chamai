@@ -30,7 +30,6 @@ describe("auth route protection", () => {
   it("bypasses public landing, auth, API, and static asset routes", () => {
     expect(isAuthBypassPath("/")).toBe(true);
     expect(isAuthBypassPath("/login")).toBe(true);
-    expect(isAuthBypassPath("/api/chat")).toBe(true);
     expect(isAuthBypassPath("/api/stream-canary")).toBe(true);
     expect(isAuthBypassPath("/_next/static/chunk.js")).toBe(true);
     expect(isAuthBypassPath("/assets/prairie-field-brief.pdf")).toBe(true);
