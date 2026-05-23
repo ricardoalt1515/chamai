@@ -65,7 +65,7 @@ export function LoginView(): React.JSX.Element {
         <div className="flex flex-col items-center text-center">
           <H2OAllegiantLogo className="h-9 w-auto" />
           <h1 id={headingId} className="mt-7 font-semibold text-2xl text-foreground tracking-tight">
-            Welcome back
+            Sign in to H2O Allegiant
           </h1>
           <p className="mt-2 max-w-sm text-muted-foreground text-sm">
             Sign in to continue to your private AI workspace.
@@ -85,6 +85,15 @@ export function LoginView(): React.JSX.Element {
       </div>
 
       <p className="mt-6 text-center text-muted-foreground text-xs">
+        Don&apos;t have an account yet?{" "}
+        <a
+          href="mailto:sales@h2oassistant.com?subject=Request%20access"
+          className="text-brand-400 underline-offset-4 hover:underline"
+        >
+          Request access
+        </a>
+      </p>
+      <p className="mt-2 text-center text-muted-foreground/70 text-[11px]">
         Protected by enterprise-grade authentication.
       </p>
     </section>
