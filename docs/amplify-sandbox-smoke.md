@@ -54,7 +54,7 @@ Minimal IAM policy shape:
 - Auth ownership: sign in as User A and User B; confirm each user only sees and mutates their own threads.
 - Data graph: create a session with a transcript attachment and generated output metadata; confirm owner, session, source message, file, and output records are traceable in Amplify Data.
 - Storage privacy: upload as User A, confirm the object key is nested under `private/<identityId>/sessions/...`, confirm User A can retrieve it, and confirm User B cannot retrieve User A's private object. The backend access rule must stay `private/{entity_id}/*`; Amplify Gen 2 rejects `private/{entity_id}/sessions/*`.
-- Chat route: submit to `/api/chat`, confirm progressive streaming and persisted final state.
+- Chat route: submit to the direct Lambda chat transport configured in `amplify_outputs.json#custom.chatStreamingFunctionUrl`, confirm progressive streaming and persisted final state.
 - Court Reporter safety: ask for certified/final wording and confirm the assistant frames output as draft assistance requiring human review.
 
 Do not mark the change release-ready until these sandbox checks have real evidence.
