@@ -6,7 +6,7 @@ import { LandingEffects } from "@/components/landing-effects";
 
 const LANDING_TITLE = "H2O Allegiant — Win the wastewater deals you should be winning.";
 const LANDING_DESCRIPTION =
-  "H2O Allegiant is the AI agent for US wastewater BD. It reads the case file in an hour — NPDES, eDMRs, master plans — and produces the Field Brief, Playbook, Pursuit Memo, and Scope Outline priced on the customer's 5-year economics. Win the deals you should be winning.";
+  "H2O Allegiant is the AI agent for US wastewater BD. It reads the case file in an hour — NPDES, eDMRs, master plans — and produces the Field Brief, Playbook, Analytical Read, and Proposal Shell priced on the customer's 5-year economics. Win the deals you should be winning.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.h2oassistant.com"),
