@@ -1,10 +1,10 @@
 # SecondstreamAI
 
-An AI chat application built with [Next.js](https://nextjs.org), [Amplify Gen 2](https://docs.amplify.aws), [Mastra](https://mastra.ai), AI SDK, and React 19.
+An AI chat application built with [Next.js](https://nextjs.org), [Amplify Gen 2](https://docs.amplify.aws), AI SDK, and React 19.
 
 ## Features
 
-- Court Reporter draft-assistance chat workflow with human-review safety boundaries
+- H2O Allegiant wastewater BD chat workflow with human-review safety boundaries
 - Conversational AI assistant with working memory that persists across threads
 - Authenticated thread, message, file, and output metadata backed by Amplify Gen 2
 - Private attachment storage through Amplify Storage, with explicit S3 rollback fallback
@@ -83,7 +83,7 @@ bun run check
 
 - **Framework**: Next.js App Router (React 19, TanStack Query)
 - **Backend**: Amplify Gen 2 Auth, Data, and Storage
-- **AI**: Vercel AI SDK `ToolLoopAgent` with Amazon Bedrock
+- **AI**: AI SDK `ToolLoopAgent` with Amazon Bedrock
 - **Styling**: Tailwind CSS v4, Shadcn UI
 - **Tooling**: Next.js, TypeScript, Bun, Biome, Vitest
 
