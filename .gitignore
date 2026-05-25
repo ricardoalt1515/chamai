@@ -47,3 +47,8 @@ playwright-report/
 # Session scratch (subagent outputs, exploratory notes)
 tmp/
 openspec/
+
+# Local tool directories and scratch files
+.antigravitycli/
+.tmp/
+context.md
