@@ -3,10 +3,8 @@ import type { FieldBriefPayload } from "../payloads";
 import { h2oBrand } from "./brand-tokens";
 import { Footer, InsightBox, LogoMark, SectionHeader, StageBadge } from "./shared-document";
 
-// Type scale and layout mirror the canonical reference render_field_brief.py + brand.py +
-// h2o-field-brief-SPEC.md from `H2O Allegiant Discovery Agent v3/`. Page margins 0.75" L/R,
-// 0.45" T/B; body 9.5pt @ 1.26 leading; cover title 14pt navy; insight 10.5pt bold navy
-// (rendered by shared-document.tsx InsightBox).
+// Layout constants: page margins 0.75" L/R, 0.45" T/B; body 9.5pt @ 1.26 leading;
+// cover title 14pt navy; insight 10.5pt bold navy (rendered by shared-document.tsx InsightBox).
 const FIELD_BRIEF_PAGE_PADDING_X = 54; // 0.75" * 72pt
 const FIELD_BRIEF_PAGE_PADDING_Y = 32.4; // 0.45" * 72pt
 
