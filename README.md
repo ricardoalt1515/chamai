@@ -1,24 +1,24 @@
-# SecondstreamAI
+# Chamai
 
-SecondstreamAI is evolving into a white-label AI agent workspace for vertical workflows. It provides the reusable product shell — authenticated chat, persistent threads, private attachments, streaming, artifact generation, and AWS-backed storage — while the long-term architecture lets each vertical own its prompt, skills, tools, artifacts, and brand.
+Chamai is a white-label AI agent workspace for vertical workflows. It provides the reusable product shell — authenticated chat, persistent threads, private attachments, streaming, artifact generation, and AWS-backed storage — while the long-term architecture lets each vertical own its prompt, skills, tools, artifacts, and brand.
 
 The current implementation ships one vertical: **H2O Allegiant**, a wastewater business-development assistant that helps field teams turn messy opportunity evidence into draft field-support briefs grounded in the customer's economics.
 
 ## Product preview
 
 <p align="center">
-  <img src="docs/screenshots/home.png" alt="SecondstreamAI home screen" />
+  <img src="docs/screenshots/home.png" alt="Chamai home screen" />
 </p>
 
 | Conversation workspace | Settings |
 | --- | --- |
-| <img src="docs/screenshots/conversation.png" alt="SecondstreamAI conversation workspace" /> | <img src="docs/screenshots/settings.png" alt="SecondstreamAI settings panel" /> |
+| <img src="docs/screenshots/conversation.png" alt="Chamai conversation workspace" /> | <img src="docs/screenshots/settings.png" alt="Chamai settings panel" /> |
 
 ## Why this exists
 
 Many vertical AI products need the same foundation: login, chat history, file handling, streaming responses, private storage, artifact generation, and deployment. Rebuilding that foundation for every niche wastes time.
 
-SecondstreamAI separates the reusable platform from the domain-specific agent layer. The first vertical focuses on wastewater business development, where field teams often walk into customer conversations with fragmented inputs: permits, eDMR excerpts, call notes, case files, and spreadsheets. The product goal is to help turn that evidence into a clear internal position before the next customer conversation.
+Chamai separates the reusable platform from the domain-specific agent layer. The first vertical focuses on wastewater business development, where field teams often walk into customer conversations with fragmented inputs: permits, eDMR excerpts, call notes, case files, and spreadsheets. The product goal is to help turn that evidence into a clear internal position before the next customer conversation.
 
 ## Platform concept
 
