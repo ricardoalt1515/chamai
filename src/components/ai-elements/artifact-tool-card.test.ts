@@ -20,10 +20,11 @@ describe("resolveArtifactPresignedUrl", () => {
   });
 
   it("calls the Lambda with the bearer token and disposition, returns the presigned URL", async () => {
-    const fetchMock = vi.fn(async () =>
-      new Response(JSON.stringify({ url: "https://signed.s3.example/file.pdf?Signature=abc" }), {
-        status: 200,
-      }),
+    const fetchMock = vi.fn(
+      async () =>
+        new Response(JSON.stringify({ url: "https://signed.s3.example/file.pdf?Signature=abc" }), {
+          status: 200,
+        }),
     );
     vi.stubGlobal("fetch", fetchMock);
 

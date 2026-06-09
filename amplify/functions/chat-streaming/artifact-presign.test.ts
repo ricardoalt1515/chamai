@@ -3,8 +3,7 @@ import type { ArtifactRecord, ArtifactStore } from "@/lib/artifacts/artifact-sto
 import type { ArtifactPdfStorage } from "@/lib/artifacts/pdf-storage";
 import { AuthRequiredError } from "@/lib/auth/errors";
 import type { OwnerContext } from "@/lib/auth/owner-context";
-import type { ChatStore } from "@/lib/storage/chat-store-types";
-import type { StoredThread } from "@/lib/storage/chat-store-types";
+import type { ChatStore, StoredThread } from "@/lib/storage/chat-store-types";
 import { handleArtifactPresign } from "./artifact-presign";
 
 const owner: OwnerContext = { identityId: "id-1", userId: "user-1" };
@@ -44,9 +43,7 @@ const buildDeps = (
     getThreadById: vi.fn(async () => overrides.thread ?? thread),
   } as unknown as ChatStore;
   const artifactStore: ArtifactStore = {
-    getActiveArtifact: vi.fn(async () =>
-      "artifact" in overrides ? overrides.artifact : artifact,
-    ),
+    getActiveArtifact: vi.fn(async () => ("artifact" in overrides ? overrides.artifact : artifact)),
   } as unknown as ArtifactStore;
   const pdfStorage = {
     presign: vi.fn(async () => overrides.presignedUrl ?? "https://signed.example/pdf"),
@@ -86,10 +83,7 @@ describe("handleArtifactPresign", () => {
 
   it("defaults disposition to attachment when omitted", async () => {
     const deps = buildDeps();
-    await handleArtifactPresign(
-      buildRequest("?threadId=thread-1&kind=field-brief"),
-      deps,
-    );
+    await handleArtifactPresign(buildRequest("?threadId=thread-1&kind=field-brief"), deps);
     expect(deps.pdfStorage.presign).toHaveBeenCalledWith(
       expect.objectContaining({ disposition: "attachment" }),
     );
