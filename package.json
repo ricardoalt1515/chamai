@@ -10,6 +10,8 @@
     "build": "next build",
     "preview": "next start",
     "test": "vitest run",
+    "eval": "vitest run --config evals/vitest.config.ts",
+    "eval:live": "EVALS_LIVE=1 vitest run --config evals/vitest.config.ts",
     "auth:create-user": "bun src/config/cognito-create-user.ts",
     "amplify:sandbox": "npx ampx sandbox",
     "verify:amplify-config": "bun src/config/amplify-runtime.ts",

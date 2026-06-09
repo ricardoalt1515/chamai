@@ -54,3 +54,6 @@ jobs:
 
       - name: Unit tests
         run: bun run test
+
+      - name: Deterministic evals
+        run: bun run eval
