@@ -43,10 +43,10 @@ vi.mock("@/lib/storage/chat-store", () => ({
 }));
 
 describe("App Router route parity", () => {
-  it("renders the root workspace with a new thread id and empty initial history", async () => {
-    const { default: Page } = await import("./page");
+  it("renders the chat workspace with a new thread id and empty initial history", async () => {
+    const { default: ChatPage } = await import("./chat/page");
 
-    const element = (await Page({
+    const element = (await ChatPage({
       searchParams: Promise.resolve({}),
     })) as { key: string };
 
