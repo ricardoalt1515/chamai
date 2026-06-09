@@ -54,7 +54,7 @@ const H2O_AGENT_SYSTEM_MESSAGES: SystemModelMessage[] = [
 // done — typically after the closing text step where prepareStep has filtered
 // completed artifact tools out of `activeTools`, leaving only `loadSkill`.
 // The model sees no useful tool to call and generates a closing summary.
-const AGENT_MAX_STEPS = 10;
+export const AGENT_MAX_STEPS = 10;
 
 // Sonnet 4.6 supports up to 64K output tokens; cap at 32K to leave headroom for
 // large tool-call payloads (Field Brief JSON ~3-4K) plus a long closing reply
@@ -73,7 +73,7 @@ export const estimateTokenCostUsd = ({
   (inputTokens / 1_000_000) * model.inputPricePerMillion +
   (outputTokens / 1_000_000) * model.outputPricePerMillion;
 
-const ARTIFACT_TOOL_SEQUENCE = [
+export const ARTIFACT_TOOL_SEQUENCE = [
   "generateFieldBrief",
   "generatePlaybook",
   "generateAnalyticalRead",
