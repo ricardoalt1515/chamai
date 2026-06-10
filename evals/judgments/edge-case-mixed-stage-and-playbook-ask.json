@@ -1,0 +1,12 @@
+{
+  "scenarioId": "edge-case-mixed-stage-and-playbook-ask",
+  "modelId": "claude-sonnet-4-6",
+  "judgedAt": "2026-06-10T00:38:14.358Z",
+  "scores": {
+    "groundedness": 4,
+    "stageAppropriateness": 5,
+    "actionability": 5,
+    "rationale": "**Groundedness (4):** Nearly all claims trace directly to the scenario prompt — two follow-up calls, pretreatment layout shared, regional ops VP threshold at $150K, site walk-through agreed, NC location, and oil-and-grease NOVs are all grounded. The \"Piedmont / Coastal Plain\" basin designation is an inference not present in the prompt and is stated as fact without a flag, which is a minor but real gap. Similarly, the phase-2 themes around surfactants, pH, and wash chemistry are reasonable industry inferences for industrial laundry but are presented as established exposure rather than flagged as assumptions — a second minor unflagged inference. Neither materially misleads, keeping this at 4 rather than 3. **Stage Appropriateness (5):** The Scope call with MEDIUM confidence is precisely calibrated to the evidence: two follow-up calls completed, drawings shared, site walk agreed, but loading data, competitive landscape, and procurement vehicle still open. The artifact explicitly names the three gaps that would advance the deal to Position and frames the site walk-through as the vehicle to close them — exactly the right depth and confidence for this stage. The artifact does not over-propose or under-sell the opportunity. **Actionability (5):** The playbook delivers 11 sequenced conversation themes with specific, verbatim questions, clear framing rationale for each, and an explicit \"lock the next step\" closing section. The final text response surfaces three must-hit priority questions with direct quotes a field agent could use immediately. Owners (field agent, plant manager, ops VP) and timing (the upcoming site walk-through) are clear throughout, with no significant ambiguity requiring further interpretation before acting."
+  },
+  "judgeCostUsd": 0.021729
+}

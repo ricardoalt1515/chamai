@@ -1,0 +1,12 @@
+{
+  "scenarioId": "edge-case-minimal-evidence-lead-full-package",
+  "modelId": "claude-sonnet-4-6",
+  "judgedAt": "2026-06-10T00:37:31.664Z",
+  "scores": {
+    "groundedness": 5,
+    "stageAppropriateness": 5,
+    "actionability": 5,
+    "rationale": "**Groundedness (5):** Every factual claim in the package is either directly traceable to the scenario prompt (cold inbound, \"bills seem high,\" no data shared, no site visit, no permit limits known) or is explicitly flagged as an assumption, directional range, or lens-cheat-sheet baseline. Specific figures — $50K–$200K/yr in surcharges, $150K–$800K Phase 1 capex, $0.50–$2.00/lb BOD surcharge rates — are consistently labeled \"directional,\" \"LOW confidence,\" or \"lens cheat-sheet ranges.\" The ATTN-01 flag, the evidence-gap table, and the \"What We Do Not Promise Yet\" section collectively ensure no invented specificity passes as site-derived fact. Nothing in the artifacts contradicts or fabricates details beyond the single-sentence scenario prompt.\n\n**Stage Appropriateness (5):** The artifacts are rigorously calibrated to Lead stage throughout. The proposal shell is explicitly marked \"DRAFT INTENT — not for distribution\" with a banner warning against external use. All five stage-gap items are surfaced as open. Confidence is set to LOW and the ceiling is explained. The analytical read's \"stage classification\" section explicitly defines what evidence is required to advance to Qualify — the artifacts do not over-reach toward qualification-level or proposal-level certainty at any point. Importantly, the package correctly frames thin content as appropriate given thin evidence, including calling out that deeper sizing \"requires first-call data.\"\n\n**Actionability (5):** Next steps are concrete, sequenced, owner-assigned, and time-bound. The field brief's \"doThisNext\" section provides three actions with explicit timeframes (first call within 7 days; follow-up within 14 days) and verbatim opening questions the agent can use immediately. The proposal shell's \"gatesToClose\" table assigns every gate to a specific closer (field agent) with a specific venue (first call or site visit). The playbook's seven themed sections — including an explicit \"Set the next step\" theme with closing questions — give the agent a ready-to-use call structure. The final text response distills the three call priorities into a sentence-level script the agent can lift directly."
+  },
+  "judgeCostUsd": 0.04284
+}

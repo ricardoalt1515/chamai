@@ -1,0 +1,12 @@
+{
+  "scenarioId": "edge-case-name-only-customer-no-company-details",
+  "modelId": "claude-sonnet-4-6",
+  "judgedAt": "2026-06-10T00:37:46.508Z",
+  "scores": {
+    "groundedness": 5,
+    "stageAppropriateness": 5,
+    "actionability": 5,
+    "rationale": "**Groundedness (5):** Every factual claim in the package is either directly traceable to the scenario prompt (Marcus Webb, operations role, poultry/meat processing, \"surcharge problems for years,\" trade-show origin, no company name) or is explicitly and consistently flagged as directional, LOW confidence, or an assumption — including the $100K–$500K/yr surcharge range, the $1.5–5M capex range, the BOD/TSS/FOG sub-stream inference, the 40 CFR Part 403 regulatory framework, and the typical NOV enforcement pattern. No invented specifics (facility location, flow numbers, permit conditions, competitor names) are presented as known facts. The proposal-shell is correctly labeled \"PLACEHOLDER — Lead stage. Not for distribution,\" and the analytical read's cost rows each carry explicit LOW or QUALITATIVE confidence tags. This is a textbook example of tight evidential hygiene at a nearly zero-evidence stage.\n\n**Stage Appropriateness (5):** The artifacts precisely match Lead-stage norms. All four pieces explicitly resist solution-pitching; the playbook's header states \"The goal is not to pitch — it's to qualify\"; the proposal shell is a non-distributable placeholder; and the field brief's doThisNext section sequences actions at 48 hours, 7–10 days, and 14–21 days rather than projecting a close. The five Required gaps (company name, surcharge cost, POTW status, decision-maker, loading profile) are clearly enumerated as gates to Qualify. The package is appropriately thin in commitment depth and explicitly names what evidence is absent before deeper analysis can begin, which is exactly correct behavior at this stage.\n\n**Actionability (5):** The package delivers concrete, sequenced, owner-attributed next steps with explicit timeframes: a 48-hour email/call with a verbatim opening line, a scoping call within 7–10 days with three named qualifying questions, and a decision-maker mapping task within 14–21 days. The playbook provides 20 specific questions organized into seven themes with a clear sequencing rationale. The final text response reinforces the top three pre-call actions with specific dialogue language. A field agent could pick this up and execute immediately without needing to interpret or expand any step."
+  },
+  "judgeCostUsd": 0.041010000000000005
+}
