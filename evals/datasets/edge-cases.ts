@@ -39,9 +39,18 @@ const buildLongEdmrEvidence = (): string => {
 
   const rows = months.map((month, index) => {
     const flow = (1.8 + (index % 5) * 0.07).toFixed(2);
-    const bod = (210 + (index % 7) * 18).toFixed(0);
-    const tss = (95 + (index % 6) * 12).toFixed(0);
-    const ammonia = (3.1 + (index % 4) * 0.6).toFixed(1);
+    // Effluent-typical values for a conventional activated sludge plant,
+    // consistent with the scenario narrative: BOD/TSS sit below their 25/30
+    // mg/L monthly limits with marginal months, while NH3-N trends upward
+    // through 2025 as nitrification degrades and only exceeds the 2.0 mg/L
+    // summer limit in the most recent summer months. The first version of
+    // this generator emitted influent-strength BOD/TSS (210-318 mg/L)
+    // labeled as eDMR (discharge) data — an internally incoherent case the
+    // LLM judge flagged as a groundedness failure on the first judged run.
+    const bod = (14 + (index % 7) * 1.5).toFixed(0);
+    const tss = (18 + (index % 6) * 2).toFixed(0);
+    const isSummer = /^(Jun|Jul|Aug|Sep)/.test(month);
+    const ammonia = (0.9 + index * 0.05 + (isSummer ? 0.45 : 0)).toFixed(1);
     const phLow = (6.4 + (index % 3) * 0.1).toFixed(1);
     const phHigh = (7.6 + (index % 3) * 0.1).toFixed(1);
     return `${month}: Flow ${flow} MGD, BOD ${bod} mg/L, TSS ${tss} mg/L, NH3-N ${ammonia} mg/L, pH ${phLow}-${phHigh}`;
