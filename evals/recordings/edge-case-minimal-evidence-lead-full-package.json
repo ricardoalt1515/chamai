@@ -1,0 +1,998 @@
+{
+  "scenarioId": "edge-case-minimal-evidence-lead-full-package",
+  "modelId": "claude-sonnet-4-6",
+  "recordedAt": "2026-06-10T00:04:57.371Z",
+  "toolCalls": [
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-evidence-and-context"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-stage-and-gaps"
+      }
+    },
+    {
+      "step": 2,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-positioning"
+      }
+    },
+    {
+      "step": 3,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-field-brief"
+      }
+    },
+    {
+      "step": 4,
+      "toolName": "generateFieldBrief",
+      "input": {
+        "customer": {
+          "name": "Regional Food Distribution Center",
+          "location": "Distribution Center (site TBD)",
+          "slug": "food-distro-inbound"
+        },
+        "stage": "Lead",
+        "confidence": "LOW",
+        "date": "2025-07-14",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "No enforcement driver is in evidence today — urgency is entirely economic. The first conversation must convert 'bills seem high' into a quantified, solvable surcharge problem before a point-fix competitor defines the playing field.",
+          "Decision-maker identity is unknown. The contact who reached out may have no budget authority. Mapping the decision landscape in the first call is as important as the technical pitch."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "This is a recurring surcharge penalty disguised as a high utility bill — and it's solvable.",
+            "body": "A cold inbound from a regional food distribution center — contact mentioned wastewater bills 'seem high' and asked whether we operate in that space. No data has been shared, no site visit has occurred, and permit limits are unknown. Food distribution facilities are canonical high-BOD/TSS/FOG generators from dock wash, floor drains, and food-waste sluicing. Elevated sewer bills at these sites almost always reflect POTW surcharges on wastewater strength — charges that accrue every month and are fully eliminable with right-sized pretreatment. There is no active enforcement driver in evidence; the urgency is economic. Our job in the first conversation is to reframe the bill from a fixed operating cost into a recurring penalty the customer is choosing to pay — and to quantify exactly what that choice is costing them over five years."
+          },
+          "whatWeWouldPropose": {
+            "insight": "Phase 1: eliminate the surcharge burden. Phase 2: build headroom before POTW limits tighten.",
+            "recommendedApproach": "Phase 1 (deal anchor) — FOG interceptor upgrade or new installation, equalization, and pH adjustment targeting BOD/TSS/FOG mass loading reduction to bring the facility inside local POTW limits and eliminate recurring surcharge charges. Directional capex: $150K–$800K depending on facility flow and whether basic interceptor infrastructure exists. Phase 2 prize — on-site biological pretreatment (package DAF or aerobic package plant) addressing BOD and TSS at scale for facilities with meaningful flow (>50K GPD) as POTW limits tighten. Directional capex: $500K–$2M. Combined deal range: $150K–$2M. LOW confidence — dominant variable is the absence of any flow or mass-loading data.",
+            "winWinArguments": [
+              {
+                "lead": "Surcharge elimination turns a recurring penalty into capital-project payback.",
+                "body": "Food distribution facilities routinely carry $50K–$200K/yr in BOD/TSS/FOG surcharges to their POTW (directional — basis: typical industrial surcharge rates of $0.50–$2.00/lb BOD and $1.00–$5.00/lb FOG × estimated facility loadings). A right-sized pretreatment solution eliminates those charges. At a 5-year horizon, the avoided surcharge burden typically exceeds the capital investment — making the project self-funding from operating cost savings alone."
+              },
+              {
+                "lead": "Regulatory headroom built now is cheaper than an enforcement-driven retrofit later.",
+                "body": "Municipal POTWs nationwide are tightening local limits for FOG and high-strength organics as their own capacity constraints and effluent permit pressures grow. Facilities that remain above local limits become enforcement targets when the POTW's compliance posture shifts. Installing pretreatment on their own timeline — as a planned capital project — is 20–40% cheaper than installing under a pretreatment compliance order on emergency timing."
+              },
+              {
+                "lead": "Predictable operating cost replaces opaque monthly billing.",
+                "body": "Surcharge billing is variable and difficult to forecast — customers often can't predict next month's bill from this month's operations. Properly sized pretreatment stabilizes the wastewater cost line and removes the monthly variance, making utility spend a manageable and predictable budget item."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex (Year 0)",
+                "theirPath": "$0 upfront",
+                "ourProposal": "$150K–$800K (Phase 1)"
+              },
+              {
+                "component": "Ongoing surcharges (5yr)",
+                "theirPath": "$250K–$1M (directional: $50K–$200K/yr at typical FOG/BOD industrial surcharge rates × estimated facility loading)",
+                "ourProposal": "Eliminated or near-zero post-installation"
+              },
+              {
+                "component": "Forced retrofit if POTW issues compliance order (Yr 2–4)",
+                "theirPath": "$200K–$600K on emergency timing (20–40% premium vs planned)",
+                "ourProposal": "Included in Phase 1 scope — no emergency premium"
+              },
+              {
+                "component": "Risk-adjusted enforcement exposure",
+                "theirPath": "Low probability today; escalates over 5yr as POTWs tighten. NOV exposure $10K–$50K/day per parameter if escalated.",
+                "ourProposal": "Exposure extinguished"
+              },
+              {
+                "component": "5-Year Total (mid-range)",
+                "theirPath": "~$450K–$1.6M + enforcement tail",
+                "ourProposal": "~$150K–$800K capex, surcharges eliminated",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Single dominant variable: whether pretreatment infrastructure exists at all (3–5× swing). Facility scale matters — a large regional DC with high dock-door count pushes toward the top of the range; a smaller last-mile facility stays at the low end. Phase-2 commitment (biological pretreatment) roughly doubles the deal. All sizing is directional at LOW confidence pending first-call data."
+          },
+          "whatCouldKillIt": {
+            "insight": "No enforcement pressure means no urgency — the deal stalls unless the first conversation makes the cost of inaction vivid and specific.",
+            "risks": [
+              {
+                "name": "No-urgency stall",
+                "mechanism": "Without a regulatory driver or an enforcement event, the contact has no compulsion to act. A 'that's interesting, we'll look into it' response leads to a 6–12 month polite non-engagement. The deal never becomes a capital project.",
+                "mitigation": "In the first conversation, quantify the surcharge burden from the utility bill directly. Ask to see the bill. Turn the abstract 'high' into a specific dollar figure the contact can take to a decision-maker. Make the five-year cost of inaction visible before the call ends."
+              },
+              {
+                "name": "Wrong contact / no budget authority",
+                "mechanism": "The contact who reached out may be operational-level with no capital budget authority. Every technical conversation hits a 'let me check with finance or corporate' wall, and the deal never reaches a decision-maker.",
+                "mitigation": "Map the decision-maker landscape explicitly in the first conversation. Ask directly who owns the utility cost line and who would approve a capital project of this scale. Get a name and a role before committing to a second meeting."
+              },
+              {
+                "name": "Point-fix competitor pre-empts the frame",
+                "mechanism": "A local grease-trap service provider or plumbing contractor may already be in the facility's vendor list. If they propose a cheap clean-out or minor equipment service, the customer accepts it as the 'fix' without ever understanding the surcharge-elimination economics — and the deal collapses to a maintenance call.",
+                "mitigation": "Anchor the conversation on the surcharge bill specifically, not on equipment. The frame must be economic before any competing quote lands. Ask about the utility bill before asking about the equipment."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The single most valuable thing you can do before this call is decide what question gets the utility bill in front of you.",
+            "actions": [
+              {
+                "title": "Get the utility bill on the table",
+                "timeframe": "First call — within 7 days",
+                "body": "Open with: 'Before we talk about what we do, can you walk me through what's on the bill that's catching your attention — is it the total, or are there line items for strength surcharges like BOD, FOG, or TSS?' If they can share the bill, ask for it. The bill converts 'seems high' into a specific number you can work with. Without it, every subsequent conversation is directional."
+              },
+              {
+                "title": "Map the decision-maker landscape",
+                "timeframe": "First call — within 7 days",
+                "body": "Ask directly: 'If we found a way to structurally reduce that cost, who in your organization would own that decision — is that you, or does it go to facilities management, finance, or corporate?' You need to know whether this contact can move a capital project or whether you need a second contact. Get both the role and the person before the call ends."
+              },
+              {
+                "title": "Pre-qualify the facility scale",
+                "timeframe": "First call / follow-up — within 14 days",
+                "body": "Ask about facility type and scale: number of dock doors, whether there's any food processing or preparation on site (vs pure distribution), and whether they have any existing grease interceptor or pretreatment equipment. This pins the sizing range from LOW confidence to at least MEDIUM-LOW — and tells you whether this is a $200K interceptor job or a $1–2M pretreatment project."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "step": 5,
+      "toolName": "generatePlaybook",
+      "input": {
+        "customer": {
+          "name": "Regional Food Distribution Center",
+          "location": "Distribution Center (site TBD)",
+          "slug": "food-distro-inbound"
+        },
+        "stage": "Lead",
+        "subtitle": "First-call qualification questions — converting 'bills seem high' into a scoped opportunity",
+        "header": {
+          "subStreams": [
+            "Industrial discharge / food & beverage POTW indirect discharger — high-strength organics (BOD/TSS/FOG)"
+          ],
+          "stageIntro": "This is your first real conversation. You have one signal: 'wastewater bills seem high.' Every question in this playbook serves one of two purposes — quantifying the surcharge burden, or mapping the decision landscape. Don't leave the call without progress on both.",
+          "insight": "The utility bill is the deal. Get it on the table before the call ends.",
+          "orientationLine": "Cold inbound at Lead stage — no data shared, no site visit, no permit limits known."
+        },
+        "themes": [
+          {
+            "title": "Open the economic reframe",
+            "framing": "Your job in the first two minutes is to establish that 'high bills' is a specific, solvable problem — not background noise. These questions surface the actual dollar figure and the driver behind it.",
+            "questions": [
+              "Can you walk me through what's on that wastewater bill that caught your attention — is it the total dollar amount, or are there line items for things like BOD, FOG, or strength surcharges?",
+              "How long have the bills been running at this level — has it crept up over time, or did something change recently?",
+              "Do you have a recent bill handy, or could you share one before our next conversation? Even a one-month snapshot tells us a lot.",
+              "Has anyone from the POTW or the municipal utility been in touch about what's driving the charges?"
+            ],
+            "whyItMatters": [
+              "The surcharge line item — not the volumetric charge — is where the addressable cost lives. If the contact can't identify surcharge line items, the first step is helping them read the bill.",
+              "How long they've been paying tells you how normalized the pain is — and how hard the urgency conversation will be."
+            ],
+            "accentIndex": 0
+          },
+          {
+            "title": "Qualify the facility and its loading profile",
+            "framing": "You need enough about the facility's footprint and operations to directionally size the opportunity. You're not engineering yet — you're anchoring the range.",
+            "questions": [
+              "What does the facility actually do — is it pure distribution and cross-docking, or is there any food preparation, portioning, or processing happening on site?",
+              "Roughly how many dock doors are you running, and what's the daily throughput look like?",
+              "Are there floor drains tied into the sewer system in dock areas, cooler rooms, or any wash-down areas?",
+              "Do you have any grease interceptors or pretreatment equipment on site currently — even basic grease traps?"
+            ],
+            "whyItMatters": [
+              "Whether there's food processing versus pure distribution is the single biggest swing factor in loading — it can move the opportunity 3–5× in scope.",
+              "Existing pretreatment infrastructure (even undersized) is different from zero — it changes the scope from new installation to retrofit."
+            ],
+            "accentIndex": 1
+          },
+          {
+            "title": "Surface the regulatory posture",
+            "framing": "No enforcement driver is in evidence, but that doesn't mean none exists. These questions determine whether the POTW has already signaled concern.",
+            "questions": [
+              "Have you received anything in writing from the utility or POTW about your discharge — notices, letters, requests for sampling data?",
+              "Are you currently on any kind of pretreatment program or monitoring requirement with the municipal utility?",
+              "Has the utility ever requested a sample from your discharge point, or do you self-monitor anything?"
+            ],
+            "accentIndex": 2
+          },
+          {
+            "title": "Map the decision landscape",
+            "framing": "The contact who reached out may or may not own the budget. This is the most important structural question on the call — you need to know it before you commit to a second meeting.",
+            "questions": [
+              "If we found a way to structurally reduce that cost, who in your organization would own that decision — is that you, or does it go to facilities management, finance, or a corporate level?",
+              "Is this a site-level decision, or does a capital project of any size need to go up to regional or corporate for approval?",
+              "Who else has visibility on the wastewater cost line — does someone in finance or operations track it separately?"
+            ],
+            "whyItMatters": [
+              "If the contact can't approve a capital project, you need a second contact before the second meeting. Every call that ends without this answer risks a 'let me check with X' wall that stalls the deal for months."
+            ],
+            "accentIndex": 3
+          },
+          {
+            "title": "Surface competing alternatives already in play",
+            "framing": "A grease-trap service provider or local plumbing contractor may already be in their vendor list. If they've already been quoted a cheap clean-out, you need to know before you frame the economics.",
+            "questions": [
+              "Has anyone else looked at this for you — a plumber, a grease-trap service, or a utility consultant?",
+              "Have you gotten any quotes or proposals for this already, even informal ones?",
+              "What's your current maintenance relationship for floor drains and any existing interceptor equipment?"
+            ],
+            "accentIndex": 4
+          },
+          {
+            "title": "Test the win-win anchor",
+            "framing": "Different decision-makers respond to different frames. These questions surface which outcome matters most to this contact — and tell you which win-win argument to lead with in your follow-up.",
+            "questions": [
+              "If you could wave a wand and fix this, what does success look like — is it a lower bill, a predictable bill, or getting ahead of something you're worried about?",
+              "Is the concern primarily cost, or is there any worry about where regulations might be heading for facilities like yours?",
+              "Has this come up with your leadership — is it on anyone's radar as something that needs to be addressed, or is it still just on yours?"
+            ],
+            "accentIndex": 5
+          },
+          {
+            "title": "Set the next step",
+            "framing": "This call has one job: earn the right to a second, substantive conversation. These questions pin the concrete next move before you hang up.",
+            "questions": [
+              "Would you be open to a 30-minute working session where I walk through what the surcharge line items actually mean and what a remediation looks like economically?",
+              "If I put together a rough cost-of-inaction number based on your bill and facility type, would that be worth a conversation with the person who owns the capital budget?",
+              "What's the fastest path to getting a utility bill in front of me — even just a photo of the page that shows the surcharge breakdown?"
+            ],
+            "whyItMatters": [
+              "The goal of this call is a second call — with the utility bill on the table and the decision-maker in the room. If you leave without a concrete next step on both, the deal stalls."
+            ],
+            "accentIndex": 6
+          }
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "toolName": "generateAnalyticalRead",
+      "input": {
+        "customer": {
+          "name": "Regional Food Distribution Center",
+          "location": "Distribution Center (site TBD)",
+          "slug": "food-distro-inbound"
+        },
+        "subtitle": "Evidenced read on a cold-inbound surcharge complaint — food distribution center, stage Lead",
+        "subStreamsLine": "Sub-streams: high-strength organics pretreatment (BOD/TSS/FOG), POTW indirect discharge compliance, phase-2 biological pretreatment",
+        "closingInsight": "The do-nothing path at this facility is not free — it is a recurring surcharge penalty that will likely exceed the capital cost of solving it within five years, and it grows as POTWs tighten local limits. The first conversation's only job is making that arithmetic visible to the person who can act on it.",
+        "summary": "Cold inbound from a regional food distribution center contact reporting elevated wastewater bills. No data, permit limits, or treatment configuration has been shared. Sub-stream: industrial-discharge / food-and-beverage POTW indirect discharger, high-strength organics (BOD/TSS/FOG). Directional deal range $150K–$2M at LOW confidence. Stage: Lead. All sizing is orientation-level pending first-call discovery.",
+        "flags": [
+          {
+            "id": "ATTN-01",
+            "severity": "ATTENTION",
+            "evidence": "Evidence base is a single verbal data point (INBOUND-01). All sizing, loading assumptions, and regulatory posture assessments are derived from lens cheat-sheet ranges and canonical food-distribution facility profiles — not site data. Confidence ceiling is LOW until first-call data is obtained.",
+            "status": "Open — advances to SPECIALIST if first call fails to produce any operational data"
+          }
+        ],
+        "subStreamLens": [
+          {
+            "subStream": "High-strength organics / FOG pretreatment",
+            "activeCondition": "Elevated sewer-use surcharges reported by contact; mass loading, flow, and permit limits unknown. Canonical food distribution facility loading profile assumed pending data.",
+            "evidenceAnchor": "INBOUND-01"
+          },
+          {
+            "subStream": "POTW indirect discharge compliance",
+            "activeCondition": "No NOV or formal compliance action in evidence. Contact's language ('bills seem high') consistent with chronic surcharge over-payment rather than active enforcement. Regulatory posture of receiving POTW unknown.",
+            "evidenceAnchor": "INBOUND-01"
+          },
+          {
+            "subStream": "Phase-2 biological pretreatment",
+            "activeCondition": "Not yet surfaced with customer. Activated if facility flow >50K GPD or BOD loading is material after Phase 1 assessment. POTW limit-tightening trend provides the regulatory rationale.",
+            "evidenceAnchor": "LENS-CHEAT-SHEET"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Utility bill with surcharge line items — pins the addressable cost burden",
+            "status": "Not provided",
+            "source": "INBOUND-01"
+          },
+          {
+            "required": "Decision-maker identified by role — confirms whether the contact has budget authority",
+            "status": "Unknown",
+            "source": "INBOUND-01"
+          },
+          {
+            "required": "Facility scale and flow indication — dock-door count, daily throughput, floor-drain configuration",
+            "status": "Not provided",
+            "source": "INBOUND-01"
+          },
+          {
+            "required": "Existing pretreatment infrastructure — confirms whether scope is new install or retrofit",
+            "status": "Unknown",
+            "source": "INBOUND-01"
+          },
+          {
+            "required": "Contact's willingness to engage on scope of work — confirms deal is real",
+            "status": "Unconfirmed",
+            "source": "INBOUND-01"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex (Year 0) — do-nothing path",
+            "basis": "No pretreatment capital outlay under do-nothing; facility continues discharging above local limits",
+            "confidence": "HIGH"
+          },
+          {
+            "row": "Capex (Year 0) — our path: $150K–$800K (Phase 1)",
+            "basis": "Lens cheat-sheet: FOG interceptor upgrade or new install + EQ + pH adjustment at food distribution facility scale; driver of range is whether interceptor infrastructure exists at all",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Ongoing surcharges, 5yr — do-nothing: $250K–$1M",
+            "basis": "Directional: $50K–$200K/yr at typical industrial FOG/BOD surcharge rates ($0.50–$2.00/lb BOD, $1.00–$5.00/lb FOG) × estimated food distribution facility loading; actual figure requires utility bill",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Ongoing surcharges, 5yr — our path: eliminated or near-zero",
+            "basis": "Pretreatment system designed to bring mass loading inside local limits; residual minor variability possible",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit if POTW issues compliance order (Yr 2–4) — do-nothing: $200K–$600K",
+            "basis": "Emergency installation premium 20–40% above planned capex; timing risk increases as POTWs tighten local limits under their own regulatory pressure",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit — our path: included in Phase 1 scope",
+            "basis": "Phase 1 designed to preclude compliance order; no emergency premium",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "5-Year Total — do-nothing: ~$450K–$1.6M + enforcement tail",
+            "basis": "Sum of surcharges + forced retrofit risk; enforcement tail qualitative (NOV $10K–$50K/day per parameter if escalated)",
+            "confidence": "LOW"
+          },
+          {
+            "row": "5-Year Total — our path: ~$150K–$800K capex, surcharges eliminated",
+            "basis": "Phase 1 capex only; surcharge elimination begins post-commissioning; Phase 2 additional if flow warrants",
+            "confidence": "LOW"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "A contact at a regional food distribution center initiated an inbound inquiry reporting that wastewater bills 'seem high' and asking whether we operate in the wastewater space. No site visit has occurred. No operational data (flows, concentrations, discharge volumes), permit limits, or treatment configuration details have been shared. The contact's role within the organization is unknown. No regulatory action (NOV, pretreatment compliance order, or informal POTW communication) is in evidence. The opportunity is classified at Lead stage with MEDIUM confidence; advancement to Qualify requires a substantive first conversation with a utility bill or operational data in hand.",
+            "evidenceTags": ["INBOUND-01"],
+            "evidenceSource": "INBOUND-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "The opportunity maps to a single sub-stream: industrial-discharge / food-and-beverage POTW indirect discharger, high-strength organics. Food distribution centers are canonical generators of high-BOD/TSS/FOG wastewater from dock wash, floor drain discharge, cold-storage condensate, and food-waste sluicing. In the absence of on-site pretreatment, these facilities routinely incur POTW surcharges on BOD, TSS, and FOG above local limits. A phase-2 sub-stream (biological pretreatment) is conditionally in scope if flow volumes are material; this is not advanced to the customer until Phase 1 scoping is complete.",
+            "evidenceTags": ["INBOUND-01", "LENS-CHEAT-SHEET"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Evidence base",
+            "body": "The evidence base at Lead stage consists of a single verbal data point: the contact's report that wastewater bills 'seem high.' No permit limits, no eDMR data, no flow or mass-loading estimates, no utility bill, and no knowledge of existing treatment configuration are in evidence. All sizing is derived from lens cheat-sheet ranges and food-distribution facility canonical loading profiles — not from site-specific data. The following gaps are required before sizing can advance beyond LOW confidence.",
+            "evidenceTags": ["INBOUND-01"],
+            "table": [
+              {
+                "Item": "Utility bill showing surcharge line items",
+                "Status": "Not provided",
+                "Impact on sizing": "Highest — pins the addressable surcharge burden"
+              },
+              {
+                "Item": "Facility flow and dock-door count",
+                "Status": "Not provided",
+                "Impact on sizing": "High — drives 3–5× range variance"
+              },
+              {
+                "Item": "Existing pretreatment infrastructure",
+                "Status": "Unknown",
+                "Impact on sizing": "High — new install vs retrofit is a major scope driver"
+              },
+              {
+                "Item": "Permit limits / local pretreatment standards",
+                "Status": "Unknown",
+                "Impact on sizing": "Medium — sets the compliance target"
+              },
+              {
+                "Item": "POTW enforcement posture",
+                "Status": "Unknown",
+                "Impact on urgency": "Medium — determines whether enforcement risk is near-term"
+              }
+            ],
+            "evidenceSource": "INBOUND-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Customer behaviour read",
+            "body": "The 'bills seem high' framing indicates a low-urgency economic complaint that the contact has normalized. There is no enforcement driver in evidence; the contact reached out from curiosity or a recent spike rather than regulatory pressure. The cold inbound and absence of shared data suggests no internal champion, no active procurement motion, and possibly no formal environmental function. The contact is likely operational or facilities-level — the person who sees the invoice — rather than EHS or corporate finance. The gap between what they said ('high bills') and the likely reality (a chronic, quantifiable surcharge penalty) is the reframe the first conversation must deliver.",
+            "evidenceTags": ["INBOUND-01"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "Phase 1 (deal anchor): FOG interceptor upgrade or new installation, equalization, and pH adjustment targeting BOD/TSS/FOG mass-loading reduction to bring the facility inside local POTW limits and eliminate recurring surcharge charges. Directional capex $150K–$800K depending on facility flow and whether interceptor infrastructure exists at all. Phase 2 (prize): on-site biological pretreatment (package DAF or aerobic package plant) for facilities with material flow (>50K GPD), addressing BOD and TSS reduction at scale as POTW limits tighten. Directional capex $500K–$2M. Combined deal range: $150K–$2M at LOW confidence. Dominant variable: absence of any flow, mass-loading, or existing-infrastructure data.",
+            "evidenceTags": ["LENS-CHEAT-SHEET"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The customer's do-nothing BATNA is a continuing monthly surcharge payment with no capital outlay but an accumulating cost that exceeds most pretreatment capital investments over a 5-year horizon. The table below prices the do-nothing path against our proposed path using lens cheat-sheet ranges and typical industrial surcharge rates. All figures are directional at LOW confidence pending site data.",
+            "evidenceTags": ["LENS-CHEAT-SHEET", "INBOUND-01"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "No STOP or SPECIALIST flags are active at Lead stage based on available evidence. One ATTENTION flag is recorded. Absence of STOP flags reflects absence of data — not confirmed absence of risk. Site-visit and first-call discovery may surface additional flags.",
+            "evidenceTags": ["INBOUND-01"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Stage classification and gap analysis",
+            "body": "Stage: Lead. Confidence: MEDIUM. The deal presents as a genuine early-stage opportunity with one confirmed signal (inbound inquiry from facility contact) and no confirmed data. Advancement to Qualify requires: (1) a substantive first conversation producing a utility bill or documented problem statement, (2) at least one decision-maker identified by role, and (3) confirmation that the contact is willing to engage on the scope of work. Nice-to-have for Qualify: 12-month utility bill history, basic facility operating data (dock-door count, daily throughput, floor-drain configuration), any prior vendor contacts or quotes.",
+            "evidenceTags": ["INBOUND-01"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not promise yet",
+            "body": "At Lead stage, the following are explicitly outside our commitment: (1) any specific sizing, capex figure, or surcharge-reduction guarantee — all figures are directional ranges from lens cheat-sheet baselines, not site-specific engineering estimates; (2) identification of the receiving POTW's specific local limits or enforcement posture; (3) any finding that a specific pretreatment technology is required — technology selection requires flow and mass-loading data; (4) any regulatory determination on whether the facility is subject to a specific categorical pretreatment standard; (5) any funding pathway eligibility determination — that requires the project to reach Scope stage with a defined capital figure.",
+            "evidenceTags": ["INBOUND-01"],
+            "confidenceTier": "LOW"
+          }
+        ]
+      }
+    },
+    {
+      "step": 7,
+      "toolName": "generateProposalShell",
+      "input": {
+        "customer": {
+          "name": "Regional Food Distribution Center",
+          "location": "Distribution Center (site TBD)",
+          "slug": "food-distro-inbound"
+        },
+        "subtitle": "Lead-stage scoping seed — orientation only, not for external distribution",
+        "executiveSummary": "This document is a placeholder scoping seed at Lead stage. A full Proposal Shell will be generated when the opportunity advances to Qualify or Scope, at which point flow data, permit limits, and existing infrastructure details will anchor a defensible scope and pricing range. At this stage, the commercial case is directional only: food distribution facilities operating above local POTW limits for BOD, TSS, or FOG typically incur $50K–$200K/yr in avoidable surcharges. A right-sized pretreatment solution in the range of $150K–$800K (Phase 1) typically eliminates that burden within a 3–5 year payback horizon. All figures are orientation-level pending first-call discovery.",
+        "proposedScope": [
+          "Phase 1 (indicative): FOG interception, equalization, and pH adjustment — scope and sizing to be determined following site visit and utility bill review.",
+          "Phase 2 (conditional): On-site biological pretreatment if flow volumes and BOD loading warrant — to be evaluated following Phase 1 scoping."
+        ],
+        "sizingAndPricing": "Too early for a defensible pricing range. Directional orientation only: Phase 1 $150K–$800K, Phase 2 (if warranted) $500K–$2M. LOW confidence. Dominant variable: whether interceptor infrastructure exists at all (3–5× scope swing). A firm scoping range requires at minimum: one utility bill showing surcharge line items, facility flow indication, and confirmation of existing pretreatment infrastructure. All figures subject to site assessment, engineering scoping, and decision-maker confirmation.",
+        "schedule": "To be determined. Schedule development begins at Qualify stage following a site visit and utility bill review. A typical Phase 1 pretreatment installation (interceptor retrofit or new install) runs 3–6 months from engineering-to-commissioning depending on site constraints and permitting.",
+        "commitments": [
+          {
+            "label": "What this document is not",
+            "text": "This shell is not a proposal, a quote, or a commitment of any kind. It is an internal scoping seed produced at Lead stage for field agent reference only. No scope, pricing, schedule, or regulatory determination in this document should be shared with the customer in this form."
+          },
+          {
+            "label": "Next development trigger",
+            "text": "This shell will be developed into a full Proposal Shell (1–2 pages at Qualify, 2–3 pages at Scope) when the deal advances. Advancement requires: utility bill with surcharge line items, decision-maker identified by role, facility scale indication, and confirmation of existing pretreatment infrastructure."
+          }
+        ],
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — Lead stage, not for distribution. To be developed into a full Proposal Shell upon advancement to Qualify or Scope.",
+        "outOfScope": [
+          {
+            "heading": "Regulatory determinations",
+            "body": "No determination of applicable categorical pretreatment standards, local limit applicability, or POTW enforcement posture is made in this document. Those assessments require site data and are Assessment-mode work."
+          },
+          {
+            "heading": "Technology selection",
+            "body": "No specific pretreatment technology is recommended at this stage. Technology selection requires flow data, mass-loading characterization, and space assessment — none of which are available."
+          },
+          {
+            "heading": "Funding pathway eligibility",
+            "body": "No funding pathway eligibility determination is made at Lead stage. Applicable funding mechanisms will be assessed when the project reaches Scope and a capital figure is established."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Utility bill with surcharge line items obtained",
+            "closer": "Field agent — request during first call"
+          },
+          {
+            "gate": "Decision-maker with budget authority identified by role",
+            "closer": "Field agent — ask directly in first call"
+          },
+          {
+            "gate": "Facility flow and existing pretreatment infrastructure confirmed",
+            "closer": "Field agent — first call or site visit"
+          },
+          {
+            "gate": "Contact willing to engage on scope of work",
+            "closer": "Field agent — close first call with concrete next step"
+          }
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "field-brief",
+      "payload": {
+        "customer": {
+          "name": "Regional Food Distribution Center",
+          "location": "Distribution Center (site TBD)",
+          "slug": "food-distro-inbound"
+        },
+        "stage": "Lead",
+        "confidence": "LOW",
+        "date": "2025-07-14",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "No enforcement driver is in evidence today — urgency is entirely economic. The first conversation must convert 'bills seem high' into a quantified, solvable surcharge problem before a point-fix competitor defines the playing field.",
+          "Decision-maker identity is unknown. The contact who reached out may have no budget authority. Mapping the decision landscape in the first call is as important as the technical pitch."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "This is a recurring surcharge penalty disguised as a high utility bill — and it's solvable.",
+            "body": "A cold inbound from a regional food distribution center — contact mentioned wastewater bills 'seem high' and asked whether we operate in that space. No data has been shared, no site visit has occurred, and permit limits are unknown. Food distribution facilities are canonical high-BOD/TSS/FOG generators from dock wash, floor drains, and food-waste sluicing. Elevated sewer bills at these sites almost always reflect POTW surcharges on wastewater strength — charges that accrue every month and are fully eliminable with right-sized pretreatment. There is no active enforcement driver in evidence; the urgency is economic. Our job in the first conversation is to reframe the bill from a fixed operating cost into a recurring penalty the customer is choosing to pay — and to quantify exactly what that choice is costing them over five years."
+          },
+          "whatWeWouldPropose": {
+            "insight": "Phase 1: eliminate the surcharge burden. Phase 2: build headroom before POTW limits tighten.",
+            "recommendedApproach": "Phase 1 (deal anchor) — FOG interceptor upgrade or new installation, equalization, and pH adjustment targeting BOD/TSS/FOG mass loading reduction to bring the facility inside local POTW limits and eliminate recurring surcharge charges. Directional capex: $150K–$800K depending on facility flow and whether basic interceptor infrastructure exists. Phase 2 prize — on-site biological pretreatment (package DAF or aerobic package plant) addressing BOD and TSS at scale for facilities with meaningful flow (>50K GPD) as POTW limits tighten. Directional capex: $500K–$2M. Combined deal range: $150K–$2M. LOW confidence — dominant variable is the absence of any flow or mass-loading data.",
+            "winWinArguments": [
+              {
+                "lead": "Surcharge elimination turns a recurring penalty into capital-project payback.",
+                "body": "Food distribution facilities routinely carry $50K–$200K/yr in BOD/TSS/FOG surcharges to their POTW (directional — basis: typical industrial surcharge rates of $0.50–$2.00/lb BOD and $1.00–$5.00/lb FOG × estimated facility loadings). A right-sized pretreatment solution eliminates those charges. At a 5-year horizon, the avoided surcharge burden typically exceeds the capital investment — making the project self-funding from operating cost savings alone."
+              },
+              {
+                "lead": "Regulatory headroom built now is cheaper than an enforcement-driven retrofit later.",
+                "body": "Municipal POTWs nationwide are tightening local limits for FOG and high-strength organics as their own capacity constraints and effluent permit pressures grow. Facilities that remain above local limits become enforcement targets when the POTW's compliance posture shifts. Installing pretreatment on their own timeline — as a planned capital project — is 20–40% cheaper than installing under a pretreatment compliance order on emergency timing."
+              },
+              {
+                "lead": "Predictable operating cost replaces opaque monthly billing.",
+                "body": "Surcharge billing is variable and difficult to forecast — customers often can't predict next month's bill from this month's operations. Properly sized pretreatment stabilizes the wastewater cost line and removes the monthly variance, making utility spend a manageable and predictable budget item."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex (Year 0)",
+                "theirPath": "$0 upfront",
+                "ourProposal": "$150K–$800K (Phase 1)"
+              },
+              {
+                "component": "Ongoing surcharges (5yr)",
+                "theirPath": "$250K–$1M (directional: $50K–$200K/yr at typical FOG/BOD industrial surcharge rates × estimated facility loading)",
+                "ourProposal": "Eliminated or near-zero post-installation"
+              },
+              {
+                "component": "Forced retrofit if POTW issues compliance order (Yr 2–4)",
+                "theirPath": "$200K–$600K on emergency timing (20–40% premium vs planned)",
+                "ourProposal": "Included in Phase 1 scope — no emergency premium"
+              },
+              {
+                "component": "Risk-adjusted enforcement exposure",
+                "theirPath": "Low probability today; escalates over 5yr as POTWs tighten. NOV exposure $10K–$50K/day per parameter if escalated.",
+                "ourProposal": "Exposure extinguished"
+              },
+              {
+                "component": "5-Year Total (mid-range)",
+                "theirPath": "~$450K–$1.6M + enforcement tail",
+                "ourProposal": "~$150K–$800K capex, surcharges eliminated",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Single dominant variable: whether pretreatment infrastructure exists at all (3–5× swing). Facility scale matters — a large regional DC with high dock-door count pushes toward the top of the range; a smaller last-mile facility stays at the low end. Phase-2 commitment (biological pretreatment) roughly doubles the deal. All sizing is directional at LOW confidence pending first-call data."
+          },
+          "whatCouldKillIt": {
+            "insight": "No enforcement pressure means no urgency — the deal stalls unless the first conversation makes the cost of inaction vivid and specific.",
+            "risks": [
+              {
+                "name": "No-urgency stall",
+                "mechanism": "Without a regulatory driver or an enforcement event, the contact has no compulsion to act. A 'that's interesting, we'll look into it' response leads to a 6–12 month polite non-engagement. The deal never becomes a capital project.",
+                "mitigation": "In the first conversation, quantify the surcharge burden from the utility bill directly. Ask to see the bill. Turn the abstract 'high' into a specific dollar figure the contact can take to a decision-maker. Make the five-year cost of inaction visible before the call ends."
+              },
+              {
+                "name": "Wrong contact / no budget authority",
+                "mechanism": "The contact who reached out may be operational-level with no capital budget authority. Every technical conversation hits a 'let me check with finance or corporate' wall, and the deal never reaches a decision-maker.",
+                "mitigation": "Map the decision-maker landscape explicitly in the first conversation. Ask directly who owns the utility cost line and who would approve a capital project of this scale. Get a name and a role before committing to a second meeting."
+              },
+              {
+                "name": "Point-fix competitor pre-empts the frame",
+                "mechanism": "A local grease-trap service provider or plumbing contractor may already be in the facility's vendor list. If they propose a cheap clean-out or minor equipment service, the customer accepts it as the 'fix' without ever understanding the surcharge-elimination economics — and the deal collapses to a maintenance call.",
+                "mitigation": "Anchor the conversation on the surcharge bill specifically, not on equipment. The frame must be economic before any competing quote lands. Ask about the utility bill before asking about the equipment."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The single most valuable thing you can do before this call is decide what question gets the utility bill in front of you.",
+            "actions": [
+              {
+                "title": "Get the utility bill on the table",
+                "timeframe": "First call — within 7 days",
+                "body": "Open with: 'Before we talk about what we do, can you walk me through what's on the bill that's catching your attention — is it the total, or are there line items for strength surcharges like BOD, FOG, or TSS?' If they can share the bill, ask for it. The bill converts 'seems high' into a specific number you can work with. Without it, every subsequent conversation is directional."
+              },
+              {
+                "title": "Map the decision-maker landscape",
+                "timeframe": "First call — within 7 days",
+                "body": "Ask directly: 'If we found a way to structurally reduce that cost, who in your organization would own that decision — is that you, or does it go to facilities management, finance, or corporate?' You need to know whether this contact can move a capital project or whether you need a second contact. Get both the role and the person before the call ends."
+              },
+              {
+                "title": "Pre-qualify the facility scale",
+                "timeframe": "First call / follow-up — within 14 days",
+                "body": "Ask about facility type and scale: number of dock doors, whether there's any food processing or preparation on site (vs pure distribution), and whether they have any existing grease interceptor or pretreatment equipment. This pins the sizing range from LOW confidence to at least MEDIUM-LOW — and tells you whether this is a $200K interceptor job or a $1–2M pretreatment project."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "playbook",
+      "payload": {
+        "customer": {
+          "name": "Regional Food Distribution Center",
+          "location": "Distribution Center (site TBD)",
+          "slug": "food-distro-inbound"
+        },
+        "stage": "Lead",
+        "subtitle": "First-call qualification questions — converting 'bills seem high' into a scoped opportunity",
+        "header": {
+          "subStreams": [
+            "Industrial discharge / food & beverage POTW indirect discharger — high-strength organics (BOD/TSS/FOG)"
+          ],
+          "stageIntro": "This is your first real conversation. You have one signal: 'wastewater bills seem high.' Every question in this playbook serves one of two purposes — quantifying the surcharge burden, or mapping the decision landscape. Don't leave the call without progress on both.",
+          "insight": "The utility bill is the deal. Get it on the table before the call ends.",
+          "orientationLine": "Cold inbound at Lead stage — no data shared, no site visit, no permit limits known."
+        },
+        "themes": [
+          {
+            "title": "Open the economic reframe",
+            "framing": "Your job in the first two minutes is to establish that 'high bills' is a specific, solvable problem — not background noise. These questions surface the actual dollar figure and the driver behind it.",
+            "questions": [
+              "Can you walk me through what's on that wastewater bill that caught your attention — is it the total dollar amount, or are there line items for things like BOD, FOG, or strength surcharges?",
+              "How long have the bills been running at this level — has it crept up over time, or did something change recently?",
+              "Do you have a recent bill handy, or could you share one before our next conversation? Even a one-month snapshot tells us a lot.",
+              "Has anyone from the POTW or the municipal utility been in touch about what's driving the charges?"
+            ],
+            "whyItMatters": [
+              "The surcharge line item — not the volumetric charge — is where the addressable cost lives. If the contact can't identify surcharge line items, the first step is helping them read the bill.",
+              "How long they've been paying tells you how normalized the pain is — and how hard the urgency conversation will be."
+            ],
+            "accentIndex": 0
+          },
+          {
+            "title": "Qualify the facility and its loading profile",
+            "framing": "You need enough about the facility's footprint and operations to directionally size the opportunity. You're not engineering yet — you're anchoring the range.",
+            "questions": [
+              "What does the facility actually do — is it pure distribution and cross-docking, or is there any food preparation, portioning, or processing happening on site?",
+              "Roughly how many dock doors are you running, and what's the daily throughput look like?",
+              "Are there floor drains tied into the sewer system in dock areas, cooler rooms, or any wash-down areas?",
+              "Do you have any grease interceptors or pretreatment equipment on site currently — even basic grease traps?"
+            ],
+            "whyItMatters": [
+              "Whether there's food processing versus pure distribution is the single biggest swing factor in loading — it can move the opportunity 3–5× in scope.",
+              "Existing pretreatment infrastructure (even undersized) is different from zero — it changes the scope from new installation to retrofit."
+            ],
+            "accentIndex": 1
+          },
+          {
+            "title": "Surface the regulatory posture",
+            "framing": "No enforcement driver is in evidence, but that doesn't mean none exists. These questions determine whether the POTW has already signaled concern.",
+            "questions": [
+              "Have you received anything in writing from the utility or POTW about your discharge — notices, letters, requests for sampling data?",
+              "Are you currently on any kind of pretreatment program or monitoring requirement with the municipal utility?",
+              "Has the utility ever requested a sample from your discharge point, or do you self-monitor anything?"
+            ],
+            "accentIndex": 2
+          },
+          {
+            "title": "Map the decision landscape",
+            "framing": "The contact who reached out may or may not own the budget. This is the most important structural question on the call — you need to know it before you commit to a second meeting.",
+            "questions": [
+              "If we found a way to structurally reduce that cost, who in your organization would own that decision — is that you, or does it go to facilities management, finance, or a corporate level?",
+              "Is this a site-level decision, or does a capital project of any size need to go up to regional or corporate for approval?",
+              "Who else has visibility on the wastewater cost line — does someone in finance or operations track it separately?"
+            ],
+            "whyItMatters": [
+              "If the contact can't approve a capital project, you need a second contact before the second meeting. Every call that ends without this answer risks a 'let me check with X' wall that stalls the deal for months."
+            ],
+            "accentIndex": 3
+          },
+          {
+            "title": "Surface competing alternatives already in play",
+            "framing": "A grease-trap service provider or local plumbing contractor may already be in their vendor list. If they've already been quoted a cheap clean-out, you need to know before you frame the economics.",
+            "questions": [
+              "Has anyone else looked at this for you — a plumber, a grease-trap service, or a utility consultant?",
+              "Have you gotten any quotes or proposals for this already, even informal ones?",
+              "What's your current maintenance relationship for floor drains and any existing interceptor equipment?"
+            ],
+            "accentIndex": 4
+          },
+          {
+            "title": "Test the win-win anchor",
+            "framing": "Different decision-makers respond to different frames. These questions surface which outcome matters most to this contact — and tell you which win-win argument to lead with in your follow-up.",
+            "questions": [
+              "If you could wave a wand and fix this, what does success look like — is it a lower bill, a predictable bill, or getting ahead of something you're worried about?",
+              "Is the concern primarily cost, or is there any worry about where regulations might be heading for facilities like yours?",
+              "Has this come up with your leadership — is it on anyone's radar as something that needs to be addressed, or is it still just on yours?"
+            ],
+            "accentIndex": 5
+          },
+          {
+            "title": "Set the next step",
+            "framing": "This call has one job: earn the right to a second, substantive conversation. These questions pin the concrete next move before you hang up.",
+            "questions": [
+              "Would you be open to a 30-minute working session where I walk through what the surcharge line items actually mean and what a remediation looks like economically?",
+              "If I put together a rough cost-of-inaction number based on your bill and facility type, would that be worth a conversation with the person who owns the capital budget?",
+              "What's the fastest path to getting a utility bill in front of me — even just a photo of the page that shows the surcharge breakdown?"
+            ],
+            "whyItMatters": [
+              "The goal of this call is a second call — with the utility bill on the table and the decision-maker in the room. If you leave without a concrete next step on both, the deal stalls."
+            ],
+            "accentIndex": 6
+          }
+        ]
+      }
+    },
+    {
+      "kind": "analytical-read",
+      "payload": {
+        "customer": {
+          "name": "Regional Food Distribution Center",
+          "location": "Distribution Center (site TBD)",
+          "slug": "food-distro-inbound"
+        },
+        "subtitle": "Evidenced read on a cold-inbound surcharge complaint — food distribution center, stage Lead",
+        "subStreamsLine": "Sub-streams: high-strength organics pretreatment (BOD/TSS/FOG), POTW indirect discharge compliance, phase-2 biological pretreatment",
+        "closingInsight": "The do-nothing path at this facility is not free — it is a recurring surcharge penalty that will likely exceed the capital cost of solving it within five years, and it grows as POTWs tighten local limits. The first conversation's only job is making that arithmetic visible to the person who can act on it.",
+        "summary": "Cold inbound from a regional food distribution center contact reporting elevated wastewater bills. No data, permit limits, or treatment configuration has been shared. Sub-stream: industrial-discharge / food-and-beverage POTW indirect discharger, high-strength organics (BOD/TSS/FOG). Directional deal range $150K–$2M at LOW confidence. Stage: Lead. All sizing is orientation-level pending first-call discovery.",
+        "flags": [
+          {
+            "id": "ATTN-01",
+            "severity": "ATTENTION",
+            "evidence": "Evidence base is a single verbal data point (INBOUND-01). All sizing, loading assumptions, and regulatory posture assessments are derived from lens cheat-sheet ranges and canonical food-distribution facility profiles — not site data. Confidence ceiling is LOW until first-call data is obtained.",
+            "status": "Open — advances to SPECIALIST if first call fails to produce any operational data"
+          }
+        ],
+        "subStreamLens": [
+          {
+            "subStream": "High-strength organics / FOG pretreatment",
+            "activeCondition": "Elevated sewer-use surcharges reported by contact; mass loading, flow, and permit limits unknown. Canonical food distribution facility loading profile assumed pending data.",
+            "evidenceAnchor": "INBOUND-01"
+          },
+          {
+            "subStream": "POTW indirect discharge compliance",
+            "activeCondition": "No NOV or formal compliance action in evidence. Contact's language ('bills seem high') consistent with chronic surcharge over-payment rather than active enforcement. Regulatory posture of receiving POTW unknown.",
+            "evidenceAnchor": "INBOUND-01"
+          },
+          {
+            "subStream": "Phase-2 biological pretreatment",
+            "activeCondition": "Not yet surfaced with customer. Activated if facility flow >50K GPD or BOD loading is material after Phase 1 assessment. POTW limit-tightening trend provides the regulatory rationale.",
+            "evidenceAnchor": "LENS-CHEAT-SHEET"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Utility bill with surcharge line items — pins the addressable cost burden",
+            "status": "Not provided",
+            "source": "INBOUND-01"
+          },
+          {
+            "required": "Decision-maker identified by role — confirms whether the contact has budget authority",
+            "status": "Unknown",
+            "source": "INBOUND-01"
+          },
+          {
+            "required": "Facility scale and flow indication — dock-door count, daily throughput, floor-drain configuration",
+            "status": "Not provided",
+            "source": "INBOUND-01"
+          },
+          {
+            "required": "Existing pretreatment infrastructure — confirms whether scope is new install or retrofit",
+            "status": "Unknown",
+            "source": "INBOUND-01"
+          },
+          {
+            "required": "Contact's willingness to engage on scope of work — confirms deal is real",
+            "status": "Unconfirmed",
+            "source": "INBOUND-01"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex (Year 0) — do-nothing path",
+            "basis": "No pretreatment capital outlay under do-nothing; facility continues discharging above local limits",
+            "confidence": "HIGH"
+          },
+          {
+            "row": "Capex (Year 0) — our path: $150K–$800K (Phase 1)",
+            "basis": "Lens cheat-sheet: FOG interceptor upgrade or new install + EQ + pH adjustment at food distribution facility scale; driver of range is whether interceptor infrastructure exists at all",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Ongoing surcharges, 5yr — do-nothing: $250K–$1M",
+            "basis": "Directional: $50K–$200K/yr at typical industrial FOG/BOD surcharge rates ($0.50–$2.00/lb BOD, $1.00–$5.00/lb FOG) × estimated food distribution facility loading; actual figure requires utility bill",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Ongoing surcharges, 5yr — our path: eliminated or near-zero",
+            "basis": "Pretreatment system designed to bring mass loading inside local limits; residual minor variability possible",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit if POTW issues compliance order (Yr 2–4) — do-nothing: $200K–$600K",
+            "basis": "Emergency installation premium 20–40% above planned capex; timing risk increases as POTWs tighten local limits under their own regulatory pressure",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit — our path: included in Phase 1 scope",
+            "basis": "Phase 1 designed to preclude compliance order; no emergency premium",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "5-Year Total — do-nothing: ~$450K–$1.6M + enforcement tail",
+            "basis": "Sum of surcharges + forced retrofit risk; enforcement tail qualitative (NOV $10K–$50K/day per parameter if escalated)",
+            "confidence": "LOW"
+          },
+          {
+            "row": "5-Year Total — our path: ~$150K–$800K capex, surcharges eliminated",
+            "basis": "Phase 1 capex only; surcharge elimination begins post-commissioning; Phase 2 additional if flow warrants",
+            "confidence": "LOW"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "A contact at a regional food distribution center initiated an inbound inquiry reporting that wastewater bills 'seem high' and asking whether we operate in the wastewater space. No site visit has occurred. No operational data (flows, concentrations, discharge volumes), permit limits, or treatment configuration details have been shared. The contact's role within the organization is unknown. No regulatory action (NOV, pretreatment compliance order, or informal POTW communication) is in evidence. The opportunity is classified at Lead stage with MEDIUM confidence; advancement to Qualify requires a substantive first conversation with a utility bill or operational data in hand.",
+            "evidenceTags": ["INBOUND-01"],
+            "evidenceSource": "INBOUND-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "The opportunity maps to a single sub-stream: industrial-discharge / food-and-beverage POTW indirect discharger, high-strength organics. Food distribution centers are canonical generators of high-BOD/TSS/FOG wastewater from dock wash, floor drain discharge, cold-storage condensate, and food-waste sluicing. In the absence of on-site pretreatment, these facilities routinely incur POTW surcharges on BOD, TSS, and FOG above local limits. A phase-2 sub-stream (biological pretreatment) is conditionally in scope if flow volumes are material; this is not advanced to the customer until Phase 1 scoping is complete.",
+            "evidenceTags": ["INBOUND-01", "LENS-CHEAT-SHEET"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Evidence base",
+            "body": "The evidence base at Lead stage consists of a single verbal data point: the contact's report that wastewater bills 'seem high.' No permit limits, no eDMR data, no flow or mass-loading estimates, no utility bill, and no knowledge of existing treatment configuration are in evidence. All sizing is derived from lens cheat-sheet ranges and food-distribution facility canonical loading profiles — not from site-specific data. The following gaps are required before sizing can advance beyond LOW confidence.",
+            "evidenceTags": ["INBOUND-01"],
+            "table": [
+              {
+                "Item": "Utility bill showing surcharge line items",
+                "Status": "Not provided",
+                "Impact on sizing": "Highest — pins the addressable surcharge burden"
+              },
+              {
+                "Item": "Facility flow and dock-door count",
+                "Status": "Not provided",
+                "Impact on sizing": "High — drives 3–5× range variance"
+              },
+              {
+                "Item": "Existing pretreatment infrastructure",
+                "Status": "Unknown",
+                "Impact on sizing": "High — new install vs retrofit is a major scope driver"
+              },
+              {
+                "Item": "Permit limits / local pretreatment standards",
+                "Status": "Unknown",
+                "Impact on sizing": "Medium — sets the compliance target"
+              },
+              {
+                "Item": "POTW enforcement posture",
+                "Status": "Unknown",
+                "Impact on urgency": "Medium — determines whether enforcement risk is near-term"
+              }
+            ],
+            "evidenceSource": "INBOUND-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Customer behaviour read",
+            "body": "The 'bills seem high' framing indicates a low-urgency economic complaint that the contact has normalized. There is no enforcement driver in evidence; the contact reached out from curiosity or a recent spike rather than regulatory pressure. The cold inbound and absence of shared data suggests no internal champion, no active procurement motion, and possibly no formal environmental function. The contact is likely operational or facilities-level — the person who sees the invoice — rather than EHS or corporate finance. The gap between what they said ('high bills') and the likely reality (a chronic, quantifiable surcharge penalty) is the reframe the first conversation must deliver.",
+            "evidenceTags": ["INBOUND-01"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "Phase 1 (deal anchor): FOG interceptor upgrade or new installation, equalization, and pH adjustment targeting BOD/TSS/FOG mass-loading reduction to bring the facility inside local POTW limits and eliminate recurring surcharge charges. Directional capex $150K–$800K depending on facility flow and whether interceptor infrastructure exists at all. Phase 2 (prize): on-site biological pretreatment (package DAF or aerobic package plant) for facilities with material flow (>50K GPD), addressing BOD and TSS reduction at scale as POTW limits tighten. Directional capex $500K–$2M. Combined deal range: $150K–$2M at LOW confidence. Dominant variable: absence of any flow, mass-loading, or existing-infrastructure data.",
+            "evidenceTags": ["LENS-CHEAT-SHEET"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The customer's do-nothing BATNA is a continuing monthly surcharge payment with no capital outlay but an accumulating cost that exceeds most pretreatment capital investments over a 5-year horizon. The table below prices the do-nothing path against our proposed path using lens cheat-sheet ranges and typical industrial surcharge rates. All figures are directional at LOW confidence pending site data.",
+            "evidenceTags": ["LENS-CHEAT-SHEET", "INBOUND-01"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "No STOP or SPECIALIST flags are active at Lead stage based on available evidence. One ATTENTION flag is recorded. Absence of STOP flags reflects absence of data — not confirmed absence of risk. Site-visit and first-call discovery may surface additional flags.",
+            "evidenceTags": ["INBOUND-01"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Stage classification and gap analysis",
+            "body": "Stage: Lead. Confidence: MEDIUM. The deal presents as a genuine early-stage opportunity with one confirmed signal (inbound inquiry from facility contact) and no confirmed data. Advancement to Qualify requires: (1) a substantive first conversation producing a utility bill or documented problem statement, (2) at least one decision-maker identified by role, and (3) confirmation that the contact is willing to engage on the scope of work. Nice-to-have for Qualify: 12-month utility bill history, basic facility operating data (dock-door count, daily throughput, floor-drain configuration), any prior vendor contacts or quotes.",
+            "evidenceTags": ["INBOUND-01"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not promise yet",
+            "body": "At Lead stage, the following are explicitly outside our commitment: (1) any specific sizing, capex figure, or surcharge-reduction guarantee — all figures are directional ranges from lens cheat-sheet baselines, not site-specific engineering estimates; (2) identification of the receiving POTW's specific local limits or enforcement posture; (3) any finding that a specific pretreatment technology is required — technology selection requires flow and mass-loading data; (4) any regulatory determination on whether the facility is subject to a specific categorical pretreatment standard; (5) any funding pathway eligibility determination — that requires the project to reach Scope stage with a defined capital figure.",
+            "evidenceTags": ["INBOUND-01"],
+            "confidenceTier": "LOW"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "proposal-shell",
+      "payload": {
+        "customer": {
+          "name": "Regional Food Distribution Center",
+          "location": "Distribution Center (site TBD)",
+          "slug": "food-distro-inbound"
+        },
+        "subtitle": "Lead-stage scoping seed — orientation only, not for external distribution",
+        "executiveSummary": "This document is a placeholder scoping seed at Lead stage. A full Proposal Shell will be generated when the opportunity advances to Qualify or Scope, at which point flow data, permit limits, and existing infrastructure details will anchor a defensible scope and pricing range. At this stage, the commercial case is directional only: food distribution facilities operating above local POTW limits for BOD, TSS, or FOG typically incur $50K–$200K/yr in avoidable surcharges. A right-sized pretreatment solution in the range of $150K–$800K (Phase 1) typically eliminates that burden within a 3–5 year payback horizon. All figures are orientation-level pending first-call discovery.",
+        "proposedScope": [
+          "Phase 1 (indicative): FOG interception, equalization, and pH adjustment — scope and sizing to be determined following site visit and utility bill review.",
+          "Phase 2 (conditional): On-site biological pretreatment if flow volumes and BOD loading warrant — to be evaluated following Phase 1 scoping."
+        ],
+        "sizingAndPricing": "Too early for a defensible pricing range. Directional orientation only: Phase 1 $150K–$800K, Phase 2 (if warranted) $500K–$2M. LOW confidence. Dominant variable: whether interceptor infrastructure exists at all (3–5× scope swing). A firm scoping range requires at minimum: one utility bill showing surcharge line items, facility flow indication, and confirmation of existing pretreatment infrastructure. All figures subject to site assessment, engineering scoping, and decision-maker confirmation.",
+        "schedule": "To be determined. Schedule development begins at Qualify stage following a site visit and utility bill review. A typical Phase 1 pretreatment installation (interceptor retrofit or new install) runs 3–6 months from engineering-to-commissioning depending on site constraints and permitting.",
+        "commitments": [
+          {
+            "label": "What this document is not",
+            "text": "This shell is not a proposal, a quote, or a commitment of any kind. It is an internal scoping seed produced at Lead stage for field agent reference only. No scope, pricing, schedule, or regulatory determination in this document should be shared with the customer in this form."
+          },
+          {
+            "label": "Next development trigger",
+            "text": "This shell will be developed into a full Proposal Shell (1–2 pages at Qualify, 2–3 pages at Scope) when the deal advances. Advancement requires: utility bill with surcharge line items, decision-maker identified by role, facility scale indication, and confirmation of existing pretreatment infrastructure."
+          }
+        ],
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — Lead stage, not for distribution. To be developed into a full Proposal Shell upon advancement to Qualify or Scope.",
+        "outOfScope": [
+          {
+            "heading": "Regulatory determinations",
+            "body": "No determination of applicable categorical pretreatment standards, local limit applicability, or POTW enforcement posture is made in this document. Those assessments require site data and are Assessment-mode work."
+          },
+          {
+            "heading": "Technology selection",
+            "body": "No specific pretreatment technology is recommended at this stage. Technology selection requires flow data, mass-loading characterization, and space assessment — none of which are available."
+          },
+          {
+            "heading": "Funding pathway eligibility",
+            "body": "No funding pathway eligibility determination is made at Lead stage. Applicable funding mechanisms will be assessed when the project reaches Scope and a capital figure is established."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Utility bill with surcharge line items obtained",
+            "closer": "Field agent — request during first call"
+          },
+          {
+            "gate": "Decision-maker with budget authority identified by role",
+            "closer": "Field agent — ask directly in first call"
+          },
+          {
+            "gate": "Facility flow and existing pretreatment infrastructure confirmed",
+            "closer": "Field agent — first call or site visit"
+          },
+          {
+            "gate": "Contact willing to engage on scope of work",
+            "closer": "Field agent — close first call with concrete next step"
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "inputTokens": 211949,
+    "outputTokens": 11963,
+    "costUsd": 0.815292
+  },
+  "stepCount": 9,
+  "finalText": "Your package is ready. Here's the headline before you read the brief:\n\n---\n\n**This is a recurring surcharge penalty disguised as a high utility bill — and it's solvable.** The do-nothing path likely costs this facility **$450K–$1.6M over five years** in avoidable surcharges and forced-retrofit risk. The fix (Phase 1: FOG intercept + EQ + pH adjustment) probably runs **$150K–$800K** — meaning the capital investment pays back from operating savings alone, typically within 3–5 years. All of this is at **LOW confidence** until the first call — the dominant variable is whether you can get the utility bill on the table.\n\n---\n\n### Your four documents\n\n| Document | What it's for |\n|---|---|\n| 📋 [**Field Brief**](?threadId=eval-edge-case-minimal-evidence-lead-full-package-lRHGe_iC4LKpRV79BiMt_&kind=field-brief) | Read this first — the 3-minute strategic brief before the call |\n| 🗣️ [**Conversation Playbook**](?threadId=eval-edge-case-minimal-evidence-lead-full-package-lRHGe_iC4LKpRV79BiMt_&kind=playbook) | Keep open on the call — 7 themed question sets |\n| 📊 [**Analytical Read**](?threadId=eval-edge-case-minimal-evidence-lead-full-package-lRHGe_iC4LKpRV79BiMt_&kind=analytical-read) | For your manager — evidence-tagged, defensible |\n| 📄 [**Proposal Shell**](?threadId=eval-edge-case-minimal-evidence-lead-full-package-lRHGe_iC4LKpRV79BiMt_&kind=proposal-shell) | Placeholder only at Lead — fills out when you advance |\n\n---\n\n### The three things the first call must do\n\n1. **Get the utility bill.** Ask for it on the call — even a photo of the surcharge page. Without it, every number stays directional and the conversation stays abstract.\n2. **Map who owns the budget decision.** Ask directly: *\"If we found a way to cut that cost structurally, who in your organization owns that call — is that you?\"* If the answer is no, you need a second contact before you schedule a second meeting.\n3. **Make the five-year arithmetic visible.** Before the call ends, plant this: *\"Most facilities like yours are paying $50K–$200K a year in strength surcharges — that's $250K–$1M over five years — and the fix typically costs less than that. Let me show you what the numbers look like for your situation.\"* If that lands, you have a deal. If it doesn't land, you're still at Lead.\n\nBring the Playbook into the call — it's built around exactly these three priorities."
+}

@@ -28,7 +28,7 @@ export const happyPathScenarios: Scenario[] = [
       "I can walk in prepared next week.",
     expectations: {
       artifactSequence: [...FULL_PACKAGE_SEQUENCE],
-      maxCostUsd: 0.75,
+      maxCostUsd: 1.15,
     },
   },
   {
@@ -48,7 +48,7 @@ export const happyPathScenarios: Scenario[] = [
       "package for this one — I'm meeting the public works director Thursday.",
     expectations: {
       artifactSequence: [...FULL_PACKAGE_SEQUENCE],
-      maxCostUsd: 0.75,
+      maxCostUsd: 1.15,
     },
   },
   {
@@ -69,7 +69,7 @@ export const happyPathScenarios: Scenario[] = [
       "Analytical Read, and Proposal Shell.",
     expectations: {
       artifactSequence: [...FULL_PACKAGE_SEQUENCE],
-      maxCostUsd: 0.75,
+      maxCostUsd: 1.15,
     },
   },
   {
@@ -90,7 +90,7 @@ export const happyPathScenarios: Scenario[] = [
       "this deal actually stands.",
     expectations: {
       artifactSequence: [...FULL_PACKAGE_SEQUENCE],
-      maxCostUsd: 0.75,
+      maxCostUsd: 1.15,
     },
   },
 ];

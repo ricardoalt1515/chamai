@@ -1,0 +1,1180 @@
+{
+  "scenarioId": "happy-path-municipality-npdes-renewal",
+  "modelId": "claude-sonnet-4-6",
+  "recordedAt": "2026-06-09T23:47:35.746Z",
+  "toolCalls": [
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-evidence-and-context"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-stage-and-gaps"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-positioning"
+      }
+    },
+    {
+      "step": 2,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-field-brief"
+      }
+    },
+    {
+      "step": 3,
+      "toolName": "generateFieldBrief",
+      "input": {
+        "customer": {
+          "name": "City of [Eastern TN Municipality]",
+          "location": "Municipal WWTP",
+          "county": "Eastern Tennessee County",
+          "state": "Tennessee",
+          "basin": "Tennessee River Basin"
+        },
+        "stage": "Qualify",
+        "confidence": "MEDIUM-LOW",
+        "date": "2025-07-17",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "CWSRF applications in Tennessee require a completed preliminary engineering report (PER) as a prerequisite. With 14 months to permit effective date and a typical 3–6 month SRF processing window, the city has approximately 60–90 days before the financing timeline becomes critically compressed.",
+          "No engineering study has been commissioned. Whoever scopes this project first shapes the design approach, the vendor relationship, and the CWSRF application. A competing municipal engineering firm awarded a PER before Thursday's follow-up would functionally pre-empt the engagement."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "The permit is already written. 1.5 mg/L ammonia and 1.0 mg/L phosphorus aren't negotiating points — they're enforceable limits in 14 months. The only open question is whether the city controls this capital project or TDEC does.",
+            "body": "A ~12,000-population eastern Tennessee municipality operates a trickling filter WWTP with no nitrification capacity and no phosphorus removal. Their NPDES permit renewal, due in 14 months, tightens ammonia from 4.0 to 1.5 mg/L and introduces a new 1.0 mg/L TP limit where none previously existed. Neither limit is achievable with the existing process train — this is a process-gap compliance project, not a fine-tuning problem. The Public Works Director has flagged it to council as a capital item and named CWSRF as the likely funding pathway, which signals an informed posture. No engineering study has been commissioned, which means the capital project is unpriced and unscoped. The 14-month window, combined with Tennessee SRF application requirements, makes this genuinely time-sensitive: a preliminary engineering report is a prerequisite for CWSRF eligibility, and the annual SRF priority list cycle means delays in scoping translate directly into financing risk."
+          },
+          "whatWeWouldPropose": {
+            "insight": "A biological nitrification addition (MBBR or activated sludge stage) plus chemical phosphorus removal delivers both permit limits in one capital project — financed through CWSRF at well below market rates. Their cost-of-alternative, fully priced, is not 'do nothing': it's enforcement, legal exposure, and an emergency procurement at a premium.",
+            "recommendedApproach": "Append a moving bed biofilm reactor (MBBR) nitrification stage to the existing trickling filter secondary train to achieve 1.5 mg/L ammonia compliance. Add chemical phosphorus removal (ferric chloride or alum dosing with clarifier contact time) to achieve 1.0 mg/L TP. Design the chemical feed system with future-proofing for a polishing filter addition if TDEC tightens TP to 0.5 mg/L in the next permit cycle. Package as a single CWSRF-eligible capital project. Estimated capex: $3.5–6.5M · MEDIUM-LOW confidence (design flow unconfirmed; driver is site footprint and existing clarifier capacity).",
+            "winWinArguments": [
+              {
+                "lead": "Compliance is non-negotiable — the question is cost of delivery.",
+                "body": "1.5 mg/L ammonia and 1.0 mg/L TP are achievable with a properly scoped biological + chemical retrofit. Getting the preliminary engineering report done now means the city controls the design, the schedule, and the CWSRF application — rather than being forced into an emergency procurement after a Notice of Violation. TDEC enforcement on missed NPDES limits typically runs $10–25K per day per parameter; a two-parameter exceedance at permit effective date creates a material and ongoing exposure."
+              },
+              {
+                "lead": "CWSRF financing cuts the city's net capital cost materially.",
+                "body": "Tennessee CWSRF rates currently run ~1.5–2.5% over 20-year terms. On a $4–5M project, that's roughly $800K–$1.2M in interest savings versus general obligation bond financing at current market rates. CWSRF eligibility requires a completed PER — which means starting scoping now is the prerequisite for capturing that savings. Delay compresses the SRF application timeline and may force the city onto a more expensive interim financing path."
+              },
+              {
+                "lead": "Right-sizing now avoids a second forced capital event in the next permit cycle.",
+                "body": "EPA's nutrient reduction framework and Tennessee's ongoing nutrient strategy work make a further TP tightening — toward 0.5 mg/L — plausible within 10 years. A plant designed now for 1.0 mg/L with no polishing capacity footprint will face a second capital mobilization at emergency timing. A well-scoped project can include the physical space and chemical infrastructure that makes a future polishing-filter addition straightforward rather than disruptive."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex — do-nothing / delay path",
+                "theirPath": "$0 now; emergency design-build procurement at premium timing after NOV (add 20–35% to capex)",
+                "ourProposal": "$3.5–6.5M, CWSRF-financed at ~1.5–2.5% / 20 yr"
+              },
+              {
+                "component": "CWSRF interest savings vs. GO bond (5 yr)",
+                "theirPath": "Market-rate GO bond (~4.5–5.5%) if CWSRF window missed",
+                "ourProposal": "~$800K–$1.2M interest savings retained by city"
+              },
+              {
+                "component": "TDEC enforcement exposure — NOV + Consent Order",
+                "theirPath": "$10–25K/day per exceeded parameter; two-parameter exceedance = $20–50K/day. Consent Order probable within 12–18 months of permit exceedance. Legal and consultant costs additional.",
+                "ourProposal": "Risk extinguished at permit effective date"
+              },
+              {
+                "component": "Emergency procurement premium",
+                "theirPath": "20–35% capex premium on design-build under enforcement timeline pressure",
+                "ourProposal": "Controlled competitive procurement under planned schedule"
+              },
+              {
+                "component": "Future TP retrofit (polishing, ~yr 8–12)",
+                "theirPath": "Second capital mobilization at emergency timing if TP tightens to 0.5 mg/L; estimated $1–2M additional",
+                "ourProposal": "Physical footprint and chemical infrastructure pre-positioned; polishing-filter addition straightforward"
+              },
+              {
+                "component": "5-year total (mid-range estimate)",
+                "theirPath": "~$5–9M+ including enforcement exposure, emergency premium, and interim financing costs",
+                "ourProposal": "~$3–5.5M net city cost after CWSRF interest savings; risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Range driver is design flow (not yet confirmed) and site footprint. At 1.0 MGD, project comes in toward the low end ($3.5–4.5M); at 1.5 MGD with constrained site, toward the high end ($5.5–6.5M). CWSRF financing affects deal pace and shape but not project size. Phase-2 polishing filter (if TP tightens) adds $1–2M as a future option."
+          },
+          "whatCouldKillIt": {
+            "insight": "The most immediate threat is a competing municipal engineering firm getting awarded the preliminary engineering report before we've had a scoping conversation. That pre-empts the design approach and the relationship. The second threat is the CWSRF timeline — 14 months sounds comfortable, but the PER prerequisite and annual SRF cycle make it tight.",
+            "risks": [
+              {
+                "name": "Competing engineer pre-empts the PER",
+                "mechanism": "If the city issues a PER RFQ to its existing municipal engineering relationships before we've had a scoping conversation, the project gets designed around that firm's preferred treatment approach. We're then bidding against a bespoke spec with an incumbent relationship advantage. This is the single most likely path to losing the deal before it's a deal.",
+                "mitigation": "Use Thursday's meeting to offer a preliminary scope-of-work framing — positioning our approach in the conversation before any PER RFQ goes out. Ask directly whether an engineering firm has already been contacted."
+              },
+              {
+                "name": "CWSRF timing squeeze",
+                "mechanism": "Tennessee SRF cycles are annual; CWSRF applications require a completed PER. If scoping doesn't begin within ~60–90 days, the PER won't be complete in time for the next priority list submission. The city would be forced onto interim or GO bond financing at market rate, increasing their net cost and potentially stalling council approval.",
+                "mitigation": "Bring the CWSRF critical path to Thursday's meeting. Show the PW Director the specific timeline: PER completion → SRF priority list submission → SRF application → loan closing. Make the timing risk visible before it becomes real."
+              },
+              {
+                "name": "Council sticker shock without cost-of-alternative framing",
+                "mechanism": "The council hasn't seen a priced capital item yet. If the first number they hear is $5M without context — without the enforcement exposure comparison and the CWSRF savings — the vote may fail or be deferred, stalling the project past the compliance window.",
+                "mitigation": "Lead the Thursday conversation with the cost-of-alternative framing before naming the capex number. Equip the PW Director with the comparison to take into the council presentation."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "You have one conversation window before the risk of a competing engineering study locks the design approach. Use Thursday to get our treatment approach into the conversation and surface the CWSRF timeline pressure — those two moves advance the deal to Scope.",
+            "actions": [
+              {
+                "title": "Surface competing engineer status — Thursday",
+                "timeframe": "≤ 7 days",
+                "body": "Ask directly whether an engineering firm has already been contacted about the PER or is under contract for the permit response. If yes, the deal is at risk of pre-emption and you need to move to a scoping offer immediately. If no, you have a window — use it."
+              },
+              {
+                "title": "Walk the CWSRF critical path with the PW Director",
+                "timeframe": "≤ 7 days (Thursday meeting)",
+                "body": "Bring a one-page CWSRF timeline showing PER → priority list → application → loan closing. The PW Director knows CWSRF is the pathway but may not have visualized the PER prerequisite and annual cycle against the 14-month permit window. Making the timeline concrete is the most direct path to a scoping commitment."
+              },
+              {
+                "title": "Request last 12 months of DMR data and plant design flow",
+                "timeframe": "7–14 days",
+                "body": "Current effluent ammonia and TP performance data pins the sizing range and sharpens the cost-of-alternative table. Design flow confirms whether the project comes in at $3.5M or $6.5M. These are the two gaps that most widen the current confidence range — get them before the next conversation."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "step": 4,
+      "toolName": "generatePlaybook",
+      "input": {
+        "customer": {
+          "name": "City of [Eastern TN Municipality]",
+          "location": "Municipal WWTP",
+          "state": "Tennessee",
+          "basin": "Tennessee River Basin"
+        },
+        "stage": "Qualify",
+        "subtitle": "NPDES Permit Renewal — Ammonia & Phosphorus Compliance Capital",
+        "header": {
+          "subStreams": [
+            "Municipal nutrient compliance capital — ammonia nitrification, phosphorus removal"
+          ],
+          "stageIntro": "Qualify stage: decision-maker identified, regulatory driver confirmed, no engineering study yet. Goal for Thursday is to advance to Scope by securing a scoping conversation or site visit commitment.",
+          "insight": "You have one window before a competing engineering firm locks the design approach. Use Thursday to surface the CWSRF timeline pressure and position our treatment approach before any PER RFQ goes out."
+        },
+        "themes": [
+          {
+            "title": "Open the reframe",
+            "framing": "The permit is already written. Surface whether the PW Director understands this is a process-gap project, not a fine-tuning problem — and that the 14-month window is tighter than it looks once the CWSRF PER prerequisite is factored in.",
+            "questions": [
+              "When you think about what the plant needs to do to hit 1.5 mg/L ammonia, what's your read on the gap between where you are today and where you need to be?",
+              "Has TDEC given any indication there's room to negotiate the 1.0 mg/L phosphorus limit, or is the draft permit effectively final?",
+              "If the permit becomes effective and you're still in your current configuration, what does TDEC enforcement typically look like in this situation?"
+            ],
+            "whyItMatters": [
+              "The customer's answer here tells you whether they've internalized the process-gap reality or are still hoping for a negotiated out. The negotiated-out posture is the most dangerous framing — it delays scoping and compresses the CWSRF window.",
+              "TDEC enforcement awareness directly sets up the cost-of-alternative argument."
+            ]
+          },
+          {
+            "title": "Surface the CWSRF timeline pressure",
+            "framing": "The PW Director has named CWSRF as the pathway — they know it exists. The question is whether they've mapped the PER prerequisite and the annual SRF cycle against the 14-month permit window. Make the critical path visible.",
+            "questions": [
+              "Have you had a chance to map out what the CWSRF application process looks like against your permit renewal timeline?",
+              "Do you know when the next Tennessee SRF priority list submission window is?",
+              "Has the city done a CWSRF project before, or would this be your first application?",
+              "If the preliminary engineering report isn't ready in time for the next SRF cycle, what's the backup financing plan — general obligation bond, or something else?"
+            ],
+            "whyItMatters": [
+              "Most PW Directors know CWSRF exists but haven't visualized the PER-first prerequisite. Walking through the critical path in Thursday's meeting is the single most direct path to a scoping commitment.",
+              "A GO bond at current market rates (4.5–5.5%) vs CWSRF (~1.5–2.5%) on a $4–5M project is $800K–$1.2M in savings. That number belongs in the PW Director's council presentation."
+            ]
+          },
+          {
+            "title": "Surface the decision landscape",
+            "framing": "The PW Director flagged this to council, but who else needs to be in the room? Finance, city manager, board of public utilities? Understanding who approves a capital item of this size changes how the deal gets structured.",
+            "questions": [
+              "When you brought this to the council, what was their reaction — is this already on the capital plan, or is it still being scoped as a concept?",
+              "For a capital project in the $3–6M range, what's the approval pathway — council vote, utility board, city manager sign-off?",
+              "Is there a city engineer or outside consultant already engaged who would be involved in scoping this project?",
+              "Who else would you want in the room when we get into the technical details — plant superintendent, finance director?"
+            ]
+          },
+          {
+            "title": "Surface the operational reality",
+            "framing": "Get the data that pins the sizing range. Design flow and current effluent performance are the two variables that move the project from $3.5M to $6.5M.",
+            "questions": [
+              "What's your current permitted design flow, and what are you actually running day-to-day?",
+              "Do you have DMR data from the last 12 months I could look at — specifically ammonia and total phosphorus effluent performance?",
+              "How is the existing trickling filter performing on BOD and TSS — are you comfortably within those limits, or are there other compliance concerns?",
+              "What's the condition of the secondary clarifier — is there any known capacity constraint there?"
+            ],
+            "whyItMatters": [
+              "Design flow and current effluent ammonia/TP data are the two inputs that most narrow the sizing range. Without them, the capital estimate spans $3.5–6.5M. With them, confidence goes from MEDIUM-LOW to MEDIUM."
+            ]
+          },
+          {
+            "title": "Surface competing alternatives and consultants",
+            "framing": "The most immediate deal risk is a competing municipal engineering firm getting awarded the PER before we've had a scoping conversation. Surface this directly.",
+            "questions": [
+              "Have you already reached out to any engineering firms about the permit response or a preliminary engineering study?",
+              "Does the city have an on-call engineering contract with a municipal consultant that would typically handle something like this?",
+              "Has any vendor or consultant already presented an approach to you — chemical-only, biological, MBBR, anything like that?",
+              "Is there a local or regional engineering firm the council tends to prefer for capital projects?"
+            ]
+          },
+          {
+            "title": "Anchor the treatment approach",
+            "framing": "Position biological nitrification (MBBR) plus chemical phosphorus removal as the approach that achieves both limits in one capital project. The alternative — chemical-only for phosphorus with no nitrification — won't get the city to 1.5 mg/L ammonia. Make that clear.",
+            "questions": [
+              "Has anyone walked you through what a treatment train that achieves both the ammonia and phosphorus limits simultaneously would look like?",
+              "Have you heard of moving bed biofilm reactor systems — MBBR — as a way to add nitrification capacity to an existing trickling filter plant?",
+              "What's your sense of the existing plant footprint — is there room for an additional biological treatment stage, or is space a significant constraint?",
+              "Are there any site constraints — electrical capacity, land availability, access — we should know about before getting into a scoping conversation?"
+            ]
+          },
+          {
+            "title": "Anchor the funding pathway",
+            "framing": "Reinforce the CWSRF pathway and make it concrete. The PW Director already named it — your job is to make the interest savings real and to show the PER-first prerequisite.",
+            "questions": [
+              "When you mentioned CWSRF to the council, did you have a sense of the interest rate differential versus a general obligation bond?",
+              "Has the city's financial advisor been looped in on the CWSRF pathway yet?",
+              "Are there any other capital projects currently in the CWSRF pipeline for the city that might affect your capacity to take on another SRF loan?"
+            ]
+          },
+          {
+            "title": "Anchor the timeline",
+            "framing": "Make the permit date concrete and work backward. The 14-month window plus the PER prerequisite creates a real scheduling constraint the council needs to see.",
+            "questions": [
+              "What's the exact effective date on the draft permit renewal — do you have the TDEC correspondence?",
+              "Has the council set a timeline for deciding whether to commission an engineering study?",
+              "Is there a capital budget cycle coming up — annual budget adoption, bond referendum — that this project needs to feed into?",
+              "If you had to break ground on this project by what date to be in compliance by permit effective date, what would your contractor say?"
+            ]
+          },
+          {
+            "title": "Surface the phase-2 horizon",
+            "framing": "Tennessee is not done with nutrients. If TDEC follows EPA's nutrient framework and tightens TP further — toward 0.5 mg/L — a plant designed for 1.0 mg/L with no polishing capacity footprint faces a second capital event. Surface this without alarming.",
+            "questions": [
+              "Are you aware of any ongoing TDEC rulemaking or EPA guidance that might push phosphorus limits tighter in the next permit cycle?",
+              "If the TP limit were to tighten to 0.5 mg/L in 10 years, would you want the current project designed to accommodate that, or would you address it then?",
+              "Has TDEC mentioned any watershed-level nutrient targets that might drive future limit changes for your discharge point?"
+            ]
+          },
+          {
+            "title": "Test the win-win argument",
+            "framing": "Find out which of the three value anchors — compliance control, CWSRF savings, future-proofing — lands hardest with this PW Director. Their answer shapes the council presentation framing.",
+            "questions": [
+              "When you think about what success looks like on this project, what's the primary outcome — hitting the permit limits, keeping the council's cost exposure down, or both?",
+              "If you could quantify the benefit of getting this done now versus waiting, what number would matter most to the council — total project cost, annual debt service, or avoided enforcement risk?",
+              "How much weight does the council put on future regulatory risk versus current budget certainty?"
+            ]
+          },
+          {
+            "title": "Set the next step",
+            "framing": "Leave Thursday with a concrete commitment. A site visit, a scoping conversation with the plant superintendent, or agreement to share DMR data are all acceptable. Anything that advances to Scope.",
+            "questions": [
+              "Would it be useful to do a quick site walk so we can give you a more precise scoping estimate before any engineering study goes out to bid?",
+              "Could you get me access to the last 12 months of DMR data before our next conversation?",
+              "Is there a point in the next 30 days where it would make sense to bring in our process engineer to walk through the treatment approach in more detail?",
+              "What would you need to see from us to feel comfortable recommending to the council that we move forward with a scoping engagement?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "step": 5,
+      "toolName": "generateAnalyticalRead",
+      "input": {
+        "customer": {
+          "name": "City of [Eastern TN Municipality]",
+          "location": "Municipal WWTP, ~12,000 population served",
+          "state": "Tennessee",
+          "basin": "Tennessee River Basin"
+        },
+        "subtitle": "Evidenced read on the nutrient compliance capital requirement at NPDES permit renewal",
+        "subStreamsLine": "Sub-streams: biological nitrification addition, chemical phosphorus removal, CWSRF financing pathway, future nutrient horizon",
+        "summary": "A ~12,000-population municipal trickling filter WWTP in eastern Tennessee faces a process-gap compliance project driven by simultaneous NPDES permit tightening: ammonia from 4.0 to 1.5 mg/L and a new 1.0 mg/L total phosphorus limit. Neither limit is achievable with the existing plant configuration. Permit renewal is 14 months out; no engineering study has been commissioned. The Public Works Director has named CWSRF as the financing pathway. Deal is at Qualify stage; the primary risks are competing engineer pre-emption of the preliminary engineering report and a CWSRF timeline squeeze. Directional capex: $3.5–6.5M · MEDIUM-LOW confidence.",
+        "gateState": "OPEN_WITH_CONDITIONS",
+        "gateContent": "Opportunity is open for advancement. Conditions: (1) no competing engineering study has been awarded; (2) CWSRF application timeline remains viable given permit effective date. Both conditions require Thursday meeting confirmation.",
+        "flags": [
+          {
+            "id": "CWSRF-TIMING",
+            "severity": "SPECIALIST",
+            "evidence": "Tennessee SRF applications require a completed preliminary engineering report (PER). With 14 months to permit effective date and a typical 3–6 month SRF processing window, scoping must begin within ~60–90 days to preserve CWSRF eligibility. Annual priority list cycle compounds the risk.",
+            "status": "Monitor — confirm at Thursday meeting"
+          },
+          {
+            "id": "PER-PRE-EMPTION",
+            "severity": "SPECIALIST",
+            "evidence": "No engineering study has been commissioned per field agent report. City may have existing on-call municipal engineering relationships that would receive a PER RFQ by default. If awarded before scoping conversation, design approach is locked to that firm's preferred treatment train.",
+            "status": "Surface at Thursday meeting"
+          },
+          {
+            "id": "FLOW-DATA-ABSENT",
+            "severity": "ATTENTION",
+            "evidence": "Plant design flow and current effluent NH3/TP performance are not in the case file. Design flow is the primary driver of the capex range ($3.5M vs $6.5M). Sizing remains MEDIUM-LOW confidence until confirmed.",
+            "status": "Request DMR data and design flow at Thursday meeting"
+          }
+        ],
+        "subStreamLens": [
+          {
+            "subStream": "Biological nitrification addition",
+            "activeCondition": "Existing trickling filter has no nitrification capacity. NPDES draft permit requires 1.5 mg/L NH3 monthly average — not achievable without a dedicated biological nitrification stage. MBBR appended to existing secondary train is the primary candidate; activated sludge stage is the alternative.",
+            "evidenceAnchor": "FIELD-REPORT-01"
+          },
+          {
+            "subStream": "Chemical phosphorus removal",
+            "activeCondition": "New 1.0 mg/L TP limit in draft NPDES renewal where no limit previously existed. No chemical P removal currently installed. Ferric chloride or alum dosing with existing clarifier contact time is the primary approach; polishing filter addition is the future-proofing option if TDEC tightens to 0.5 mg/L.",
+            "evidenceAnchor": "FIELD-REPORT-01"
+          },
+          {
+            "subStream": "CWSRF financing pathway",
+            "activeCondition": "Public Works Director has identified CWSRF as the intended financing vehicle. Tennessee SRF requires a completed PER as a prerequisite. Annual priority list cycle makes PER timeline the critical path constraint for maintaining CWSRF eligibility within the permit window.",
+            "evidenceAnchor": "FIELD-REPORT-01"
+          },
+          {
+            "subStream": "Future nutrient horizon (TP polishing)",
+            "activeCondition": "EPA nutrient framework and Tennessee's ongoing nutrient strategy work create a credible pathway to TP tightening (0.5 mg/L) in the next permit cycle (~10 years). Current project scope should include physical footprint and chemical infrastructure pre-positioning for polishing filter addition.",
+            "evidenceAnchor": "NUTRIENT-HORIZON-01"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Confirm no engineering study has been awarded to a competing consultant",
+            "status": "OPEN — unconfirmed",
+            "source": "Thursday meeting"
+          },
+          {
+            "required": "Obtain plant design flow and last 12 months of DMR data (NH3, TP, BOD, TSS)",
+            "status": "OPEN — not in case file",
+            "source": "PW Director / plant superintendent"
+          },
+          {
+            "required": "Confirm TDEC draft permit status — is 1.0 mg/L TP negotiable or final?",
+            "status": "OPEN — unknown",
+            "source": "Thursday meeting"
+          },
+          {
+            "required": "Identify capital approval pathway (council vote, utility board, city manager authority) and timeline",
+            "status": "OPEN — unknown",
+            "source": "Thursday meeting"
+          },
+          {
+            "required": "Confirm CWSRF priority list submission window and next cycle deadline",
+            "status": "OPEN — unknown",
+            "source": "Tennessee CWSRF program office confirmation"
+          },
+          {
+            "required": "Secure scoping conversation or site visit commitment to advance to Scope stage",
+            "status": "OPEN — target Thursday",
+            "source": "Thursday meeting"
+          },
+          {
+            "required": "Identify whether other decision-makers (finance director, city manager) need to be in the room before capital commitment",
+            "status": "OPEN — unknown",
+            "source": "Thursday meeting"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex — controlled vs emergency procurement",
+            "basis": "CWSRF-financed design-bid-build at planned schedule vs design-build under enforcement timeline; 20–35% emergency premium is industry-observed for time-pressured municipal procurement",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "CWSRF interest savings vs GO bond (20-year term)",
+            "basis": "TN SRF rates ~1.5–2.5% vs current GO bond market ~4.5–5.5%; on $4–5M principal, NPV savings ~$800K–$1.2M over 20 years",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "TDEC enforcement exposure — NOV + Consent Order",
+            "basis": "TDEC civil penalty authority $10–25K/day per parameter; two-parameter exceedance (NH3 + TP) at permit effective date; Consent Order probable within 12–18 months of continuous exceedance",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Future TP polishing retrofit (year 8–12)",
+            "basis": "Polishing filter addition at emergency timing vs pre-positioned footprint; lens range $1–2M incremental; pre-positioning in current scope reduces future mobilization cost materially",
+            "confidence": "LOW"
+          },
+          {
+            "row": "5-year total — their delay path vs our CWSRF path",
+            "basis": "Enforcement exposure + emergency procurement premium + GO bond premium vs CWSRF-financed controlled project; their path: $5–9M+ risk-adjusted; our path: ~$3–5.5M net city cost",
+            "confidence": "LOW"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "This opportunity involves a small eastern Tennessee municipality (~12,000 population) operating a trickling filter WWTP facing simultaneous tightening of its NPDES permit at renewal. The draft permit reduces the monthly average ammonia limit from 4.0 to 1.5 mg/L and introduces a new 1.0 mg/L total phosphorus limit where no phosphorus limit previously existed. The existing plant has no biological nitrification capacity and no chemical phosphorus removal. Neither permit limit is achievable with the current process configuration — this is a process-gap compliance project, not a fine-tuning problem.\n\nThe Public Works Director has flagged this to the city council as an upcoming capital item and has identified CWSRF as the intended financing vehicle. No engineering study has been commissioned. The permit renewal window is 14 months. The primary engagement risk is that a competing municipal engineering firm receives a PER RFQ before a scoping conversation has taken place.\n\nDeal stage: Qualify (MEDIUM confidence). Single sub-stream. Single decision-maker authority (PW Director, with council approval required for capital authorization). One procurement vehicle (CWSRF capital project).",
+            "evidenceTags": ["FIELD-REPORT-01"],
+            "evidenceSource": "FIELD-REPORT-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "Lens: municipal-wet-weather / nutrient-compliance-capital. Single primary sub-stream with a secondary future-proofing sub-stream.\n\nThe nitrification sub-stream is the deal anchor. No biological nitrification exists on the current trickling filter train. Achieving 1.5 mg/L ammonia monthly average requires a dedicated nitrification stage — moving bed biofilm reactor (MBBR) appended to the existing secondary train is the primary candidate given its retrofit suitability and smaller footprint requirements relative to a full activated sludge expansion.\n\nThe phosphorus removal sub-stream is co-located and co-funded with the nitrification project. Ferric chloride or alum dosing with existing clarifier contact time is the primary approach for 1.0 mg/L TP. Chemical feed infrastructure installed now should be designed to accommodate future polishing filter addition if TDEC tightens the TP limit.\n\nThe CWSRF financing sub-stream is a prerequisite pathway constraint, not a separate deal. It governs timing: the PER is a prerequisite for CWSRF eligibility, and the annual SRF priority list cycle means PER timing directly determines whether CWSRF financing is available within the permit window.\n\nA credible future sub-stream exists: TP polishing (toward 0.5 mg/L) as a follow-on capital event if EPA's nutrient framework drives further Tennessee tightening. Physical footprint pre-positioning in the current project scope makes this future sub-stream a simple addition rather than a disruptive retrofit.",
+            "evidenceTags": ["FIELD-REPORT-01", "NUTRIENT-HORIZON-01"],
+            "evidenceSource": "FIELD-REPORT-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "Primary lens: municipal-wet-weather (nutrient compliance capital sub-case). This is a POTW capital project driven by NPDES permit tightening at renewal — the canonical application of this lens at small-municipality scale.\n\nUnit economics floor (lens cheat-sheet): secondary and tertiary capacity additions at small POTW scale run $4–10M per MGD design capacity. At estimated design flow of 1.0–1.5 MGD, the lens range yields $4–15M before site-specific adjustment. The nitrification-only retrofit (MBBR addition) at this scale is at the lower end of the lens; combined nitrification + phosphorus removal at a constrained existing site is toward the middle. Directional project estimate: $3.5–6.5M, with design flow as the primary driver of range.",
+            "evidenceTags": [],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "A single capital project addressing both permit limits is the correct scope. Splitting nitrification and phosphorus removal into sequential phases would require two mobilizations, two CWSRF applications, and two council authorizations for a project that is operationally and physically integrated.\n\nRecommended treatment train: MBBR nitrification stage appended to the existing trickling filter secondary effluent stream → chemical phosphorus removal (ferric or alum dosing) in a contact chamber ahead of or within the existing secondary clarifier → effluent polishing if needed for TP compliance confirmation.\n\nDesign the chemical feed infrastructure with excess chemical dose capacity and physical footprint for a future polishing filter addition (sand or cloth media filtration with enhanced coagulation) to address a potential future 0.5 mg/L TP limit without requiring new civil work.\n\nPackage as a single CWSRF-eligible capital project with a preliminary engineering report as the first deliverable. PER scope should include: existing plant characterization (flows, current effluent performance), treatment alternatives analysis (MBBR vs. activated sludge nitrification), preliminary design, capital cost estimate (Class 3 or equivalent), and CWSRF application support.\n\nDirectional capex: $3.5–6.5M · MEDIUM-LOW confidence. Driver of range: design flow (unconfirmed); site footprint and existing clarifier capacity. Confidence advances to MEDIUM upon receipt of design flow and DMR data.",
+            "evidenceTags": ["FIELD-REPORT-01"],
+            "evidenceSource": "FIELD-REPORT-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three outcomes are material for this customer:\n\nCompliance control vs. enforcement timeline. A planned, scoped capital project commissioned before the permit becomes effective keeps the city in control of schedule, procurement, and design. If the permit becomes effective and the city is still in its current configuration, TDEC enforcement authority activates — civil penalties, a Consent Order probable within 12–18 months, and the associated legal and consultant costs. Under an enforcement timeline, the city loses procurement flexibility and pays a premium for design-build delivery.\n\nCWSRF interest savings are real and quantifiable. Tennessee SRF rates (~1.5–2.5%, 20-year term) represent a material savings versus general obligation bond financing at current market rates (~4.5–5.5%). On a $4–5M project, the NPV savings over a 20-year term runs approximately $800K–$1.2M. This is a number the council can use in a budget presentation. It is available only if the PER is completed in time for the CWSRF priority list submission.\n\nFuture-proofing against the next tightening. EPA's nutrient reduction framework and Tennessee's ongoing nutrient rulemaking work make a further TP tightening — toward 0.5 mg/L — a credible planning horizon within the next 10 years. A plant designed for 1.0 mg/L with no polishing footprint will face a second capital mobilization at whatever timing TDEC dictates. Pre-positioning the physical footprint and chemical infrastructure now converts that future event from a disruptive retrofit to a manageable addition.",
+            "evidenceTags": ["FIELD-REPORT-01", "TN-SRF-RATE-REF", "EPA-NUTRIENT-FRAMEWORK"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The cost of the alternative is the fully-priced exposure under a delay or do-nothing path over five years. The comparison is not 'spend $5M now vs. spend nothing' — it is 'spend $3–5.5M now, controlled, CWSRF-financed' vs. 'spend $5–9M+ over five years under enforcement pressure, at market financing rates, with a two-parameter civil penalty exposure running in the background.'\n\nThe bottom-line claim: their delay path costs the city approximately $5–9M+ over five years when enforcement exposure, emergency procurement premium, and GO bond financing costs are priced in. The CWSRF-financed capital path comes in at approximately $3–5.5M net city cost over the same period, with compliance risk extinguished at permit effective date.",
+            "evidenceTags": ["TDEC-ENF-REF", "TN-SRF-RATE-REF", "FIELD-REPORT-01"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Compliance & safety",
+            "body": "No STOP-level safety flags are active on this engagement. Two SPECIALIST-level flags are open and must be confirmed at Thursday's meeting.\n\nThe CWSRF timing flag (CWSRF-TIMING) reflects the structural reality that Tennessee SRF applications require a PER as a prerequisite and operate on an annual priority list cycle. With 14 months to permit effective date and a 3–6 month SRF processing window, the scoping start window is approximately 60–90 days from today before CWSRF eligibility within the permit window becomes uncertain.\n\nThe PER pre-emption flag (PER-PRE-EMPTION) reflects the commercial risk that the city may have existing on-call engineering relationships that would receive a PER RFQ by default. If awarded before a scoping conversation has taken place, the design approach is locked to the awarding firm's preferred treatment train. This flag is the primary deal-loss mechanism at the current stage.\n\nThe flow data flag (FLOW-DATA-ABSENT) is an ATTENTION-level analytical gap: without design flow and current effluent data, the capex estimate spans a $3M range. This is a sizing precision issue, not a compliance or commercial risk.",
+            "evidenceTags": ["FIELD-REPORT-01"]
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "See structured flag inventory above.",
+            "evidenceTags": []
+          },
+          {
+            "heading": "Funding pathway analysis",
+            "body": "CWSRF is the correct primary pathway for this project. Tennessee's Clean Water SRF program provides low-interest loans (typically 1.5–2.5% below market rate, 20-year terms) for NPDES compliance capital projects at municipal POTWs. A nutrient compliance retrofit of this type is a straightforward eligible use.\n\nPrerequisite: a completed preliminary engineering report (PER) meeting Tennessee CWSRF application requirements. Tennessee CWSRF operates on an annual priority list cycle; the submission deadline and next cycle opening date should be confirmed with the Tennessee CWSRF program office immediately.\n\nSecondary funding considerations: the BIL/IIJA Emerging Contaminants Grant program has passed its primary funding rounds for PFAS-focused projects, but general CWSRF supplemental capitalization from BIL has increased available loan capacity in most state SRF programs. Confirm with Tennessee program office whether additional principal forgiveness or grant overlay is available for small and disadvantaged community provisions — a 12,000-population municipality may qualify.\n\nGO bond backup: if CWSRF timing is missed, a general obligation bond is the most likely alternative. Current market rates (~4.5–5.5%) represent a materially higher cost over a 20-year term. This pathway should be characterized to the council as the backup, not the primary, to preserve CWSRF urgency.",
+            "evidenceTags": ["TN-SRF-RATE-REF", "BIL-SRF-REF"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not promise yet",
+            "body": "The following items are deliberately not committed to at this stage and require Assessment-mode work before they can be confirmed:\n\nSpecific capital cost. The $3.5–6.5M range is directional and based on lens unit economics at estimated design flow. A Class 3 capital cost estimate requires a completed preliminary engineering study with site characterization, treatment alternatives analysis, and preliminary design.\n\nProcess performance guarantee on effluent NH3 and TP. Performance at 1.5 mg/L ammonia and 1.0 mg/L TP is achievable with the proposed approach; confirmation of steady-state performance at the specific site requires pilot or plant performance data from the PER phase.\n\nCWSRF application outcome. CWSRF loan approval is subject to Tennessee SRF program capacity, priority list ranking, and application completeness. We support the application process but do not guarantee loan approval or timeline.\n\nRegulatory negotiation outcome on TP limit. Whether there is room to negotiate the 1.0 mg/L TP limit in the NPDES renewal is a question for the customer and TDEC. We size to the draft permit as written; a negotiated relaxation would not materially change the recommended approach.",
+            "evidenceTags": []
+          }
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "toolName": "generateProposalShell",
+      "input": {
+        "customer": {
+          "name": "City of [Eastern TN Municipality]",
+          "location": "Municipal WWTP",
+          "state": "Tennessee",
+          "basin": "Tennessee River Basin"
+        },
+        "subtitle": "NPDES Permit Compliance — Nutrient Removal Capital Project | Scoping-Stage Summary",
+        "executiveSummary": "The City's NPDES permit renewal, due in approximately 14 months, tightens the monthly average ammonia limit from 4.0 to 1.5 mg/L and introduces a new 1.0 mg/L total phosphorus limit where no limit previously existed. The existing trickling filter plant has no biological nitrification capacity and no chemical phosphorus removal. Neither limit is achievable with the current process configuration without capital investment.\\n\\nThe recommended approach is a single capital project combining a moving bed biofilm reactor (MBBR) nitrification stage appended to the existing trickling filter secondary train, plus chemical phosphorus removal (ferric chloride or alum dosing) integrated into the existing clarifier. This approach achieves both permit limits in one project, qualifies as a single CWSRF-eligible capital loan, and can be designed to accommodate future TP tightening without additional civil mobilization.\\n\\nThe cost of delay is not zero. Under a do-nothing or emergency-procurement path, the city faces: TDEC civil penalties of $10–25K per day per exceeded parameter upon permit exceedance; a Consent Order probable within 12–18 months of continuous non-compliance; emergency design-build procurement at a 20–35% capex premium; and general obligation bond financing at current market rates (~4.5–5.5%) if the CWSRF priority list window is missed. The CWSRF-financed controlled path comes in at an estimated $3.5–6.5M directional capex (MEDIUM-LOW confidence, pending engineering study) at approximately 1.5–2.5% over 20 years — representing approximately $800K–$1.2M in interest savings versus GO bond financing on this project size. Their fully-priced delay path: ~$5–9M+ over five years. Our path: ~$3–5.5M net city cost, compliance risk extinguished.",
+        "proposedScope": [
+          "Preliminary Engineering Report (PER): Existing plant characterization (flows, current effluent performance, secondary clarifier capacity), treatment alternatives analysis (MBBR vs. activated sludge nitrification), preliminary design for combined nitrification and phosphorus removal, Class 3 capital cost estimate, and Tennessee CWSRF application support documentation.",
+          "Biological nitrification addition: Moving bed biofilm reactor (MBBR) stage appended to the existing trickling filter secondary train effluent, sized to achieve a 1.5 mg/L monthly average ammonia limit at design flow and peak loading conditions.",
+          "Chemical phosphorus removal: Ferric chloride or alum chemical feed system with contact chamber integration into the existing secondary clarification process, sized to achieve a 1.0 mg/L total phosphorus monthly average limit.",
+          "Future-proofing design provisions: Physical footprint reservation and chemical feed over-capacity designed to accommodate a future polishing filter addition (cloth or sand media filtration with enhanced coagulation) in the event that TDEC tightens the TP limit to 0.5 mg/L in a subsequent permit cycle. No additional civil mobilization required for the future addition if provisions are incorporated in the current project.",
+          "CWSRF application support: Preparation and submission of Tennessee CWSRF priority list application, loan application documentation, and coordination with the State Revolving Fund program office."
+        ],
+        "sizingAndPricing": "Directional capex: $3.5–6.5M · MEDIUM-LOW confidence. This range is based on lens unit economics at estimated design flow (1.0–1.5 MGD, unconfirmed). The primary driver of the range is confirmed design flow and existing secondary clarifier capacity. At 1.0 MGD design flow with available site footprint, the project comes in toward the low end ($3.5–4.5M). At 1.5 MGD with constrained site conditions, toward the high end ($5.5–6.5M). A Class 3 capital cost estimate (±30%) is produced as part of the Preliminary Engineering Report. All figures are directional, subject to engineering study, and not for use in council appropriations or CWSRF applications without PER completion.",
+        "schedule": "Phase 1 — Preliminary Engineering Report: ~4–5 months from notice to proceed. Delivers Class 3 cost estimate, CWSRF application documentation, and preliminary design. Must begin within approximately 60–90 days to preserve CWSRF priority list eligibility within the permit renewal window.\\n\\nPhase 2 — Final Design and CWSRF Application: ~4–6 months concurrent with or immediately following PER. CWSRF loan closing targeted for approximately 9–11 months from PER NTP.\\n\\nPhase 3 — Construction: ~12–18 months following CWSRF loan closing. Schedule is driven by permit effective date; construction completion targeted for compliance at or before permit effective date.\\n\\nAll schedule milestones are directional and conditional on PER NTP timing, CWSRF priority list cycle deadlines, and council authorization. The critical path item is PER initiation — delay beyond 60–90 days compresses CWSRF availability within the permit window.",
+        "commitments": [
+          {
+            "label": "Scope boundary",
+            "text": "This document covers biological nitrification (MBBR) and chemical phosphorus removal only. Biosolids handling, wet-weather hydraulics, PFAS, and collection system work are explicitly excluded."
+          },
+          {
+            "label": "Capex range",
+            "text": "$3.5–6.5M directional capex · MEDIUM-LOW confidence. Range narrows to MEDIUM upon receipt of confirmed design flow and DMR data and completion of preliminary engineering study. Not for use in council appropriations or CWSRF applications without PER completion.",
+            "owner": "Confirmed in PER phase"
+          },
+          {
+            "label": "CWSRF support",
+            "text": "PER scope includes Tennessee CWSRF priority list application preparation and loan application documentation. CWSRF loan approval is subject to program capacity and priority list ranking — not guaranteed."
+          },
+          {
+            "label": "Future-proofing design provisions",
+            "text": "Current project scope to include physical footprint reservation and chemical feed over-capacity for future polishing filter addition. No additional civil mobilization required for future TP polishing if provisions are incorporated in Phase 1 design."
+          },
+          {
+            "label": "Schedule dependency",
+            "text": "CWSRF-eligible schedule requires PER NTP within approximately 60–90 days from today. Delay beyond this window compresses CWSRF availability within the permit renewal timeline.",
+            "date": "60–90 day PER NTP window"
+          }
+        ],
+        "fundingPathway": "Primary: Tennessee Clean Water State Revolving Fund (CWSRF). Eligible use — NPDES compliance capital at municipal POTW. Prerequisite: completed preliminary engineering report. Application requires priority list submission (annual cycle — confirm next deadline with Tennessee program office). Loan terms: approximately 1.5–2.5% interest, up to 20-year repayment. Small-community principal forgiveness provisions may apply — confirm with program office.\\n\\nSecondary (backup): General Obligation Bond at current market rates (~4.5–5.5%). Estimated $800K–$1.2M higher cost over loan term vs. CWSRF. Recommended as backup only.\\n\\nNote: BIL/IIJA supplemental CWSRF capitalization has increased available SRF loan capacity in Tennessee. Confirm whether additional principal forgiveness or grant overlay is available for the City's population and income classification.",
+        "riskAllocation": "This document is a scoping-stage seed. Risk allocation language is directional pending preliminary engineering study and formal proposal.\\n\\nProcess performance: Treatment process performance to permit limits (1.5 mg/L NH3, 1.0 mg/L TP) is a design obligation contingent on design flow and loading conditions confirmed in the PER. Performance at loadings materially exceeding design flow is outside the guarantee envelope.\\n\\nCWSRF timing: CWSRF application support is included in scope; loan approval and timing are subject to Tennessee SRF program capacity and priority list ranking. No guarantee of loan approval or timing is made at this stage.\\n\\nSchedule: Construction completion targeting permit effective date compliance is achievable on the schedule above, conditional on PER NTP within the 60–90 day window. Delay in NTP shifts the schedule accordingly.",
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — Qualify stage. For internal scoping use only. Not for distribution to customer or regulatory agencies. Scope, sizing, and schedule are directional pending preliminary engineering study.",
+        "sizingRows": [
+          {
+            "label": "Estimated design flow (unconfirmed)",
+            "value": "1.0–1.5 MGD"
+          },
+          {
+            "label": "Directional total project capex",
+            "value": "$3.5–6.5M · MEDIUM-LOW confidence"
+          },
+          {
+            "label": "CWSRF financing rate (TN, typical)",
+            "value": "~1.5–2.5% / 20-year term"
+          },
+          {
+            "label": "Estimated interest savings vs. GO bond",
+            "value": "~$800K–$1.2M over loan term"
+          },
+          {
+            "label": "Cost-of-alternative (delay path, 5-yr)",
+            "value": "~$5–9M+ risk-adjusted"
+          },
+          {
+            "label": "Net city cost (CWSRF path, 5-yr)",
+            "value": "~$3–5.5M, risk extinguished"
+          },
+          {
+            "label": "Confidence driver",
+            "value": "Design flow and clarifier capacity (unconfirmed; narrows to MEDIUM upon PER completion)"
+          }
+        ],
+        "outOfScope": [
+          {
+            "heading": "Biosolids handling and disposal",
+            "body": "Any changes to sludge handling, digestion, dewatering, or biosolids land-application resulting from increased biological solids production are not included in this scope and are deferred to a future assessment phase."
+          },
+          {
+            "heading": "Wet-weather / hydraulic capacity",
+            "body": "Hydraulic capacity evaluation and any wet-weather overflow compliance are not included in this scope. If the PER identifies a hydraulic capacity constraint that affects compliance with the nutrient limits, scope will be revised accordingly."
+          },
+          {
+            "heading": "PFAS or emerging contaminant compliance",
+            "body": "No PFAS or emerging contaminant assessment or treatment scope is included at this stage. If industrial contributors to the collection system introduce PFAS loading concerns, a separate source-control or pretreatment assessment would be required."
+          },
+          {
+            "heading": "Collection system rehabilitation",
+            "body": "Sewer collection system work, I/I reduction, or manhole/pipe rehabilitation are not included in this scope."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Confirm no competing engineering study has been awarded or is pending",
+            "closer": "PW Director — Thursday meeting"
+          },
+          {
+            "gate": "Obtain plant design flow and last 12 months of DMR data to narrow capex range to MEDIUM confidence",
+            "closer": "PW Director / plant superintendent — request at Thursday meeting"
+          },
+          {
+            "gate": "Confirm TDEC draft permit status on 1.0 mg/L TP limit (negotiable vs. final)",
+            "closer": "PW Director / TDEC permit contact"
+          },
+          {
+            "gate": "Confirm Tennessee CWSRF next priority list submission deadline",
+            "closer": "Field agent — Tennessee CWSRF program office contact"
+          },
+          {
+            "gate": "Identify capital approval authority and next council / utility board vote timeline",
+            "closer": "PW Director — Thursday meeting"
+          },
+          {
+            "gate": "Secure scoping conversation or site visit commitment",
+            "closer": "Thursday meeting — target outcome"
+          }
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "field-brief",
+      "payload": {
+        "customer": {
+          "name": "City of [Eastern TN Municipality]",
+          "location": "Municipal WWTP",
+          "county": "Eastern Tennessee County",
+          "state": "Tennessee",
+          "basin": "Tennessee River Basin"
+        },
+        "stage": "Qualify",
+        "confidence": "MEDIUM-LOW",
+        "date": "2025-07-17",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "CWSRF applications in Tennessee require a completed preliminary engineering report (PER) as a prerequisite. With 14 months to permit effective date and a typical 3–6 month SRF processing window, the city has approximately 60–90 days before the financing timeline becomes critically compressed.",
+          "No engineering study has been commissioned. Whoever scopes this project first shapes the design approach, the vendor relationship, and the CWSRF application. A competing municipal engineering firm awarded a PER before Thursday's follow-up would functionally pre-empt the engagement."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "The permit is already written. 1.5 mg/L ammonia and 1.0 mg/L phosphorus aren't negotiating points — they're enforceable limits in 14 months. The only open question is whether the city controls this capital project or TDEC does.",
+            "body": "A ~12,000-population eastern Tennessee municipality operates a trickling filter WWTP with no nitrification capacity and no phosphorus removal. Their NPDES permit renewal, due in 14 months, tightens ammonia from 4.0 to 1.5 mg/L and introduces a new 1.0 mg/L TP limit where none previously existed. Neither limit is achievable with the existing process train — this is a process-gap compliance project, not a fine-tuning problem. The Public Works Director has flagged it to council as a capital item and named CWSRF as the likely funding pathway, which signals an informed posture. No engineering study has been commissioned, which means the capital project is unpriced and unscoped. The 14-month window, combined with Tennessee SRF application requirements, makes this genuinely time-sensitive: a preliminary engineering report is a prerequisite for CWSRF eligibility, and the annual SRF priority list cycle means delays in scoping translate directly into financing risk."
+          },
+          "whatWeWouldPropose": {
+            "insight": "A biological nitrification addition (MBBR or activated sludge stage) plus chemical phosphorus removal delivers both permit limits in one capital project — financed through CWSRF at well below market rates. Their cost-of-alternative, fully priced, is not 'do nothing': it's enforcement, legal exposure, and an emergency procurement at a premium.",
+            "recommendedApproach": "Append a moving bed biofilm reactor (MBBR) nitrification stage to the existing trickling filter secondary train to achieve 1.5 mg/L ammonia compliance. Add chemical phosphorus removal (ferric chloride or alum dosing with clarifier contact time) to achieve 1.0 mg/L TP. Design the chemical feed system with future-proofing for a polishing filter addition if TDEC tightens TP to 0.5 mg/L in the next permit cycle. Package as a single CWSRF-eligible capital project. Estimated capex: $3.5–6.5M · MEDIUM-LOW confidence (design flow unconfirmed; driver is site footprint and existing clarifier capacity).",
+            "winWinArguments": [
+              {
+                "lead": "Compliance is non-negotiable — the question is cost of delivery.",
+                "body": "1.5 mg/L ammonia and 1.0 mg/L TP are achievable with a properly scoped biological + chemical retrofit. Getting the preliminary engineering report done now means the city controls the design, the schedule, and the CWSRF application — rather than being forced into an emergency procurement after a Notice of Violation. TDEC enforcement on missed NPDES limits typically runs $10–25K per day per parameter; a two-parameter exceedance at permit effective date creates a material and ongoing exposure."
+              },
+              {
+                "lead": "CWSRF financing cuts the city's net capital cost materially.",
+                "body": "Tennessee CWSRF rates currently run ~1.5–2.5% over 20-year terms. On a $4–5M project, that's roughly $800K–$1.2M in interest savings versus general obligation bond financing at current market rates. CWSRF eligibility requires a completed PER — which means starting scoping now is the prerequisite for capturing that savings. Delay compresses the SRF application timeline and may force the city onto a more expensive interim financing path."
+              },
+              {
+                "lead": "Right-sizing now avoids a second forced capital event in the next permit cycle.",
+                "body": "EPA's nutrient reduction framework and Tennessee's ongoing nutrient strategy work make a further TP tightening — toward 0.5 mg/L — plausible within 10 years. A plant designed now for 1.0 mg/L with no polishing capacity footprint will face a second capital mobilization at emergency timing. A well-scoped project can include the physical space and chemical infrastructure that makes a future polishing-filter addition straightforward rather than disruptive."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex — do-nothing / delay path",
+                "theirPath": "$0 now; emergency design-build procurement at premium timing after NOV (add 20–35% to capex)",
+                "ourProposal": "$3.5–6.5M, CWSRF-financed at ~1.5–2.5% / 20 yr"
+              },
+              {
+                "component": "CWSRF interest savings vs. GO bond (5 yr)",
+                "theirPath": "Market-rate GO bond (~4.5–5.5%) if CWSRF window missed",
+                "ourProposal": "~$800K–$1.2M interest savings retained by city"
+              },
+              {
+                "component": "TDEC enforcement exposure — NOV + Consent Order",
+                "theirPath": "$10–25K/day per exceeded parameter; two-parameter exceedance = $20–50K/day. Consent Order probable within 12–18 months of permit exceedance. Legal and consultant costs additional.",
+                "ourProposal": "Risk extinguished at permit effective date"
+              },
+              {
+                "component": "Emergency procurement premium",
+                "theirPath": "20–35% capex premium on design-build under enforcement timeline pressure",
+                "ourProposal": "Controlled competitive procurement under planned schedule"
+              },
+              {
+                "component": "Future TP retrofit (polishing, ~yr 8–12)",
+                "theirPath": "Second capital mobilization at emergency timing if TP tightens to 0.5 mg/L; estimated $1–2M additional",
+                "ourProposal": "Physical footprint and chemical infrastructure pre-positioned; polishing-filter addition straightforward"
+              },
+              {
+                "component": "5-year total (mid-range estimate)",
+                "theirPath": "~$5–9M+ including enforcement exposure, emergency premium, and interim financing costs",
+                "ourProposal": "~$3–5.5M net city cost after CWSRF interest savings; risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Range driver is design flow (not yet confirmed) and site footprint. At 1.0 MGD, project comes in toward the low end ($3.5–4.5M); at 1.5 MGD with constrained site, toward the high end ($5.5–6.5M). CWSRF financing affects deal pace and shape but not project size. Phase-2 polishing filter (if TP tightens) adds $1–2M as a future option."
+          },
+          "whatCouldKillIt": {
+            "insight": "The most immediate threat is a competing municipal engineering firm getting awarded the preliminary engineering report before we've had a scoping conversation. That pre-empts the design approach and the relationship. The second threat is the CWSRF timeline — 14 months sounds comfortable, but the PER prerequisite and annual SRF cycle make it tight.",
+            "risks": [
+              {
+                "name": "Competing engineer pre-empts the PER",
+                "mechanism": "If the city issues a PER RFQ to its existing municipal engineering relationships before we've had a scoping conversation, the project gets designed around that firm's preferred treatment approach. We're then bidding against a bespoke spec with an incumbent relationship advantage. This is the single most likely path to losing the deal before it's a deal.",
+                "mitigation": "Use Thursday's meeting to offer a preliminary scope-of-work framing — positioning our approach in the conversation before any PER RFQ goes out. Ask directly whether an engineering firm has already been contacted."
+              },
+              {
+                "name": "CWSRF timing squeeze",
+                "mechanism": "Tennessee SRF cycles are annual; CWSRF applications require a completed PER. If scoping doesn't begin within ~60–90 days, the PER won't be complete in time for the next priority list submission. The city would be forced onto interim or GO bond financing at market rate, increasing their net cost and potentially stalling council approval.",
+                "mitigation": "Bring the CWSRF critical path to Thursday's meeting. Show the PW Director the specific timeline: PER completion → SRF priority list submission → SRF application → loan closing. Make the timing risk visible before it becomes real."
+              },
+              {
+                "name": "Council sticker shock without cost-of-alternative framing",
+                "mechanism": "The council hasn't seen a priced capital item yet. If the first number they hear is $5M without context — without the enforcement exposure comparison and the CWSRF savings — the vote may fail or be deferred, stalling the project past the compliance window.",
+                "mitigation": "Lead the Thursday conversation with the cost-of-alternative framing before naming the capex number. Equip the PW Director with the comparison to take into the council presentation."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "You have one conversation window before the risk of a competing engineering study locks the design approach. Use Thursday to get our treatment approach into the conversation and surface the CWSRF timeline pressure — those two moves advance the deal to Scope.",
+            "actions": [
+              {
+                "title": "Surface competing engineer status — Thursday",
+                "timeframe": "≤ 7 days",
+                "body": "Ask directly whether an engineering firm has already been contacted about the PER or is under contract for the permit response. If yes, the deal is at risk of pre-emption and you need to move to a scoping offer immediately. If no, you have a window — use it."
+              },
+              {
+                "title": "Walk the CWSRF critical path with the PW Director",
+                "timeframe": "≤ 7 days (Thursday meeting)",
+                "body": "Bring a one-page CWSRF timeline showing PER → priority list → application → loan closing. The PW Director knows CWSRF is the pathway but may not have visualized the PER prerequisite and annual cycle against the 14-month permit window. Making the timeline concrete is the most direct path to a scoping commitment."
+              },
+              {
+                "title": "Request last 12 months of DMR data and plant design flow",
+                "timeframe": "7–14 days",
+                "body": "Current effluent ammonia and TP performance data pins the sizing range and sharpens the cost-of-alternative table. Design flow confirms whether the project comes in at $3.5M or $6.5M. These are the two gaps that most widen the current confidence range — get them before the next conversation."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "playbook",
+      "payload": {
+        "customer": {
+          "name": "City of [Eastern TN Municipality]",
+          "location": "Municipal WWTP",
+          "state": "Tennessee",
+          "basin": "Tennessee River Basin"
+        },
+        "stage": "Qualify",
+        "subtitle": "NPDES Permit Renewal — Ammonia & Phosphorus Compliance Capital",
+        "header": {
+          "subStreams": [
+            "Municipal nutrient compliance capital — ammonia nitrification, phosphorus removal"
+          ],
+          "stageIntro": "Qualify stage: decision-maker identified, regulatory driver confirmed, no engineering study yet. Goal for Thursday is to advance to Scope by securing a scoping conversation or site visit commitment.",
+          "insight": "You have one window before a competing engineering firm locks the design approach. Use Thursday to surface the CWSRF timeline pressure and position our treatment approach before any PER RFQ goes out."
+        },
+        "themes": [
+          {
+            "title": "Open the reframe",
+            "framing": "The permit is already written. Surface whether the PW Director understands this is a process-gap project, not a fine-tuning problem — and that the 14-month window is tighter than it looks once the CWSRF PER prerequisite is factored in.",
+            "questions": [
+              "When you think about what the plant needs to do to hit 1.5 mg/L ammonia, what's your read on the gap between where you are today and where you need to be?",
+              "Has TDEC given any indication there's room to negotiate the 1.0 mg/L phosphorus limit, or is the draft permit effectively final?",
+              "If the permit becomes effective and you're still in your current configuration, what does TDEC enforcement typically look like in this situation?"
+            ],
+            "whyItMatters": [
+              "The customer's answer here tells you whether they've internalized the process-gap reality or are still hoping for a negotiated out. The negotiated-out posture is the most dangerous framing — it delays scoping and compresses the CWSRF window.",
+              "TDEC enforcement awareness directly sets up the cost-of-alternative argument."
+            ]
+          },
+          {
+            "title": "Surface the CWSRF timeline pressure",
+            "framing": "The PW Director has named CWSRF as the pathway — they know it exists. The question is whether they've mapped the PER prerequisite and the annual SRF cycle against the 14-month permit window. Make the critical path visible.",
+            "questions": [
+              "Have you had a chance to map out what the CWSRF application process looks like against your permit renewal timeline?",
+              "Do you know when the next Tennessee SRF priority list submission window is?",
+              "Has the city done a CWSRF project before, or would this be your first application?",
+              "If the preliminary engineering report isn't ready in time for the next SRF cycle, what's the backup financing plan — general obligation bond, or something else?"
+            ],
+            "whyItMatters": [
+              "Most PW Directors know CWSRF exists but haven't visualized the PER-first prerequisite. Walking through the critical path in Thursday's meeting is the single most direct path to a scoping commitment.",
+              "A GO bond at current market rates (4.5–5.5%) vs CWSRF (~1.5–2.5%) on a $4–5M project is $800K–$1.2M in savings. That number belongs in the PW Director's council presentation."
+            ]
+          },
+          {
+            "title": "Surface the decision landscape",
+            "framing": "The PW Director flagged this to council, but who else needs to be in the room? Finance, city manager, board of public utilities? Understanding who approves a capital item of this size changes how the deal gets structured.",
+            "questions": [
+              "When you brought this to the council, what was their reaction — is this already on the capital plan, or is it still being scoped as a concept?",
+              "For a capital project in the $3–6M range, what's the approval pathway — council vote, utility board, city manager sign-off?",
+              "Is there a city engineer or outside consultant already engaged who would be involved in scoping this project?",
+              "Who else would you want in the room when we get into the technical details — plant superintendent, finance director?"
+            ]
+          },
+          {
+            "title": "Surface the operational reality",
+            "framing": "Get the data that pins the sizing range. Design flow and current effluent performance are the two variables that move the project from $3.5M to $6.5M.",
+            "questions": [
+              "What's your current permitted design flow, and what are you actually running day-to-day?",
+              "Do you have DMR data from the last 12 months I could look at — specifically ammonia and total phosphorus effluent performance?",
+              "How is the existing trickling filter performing on BOD and TSS — are you comfortably within those limits, or are there other compliance concerns?",
+              "What's the condition of the secondary clarifier — is there any known capacity constraint there?"
+            ],
+            "whyItMatters": [
+              "Design flow and current effluent ammonia/TP data are the two inputs that most narrow the sizing range. Without them, the capital estimate spans $3.5–6.5M. With them, confidence goes from MEDIUM-LOW to MEDIUM."
+            ]
+          },
+          {
+            "title": "Surface competing alternatives and consultants",
+            "framing": "The most immediate deal risk is a competing municipal engineering firm getting awarded the PER before we've had a scoping conversation. Surface this directly.",
+            "questions": [
+              "Have you already reached out to any engineering firms about the permit response or a preliminary engineering study?",
+              "Does the city have an on-call engineering contract with a municipal consultant that would typically handle something like this?",
+              "Has any vendor or consultant already presented an approach to you — chemical-only, biological, MBBR, anything like that?",
+              "Is there a local or regional engineering firm the council tends to prefer for capital projects?"
+            ]
+          },
+          {
+            "title": "Anchor the treatment approach",
+            "framing": "Position biological nitrification (MBBR) plus chemical phosphorus removal as the approach that achieves both limits in one capital project. The alternative — chemical-only for phosphorus with no nitrification — won't get the city to 1.5 mg/L ammonia. Make that clear.",
+            "questions": [
+              "Has anyone walked you through what a treatment train that achieves both the ammonia and phosphorus limits simultaneously would look like?",
+              "Have you heard of moving bed biofilm reactor systems — MBBR — as a way to add nitrification capacity to an existing trickling filter plant?",
+              "What's your sense of the existing plant footprint — is there room for an additional biological treatment stage, or is space a significant constraint?",
+              "Are there any site constraints — electrical capacity, land availability, access — we should know about before getting into a scoping conversation?"
+            ]
+          },
+          {
+            "title": "Anchor the funding pathway",
+            "framing": "Reinforce the CWSRF pathway and make it concrete. The PW Director already named it — your job is to make the interest savings real and to show the PER-first prerequisite.",
+            "questions": [
+              "When you mentioned CWSRF to the council, did you have a sense of the interest rate differential versus a general obligation bond?",
+              "Has the city's financial advisor been looped in on the CWSRF pathway yet?",
+              "Are there any other capital projects currently in the CWSRF pipeline for the city that might affect your capacity to take on another SRF loan?"
+            ]
+          },
+          {
+            "title": "Anchor the timeline",
+            "framing": "Make the permit date concrete and work backward. The 14-month window plus the PER prerequisite creates a real scheduling constraint the council needs to see.",
+            "questions": [
+              "What's the exact effective date on the draft permit renewal — do you have the TDEC correspondence?",
+              "Has the council set a timeline for deciding whether to commission an engineering study?",
+              "Is there a capital budget cycle coming up — annual budget adoption, bond referendum — that this project needs to feed into?",
+              "If you had to break ground on this project by what date to be in compliance by permit effective date, what would your contractor say?"
+            ]
+          },
+          {
+            "title": "Surface the phase-2 horizon",
+            "framing": "Tennessee is not done with nutrients. If TDEC follows EPA's nutrient framework and tightens TP further — toward 0.5 mg/L — a plant designed for 1.0 mg/L with no polishing capacity footprint faces a second capital event. Surface this without alarming.",
+            "questions": [
+              "Are you aware of any ongoing TDEC rulemaking or EPA guidance that might push phosphorus limits tighter in the next permit cycle?",
+              "If the TP limit were to tighten to 0.5 mg/L in 10 years, would you want the current project designed to accommodate that, or would you address it then?",
+              "Has TDEC mentioned any watershed-level nutrient targets that might drive future limit changes for your discharge point?"
+            ]
+          },
+          {
+            "title": "Test the win-win argument",
+            "framing": "Find out which of the three value anchors — compliance control, CWSRF savings, future-proofing — lands hardest with this PW Director. Their answer shapes the council presentation framing.",
+            "questions": [
+              "When you think about what success looks like on this project, what's the primary outcome — hitting the permit limits, keeping the council's cost exposure down, or both?",
+              "If you could quantify the benefit of getting this done now versus waiting, what number would matter most to the council — total project cost, annual debt service, or avoided enforcement risk?",
+              "How much weight does the council put on future regulatory risk versus current budget certainty?"
+            ]
+          },
+          {
+            "title": "Set the next step",
+            "framing": "Leave Thursday with a concrete commitment. A site visit, a scoping conversation with the plant superintendent, or agreement to share DMR data are all acceptable. Anything that advances to Scope.",
+            "questions": [
+              "Would it be useful to do a quick site walk so we can give you a more precise scoping estimate before any engineering study goes out to bid?",
+              "Could you get me access to the last 12 months of DMR data before our next conversation?",
+              "Is there a point in the next 30 days where it would make sense to bring in our process engineer to walk through the treatment approach in more detail?",
+              "What would you need to see from us to feel comfortable recommending to the council that we move forward with a scoping engagement?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "kind": "analytical-read",
+      "payload": {
+        "customer": {
+          "name": "City of [Eastern TN Municipality]",
+          "location": "Municipal WWTP, ~12,000 population served",
+          "state": "Tennessee",
+          "basin": "Tennessee River Basin"
+        },
+        "subtitle": "Evidenced read on the nutrient compliance capital requirement at NPDES permit renewal",
+        "subStreamsLine": "Sub-streams: biological nitrification addition, chemical phosphorus removal, CWSRF financing pathway, future nutrient horizon",
+        "summary": "A ~12,000-population municipal trickling filter WWTP in eastern Tennessee faces a process-gap compliance project driven by simultaneous NPDES permit tightening: ammonia from 4.0 to 1.5 mg/L and a new 1.0 mg/L total phosphorus limit. Neither limit is achievable with the existing plant configuration. Permit renewal is 14 months out; no engineering study has been commissioned. The Public Works Director has named CWSRF as the financing pathway. Deal is at Qualify stage; the primary risks are competing engineer pre-emption of the preliminary engineering report and a CWSRF timeline squeeze. Directional capex: $3.5–6.5M · MEDIUM-LOW confidence.",
+        "gateState": "OPEN_WITH_CONDITIONS",
+        "gateContent": "Opportunity is open for advancement. Conditions: (1) no competing engineering study has been awarded; (2) CWSRF application timeline remains viable given permit effective date. Both conditions require Thursday meeting confirmation.",
+        "flags": [
+          {
+            "id": "CWSRF-TIMING",
+            "severity": "SPECIALIST",
+            "evidence": "Tennessee SRF applications require a completed preliminary engineering report (PER). With 14 months to permit effective date and a typical 3–6 month SRF processing window, scoping must begin within ~60–90 days to preserve CWSRF eligibility. Annual priority list cycle compounds the risk.",
+            "status": "Monitor — confirm at Thursday meeting"
+          },
+          {
+            "id": "PER-PRE-EMPTION",
+            "severity": "SPECIALIST",
+            "evidence": "No engineering study has been commissioned per field agent report. City may have existing on-call municipal engineering relationships that would receive a PER RFQ by default. If awarded before scoping conversation, design approach is locked to that firm's preferred treatment train.",
+            "status": "Surface at Thursday meeting"
+          },
+          {
+            "id": "FLOW-DATA-ABSENT",
+            "severity": "ATTENTION",
+            "evidence": "Plant design flow and current effluent NH3/TP performance are not in the case file. Design flow is the primary driver of the capex range ($3.5M vs $6.5M). Sizing remains MEDIUM-LOW confidence until confirmed.",
+            "status": "Request DMR data and design flow at Thursday meeting"
+          }
+        ],
+        "subStreamLens": [
+          {
+            "subStream": "Biological nitrification addition",
+            "activeCondition": "Existing trickling filter has no nitrification capacity. NPDES draft permit requires 1.5 mg/L NH3 monthly average — not achievable without a dedicated biological nitrification stage. MBBR appended to existing secondary train is the primary candidate; activated sludge stage is the alternative.",
+            "evidenceAnchor": "FIELD-REPORT-01"
+          },
+          {
+            "subStream": "Chemical phosphorus removal",
+            "activeCondition": "New 1.0 mg/L TP limit in draft NPDES renewal where no limit previously existed. No chemical P removal currently installed. Ferric chloride or alum dosing with existing clarifier contact time is the primary approach; polishing filter addition is the future-proofing option if TDEC tightens to 0.5 mg/L.",
+            "evidenceAnchor": "FIELD-REPORT-01"
+          },
+          {
+            "subStream": "CWSRF financing pathway",
+            "activeCondition": "Public Works Director has identified CWSRF as the intended financing vehicle. Tennessee SRF requires a completed PER as a prerequisite. Annual priority list cycle makes PER timeline the critical path constraint for maintaining CWSRF eligibility within the permit window.",
+            "evidenceAnchor": "FIELD-REPORT-01"
+          },
+          {
+            "subStream": "Future nutrient horizon (TP polishing)",
+            "activeCondition": "EPA nutrient framework and Tennessee's ongoing nutrient strategy work create a credible pathway to TP tightening (0.5 mg/L) in the next permit cycle (~10 years). Current project scope should include physical footprint and chemical infrastructure pre-positioning for polishing filter addition.",
+            "evidenceAnchor": "NUTRIENT-HORIZON-01"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Confirm no engineering study has been awarded to a competing consultant",
+            "status": "OPEN — unconfirmed",
+            "source": "Thursday meeting"
+          },
+          {
+            "required": "Obtain plant design flow and last 12 months of DMR data (NH3, TP, BOD, TSS)",
+            "status": "OPEN — not in case file",
+            "source": "PW Director / plant superintendent"
+          },
+          {
+            "required": "Confirm TDEC draft permit status — is 1.0 mg/L TP negotiable or final?",
+            "status": "OPEN — unknown",
+            "source": "Thursday meeting"
+          },
+          {
+            "required": "Identify capital approval pathway (council vote, utility board, city manager authority) and timeline",
+            "status": "OPEN — unknown",
+            "source": "Thursday meeting"
+          },
+          {
+            "required": "Confirm CWSRF priority list submission window and next cycle deadline",
+            "status": "OPEN — unknown",
+            "source": "Tennessee CWSRF program office confirmation"
+          },
+          {
+            "required": "Secure scoping conversation or site visit commitment to advance to Scope stage",
+            "status": "OPEN — target Thursday",
+            "source": "Thursday meeting"
+          },
+          {
+            "required": "Identify whether other decision-makers (finance director, city manager) need to be in the room before capital commitment",
+            "status": "OPEN — unknown",
+            "source": "Thursday meeting"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex — controlled vs emergency procurement",
+            "basis": "CWSRF-financed design-bid-build at planned schedule vs design-build under enforcement timeline; 20–35% emergency premium is industry-observed for time-pressured municipal procurement",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "CWSRF interest savings vs GO bond (20-year term)",
+            "basis": "TN SRF rates ~1.5–2.5% vs current GO bond market ~4.5–5.5%; on $4–5M principal, NPV savings ~$800K–$1.2M over 20 years",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "TDEC enforcement exposure — NOV + Consent Order",
+            "basis": "TDEC civil penalty authority $10–25K/day per parameter; two-parameter exceedance (NH3 + TP) at permit effective date; Consent Order probable within 12–18 months of continuous exceedance",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Future TP polishing retrofit (year 8–12)",
+            "basis": "Polishing filter addition at emergency timing vs pre-positioned footprint; lens range $1–2M incremental; pre-positioning in current scope reduces future mobilization cost materially",
+            "confidence": "LOW"
+          },
+          {
+            "row": "5-year total — their delay path vs our CWSRF path",
+            "basis": "Enforcement exposure + emergency procurement premium + GO bond premium vs CWSRF-financed controlled project; their path: $5–9M+ risk-adjusted; our path: ~$3–5.5M net city cost",
+            "confidence": "LOW"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "This opportunity involves a small eastern Tennessee municipality (~12,000 population) operating a trickling filter WWTP facing simultaneous tightening of its NPDES permit at renewal. The draft permit reduces the monthly average ammonia limit from 4.0 to 1.5 mg/L and introduces a new 1.0 mg/L total phosphorus limit where no phosphorus limit previously existed. The existing plant has no biological nitrification capacity and no chemical phosphorus removal. Neither permit limit is achievable with the current process configuration — this is a process-gap compliance project, not a fine-tuning problem.\n\nThe Public Works Director has flagged this to the city council as an upcoming capital item and has identified CWSRF as the intended financing vehicle. No engineering study has been commissioned. The permit renewal window is 14 months. The primary engagement risk is that a competing municipal engineering firm receives a PER RFQ before a scoping conversation has taken place.\n\nDeal stage: Qualify (MEDIUM confidence). Single sub-stream. Single decision-maker authority (PW Director, with council approval required for capital authorization). One procurement vehicle (CWSRF capital project).",
+            "evidenceTags": ["FIELD-REPORT-01"],
+            "evidenceSource": "FIELD-REPORT-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "Lens: municipal-wet-weather / nutrient-compliance-capital. Single primary sub-stream with a secondary future-proofing sub-stream.\n\nThe nitrification sub-stream is the deal anchor. No biological nitrification exists on the current trickling filter train. Achieving 1.5 mg/L ammonia monthly average requires a dedicated nitrification stage — moving bed biofilm reactor (MBBR) appended to the existing secondary train is the primary candidate given its retrofit suitability and smaller footprint requirements relative to a full activated sludge expansion.\n\nThe phosphorus removal sub-stream is co-located and co-funded with the nitrification project. Ferric chloride or alum dosing with existing clarifier contact time is the primary approach for 1.0 mg/L TP. Chemical feed infrastructure installed now should be designed to accommodate future polishing filter addition if TDEC tightens the TP limit.\n\nThe CWSRF financing sub-stream is a prerequisite pathway constraint, not a separate deal. It governs timing: the PER is a prerequisite for CWSRF eligibility, and the annual SRF priority list cycle means PER timing directly determines whether CWSRF financing is available within the permit window.\n\nA credible future sub-stream exists: TP polishing (toward 0.5 mg/L) as a follow-on capital event if EPA's nutrient framework drives further Tennessee tightening. Physical footprint pre-positioning in the current project scope makes this future sub-stream a simple addition rather than a disruptive retrofit.",
+            "evidenceTags": ["FIELD-REPORT-01", "NUTRIENT-HORIZON-01"],
+            "evidenceSource": "FIELD-REPORT-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "Primary lens: municipal-wet-weather (nutrient compliance capital sub-case). This is a POTW capital project driven by NPDES permit tightening at renewal — the canonical application of this lens at small-municipality scale.\n\nUnit economics floor (lens cheat-sheet): secondary and tertiary capacity additions at small POTW scale run $4–10M per MGD design capacity. At estimated design flow of 1.0–1.5 MGD, the lens range yields $4–15M before site-specific adjustment. The nitrification-only retrofit (MBBR addition) at this scale is at the lower end of the lens; combined nitrification + phosphorus removal at a constrained existing site is toward the middle. Directional project estimate: $3.5–6.5M, with design flow as the primary driver of range.",
+            "evidenceTags": [],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "A single capital project addressing both permit limits is the correct scope. Splitting nitrification and phosphorus removal into sequential phases would require two mobilizations, two CWSRF applications, and two council authorizations for a project that is operationally and physically integrated.\n\nRecommended treatment train: MBBR nitrification stage appended to the existing trickling filter secondary effluent stream → chemical phosphorus removal (ferric or alum dosing) in a contact chamber ahead of or within the existing secondary clarifier → effluent polishing if needed for TP compliance confirmation.\n\nDesign the chemical feed infrastructure with excess chemical dose capacity and physical footprint for a future polishing filter addition (sand or cloth media filtration with enhanced coagulation) to address a potential future 0.5 mg/L TP limit without requiring new civil work.\n\nPackage as a single CWSRF-eligible capital project with a preliminary engineering report as the first deliverable. PER scope should include: existing plant characterization (flows, current effluent performance), treatment alternatives analysis (MBBR vs. activated sludge nitrification), preliminary design, capital cost estimate (Class 3 or equivalent), and CWSRF application support.\n\nDirectional capex: $3.5–6.5M · MEDIUM-LOW confidence. Driver of range: design flow (unconfirmed); site footprint and existing clarifier capacity. Confidence advances to MEDIUM upon receipt of design flow and DMR data.",
+            "evidenceTags": ["FIELD-REPORT-01"],
+            "evidenceSource": "FIELD-REPORT-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three outcomes are material for this customer:\n\nCompliance control vs. enforcement timeline. A planned, scoped capital project commissioned before the permit becomes effective keeps the city in control of schedule, procurement, and design. If the permit becomes effective and the city is still in its current configuration, TDEC enforcement authority activates — civil penalties, a Consent Order probable within 12–18 months, and the associated legal and consultant costs. Under an enforcement timeline, the city loses procurement flexibility and pays a premium for design-build delivery.\n\nCWSRF interest savings are real and quantifiable. Tennessee SRF rates (~1.5–2.5%, 20-year term) represent a material savings versus general obligation bond financing at current market rates (~4.5–5.5%). On a $4–5M project, the NPV savings over a 20-year term runs approximately $800K–$1.2M. This is a number the council can use in a budget presentation. It is available only if the PER is completed in time for the CWSRF priority list submission.\n\nFuture-proofing against the next tightening. EPA's nutrient reduction framework and Tennessee's ongoing nutrient rulemaking work make a further TP tightening — toward 0.5 mg/L — a credible planning horizon within the next 10 years. A plant designed for 1.0 mg/L with no polishing footprint will face a second capital mobilization at whatever timing TDEC dictates. Pre-positioning the physical footprint and chemical infrastructure now converts that future event from a disruptive retrofit to a manageable addition.",
+            "evidenceTags": ["FIELD-REPORT-01", "TN-SRF-RATE-REF", "EPA-NUTRIENT-FRAMEWORK"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The cost of the alternative is the fully-priced exposure under a delay or do-nothing path over five years. The comparison is not 'spend $5M now vs. spend nothing' — it is 'spend $3–5.5M now, controlled, CWSRF-financed' vs. 'spend $5–9M+ over five years under enforcement pressure, at market financing rates, with a two-parameter civil penalty exposure running in the background.'\n\nThe bottom-line claim: their delay path costs the city approximately $5–9M+ over five years when enforcement exposure, emergency procurement premium, and GO bond financing costs are priced in. The CWSRF-financed capital path comes in at approximately $3–5.5M net city cost over the same period, with compliance risk extinguished at permit effective date.",
+            "evidenceTags": ["TDEC-ENF-REF", "TN-SRF-RATE-REF", "FIELD-REPORT-01"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Compliance & safety",
+            "body": "No STOP-level safety flags are active on this engagement. Two SPECIALIST-level flags are open and must be confirmed at Thursday's meeting.\n\nThe CWSRF timing flag (CWSRF-TIMING) reflects the structural reality that Tennessee SRF applications require a PER as a prerequisite and operate on an annual priority list cycle. With 14 months to permit effective date and a 3–6 month SRF processing window, the scoping start window is approximately 60–90 days from today before CWSRF eligibility within the permit window becomes uncertain.\n\nThe PER pre-emption flag (PER-PRE-EMPTION) reflects the commercial risk that the city may have existing on-call engineering relationships that would receive a PER RFQ by default. If awarded before a scoping conversation has taken place, the design approach is locked to the awarding firm's preferred treatment train. This flag is the primary deal-loss mechanism at the current stage.\n\nThe flow data flag (FLOW-DATA-ABSENT) is an ATTENTION-level analytical gap: without design flow and current effluent data, the capex estimate spans a $3M range. This is a sizing precision issue, not a compliance or commercial risk.",
+            "evidenceTags": ["FIELD-REPORT-01"]
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "See structured flag inventory above.",
+            "evidenceTags": []
+          },
+          {
+            "heading": "Funding pathway analysis",
+            "body": "CWSRF is the correct primary pathway for this project. Tennessee's Clean Water SRF program provides low-interest loans (typically 1.5–2.5% below market rate, 20-year terms) for NPDES compliance capital projects at municipal POTWs. A nutrient compliance retrofit of this type is a straightforward eligible use.\n\nPrerequisite: a completed preliminary engineering report (PER) meeting Tennessee CWSRF application requirements. Tennessee CWSRF operates on an annual priority list cycle; the submission deadline and next cycle opening date should be confirmed with the Tennessee CWSRF program office immediately.\n\nSecondary funding considerations: the BIL/IIJA Emerging Contaminants Grant program has passed its primary funding rounds for PFAS-focused projects, but general CWSRF supplemental capitalization from BIL has increased available loan capacity in most state SRF programs. Confirm with Tennessee program office whether additional principal forgiveness or grant overlay is available for small and disadvantaged community provisions — a 12,000-population municipality may qualify.\n\nGO bond backup: if CWSRF timing is missed, a general obligation bond is the most likely alternative. Current market rates (~4.5–5.5%) represent a materially higher cost over a 20-year term. This pathway should be characterized to the council as the backup, not the primary, to preserve CWSRF urgency.",
+            "evidenceTags": ["TN-SRF-RATE-REF", "BIL-SRF-REF"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not promise yet",
+            "body": "The following items are deliberately not committed to at this stage and require Assessment-mode work before they can be confirmed:\n\nSpecific capital cost. The $3.5–6.5M range is directional and based on lens unit economics at estimated design flow. A Class 3 capital cost estimate requires a completed preliminary engineering study with site characterization, treatment alternatives analysis, and preliminary design.\n\nProcess performance guarantee on effluent NH3 and TP. Performance at 1.5 mg/L ammonia and 1.0 mg/L TP is achievable with the proposed approach; confirmation of steady-state performance at the specific site requires pilot or plant performance data from the PER phase.\n\nCWSRF application outcome. CWSRF loan approval is subject to Tennessee SRF program capacity, priority list ranking, and application completeness. We support the application process but do not guarantee loan approval or timeline.\n\nRegulatory negotiation outcome on TP limit. Whether there is room to negotiate the 1.0 mg/L TP limit in the NPDES renewal is a question for the customer and TDEC. We size to the draft permit as written; a negotiated relaxation would not materially change the recommended approach.",
+            "evidenceTags": []
+          }
+        ]
+      }
+    },
+    {
+      "kind": "proposal-shell",
+      "payload": {
+        "customer": {
+          "name": "City of [Eastern TN Municipality]",
+          "location": "Municipal WWTP",
+          "state": "Tennessee",
+          "basin": "Tennessee River Basin"
+        },
+        "subtitle": "NPDES Permit Compliance — Nutrient Removal Capital Project | Scoping-Stage Summary",
+        "executiveSummary": "The City's NPDES permit renewal, due in approximately 14 months, tightens the monthly average ammonia limit from 4.0 to 1.5 mg/L and introduces a new 1.0 mg/L total phosphorus limit where no limit previously existed. The existing trickling filter plant has no biological nitrification capacity and no chemical phosphorus removal. Neither limit is achievable with the current process configuration without capital investment.\\n\\nThe recommended approach is a single capital project combining a moving bed biofilm reactor (MBBR) nitrification stage appended to the existing trickling filter secondary train, plus chemical phosphorus removal (ferric chloride or alum dosing) integrated into the existing clarifier. This approach achieves both permit limits in one project, qualifies as a single CWSRF-eligible capital loan, and can be designed to accommodate future TP tightening without additional civil mobilization.\\n\\nThe cost of delay is not zero. Under a do-nothing or emergency-procurement path, the city faces: TDEC civil penalties of $10–25K per day per exceeded parameter upon permit exceedance; a Consent Order probable within 12–18 months of continuous non-compliance; emergency design-build procurement at a 20–35% capex premium; and general obligation bond financing at current market rates (~4.5–5.5%) if the CWSRF priority list window is missed. The CWSRF-financed controlled path comes in at an estimated $3.5–6.5M directional capex (MEDIUM-LOW confidence, pending engineering study) at approximately 1.5–2.5% over 20 years — representing approximately $800K–$1.2M in interest savings versus GO bond financing on this project size. Their fully-priced delay path: ~$5–9M+ over five years. Our path: ~$3–5.5M net city cost, compliance risk extinguished.",
+        "proposedScope": [
+          "Preliminary Engineering Report (PER): Existing plant characterization (flows, current effluent performance, secondary clarifier capacity), treatment alternatives analysis (MBBR vs. activated sludge nitrification), preliminary design for combined nitrification and phosphorus removal, Class 3 capital cost estimate, and Tennessee CWSRF application support documentation.",
+          "Biological nitrification addition: Moving bed biofilm reactor (MBBR) stage appended to the existing trickling filter secondary train effluent, sized to achieve a 1.5 mg/L monthly average ammonia limit at design flow and peak loading conditions.",
+          "Chemical phosphorus removal: Ferric chloride or alum chemical feed system with contact chamber integration into the existing secondary clarification process, sized to achieve a 1.0 mg/L total phosphorus monthly average limit.",
+          "Future-proofing design provisions: Physical footprint reservation and chemical feed over-capacity designed to accommodate a future polishing filter addition (cloth or sand media filtration with enhanced coagulation) in the event that TDEC tightens the TP limit to 0.5 mg/L in a subsequent permit cycle. No additional civil mobilization required for the future addition if provisions are incorporated in the current project.",
+          "CWSRF application support: Preparation and submission of Tennessee CWSRF priority list application, loan application documentation, and coordination with the State Revolving Fund program office."
+        ],
+        "sizingAndPricing": "Directional capex: $3.5–6.5M · MEDIUM-LOW confidence. This range is based on lens unit economics at estimated design flow (1.0–1.5 MGD, unconfirmed). The primary driver of the range is confirmed design flow and existing secondary clarifier capacity. At 1.0 MGD design flow with available site footprint, the project comes in toward the low end ($3.5–4.5M). At 1.5 MGD with constrained site conditions, toward the high end ($5.5–6.5M). A Class 3 capital cost estimate (±30%) is produced as part of the Preliminary Engineering Report. All figures are directional, subject to engineering study, and not for use in council appropriations or CWSRF applications without PER completion.",
+        "schedule": "Phase 1 — Preliminary Engineering Report: ~4–5 months from notice to proceed. Delivers Class 3 cost estimate, CWSRF application documentation, and preliminary design. Must begin within approximately 60–90 days to preserve CWSRF priority list eligibility within the permit renewal window.\\n\\nPhase 2 — Final Design and CWSRF Application: ~4–6 months concurrent with or immediately following PER. CWSRF loan closing targeted for approximately 9–11 months from PER NTP.\\n\\nPhase 3 — Construction: ~12–18 months following CWSRF loan closing. Schedule is driven by permit effective date; construction completion targeted for compliance at or before permit effective date.\\n\\nAll schedule milestones are directional and conditional on PER NTP timing, CWSRF priority list cycle deadlines, and council authorization. The critical path item is PER initiation — delay beyond 60–90 days compresses CWSRF availability within the permit window.",
+        "commitments": [
+          {
+            "label": "Scope boundary",
+            "text": "This document covers biological nitrification (MBBR) and chemical phosphorus removal only. Biosolids handling, wet-weather hydraulics, PFAS, and collection system work are explicitly excluded."
+          },
+          {
+            "label": "Capex range",
+            "text": "$3.5–6.5M directional capex · MEDIUM-LOW confidence. Range narrows to MEDIUM upon receipt of confirmed design flow and DMR data and completion of preliminary engineering study. Not for use in council appropriations or CWSRF applications without PER completion.",
+            "owner": "Confirmed in PER phase"
+          },
+          {
+            "label": "CWSRF support",
+            "text": "PER scope includes Tennessee CWSRF priority list application preparation and loan application documentation. CWSRF loan approval is subject to program capacity and priority list ranking — not guaranteed."
+          },
+          {
+            "label": "Future-proofing design provisions",
+            "text": "Current project scope to include physical footprint reservation and chemical feed over-capacity for future polishing filter addition. No additional civil mobilization required for future TP polishing if provisions are incorporated in Phase 1 design."
+          },
+          {
+            "label": "Schedule dependency",
+            "text": "CWSRF-eligible schedule requires PER NTP within approximately 60–90 days from today. Delay beyond this window compresses CWSRF availability within the permit renewal timeline.",
+            "date": "60–90 day PER NTP window"
+          }
+        ],
+        "fundingPathway": "Primary: Tennessee Clean Water State Revolving Fund (CWSRF). Eligible use — NPDES compliance capital at municipal POTW. Prerequisite: completed preliminary engineering report. Application requires priority list submission (annual cycle — confirm next deadline with Tennessee program office). Loan terms: approximately 1.5–2.5% interest, up to 20-year repayment. Small-community principal forgiveness provisions may apply — confirm with program office.\\n\\nSecondary (backup): General Obligation Bond at current market rates (~4.5–5.5%). Estimated $800K–$1.2M higher cost over loan term vs. CWSRF. Recommended as backup only.\\n\\nNote: BIL/IIJA supplemental CWSRF capitalization has increased available SRF loan capacity in Tennessee. Confirm whether additional principal forgiveness or grant overlay is available for the City's population and income classification.",
+        "riskAllocation": "This document is a scoping-stage seed. Risk allocation language is directional pending preliminary engineering study and formal proposal.\\n\\nProcess performance: Treatment process performance to permit limits (1.5 mg/L NH3, 1.0 mg/L TP) is a design obligation contingent on design flow and loading conditions confirmed in the PER. Performance at loadings materially exceeding design flow is outside the guarantee envelope.\\n\\nCWSRF timing: CWSRF application support is included in scope; loan approval and timing are subject to Tennessee SRF program capacity and priority list ranking. No guarantee of loan approval or timing is made at this stage.\\n\\nSchedule: Construction completion targeting permit effective date compliance is achievable on the schedule above, conditional on PER NTP within the 60–90 day window. Delay in NTP shifts the schedule accordingly.",
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — Qualify stage. For internal scoping use only. Not for distribution to customer or regulatory agencies. Scope, sizing, and schedule are directional pending preliminary engineering study.",
+        "sizingRows": [
+          {
+            "label": "Estimated design flow (unconfirmed)",
+            "value": "1.0–1.5 MGD"
+          },
+          {
+            "label": "Directional total project capex",
+            "value": "$3.5–6.5M · MEDIUM-LOW confidence"
+          },
+          {
+            "label": "CWSRF financing rate (TN, typical)",
+            "value": "~1.5–2.5% / 20-year term"
+          },
+          {
+            "label": "Estimated interest savings vs. GO bond",
+            "value": "~$800K–$1.2M over loan term"
+          },
+          {
+            "label": "Cost-of-alternative (delay path, 5-yr)",
+            "value": "~$5–9M+ risk-adjusted"
+          },
+          {
+            "label": "Net city cost (CWSRF path, 5-yr)",
+            "value": "~$3–5.5M, risk extinguished"
+          },
+          {
+            "label": "Confidence driver",
+            "value": "Design flow and clarifier capacity (unconfirmed; narrows to MEDIUM upon PER completion)"
+          }
+        ],
+        "outOfScope": [
+          {
+            "heading": "Biosolids handling and disposal",
+            "body": "Any changes to sludge handling, digestion, dewatering, or biosolids land-application resulting from increased biological solids production are not included in this scope and are deferred to a future assessment phase."
+          },
+          {
+            "heading": "Wet-weather / hydraulic capacity",
+            "body": "Hydraulic capacity evaluation and any wet-weather overflow compliance are not included in this scope. If the PER identifies a hydraulic capacity constraint that affects compliance with the nutrient limits, scope will be revised accordingly."
+          },
+          {
+            "heading": "PFAS or emerging contaminant compliance",
+            "body": "No PFAS or emerging contaminant assessment or treatment scope is included at this stage. If industrial contributors to the collection system introduce PFAS loading concerns, a separate source-control or pretreatment assessment would be required."
+          },
+          {
+            "heading": "Collection system rehabilitation",
+            "body": "Sewer collection system work, I/I reduction, or manhole/pipe rehabilitation are not included in this scope."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Confirm no competing engineering study has been awarded or is pending",
+            "closer": "PW Director — Thursday meeting"
+          },
+          {
+            "gate": "Obtain plant design flow and last 12 months of DMR data to narrow capex range to MEDIUM confidence",
+            "closer": "PW Director / plant superintendent — request at Thursday meeting"
+          },
+          {
+            "gate": "Confirm TDEC draft permit status on 1.0 mg/L TP limit (negotiable vs. final)",
+            "closer": "PW Director / TDEC permit contact"
+          },
+          {
+            "gate": "Confirm Tennessee CWSRF next priority list submission deadline",
+            "closer": "Field agent — Tennessee CWSRF program office contact"
+          },
+          {
+            "gate": "Identify capital approval authority and next council / utility board vote timeline",
+            "closer": "PW Director — Thursday meeting"
+          },
+          {
+            "gate": "Secure scoping conversation or site visit commitment",
+            "closer": "Thursday meeting — target outcome"
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "inputTokens": 205712,
+    "outputTokens": 16181,
+    "costUsd": 0.859851
+  },
+  "stepCount": 8,
+  "finalText": "All four artifacts are ready. Here's your Thursday brief.\n\n---\n\n## Your package for Thursday\n\n**Stage: Qualify · MEDIUM confidence** — Decision-maker identified, regulatory driver confirmed and non-negotiable, financing pathway named. The deal advances to Scope when the PW Director commits to a scoping conversation or site visit. That's Thursday's job.\n\n**Cost-of-alternative bottom line:** Their fully-priced delay path runs **~$5–9M+ over five years** when TDEC enforcement exposure, an emergency procurement premium, and GO bond financing costs are included. The CWSRF-financed capital path comes in at **~$3–5.5M net city cost** — compliance risk extinguished. That comparison is the executive headline you walk in with.\n\n---\n\n### Your four PDFs\n\n| Artifact | What it's for |\n|---|---|\n| 📋 **[Field Brief](/?threadId=eval-happy-path-municipality-npdes-renewal-DY54uIIRKVqhjd08Z7n27&kind=field-brief)** | Read before you leave for the meeting. Your strategic calibration. |\n| 🎯 **[Playbook](/?threadId=eval-happy-path-municipality-npdes-renewal-DY54uIIRKVqhjd08Z7n27&kind=playbook)** | Have open during the call. 11 themed question sets keyed to Thursday's specific advance goal. |\n| 📊 **[Analytical Read](/?threadId=eval-happy-path-municipality-npdes-renewal-DY54uIIRKVqhjd08Z7n27&kind=analytical-read)** | Send upward if you need internal sign-off. Evidence-tagged, defensible. |\n| 📄 **[Proposal Shell](/?threadId=eval-happy-path-municipality-npdes-renewal-DY54uIIRKVqhjd08Z7n27&kind=proposal-shell)** | Internal scoping seed. Edit before anything goes to the customer. |\n\n---\n\n### Three things to do before you leave Thursday\n\n1. **Surface the competing engineer question immediately.** Ask whether any engineering firm has been contacted about the permit response or PER. If yes, this is a pre-emption risk and you need to move faster. If no, you have a window — don't leave without positioning your treatment approach.\n\n2. **Walk the CWSRF critical path with him.** The PW Director knows CWSRF exists. He may not know the PER is a prerequisite, or that the annual priority list cycle puts a ~60–90 day clock on scoping start. Make that timeline visible. It converts \"we should get to this\" into \"we need to start this now.\"\n\n3. **Ask for the DMR data.** Last 12 months of ammonia and TP effluent performance plus design flow. That's the gap that narrows the capex range from a $3M span to something defensible in a council presentation. You want it before the next conversation.\n\n---\n\n**One flag to carry in:** This is a **SPECIALIST-level timing risk**, not a crisis. But 14 months to permit effective date with no engineering study and an annual SRF cycle is a real constraint — not comfortable room. The PW Director may not have mapped that yet. Being the person who makes the timeline visible is the most valuable thing you can do Thursday."
+}

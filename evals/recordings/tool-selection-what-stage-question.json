@@ -1,0 +1,22 @@
+{
+  "scenarioId": "tool-selection-what-stage-question",
+  "modelId": "claude-sonnet-4-6",
+  "recordedAt": "2026-06-09T23:56:24.901Z",
+  "toolCalls": [
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-stage-and-gaps"
+      }
+    }
+  ],
+  "artifacts": [],
+  "usage": {
+    "inputTokens": 21164,
+    "outputTokens": 498,
+    "costUsd": 0.070962
+  },
+  "stepCount": 2,
+  "finalText": "**Stage: Qualify — MEDIUM confidence.**\n\nHere's the read on where this deal sits and why:\n\n**Stage signals:**\n- **Documented problem:** The SWD well approaching its permitted injection volume is a concrete, time-bounded operational constraint — this isn't inbound noise, it's a real driver with a clock on it.\n- **Evidence shared proactively:** The operator voluntarily shared NORM disposal logs on a site visit. That's cooperative, not just transactional — they're treating you as a potential partner, not a cold vendor.\n- **Decision-maker identified by role:** The ops manager is engaged and has opened the door to a follow-up. That's a role-level contact with access to the operational picture.\n- **Soft commitment only:** \"Open to a follow-up call\" without a committed next meeting is the tell. The customer is willing but not yet engaged on the work itself — that's the Qualify ceiling.\n\n**Why not Scope yet:** Scope requires the customer to *agree to engage on the work* — a scoping discussion, a structured site assessment, or a paid scoping engagement. A soft signal of openness doesn't cross that line.\n\n**The one gap that holds you at Qualify:** You need the ops manager (or whoever owns the procurement decision) to commit to a structured scoping conversation. That's the single Required action to advance.\n\n**What to do with the follow-up call:** Use it to confirm the urgency of the SWD capacity constraint (how many months of runway?), surface what they're already considering as alternatives, and ask directly for a working session on the water management question. That converts the soft signal into a Scope-stage commitment.\n\n**Stage tension note (minor):** If the NORM logs show you enough to size the sub-stream and the ops manager is functionally the decision-maker for this spend level, you could argue this is early Scope. But without a confirmed next structured engagement, Qualify is the honest call."
+}

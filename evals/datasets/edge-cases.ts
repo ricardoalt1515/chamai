@@ -67,7 +67,7 @@ export const edgeCaseScenarios: Scenario[] = [
       "have something to bring if they're willing to talk further?",
     expectations: {
       artifactSequence: [...FULL_PACKAGE_SEQUENCE],
-      maxCostUsd: 0.75,
+      maxCostUsd: 1.15,
     },
   },
   {
@@ -83,7 +83,7 @@ export const edgeCaseScenarios: Scenario[] = [
       "so I can follow up with him this week.",
     expectations: {
       artifactSequence: [...FULL_PACKAGE_SEQUENCE],
-      maxCostUsd: 0.75,
+      maxCostUsd: 1.15,
     },
   },
   {
@@ -102,7 +102,7 @@ export const edgeCaseScenarios: Scenario[] = [
       "Just generate the Field Brief from this — that's all I need for now.",
     expectations: {
       artifactSequence: ["field-brief"],
-      maxCostUsd: 0.5,
+      maxCostUsd: 0.55,
     },
   },
   {

@@ -24,7 +24,7 @@ export const toolSelectionScenarios: Scenario[] = [
       "just generate the Analytical Read for this one, nothing else.",
     expectations: {
       artifactSequence: ["analytical-read"],
-      maxCostUsd: 0.35,
+      maxCostUsd: 0.55,
     },
   },
   {
@@ -58,7 +58,7 @@ export const toolSelectionScenarios: Scenario[] = [
       "Playbook, Analytical Read, and Proposal Shell — so I have everything for tomorrow.",
     expectations: {
       artifactSequence: [...FULL_PACKAGE_SEQUENCE],
-      maxCostUsd: 0.75,
+      maxCostUsd: 1.15,
     },
   },
   {

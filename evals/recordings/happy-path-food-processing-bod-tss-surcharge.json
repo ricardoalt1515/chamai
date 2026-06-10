@@ -1,0 +1,1224 @@
+{
+  "scenarioId": "happy-path-food-processing-bod-tss-surcharge",
+  "modelId": "claude-sonnet-4-6",
+  "recordedAt": "2026-06-09T23:43:30.189Z",
+  "toolCalls": [
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-evidence-and-context"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-stage-and-gaps"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-positioning"
+      }
+    },
+    {
+      "step": 2,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-field-brief"
+      }
+    },
+    {
+      "step": 3,
+      "toolName": "generateFieldBrief",
+      "input": {
+        "customer": {
+          "name": "Poultry Processing Plant",
+          "location": "Arkansas Processing Facility",
+          "state": "Arkansas",
+          "basin": "Arkansas River Basin"
+        },
+        "stage": "Qualify",
+        "confidence": "MEDIUM",
+        "date": "2025-07-14",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "Plant flows not yet confirmed — DAF sizing gap is the primary driver of capex range width (±40%); confirm during site walk before Q3 cycle.",
+          "GM engagement not yet established — any scope above $500K requires upward alignment; phase 1 must be designed to generate the ROI data that writes the GM-level business case."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "Three months of $38K/month surcharges is a $456K/year cash drain — and it's the cheap outcome. Do nothing for five years and the fully-priced bill is $3.7–5.5M.",
+            "body": "An Arkansas poultry processing plant is chronically exceeding its POTW pretreatment limits following a 2023 production line expansion: BOD averaging 1,450 mg/L against a 300 mg/L permit limit (4.8×) and TSS averaging 620 mg/L against a 250 mg/L limit (2.5×). The root cause is documented — the existing DAF unit is undersized for current throughput. The plant has been paying ~$38,000/month in surcharges for the past three months on top of base sewer costs. The EHS manager owns the problem and has budget authority up to $500K; the plant GM controls anything above that. The customer is in information-gathering mode ahead of a Q3 capital planning cycle — the field agent's job next week is to convert that into a scoping commitment by making the surcharge math explicit. At 4.8× BOD over three months, this is not a slug event — it is a chronic discharge envelope, and ADEQ has civil penalty authority up to $10K/day per parameter for continued pretreatment exceedances."
+          },
+          "whatWeWouldPropose": {
+            "insight": "A phased program — phase 1 within EHS sole authority, phase 2 GM-level — eliminates surcharges and gets ahead of regulatory escalation. Total program cost is $1.1–2.0M against a do-nothing path of $3.7–5.5M over five years.",
+            "recommendedApproach": "Phase 1 ($300–$450K, within EHS budget authority): DAF operational optimization plus upstream load-reduction — equalization volume tuning for slug/peak-flow control, chemical-assist optimization on the existing DAF train, and shift-changeover SOPs. Goal: meaningful BOD and TSS reduction to cut surcharges materially and generate documented ROI data for GM approval. Phase 2 ($600K–$1.4M, GM-level): DAF replacement/upsizing to match post-2023 throughput plus secondary polishing to achieve sustained full compliance — BOD <300 mg/L, TSS <250 mg/L — eliminating surcharges permanently. Note: plant flows not yet confirmed; DAF sizing and capex range tighten significantly after site walk.",
+            "winWinArguments": [
+              {
+                "lead": "Surcharge elimination — ~$456K/year recovered.",
+                "body": "At observed mass loading, this plant is paying ~$456K/year in surcharges above base sewer costs. Phase 1 cuts that materially; phase 2 eliminates it. At a $1.1–2.0M total program, the surcharge payback runs 2–4 years — a defensible ROI for any GM-level capital review."
+              },
+              {
+                "lead": "Ahead of the Q3 capital cycle, not scrambling after an enforcement trigger.",
+                "body": "A plant that enters Q3 with a scoped solution and a documented surcharge-payback ROI wins budget priority over unscoped line items. Voluntary compliance now is structurally cheaper than a Consent Order later — which runs on the POTW's schedule, not the plant's."
+              },
+              {
+                "lead": "Stays in the voluntary compliance lane before ADEQ gets formal.",
+                "body": "Three months of documented 4.8× BOD exceedances is the zone where informal utility warnings escalate to formal NOVs. ADEQ civil penalty authority runs to $10K/day per parameter. Acting now, with a scoped solution in hand, keeps the plant in the voluntary compliance conversation — the materially cheaper path."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex, year 0",
+                "theirPath": "$0–$50K (band-aid equipment tweak only)",
+                "ourProposal": "$300–$450K (phase 1, within EHS authority)"
+              },
+              {
+                "component": "Ongoing surcharges, 5-year",
+                "theirPath": "~$2.28M ($456K/yr × 5, no reduction)",
+                "ourProposal": "~$0–$200K (eliminated or reduced to trace after phase 2)"
+              },
+              {
+                "component": "Forced retrofit, yr 2–3",
+                "theirPath": "$1.2–$2.2M (emergency DAF replacement under POTW pressure, premium schedule)",
+                "ourProposal": "Included in phase 2 at planned timing ($600K–$1.4M)"
+              },
+              {
+                "component": "ADEQ enforcement exposure",
+                "theirPath": "$200K–$1M risk-adjusted (NOV, civil penalty at $10K/day, Consent Order risk)",
+                "ourProposal": "Near-zero — voluntary compliance path"
+              },
+              {
+                "component": "POTW surcharge escalation",
+                "theirPath": "Material, uncapped — utility has authority to increase rates and restrict discharge",
+                "ourProposal": "Eliminated"
+              },
+              {
+                "component": "5-year total (mid-range)",
+                "theirPath": "~$3.7M–$5.5M + enforcement tail",
+                "ourProposal": "~$1.1M–$2.0M, risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Confirmed plant flows (gal/day, peak) are the single biggest driver — tighten capex range by ±40% after site walk. Whether phase 1 includes equalization expansion vs. chemical-assist optimization only moves phase 1 by $150–$200K. A phase 2 commitment in Q3 alongside phase 1 anchors total deal at the higher end. O&M support contract ($40–$80K/yr) is additive if introduced at scoping."
+          },
+          "whatCouldKillIt": {
+            "insight": "The DAF OEM is probably already in the peripheral conversation. If they close a hardware replacement before we establish the treatment-economics frame, the surcharges continue and our deal collapses to nothing.",
+            "risks": [
+              {
+                "name": "DAF OEM pre-empts the relationship",
+                "mechanism": "A DAF equipment vendor scopes a hardware replacement without addressing upstream loading control or equalization. The plant buys a new DAF for $150–$200K. Surcharges reduce but don't disappear because the root problem — slug loading and chemistry — isn't solved by hardware alone. Our deal is gone.",
+                "mitigation": "Lead next week with the surcharge math and the treatment-economics frame before equipment options come up. Establish that the DAF is a symptom; the discharge envelope is the problem. A site walk confirms this on-the-ground."
+              },
+              {
+                "name": "Budget ceiling collapses scope",
+                "mechanism": "EHS manager acts within sole authority ($500K) and approves a minimal retrofit without engaging the GM on phase 2. Partial improvement achieved, surcharges reduced but not eliminated, deal never reaches full scope.",
+                "mitigation": "Design phase 1 explicitly to generate documented surcharge-reduction data that writes the GM-level business case for phase 2. Phase 1 ROI should be visible within 90 days of commissioning — that's the GM meeting setup."
+              },
+              {
+                "name": "Regulatory pressure forces emergency timeline",
+                "mechanism": "If the utility issues a formal pretreatment notice or ADEQ gets involved before Q3, the plant may be forced into a fast point-fix on the regulator's schedule — ruling out a phased, optimized solution.",
+                "mitigation": "Confirm the utility's current posture and any informal communications in the next call. If enforcement is closer than it appears, accelerate scoping timeline ahead of Q3."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The surcharge math self-closes if you put it in front of the right people before a DAF vendor does. Get the site walk booked this week.",
+            "actions": [
+              {
+                "title": "Book the site walk",
+                "timeframe": "This week — before any other vendor conversation",
+                "body": "Confirm a site visit to walk the existing DAF, equalization, and upstream process. This is the advance gate to Scope: without confirmed flows and a look at the current train, the capex range stays wide and the ROI case stays directional. Frame it to the EHS manager as 'I want to give you real numbers for Q3, not directional ones — that takes 2 hours on-site.'"
+              },
+              {
+                "title": "Put the 5-year surcharge math in front of the EHS manager",
+                "timeframe": "Before or at the next call (within 7 days)",
+                "body": "Send a one-page surcharge economics summary ahead of the site walk: $38K/month × 5 years = $2.28M in surcharges alone, before any enforcement escalation. Make the do-nothing cost explicit. This anchors the conversation on economics, not equipment, and pre-empts the DAF OEM 'just replace the unit' frame before it takes hold."
+              },
+              {
+                "title": "Map the path to GM",
+                "timeframe": "During the site walk or next call (within 14 days)",
+                "body": "Understand how the EHS manager briefs the plant GM on capital decisions above $500K. The total program likely exceeds that threshold. Phase 1 can move on EHS authority, but phase 2 needs a GM meeting — ideally before Q3 cycle closes. Ask: 'If phase 1 data shows $300K+ in annual surcharge reduction, what does the path to GM approval for phase 2 look like?'"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "step": 4,
+      "toolName": "generatePlaybook",
+      "input": {
+        "customer": {
+          "name": "Poultry Processing Plant",
+          "location": "Arkansas Processing Facility",
+          "state": "Arkansas"
+        },
+        "stage": "Qualify",
+        "subtitle": "Qualifying the surcharge economics and locking the scoping commitment ahead of Q3 capital planning",
+        "header": {
+          "subStreams": [
+            "Industrial discharge / pretreatment compliance — BOD/TSS surcharge reduction, DAF upsizing, equalization and load management"
+          ],
+          "stageIntro": "This is a Qualify-stage conversation. Your job is to convert information-gathering mode into a scoping commitment — site walk booked, flows confirmed, GM path identified. The surcharge math does the heavy lifting; your questions surface the regulatory posture, decision landscape, and operational reality that pin the scope.",
+          "insight": "The EHS manager already knows what's wrong. Your job is to make the 5-year economics undeniable before a DAF equipment vendor frames this as a hardware swap."
+        },
+        "themes": [
+          {
+            "title": "Open the reframe",
+            "framing": "Establish the surcharge-economics frame before any equipment conversation begins. The customer is likely framing this as 'replace the DAF' — your opening reframe is that the discharge envelope is the problem, not the hardware.",
+            "questions": [
+              "You've been at $38K/month for three months — has that number been formally flagged to the GM yet, or is this still living on your desk?",
+              "When you say you want to understand options, are you looking at this as an equipment question, a compliance question, or a cost question?",
+              "Walk me through what happened in 2023 when the line expanded — was the DAF capacity question raised at the time, or did the exceedances surface later?"
+            ],
+            "whyItMatters": [
+              "$456K/year in surcharges is a visible, recurring cash drain — surfacing whether GM awareness exists tells you how much of the economic case still needs to be built."
+            ]
+          },
+          {
+            "title": "Surface the regulatory posture",
+            "framing": "Three months of 4.8× BOD exceedances is the zone where informal utility conversations become formal notices. Understanding where the utility and ADEQ stand changes the timeline pressure on the solution.",
+            "questions": [
+              "What's your current relationship with the utility — are they watching these numbers closely, or have you been managing this informally?",
+              "Have you received anything in writing from the utility or ADEQ, or is this still verbal / informal?",
+              "Is there a pretreatment coordinator at the utility you deal with directly? What's their posture?",
+              "What does your sewer use agreement say about surcharge escalation — have they threatened to change the rate structure?"
+            ],
+            "substreamTag": "Industrial discharge / pretreatment",
+            "whyItMatters": [
+              "Formal written notices from the utility or ADEQ change the timeline — they can force a faster, less optimal solution on their schedule rather than yours."
+            ]
+          },
+          {
+            "title": "Identify the decision landscape",
+            "framing": "EHS manager has $500K sole authority. Anything above that goes to the GM. The field agent needs to understand how that path works before proposing a phased program.",
+            "questions": [
+              "For capital above your threshold, how does the GM evaluate the business case — is it primarily an ROI conversation, a compliance conversation, or both?",
+              "Has the plant GM been briefed on the surcharge situation at all — is this on his radar?",
+              "If we scoped a phase 1 within your authority and a phase 2 that would need GM sign-off, what would it take to get on his calendar before Q3 closes?",
+              "Are there other stakeholders — operations, finance, corporate EHS — who typically weigh in on a capital decision like this?"
+            ]
+          },
+          {
+            "title": "Surface the operational reality",
+            "framing": "Confirm the flows and operating profile that pin the DAF sizing gap. This is the evidence needed to tighten the capex range before Q3.",
+            "questions": [
+              "What does current wastewater flow look like day-to-day — do you have a rough gal/day number, and does it vary significantly shift-to-shift?",
+              "Walk me through the current DAF setup — what's the rated capacity, and what are you actually pushing through it now?",
+              "Are there peak flow events — end-of-shift cleanup, CIP cycles — that are driving the load spikes, or is it more consistent throughout the day?",
+              "What's happening upstream of the DAF — do you have equalization, and what's its current volume?",
+              "Is the DAF the only pretreatment step, or is there anything else in the train right now?"
+            ],
+            "substreamTag": "DAF / equalization / load management",
+            "whyItMatters": [
+              "Confirmed flows are the single biggest driver of the capex range — without them, the sizing estimate carries ±40% uncertainty."
+            ]
+          },
+          {
+            "title": "Surface competing alternatives already in play",
+            "framing": "DAF OEMs are the natural first call for a plant that knows it needs a bigger DAF. Understanding whether vendor conversations have already started determines how much framing work remains.",
+            "questions": [
+              "Have you had any preliminary conversations with equipment vendors about the DAF situation yet?",
+              "Is there an internal engineering team that would typically scope this kind of project, or does it come to an outside firm?",
+              "Has anyone already proposed a solution — even informally?",
+              "What would make you confident you're looking at the right fix and not just the most obvious one?"
+            ]
+          },
+          {
+            "title": "Anchor the funding pathway",
+            "framing": "Plant capex is the likely vehicle, but confirming the Q3 capital cycle mechanics and any constraints shapes how the proposal is structured.",
+            "questions": [
+              "How does the Q3 capital cycle work — is that when you submit for approval, or when money moves?",
+              "Is there a project budget range you're already working with, or are you building that case from scratch?",
+              "Have you looked at any financing options — equipment leasing, performance contracting — or is this a straight capex play?",
+              "Is there a corporate capital approval process above the GM, or does the GM have final authority?"
+            ]
+          },
+          {
+            "title": "Anchor the timeline",
+            "framing": "Q3 capital planning is the near-term forcing function. Understanding whether there's also a regulatory forcing function — utility or ADEQ deadline — determines whether the timeline compresses further.",
+            "questions": [
+              "When does Q3 capital planning formally close — what's the submission deadline?",
+              "If you have a scoped solution with a defensible ROI in hand, is that sufficient to get it into this year's cycle?",
+              "Is there any deadline from the utility side that would force action before Q3?",
+              "What would have to be true for you to feel confident going into that GM conversation?"
+            ]
+          },
+          {
+            "title": "Surface the safety angle",
+            "framing": "Poultry processing wastewater can carry H2S generation risk in holding structures. Confirm whether any operational safety concerns are associated with the current treatment situation.",
+            "questions": [
+              "Are there any odor or H2S concerns associated with the current DAF or equalization setup — especially during peak loading periods?",
+              "Has operations flagged any safety concerns related to the wastewater side since the 2023 expansion?"
+            ]
+          },
+          {
+            "title": "Test the value proposition",
+            "framing": "The surcharge ROI case is strong, but understanding which frame resonates most with this EHS manager shapes how you write the GM business case.",
+            "questions": [
+              "When you think about solving this — what's the outcome that matters most to you personally? Surcharge elimination, staying off the regulatory radar, or just getting the right equipment in place?",
+              "If we showed you a phased approach where phase 1 cuts surcharges materially within your budget authority and generates the data to justify a full fix — would that be a workable shape for Q3?",
+              "Is there a number that would make this a clear yes for the GM, or is it more about the compliance story?"
+            ]
+          },
+          {
+            "title": "Set the next step",
+            "framing": "The advance gate to Scope is a site walk. Lock it before the call ends.",
+            "questions": [
+              "Can we schedule a 2-hour site walk this month? I want to confirm what's running, get eyes on the DAF and equalization, and come back with real numbers — not directional ones — for your Q3 cycle.",
+              "If we walk the site and I come back with a scoped phase 1 within your budget authority plus a phase 2 business case for the GM, would that give you what you need for Q3?",
+              "What's your preferred way to work through this — do you want us to present jointly to the GM, or do you want the numbers to brief him yourself?"
+            ],
+            "whyItMatters": [
+              "Leaving without a site walk booked means a DAF vendor fills that slot. The site walk is the deal."
+            ]
+          },
+          {
+            "title": "Open Discovery agenda — what this conversation won't close",
+            "framing": "These items won't be resolved in a single call. Flag them as open and confirm a path to close each.",
+            "questions": [
+              "We'll need a copy of your sewer use agreement and the last three months of utility invoices to confirm the surcharge basis — can you pull those before we meet on-site?",
+              "Do you have any eDMR or POTW-submitted discharge monitoring data we could look at alongside the surcharge bills?",
+              "Is there a site drawing or process flow diagram for the wastewater train we could review before the site walk?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "step": 5,
+      "toolName": "generateAnalyticalRead",
+      "input": {
+        "customer": {
+          "name": "Poultry Processing Plant",
+          "location": "Arkansas Processing Facility",
+          "state": "Arkansas",
+          "basin": "Arkansas River Basin"
+        },
+        "subtitle": "Evidenced read on the BOD/TSS pretreatment surcharge exposure at an Arkansas poultry processing facility post-2023 line expansion",
+        "subStreamsLine": "Sub-streams: DAF capacity, equalization and load management, BOD/TSS pretreatment compliance, ADEQ enforcement posture, POTW surcharge structure",
+        "closingInsight": "The surcharge math makes this deal nearly self-closing — $456K/year against a 2–4 year payback is a GM-level ROI that doesn't require a sophisticated buyer. The field agent's job next week is to put that comparison on paper before a DAF equipment vendor frames it as a $150K hardware swap.",
+        "summary": "A poultry processing plant in Arkansas has been chronically exceeding its municipal POTW pretreatment limits for three consecutive months following a 2023 production line expansion. BOD is averaging 1,450 mg/L against a 300 mg/L permit limit (4.8×); TSS is averaging 620 mg/L against a 250 mg/L limit (2.5×). The plant is paying approximately $38,000/month in surcharges above base sewer costs (~$456K/year). The root cause is a documented capacity mismatch: the existing DAF unit is undersized for post-expansion throughput. The EHS manager owns the problem with budget authority up to $500K; the plant GM controls anything above that threshold. The customer is entering Q3 capital planning and is in information-gathering mode. This analytical read classifies the deal at Qualify stage (MEDIUM confidence), sizes the total program at $900K–$1.85M (MEDIUM-LOW confidence pending flow confirmation), and identifies a phased engagement structure that puts phase 1 within EHS sole authority. The do-nothing/band-aid path is priced at $3.7–5.5M over five years when surcharges, forced retrofit, and risk-adjusted ADEQ enforcement exposure are included — approximately 2–3× the cost of the full program.",
+        "gateState": "OPEN_WITH_CONDITIONS",
+        "gateContent": "Engagement is open. Qualification gate advances to Scope when: (1) EHS manager commits to a site visit / scoping conversation, (2) plant flows (gal/day, peak) are confirmed, and (3) GM engagement pathway is identified. None of these block the field agent from proceeding next week.",
+        "subStreamLens": [
+          {
+            "subStream": "DAF capacity",
+            "activeCondition": "DAF unit undersized for post-2023 throughput; rated capacity vs. current throughput not yet confirmed in evidence — sizing gap is the primary capex-range driver",
+            "evidenceAnchor": "CALL-RECAP-01"
+          },
+          {
+            "subStream": "Equalization and load management",
+            "activeCondition": "Slug loading and peak-flow management identified as contributing factors; EQ volume and configuration not yet confirmed on-site",
+            "evidenceAnchor": "CALL-RECAP-01"
+          },
+          {
+            "subStream": "BOD/TSS pretreatment compliance",
+            "activeCondition": "BOD 1,450 mg/L vs 300 mg/L limit (4.8×); TSS 620 mg/L vs 250 mg/L limit (2.5×); 3 consecutive months documented; indirect discharger to municipal POTW",
+            "evidenceAnchor": "CALL-RECAP-01"
+          },
+          {
+            "subStream": "ADEQ enforcement posture",
+            "activeCondition": "Enforcement posture not yet confirmed; 3 months of chronic 4.8× BOD exceedances is within the zone where informal warnings escalate to formal NOV",
+            "evidenceAnchor": "CALL-RECAP-01"
+          },
+          {
+            "subStream": "POTW surcharge structure",
+            "activeCondition": "$38K/month documented; sewer use agreement and surcharge rate schedule not yet in evidence — escalation authority unconfirmed",
+            "evidenceAnchor": "CALL-RECAP-01"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "EHS manager commits to site visit / scoping conversation",
+            "status": "Open — not yet confirmed",
+            "source": "CALL-RECAP-01"
+          },
+          {
+            "required": "Plant flows (gal/day, peak) confirmed",
+            "status": "Open — not in evidence",
+            "source": "CALL-RECAP-01"
+          },
+          {
+            "required": "GM engagement pathway identified",
+            "status": "Open — EHS manager referenced; path to GM not yet mapped",
+            "source": "CALL-RECAP-01"
+          },
+          {
+            "required": "Confirm utility regulatory posture (informal vs. formal notice)",
+            "status": "Open — not yet confirmed",
+            "source": "CALL-RECAP-01"
+          },
+          {
+            "required": "Sewer use agreement / surcharge rate schedule obtained",
+            "status": "Nice-to-have — surcharge basis directionally confirmed from call",
+            "source": "CALL-RECAP-01"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex, year 0 — cheap path vs. our program",
+            "basis": "Band-aid: $0–$50K equipment tweak only. Our program: $300–$450K phase 1 (EHS authority) + $600K–$1.4M phase 2 (GM-level). Lens: industrial-discharge, $5–15K/gal-day design capacity for pretreatment train; directional pending flow confirmation.",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Ongoing surcharges, 5-year",
+            "basis": "$38K/month × 12 × 5 = $2.28M if unremediated. Post-program: ~$0–$200K (trace surcharges during phase-out period). Basis: documented surcharge invoices per call recap.",
+            "confidence": "HIGH"
+          },
+          {
+            "row": "Forced retrofit, yr 2–3 (cheap-path only)",
+            "basis": "Emergency DAF replacement under POTW timeline pressure: $1.2–2.2M. Basis: DAF replacement lens range ($5–15K/gal-day) plus 20–40% emergency-schedule premium. Included in our phase 2 at planned pricing.",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "ADEQ civil penalty exposure",
+            "basis": "ADEQ civil penalty authority up to $10K/day per parameter for NPDES/pretreatment violations under Ark. Code Ann. §8-4-217. 2 parameters in chronic exceedance. Risk-adjusted at 20–30% probability of formal action over 5-year horizon: $200K–1M. Our path: near-zero (voluntary compliance lane).",
+            "confidence": "LOW"
+          },
+          {
+            "row": "POTW surcharge escalation",
+            "basis": "Municipal utilities retain authority to increase surcharge rates and restrict discharge for chronic violators. Escalation amount not quantifiable without sewer use agreement; flagged as material uncapped exposure on cheap path.",
+            "confidence": "QUALITATIVE"
+          },
+          {
+            "row": "5-year total, mid-range",
+            "basis": "Cheap path: $2.28M surcharges + $1.7M forced retrofit (mid) + $600K enforcement (mid) + escalation tail = $3.7–5.5M. Our path: $1.1–2.0M total program, surcharges eliminated. Ratio: ~2–3× program cost.",
+            "confidence": "MEDIUM"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "This engagement involves a single-sub-stream industrial discharge opportunity at an Arkansas poultry processing plant. The customer is an indirect discharger to a municipal POTW and is in chronic exceedance of pretreatment permit limits for BOD and TSS following a 2023 production expansion. The EHS manager, who owns the problem and has capital budget authority up to $500K, initiated contact ahead of the plant's Q3 capital planning cycle. The plant GM holds authority for anything above that threshold. No STOP or SPECIALIST flags are active. The deal is classified at Qualify stage (MEDIUM confidence); the advance gate to Scope is a confirmed site visit with flows documented.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "HIGH"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "Single sub-stream: industrial-discharge / pretreatment-compliance-non-categorical. The plant is an indirect discharger subject to local POTW pretreatment limits and is not operating under a federal categorical standard (40 CFR Part 412 applies to NPDES direct dischargers; local pretreatment limits govern here). The DAF capacity gap is the proximate cause of current exceedances. Upstream equalization and load management are contributing factors that must be addressed alongside any DAF upsizing to achieve sustained compliance. The ADEQ enforcement posture is an open variable that materially affects the solution timeline.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "HIGH"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "The sub-stream lens table below summarizes the active conditions and evidence anchors for each decomposed sub-stream. Equalization and ADEQ posture are the two open variables that most affect the recommended approach; both are closed by the site walk.",
+            "evidenceTags": [],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Stage classification",
+            "body": "The stage and gaps table below documents the Required gaps to advance from Qualify to Scope. The single highest-leverage action is booking the site visit — that visit closes the two most material technical gaps (flows, equalization configuration) and creates the context for identifying the GM engagement pathway.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Decision-maker matrix",
+            "body": "Two roles are in scope for this engagement. The EHS manager is the primary point of contact, problem owner, and budget authority for capital under $500K. This role can move phase 1 without further approval. The plant GM is the approving authority for any capital above $500K, including the phase 2 program. The GM has not yet been briefed in the context of this engagement and is not yet a confirmed participant in the evaluation. Corporate-level EHS or engineering oversight is possible but not in evidence; the field agent should confirm whether corporate sign-off is required for plant-level capital above the GM's authority.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "Phase 1 ($300–$450K, directional, MEDIUM-LOW confidence): Equalization optimization (slug-load dampening, peak-flow control, volume confirmation), chemical-assist tuning on the existing DAF train, and operational SOP upgrades for shift changeovers. Target: meaningful BOD and TSS reduction to cut surcharges materially in the near term and generate documented performance data for the GM-level phase 2 business case. Phase 2 ($600K–$1.4M, directional, MEDIUM-LOW confidence): DAF replacement or upsizing to match post-2023 throughput, plus secondary polishing step (fine-screen or biological roughing for BOD). Target: sustained full compliance — BOD <300 mg/L, TSS <250 mg/L — permanent surcharge elimination. Total program: $900K–$1.85M, MEDIUM-LOW confidence. Primary driver of range: plant flows (gal/day, peak) not yet confirmed. Range tightens to ±25% after site walk. A phased structure deliberately places phase 1 within the EHS manager's sole authority, generating performance data and documented ROI that writes the GM-level business case for phase 2 within the same or next capital cycle.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three customer-side outcomes anchor the recommended approach. First, surcharge elimination: at $456K/year in documented surcharges, the program pays back in 2–4 years at total program cost — a straightforward ROI that survives GM-level scrutiny. Second, capital-cycle positioning: a plant that enters Q3 with a scoped solution and a defensible payback period wins budget priority over unscoped line items. Voluntary compliance now is structurally cheaper than a Consent Order response later, which runs on the regulator's schedule. Third, regulatory risk reduction: three months of chronic 4.8× BOD exceedances places this plant in the zone where informal utility monitoring becomes formal ADEQ notice. ADEQ civil penalty authority under Ark. Code Ann. §8-4-217 runs to $10K/day per parameter for continued violations. Acting now, with a scoped program, keeps the plant in the voluntary compliance lane.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The table below presents the fully-priced 5-year comparison between the do-nothing/band-aid path and the recommended program. The bottom-line claim: the cheap path costs $3.7–5.5M over five years against a $1.1–2.0M program, a 2–3× multiple. The largest single driver is not enforcement — it is the $2.28M in ongoing surcharges that continue unabated under a band-aid scenario. Enforcement exposure is directional and risk-adjusted; the surcharge exposure is documented and certain.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Compliance & safety",
+            "body": "No STOP or SPECIALIST flags are active based on current evidence. Two ATTENTION flags are open: (1) plant flows not yet confirmed — DAF sizing gap is the primary driver of capex-range width; closes at site visit; (2) GM engagement not yet established — any scope above $500K requires upward alignment; the EHS manager's phase 1 ROI data is the designed unlock. Additionally, H2S generation potential in holding and equalization structures at poultry processing facilities is standard-practice risk; confirmation of current odor management and any near-miss history should be addressed at the site walk.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Kill-risk inventory",
+            "body": "Three ranked kill risks apply at Qualify stage. First (SPECIALIST): DAF OEM pre-empts the relationship. A DAF equipment vendor sells a hardware replacement without addressing upstream load management or equalization; surcharges reduce but persist; the full-program engagement is displaced. Mitigation: establish the treatment-economics frame — $456K/year, 5-year comparison — before equipment options are presented. Second (SPECIALIST): budget ceiling collapses scope. EHS manager acts within sole authority and approves a minimal retrofit; partial improvement only; deal never reaches full program scope. Mitigation: design phase 1 to generate documented surcharge-reduction performance data that writes the GM-level phase 2 business case. Third (ATTENTION): regulatory pressure forces emergency timeline. Formal ADEQ or POTW notice before Q3 forces a fast point-fix on the regulator's schedule. Mitigation: confirm utility posture in next call; accelerate scoping if formal action is closer than it appears.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Funding pathway analysis",
+            "body": "This engagement is an industrial plant capital project. The primary vehicle is plant capex, managed through the Q3 capital cycle. CWSRF does not apply (industrial borrowers are not eligible except in specific state-authorized programs; Arkansas has not broadly extended CWSRF to industrial pretreatment). Equipment financing and performance contracting are available alternatives worth surfacing — a performance contract structure where phase 1 is financed against documented surcharge reduction could reduce the EHS manager's upfront ask and create a clean ROI narrative for the GM. This should be introduced as an option at scoping, not as the primary proposal structure.",
+            "evidenceTags": [],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not commit to yet",
+            "body": "The following are explicitly not committed at Qualify stage: (1) specific DAF sizing or model selection — requires confirmed flows and site assessment; (2) treatment performance guarantees — require confirmed inlet characterization beyond the reported averages; (3) final capex pricing — directional ranges only until site walk and scoping are complete; (4) ADEQ enforcement timeline — regulatory posture confirmation is an open gap; (5) GM-level engagement outcome — the path to GM approval is identified but not yet confirmed.",
+            "evidenceTags": [],
+            "confidenceTier": "HIGH"
+          }
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "toolName": "generateProposalShell",
+      "input": {
+        "customer": {
+          "name": "Poultry Processing Plant",
+          "location": "Arkansas Processing Facility",
+          "state": "Arkansas"
+        },
+        "subtitle": "Phased Wastewater Treatment Improvement — BOD/TSS Pretreatment Compliance Program",
+        "executiveSummary": "This document outlines a proposed phased wastewater treatment improvement program for a poultry processing facility in Arkansas that has experienced chronic exceedances of its municipal pretreatment permit limits following a 2023 production line expansion. Current discharge concentrations — BOD averaging 1,450 mg/L against a 300 mg/L limit and TSS averaging 620 mg/L against a 250 mg/L limit — are generating approximately $456,000 per year in sewer surcharges above base costs. Left unaddressed, this exposure is estimated at $3.7–5.5M over five years when ongoing surcharges, a forced treatment system retrofit, and risk-adjusted regulatory enforcement exposure are fully priced. The proposed program addresses the root cause — an undersized dissolved air flotation (DAF) unit combined with upstream equalization and load management deficiencies — through a two-phase structure designed to move Phase 1 within the plant's capital approval threshold and generate the documented performance data needed to support a Phase 2 capital request. Total program investment is estimated at $900K–$1.85M (directional — subject to site assessment and flow confirmation), against an estimated 2–4 year payback from surcharge elimination alone.",
+        "proposedScope": [
+          "Phase 1 — DAF Operational Optimization and Upstream Load Control: Equalization volume and configuration assessment and tuning for slug-load dampening and peak-flow management; chemical-assist optimization on the existing DAF train (coagulant/flocculant program); shift-changeover SOP development and operator training. Goal: materially reduce BOD and TSS discharge concentrations, generate measurable surcharge reduction within 60–90 days of commissioning, and produce documented performance data supporting the Phase 2 business case.",
+          "Phase 2 — DAF Replacement/Upsizing and Secondary Polishing: Replacement or upsizing of the DAF unit to match post-2023 production throughput; addition of a secondary polishing step (fine screening and/or biological roughing) for sustained BOD reduction; integration with the Phase 1 equalization and load management improvements. Goal: sustained full compliance — BOD below 300 mg/L and TSS below 250 mg/L — permanently eliminating pretreatment surcharges.",
+          "Ongoing Operational Support (optional): Performance monitoring, periodic optimization review, and operator support during commissioning and the first year of full operation. Scope and cadence to be defined at scoping."
+        ],
+        "sizingAndPricing": "Phase 1 is estimated at $300,000–$450,000 (directional, MEDIUM-LOW confidence). Phase 2 is estimated at $600,000–$1,400,000 (directional, MEDIUM-LOW confidence). Total program range: $900,000–$1,850,000. These ranges are directional and subject to site assessment, confirmed plant flow rates (gal/day, peak), and detailed engineering scoping. Plant flows are the primary driver of range width; the range tightens to approximately ±25% following site walk and flow confirmation. Ongoing operational support, if included, is estimated at $40,000–$80,000 per year.",
+        "schedule": "Phase 1 scoping and site assessment: targeted for completion prior to Q3 capital planning cycle. Phase 1 design and procurement: Q3–Q4 of current year subject to capital approval. Phase 1 commissioning: within 90–120 days of authorization. Phase 2 design, procurement, and construction: subsequent capital cycle or concurrent with Phase 1 pending GM authorization. All timelines are directional and subject to site assessment findings and capital approval dates.",
+        "commitments": [
+          {
+            "label": "Directional Sizing",
+            "text": "Phase 1 estimated at $300K–$450K; Phase 2 at $600K–$1.4M. Total program $900K–$1.85M. These are directional ranges only. Final scoped pricing follows site assessment and flow confirmation.",
+            "owner": "H2O Allegiant"
+          },
+          {
+            "label": "Phased Structure",
+            "text": "Phase 1 is specifically designed to be within the EHS manager's capital authority threshold and to generate documented performance data that supports the Phase 2 GM-level business case. Phase 2 is not contingent on a separate competitive process unless required by the plant's procurement policy.",
+            "owner": "H2O Allegiant"
+          },
+          {
+            "label": "Site Assessment Commitment",
+            "text": "Upon authorization, H2O Allegiant will conduct a full site assessment including flow measurement, DAF performance evaluation, and equalization configuration review. Site assessment findings will be delivered within [X] business days as the basis for a final scoped proposal.",
+            "date": "To be confirmed at scheduling",
+            "owner": "H2O Allegiant"
+          },
+          {
+            "label": "Surcharge Payback Basis",
+            "text": "Surcharge elimination estimate of ~$456K/year is based on documented surcharge invoices as reported by the plant. Actual payback will depend on post-Phase 2 discharge performance and prevailing POTW surcharge rates at time of compliance. The 2–4 year payback estimate is directional and will be confirmed in the final scoped proposal.",
+            "owner": "H2O Allegiant"
+          }
+        ],
+        "fundingPathway": "This engagement is expected to proceed as plant capital expenditure managed through the Q3 capital planning cycle. CWSRF financing is not applicable to industrial pretreatment borrowers in most state programs. Equipment financing and performance contracting structures — where Phase 1 investment is recovered against documented surcharge reduction — are available as alternatives and can be structured if preferred. This option is worth introducing at the scoping conversation.",
+        "riskAllocation": "Phase 1 optimization work carries performance risk primarily driven by inlet quality variability; documented inlet characterization during the site assessment establishes the performance baseline. Phase 2 equipment carries standard industrial construction risk. Risk allocation detail to be developed in the final scoped proposal.",
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — internal scoping seed only. Not for distribution. Field agent to edit and expand following site visit and flow confirmation.",
+        "workPackages": [
+          {
+            "id": "WP-1",
+            "name": "Site Assessment and Flow Confirmation",
+            "outcome": "Confirmed plant flow rates (gal/day, peak), existing DAF rated vs. actual capacity, equalization volume and configuration — inputs required to finalize Phase 1 and Phase 2 scope and pricing"
+          },
+          {
+            "id": "WP-2",
+            "name": "Phase 1: Equalization and Load Management Optimization",
+            "outcome": "Slug-load dampening and peak-flow attenuation improvements; documented inlet quality improvement to existing DAF"
+          },
+          {
+            "id": "WP-3",
+            "name": "Phase 1: DAF Chemical-Assist Optimization",
+            "outcome": "Optimized coagulant/flocculant program for existing DAF train; documented TSS and BOD removal improvement; measurable surcharge reduction within 60–90 days"
+          },
+          {
+            "id": "WP-4",
+            "name": "Phase 1: Operator SOP Development and Training",
+            "outcome": "Shift-changeover SOPs; operator training documentation; Phase 2 performance baseline established"
+          },
+          {
+            "id": "WP-5",
+            "name": "Phase 2: DAF Replacement/Upsizing",
+            "outcome": "DAF unit sized for post-2023 throughput; integrated with Phase 1 equalization improvements"
+          },
+          {
+            "id": "WP-6",
+            "name": "Phase 2: Secondary Polishing Step",
+            "outcome": "Sustained BOD removal to below 300 mg/L; TSS below 250 mg/L; permanent pretreatment surcharge elimination"
+          }
+        ],
+        "sizingRows": [
+          {
+            "label": "Phase 1 (DAF optimization + load control)",
+            "value": "$300K–$450K | MEDIUM-LOW confidence"
+          },
+          {
+            "label": "Phase 2 (DAF upsizing + secondary polishing)",
+            "value": "$600K–$1.4M | MEDIUM-LOW confidence"
+          },
+          {
+            "label": "Total program",
+            "value": "$900K–$1.85M | MEDIUM-LOW confidence"
+          },
+          {
+            "label": "Primary range driver",
+            "value": "Plant flow rate (gal/day, peak) — not yet confirmed; tightens to ±25% after site walk"
+          },
+          {
+            "label": "Surcharge payback (program)",
+            "value": "2–4 years from surcharge elimination at $456K/yr documented"
+          },
+          {
+            "label": "Optional O&M support",
+            "value": "$40K–$80K/yr"
+          }
+        ],
+        "outOfScope": [
+          {
+            "heading": "Stormwater or NPDES Direct Discharge Permitting",
+            "body": "This proposal addresses the plant's indirect discharge to the municipal POTW under local pretreatment limits. Stormwater management, NPDES direct discharge permitting, and any associated infrastructure are outside the scope of this program."
+          },
+          {
+            "heading": "Process Water or Production Equipment Changes",
+            "body": "Changes to the production line, process water systems, or manufacturing equipment are outside the scope of this engagement. Water conservation or source-reduction measures may be identified during the site assessment as complementary opportunities; these would be scoped separately."
+          },
+          {
+            "heading": "Regulatory Representation or ADEQ Liaison",
+            "body": "This proposal does not include regulatory representation, permit negotiation, or liaison with ADEQ or the receiving POTW on the plant's behalf. The field agent or the plant's environmental counsel should manage any active regulatory correspondence."
+          },
+          {
+            "heading": "Final Engineering Design or Construction Management (Phase 1)",
+            "body": "Phase 1 as described is an optimization and operational improvement program. Final engineering design and construction management are included in Phase 2 scope; Phase 1 does not require a PE-stamped design package. This boundary is subject to confirmation at scoping."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Plant flows (gal/day, peak) confirmed",
+            "closer": "Site walk — field agent to schedule before Q3 capital cycle submission"
+          },
+          {
+            "gate": "Existing DAF rated capacity vs. current throughput confirmed",
+            "closer": "Site walk — EHS manager to provide equipment specifications in advance if available"
+          },
+          {
+            "gate": "Equalization volume and configuration assessed",
+            "closer": "Site walk — field agent to walk the existing train and document"
+          },
+          {
+            "gate": "GM engagement pathway confirmed",
+            "closer": "EHS manager to identify; field agent to request in next call"
+          },
+          {
+            "gate": "ADEQ / utility regulatory posture confirmed (informal vs. formal notice)",
+            "closer": "EHS manager to confirm in next call; sewer use agreement and utility correspondence to be obtained"
+          }
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "field-brief",
+      "payload": {
+        "customer": {
+          "name": "Poultry Processing Plant",
+          "location": "Arkansas Processing Facility",
+          "state": "Arkansas",
+          "basin": "Arkansas River Basin"
+        },
+        "stage": "Qualify",
+        "confidence": "MEDIUM",
+        "date": "2025-07-14",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "Plant flows not yet confirmed — DAF sizing gap is the primary driver of capex range width (±40%); confirm during site walk before Q3 cycle.",
+          "GM engagement not yet established — any scope above $500K requires upward alignment; phase 1 must be designed to generate the ROI data that writes the GM-level business case."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "Three months of $38K/month surcharges is a $456K/year cash drain — and it's the cheap outcome. Do nothing for five years and the fully-priced bill is $3.7–5.5M.",
+            "body": "An Arkansas poultry processing plant is chronically exceeding its POTW pretreatment limits following a 2023 production line expansion: BOD averaging 1,450 mg/L against a 300 mg/L permit limit (4.8×) and TSS averaging 620 mg/L against a 250 mg/L limit (2.5×). The root cause is documented — the existing DAF unit is undersized for current throughput. The plant has been paying ~$38,000/month in surcharges for the past three months on top of base sewer costs. The EHS manager owns the problem and has budget authority up to $500K; the plant GM controls anything above that. The customer is in information-gathering mode ahead of a Q3 capital planning cycle — the field agent's job next week is to convert that into a scoping commitment by making the surcharge math explicit. At 4.8× BOD over three months, this is not a slug event — it is a chronic discharge envelope, and ADEQ has civil penalty authority up to $10K/day per parameter for continued pretreatment exceedances."
+          },
+          "whatWeWouldPropose": {
+            "insight": "A phased program — phase 1 within EHS sole authority, phase 2 GM-level — eliminates surcharges and gets ahead of regulatory escalation. Total program cost is $1.1–2.0M against a do-nothing path of $3.7–5.5M over five years.",
+            "recommendedApproach": "Phase 1 ($300–$450K, within EHS budget authority): DAF operational optimization plus upstream load-reduction — equalization volume tuning for slug/peak-flow control, chemical-assist optimization on the existing DAF train, and shift-changeover SOPs. Goal: meaningful BOD and TSS reduction to cut surcharges materially and generate documented ROI data for GM approval. Phase 2 ($600K–$1.4M, GM-level): DAF replacement/upsizing to match post-2023 throughput plus secondary polishing to achieve sustained full compliance — BOD <300 mg/L, TSS <250 mg/L — eliminating surcharges permanently. Note: plant flows not yet confirmed; DAF sizing and capex range tighten significantly after site walk.",
+            "winWinArguments": [
+              {
+                "lead": "Surcharge elimination — ~$456K/year recovered.",
+                "body": "At observed mass loading, this plant is paying ~$456K/year in surcharges above base sewer costs. Phase 1 cuts that materially; phase 2 eliminates it. At a $1.1–2.0M total program, the surcharge payback runs 2–4 years — a defensible ROI for any GM-level capital review."
+              },
+              {
+                "lead": "Ahead of the Q3 capital cycle, not scrambling after an enforcement trigger.",
+                "body": "A plant that enters Q3 with a scoped solution and a documented surcharge-payback ROI wins budget priority over unscoped line items. Voluntary compliance now is structurally cheaper than a Consent Order later — which runs on the POTW's schedule, not the plant's."
+              },
+              {
+                "lead": "Stays in the voluntary compliance lane before ADEQ gets formal.",
+                "body": "Three months of documented 4.8× BOD exceedances is the zone where informal utility warnings escalate to formal NOVs. ADEQ civil penalty authority runs to $10K/day per parameter. Acting now, with a scoped solution in hand, keeps the plant in the voluntary compliance conversation — the materially cheaper path."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex, year 0",
+                "theirPath": "$0–$50K (band-aid equipment tweak only)",
+                "ourProposal": "$300–$450K (phase 1, within EHS authority)"
+              },
+              {
+                "component": "Ongoing surcharges, 5-year",
+                "theirPath": "~$2.28M ($456K/yr × 5, no reduction)",
+                "ourProposal": "~$0–$200K (eliminated or reduced to trace after phase 2)"
+              },
+              {
+                "component": "Forced retrofit, yr 2–3",
+                "theirPath": "$1.2–$2.2M (emergency DAF replacement under POTW pressure, premium schedule)",
+                "ourProposal": "Included in phase 2 at planned timing ($600K–$1.4M)"
+              },
+              {
+                "component": "ADEQ enforcement exposure",
+                "theirPath": "$200K–$1M risk-adjusted (NOV, civil penalty at $10K/day, Consent Order risk)",
+                "ourProposal": "Near-zero — voluntary compliance path"
+              },
+              {
+                "component": "POTW surcharge escalation",
+                "theirPath": "Material, uncapped — utility has authority to increase rates and restrict discharge",
+                "ourProposal": "Eliminated"
+              },
+              {
+                "component": "5-year total (mid-range)",
+                "theirPath": "~$3.7M–$5.5M + enforcement tail",
+                "ourProposal": "~$1.1M–$2.0M, risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Confirmed plant flows (gal/day, peak) are the single biggest driver — tighten capex range by ±40% after site walk. Whether phase 1 includes equalization expansion vs. chemical-assist optimization only moves phase 1 by $150–$200K. A phase 2 commitment in Q3 alongside phase 1 anchors total deal at the higher end. O&M support contract ($40–$80K/yr) is additive if introduced at scoping."
+          },
+          "whatCouldKillIt": {
+            "insight": "The DAF OEM is probably already in the peripheral conversation. If they close a hardware replacement before we establish the treatment-economics frame, the surcharges continue and our deal collapses to nothing.",
+            "risks": [
+              {
+                "name": "DAF OEM pre-empts the relationship",
+                "mechanism": "A DAF equipment vendor scopes a hardware replacement without addressing upstream loading control or equalization. The plant buys a new DAF for $150–$200K. Surcharges reduce but don't disappear because the root problem — slug loading and chemistry — isn't solved by hardware alone. Our deal is gone.",
+                "mitigation": "Lead next week with the surcharge math and the treatment-economics frame before equipment options come up. Establish that the DAF is a symptom; the discharge envelope is the problem. A site walk confirms this on-the-ground."
+              },
+              {
+                "name": "Budget ceiling collapses scope",
+                "mechanism": "EHS manager acts within sole authority ($500K) and approves a minimal retrofit without engaging the GM on phase 2. Partial improvement achieved, surcharges reduced but not eliminated, deal never reaches full scope.",
+                "mitigation": "Design phase 1 explicitly to generate documented surcharge-reduction data that writes the GM-level business case for phase 2. Phase 1 ROI should be visible within 90 days of commissioning — that's the GM meeting setup."
+              },
+              {
+                "name": "Regulatory pressure forces emergency timeline",
+                "mechanism": "If the utility issues a formal pretreatment notice or ADEQ gets involved before Q3, the plant may be forced into a fast point-fix on the regulator's schedule — ruling out a phased, optimized solution.",
+                "mitigation": "Confirm the utility's current posture and any informal communications in the next call. If enforcement is closer than it appears, accelerate scoping timeline ahead of Q3."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The surcharge math self-closes if you put it in front of the right people before a DAF vendor does. Get the site walk booked this week.",
+            "actions": [
+              {
+                "title": "Book the site walk",
+                "timeframe": "This week — before any other vendor conversation",
+                "body": "Confirm a site visit to walk the existing DAF, equalization, and upstream process. This is the advance gate to Scope: without confirmed flows and a look at the current train, the capex range stays wide and the ROI case stays directional. Frame it to the EHS manager as 'I want to give you real numbers for Q3, not directional ones — that takes 2 hours on-site.'"
+              },
+              {
+                "title": "Put the 5-year surcharge math in front of the EHS manager",
+                "timeframe": "Before or at the next call (within 7 days)",
+                "body": "Send a one-page surcharge economics summary ahead of the site walk: $38K/month × 5 years = $2.28M in surcharges alone, before any enforcement escalation. Make the do-nothing cost explicit. This anchors the conversation on economics, not equipment, and pre-empts the DAF OEM 'just replace the unit' frame before it takes hold."
+              },
+              {
+                "title": "Map the path to GM",
+                "timeframe": "During the site walk or next call (within 14 days)",
+                "body": "Understand how the EHS manager briefs the plant GM on capital decisions above $500K. The total program likely exceeds that threshold. Phase 1 can move on EHS authority, but phase 2 needs a GM meeting — ideally before Q3 cycle closes. Ask: 'If phase 1 data shows $300K+ in annual surcharge reduction, what does the path to GM approval for phase 2 look like?'"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "playbook",
+      "payload": {
+        "customer": {
+          "name": "Poultry Processing Plant",
+          "location": "Arkansas Processing Facility",
+          "state": "Arkansas"
+        },
+        "stage": "Qualify",
+        "subtitle": "Qualifying the surcharge economics and locking the scoping commitment ahead of Q3 capital planning",
+        "header": {
+          "subStreams": [
+            "Industrial discharge / pretreatment compliance — BOD/TSS surcharge reduction, DAF upsizing, equalization and load management"
+          ],
+          "stageIntro": "This is a Qualify-stage conversation. Your job is to convert information-gathering mode into a scoping commitment — site walk booked, flows confirmed, GM path identified. The surcharge math does the heavy lifting; your questions surface the regulatory posture, decision landscape, and operational reality that pin the scope.",
+          "insight": "The EHS manager already knows what's wrong. Your job is to make the 5-year economics undeniable before a DAF equipment vendor frames this as a hardware swap."
+        },
+        "themes": [
+          {
+            "title": "Open the reframe",
+            "framing": "Establish the surcharge-economics frame before any equipment conversation begins. The customer is likely framing this as 'replace the DAF' — your opening reframe is that the discharge envelope is the problem, not the hardware.",
+            "questions": [
+              "You've been at $38K/month for three months — has that number been formally flagged to the GM yet, or is this still living on your desk?",
+              "When you say you want to understand options, are you looking at this as an equipment question, a compliance question, or a cost question?",
+              "Walk me through what happened in 2023 when the line expanded — was the DAF capacity question raised at the time, or did the exceedances surface later?"
+            ],
+            "whyItMatters": [
+              "$456K/year in surcharges is a visible, recurring cash drain — surfacing whether GM awareness exists tells you how much of the economic case still needs to be built."
+            ]
+          },
+          {
+            "title": "Surface the regulatory posture",
+            "framing": "Three months of 4.8× BOD exceedances is the zone where informal utility conversations become formal notices. Understanding where the utility and ADEQ stand changes the timeline pressure on the solution.",
+            "questions": [
+              "What's your current relationship with the utility — are they watching these numbers closely, or have you been managing this informally?",
+              "Have you received anything in writing from the utility or ADEQ, or is this still verbal / informal?",
+              "Is there a pretreatment coordinator at the utility you deal with directly? What's their posture?",
+              "What does your sewer use agreement say about surcharge escalation — have they threatened to change the rate structure?"
+            ],
+            "substreamTag": "Industrial discharge / pretreatment",
+            "whyItMatters": [
+              "Formal written notices from the utility or ADEQ change the timeline — they can force a faster, less optimal solution on their schedule rather than yours."
+            ]
+          },
+          {
+            "title": "Identify the decision landscape",
+            "framing": "EHS manager has $500K sole authority. Anything above that goes to the GM. The field agent needs to understand how that path works before proposing a phased program.",
+            "questions": [
+              "For capital above your threshold, how does the GM evaluate the business case — is it primarily an ROI conversation, a compliance conversation, or both?",
+              "Has the plant GM been briefed on the surcharge situation at all — is this on his radar?",
+              "If we scoped a phase 1 within your authority and a phase 2 that would need GM sign-off, what would it take to get on his calendar before Q3 closes?",
+              "Are there other stakeholders — operations, finance, corporate EHS — who typically weigh in on a capital decision like this?"
+            ]
+          },
+          {
+            "title": "Surface the operational reality",
+            "framing": "Confirm the flows and operating profile that pin the DAF sizing gap. This is the evidence needed to tighten the capex range before Q3.",
+            "questions": [
+              "What does current wastewater flow look like day-to-day — do you have a rough gal/day number, and does it vary significantly shift-to-shift?",
+              "Walk me through the current DAF setup — what's the rated capacity, and what are you actually pushing through it now?",
+              "Are there peak flow events — end-of-shift cleanup, CIP cycles — that are driving the load spikes, or is it more consistent throughout the day?",
+              "What's happening upstream of the DAF — do you have equalization, and what's its current volume?",
+              "Is the DAF the only pretreatment step, or is there anything else in the train right now?"
+            ],
+            "substreamTag": "DAF / equalization / load management",
+            "whyItMatters": [
+              "Confirmed flows are the single biggest driver of the capex range — without them, the sizing estimate carries ±40% uncertainty."
+            ]
+          },
+          {
+            "title": "Surface competing alternatives already in play",
+            "framing": "DAF OEMs are the natural first call for a plant that knows it needs a bigger DAF. Understanding whether vendor conversations have already started determines how much framing work remains.",
+            "questions": [
+              "Have you had any preliminary conversations with equipment vendors about the DAF situation yet?",
+              "Is there an internal engineering team that would typically scope this kind of project, or does it come to an outside firm?",
+              "Has anyone already proposed a solution — even informally?",
+              "What would make you confident you're looking at the right fix and not just the most obvious one?"
+            ]
+          },
+          {
+            "title": "Anchor the funding pathway",
+            "framing": "Plant capex is the likely vehicle, but confirming the Q3 capital cycle mechanics and any constraints shapes how the proposal is structured.",
+            "questions": [
+              "How does the Q3 capital cycle work — is that when you submit for approval, or when money moves?",
+              "Is there a project budget range you're already working with, or are you building that case from scratch?",
+              "Have you looked at any financing options — equipment leasing, performance contracting — or is this a straight capex play?",
+              "Is there a corporate capital approval process above the GM, or does the GM have final authority?"
+            ]
+          },
+          {
+            "title": "Anchor the timeline",
+            "framing": "Q3 capital planning is the near-term forcing function. Understanding whether there's also a regulatory forcing function — utility or ADEQ deadline — determines whether the timeline compresses further.",
+            "questions": [
+              "When does Q3 capital planning formally close — what's the submission deadline?",
+              "If you have a scoped solution with a defensible ROI in hand, is that sufficient to get it into this year's cycle?",
+              "Is there any deadline from the utility side that would force action before Q3?",
+              "What would have to be true for you to feel confident going into that GM conversation?"
+            ]
+          },
+          {
+            "title": "Surface the safety angle",
+            "framing": "Poultry processing wastewater can carry H2S generation risk in holding structures. Confirm whether any operational safety concerns are associated with the current treatment situation.",
+            "questions": [
+              "Are there any odor or H2S concerns associated with the current DAF or equalization setup — especially during peak loading periods?",
+              "Has operations flagged any safety concerns related to the wastewater side since the 2023 expansion?"
+            ]
+          },
+          {
+            "title": "Test the value proposition",
+            "framing": "The surcharge ROI case is strong, but understanding which frame resonates most with this EHS manager shapes how you write the GM business case.",
+            "questions": [
+              "When you think about solving this — what's the outcome that matters most to you personally? Surcharge elimination, staying off the regulatory radar, or just getting the right equipment in place?",
+              "If we showed you a phased approach where phase 1 cuts surcharges materially within your budget authority and generates the data to justify a full fix — would that be a workable shape for Q3?",
+              "Is there a number that would make this a clear yes for the GM, or is it more about the compliance story?"
+            ]
+          },
+          {
+            "title": "Set the next step",
+            "framing": "The advance gate to Scope is a site walk. Lock it before the call ends.",
+            "questions": [
+              "Can we schedule a 2-hour site walk this month? I want to confirm what's running, get eyes on the DAF and equalization, and come back with real numbers — not directional ones — for your Q3 cycle.",
+              "If we walk the site and I come back with a scoped phase 1 within your budget authority plus a phase 2 business case for the GM, would that give you what you need for Q3?",
+              "What's your preferred way to work through this — do you want us to present jointly to the GM, or do you want the numbers to brief him yourself?"
+            ],
+            "whyItMatters": [
+              "Leaving without a site walk booked means a DAF vendor fills that slot. The site walk is the deal."
+            ]
+          },
+          {
+            "title": "Open Discovery agenda — what this conversation won't close",
+            "framing": "These items won't be resolved in a single call. Flag them as open and confirm a path to close each.",
+            "questions": [
+              "We'll need a copy of your sewer use agreement and the last three months of utility invoices to confirm the surcharge basis — can you pull those before we meet on-site?",
+              "Do you have any eDMR or POTW-submitted discharge monitoring data we could look at alongside the surcharge bills?",
+              "Is there a site drawing or process flow diagram for the wastewater train we could review before the site walk?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "kind": "analytical-read",
+      "payload": {
+        "customer": {
+          "name": "Poultry Processing Plant",
+          "location": "Arkansas Processing Facility",
+          "state": "Arkansas",
+          "basin": "Arkansas River Basin"
+        },
+        "subtitle": "Evidenced read on the BOD/TSS pretreatment surcharge exposure at an Arkansas poultry processing facility post-2023 line expansion",
+        "subStreamsLine": "Sub-streams: DAF capacity, equalization and load management, BOD/TSS pretreatment compliance, ADEQ enforcement posture, POTW surcharge structure",
+        "closingInsight": "The surcharge math makes this deal nearly self-closing — $456K/year against a 2–4 year payback is a GM-level ROI that doesn't require a sophisticated buyer. The field agent's job next week is to put that comparison on paper before a DAF equipment vendor frames it as a $150K hardware swap.",
+        "summary": "A poultry processing plant in Arkansas has been chronically exceeding its municipal POTW pretreatment limits for three consecutive months following a 2023 production line expansion. BOD is averaging 1,450 mg/L against a 300 mg/L permit limit (4.8×); TSS is averaging 620 mg/L against a 250 mg/L limit (2.5×). The plant is paying approximately $38,000/month in surcharges above base sewer costs (~$456K/year). The root cause is a documented capacity mismatch: the existing DAF unit is undersized for post-expansion throughput. The EHS manager owns the problem with budget authority up to $500K; the plant GM controls anything above that threshold. The customer is entering Q3 capital planning and is in information-gathering mode. This analytical read classifies the deal at Qualify stage (MEDIUM confidence), sizes the total program at $900K–$1.85M (MEDIUM-LOW confidence pending flow confirmation), and identifies a phased engagement structure that puts phase 1 within EHS sole authority. The do-nothing/band-aid path is priced at $3.7–5.5M over five years when surcharges, forced retrofit, and risk-adjusted ADEQ enforcement exposure are included — approximately 2–3× the cost of the full program.",
+        "gateState": "OPEN_WITH_CONDITIONS",
+        "gateContent": "Engagement is open. Qualification gate advances to Scope when: (1) EHS manager commits to a site visit / scoping conversation, (2) plant flows (gal/day, peak) are confirmed, and (3) GM engagement pathway is identified. None of these block the field agent from proceeding next week.",
+        "subStreamLens": [
+          {
+            "subStream": "DAF capacity",
+            "activeCondition": "DAF unit undersized for post-2023 throughput; rated capacity vs. current throughput not yet confirmed in evidence — sizing gap is the primary capex-range driver",
+            "evidenceAnchor": "CALL-RECAP-01"
+          },
+          {
+            "subStream": "Equalization and load management",
+            "activeCondition": "Slug loading and peak-flow management identified as contributing factors; EQ volume and configuration not yet confirmed on-site",
+            "evidenceAnchor": "CALL-RECAP-01"
+          },
+          {
+            "subStream": "BOD/TSS pretreatment compliance",
+            "activeCondition": "BOD 1,450 mg/L vs 300 mg/L limit (4.8×); TSS 620 mg/L vs 250 mg/L limit (2.5×); 3 consecutive months documented; indirect discharger to municipal POTW",
+            "evidenceAnchor": "CALL-RECAP-01"
+          },
+          {
+            "subStream": "ADEQ enforcement posture",
+            "activeCondition": "Enforcement posture not yet confirmed; 3 months of chronic 4.8× BOD exceedances is within the zone where informal warnings escalate to formal NOV",
+            "evidenceAnchor": "CALL-RECAP-01"
+          },
+          {
+            "subStream": "POTW surcharge structure",
+            "activeCondition": "$38K/month documented; sewer use agreement and surcharge rate schedule not yet in evidence — escalation authority unconfirmed",
+            "evidenceAnchor": "CALL-RECAP-01"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "EHS manager commits to site visit / scoping conversation",
+            "status": "Open — not yet confirmed",
+            "source": "CALL-RECAP-01"
+          },
+          {
+            "required": "Plant flows (gal/day, peak) confirmed",
+            "status": "Open — not in evidence",
+            "source": "CALL-RECAP-01"
+          },
+          {
+            "required": "GM engagement pathway identified",
+            "status": "Open — EHS manager referenced; path to GM not yet mapped",
+            "source": "CALL-RECAP-01"
+          },
+          {
+            "required": "Confirm utility regulatory posture (informal vs. formal notice)",
+            "status": "Open — not yet confirmed",
+            "source": "CALL-RECAP-01"
+          },
+          {
+            "required": "Sewer use agreement / surcharge rate schedule obtained",
+            "status": "Nice-to-have — surcharge basis directionally confirmed from call",
+            "source": "CALL-RECAP-01"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex, year 0 — cheap path vs. our program",
+            "basis": "Band-aid: $0–$50K equipment tweak only. Our program: $300–$450K phase 1 (EHS authority) + $600K–$1.4M phase 2 (GM-level). Lens: industrial-discharge, $5–15K/gal-day design capacity for pretreatment train; directional pending flow confirmation.",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Ongoing surcharges, 5-year",
+            "basis": "$38K/month × 12 × 5 = $2.28M if unremediated. Post-program: ~$0–$200K (trace surcharges during phase-out period). Basis: documented surcharge invoices per call recap.",
+            "confidence": "HIGH"
+          },
+          {
+            "row": "Forced retrofit, yr 2–3 (cheap-path only)",
+            "basis": "Emergency DAF replacement under POTW timeline pressure: $1.2–2.2M. Basis: DAF replacement lens range ($5–15K/gal-day) plus 20–40% emergency-schedule premium. Included in our phase 2 at planned pricing.",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "ADEQ civil penalty exposure",
+            "basis": "ADEQ civil penalty authority up to $10K/day per parameter for NPDES/pretreatment violations under Ark. Code Ann. §8-4-217. 2 parameters in chronic exceedance. Risk-adjusted at 20–30% probability of formal action over 5-year horizon: $200K–1M. Our path: near-zero (voluntary compliance lane).",
+            "confidence": "LOW"
+          },
+          {
+            "row": "POTW surcharge escalation",
+            "basis": "Municipal utilities retain authority to increase surcharge rates and restrict discharge for chronic violators. Escalation amount not quantifiable without sewer use agreement; flagged as material uncapped exposure on cheap path.",
+            "confidence": "QUALITATIVE"
+          },
+          {
+            "row": "5-year total, mid-range",
+            "basis": "Cheap path: $2.28M surcharges + $1.7M forced retrofit (mid) + $600K enforcement (mid) + escalation tail = $3.7–5.5M. Our path: $1.1–2.0M total program, surcharges eliminated. Ratio: ~2–3× program cost.",
+            "confidence": "MEDIUM"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "This engagement involves a single-sub-stream industrial discharge opportunity at an Arkansas poultry processing plant. The customer is an indirect discharger to a municipal POTW and is in chronic exceedance of pretreatment permit limits for BOD and TSS following a 2023 production expansion. The EHS manager, who owns the problem and has capital budget authority up to $500K, initiated contact ahead of the plant's Q3 capital planning cycle. The plant GM holds authority for anything above that threshold. No STOP or SPECIALIST flags are active. The deal is classified at Qualify stage (MEDIUM confidence); the advance gate to Scope is a confirmed site visit with flows documented.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "HIGH"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "Single sub-stream: industrial-discharge / pretreatment-compliance-non-categorical. The plant is an indirect discharger subject to local POTW pretreatment limits and is not operating under a federal categorical standard (40 CFR Part 412 applies to NPDES direct dischargers; local pretreatment limits govern here). The DAF capacity gap is the proximate cause of current exceedances. Upstream equalization and load management are contributing factors that must be addressed alongside any DAF upsizing to achieve sustained compliance. The ADEQ enforcement posture is an open variable that materially affects the solution timeline.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "HIGH"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "The sub-stream lens table below summarizes the active conditions and evidence anchors for each decomposed sub-stream. Equalization and ADEQ posture are the two open variables that most affect the recommended approach; both are closed by the site walk.",
+            "evidenceTags": [],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Stage classification",
+            "body": "The stage and gaps table below documents the Required gaps to advance from Qualify to Scope. The single highest-leverage action is booking the site visit — that visit closes the two most material technical gaps (flows, equalization configuration) and creates the context for identifying the GM engagement pathway.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Decision-maker matrix",
+            "body": "Two roles are in scope for this engagement. The EHS manager is the primary point of contact, problem owner, and budget authority for capital under $500K. This role can move phase 1 without further approval. The plant GM is the approving authority for any capital above $500K, including the phase 2 program. The GM has not yet been briefed in the context of this engagement and is not yet a confirmed participant in the evaluation. Corporate-level EHS or engineering oversight is possible but not in evidence; the field agent should confirm whether corporate sign-off is required for plant-level capital above the GM's authority.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "Phase 1 ($300–$450K, directional, MEDIUM-LOW confidence): Equalization optimization (slug-load dampening, peak-flow control, volume confirmation), chemical-assist tuning on the existing DAF train, and operational SOP upgrades for shift changeovers. Target: meaningful BOD and TSS reduction to cut surcharges materially in the near term and generate documented performance data for the GM-level phase 2 business case. Phase 2 ($600K–$1.4M, directional, MEDIUM-LOW confidence): DAF replacement or upsizing to match post-2023 throughput, plus secondary polishing step (fine-screen or biological roughing for BOD). Target: sustained full compliance — BOD <300 mg/L, TSS <250 mg/L — permanent surcharge elimination. Total program: $900K–$1.85M, MEDIUM-LOW confidence. Primary driver of range: plant flows (gal/day, peak) not yet confirmed. Range tightens to ±25% after site walk. A phased structure deliberately places phase 1 within the EHS manager's sole authority, generating performance data and documented ROI that writes the GM-level business case for phase 2 within the same or next capital cycle.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three customer-side outcomes anchor the recommended approach. First, surcharge elimination: at $456K/year in documented surcharges, the program pays back in 2–4 years at total program cost — a straightforward ROI that survives GM-level scrutiny. Second, capital-cycle positioning: a plant that enters Q3 with a scoped solution and a defensible payback period wins budget priority over unscoped line items. Voluntary compliance now is structurally cheaper than a Consent Order response later, which runs on the regulator's schedule. Third, regulatory risk reduction: three months of chronic 4.8× BOD exceedances places this plant in the zone where informal utility monitoring becomes formal ADEQ notice. ADEQ civil penalty authority under Ark. Code Ann. §8-4-217 runs to $10K/day per parameter for continued violations. Acting now, with a scoped program, keeps the plant in the voluntary compliance lane.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The table below presents the fully-priced 5-year comparison between the do-nothing/band-aid path and the recommended program. The bottom-line claim: the cheap path costs $3.7–5.5M over five years against a $1.1–2.0M program, a 2–3× multiple. The largest single driver is not enforcement — it is the $2.28M in ongoing surcharges that continue unabated under a band-aid scenario. Enforcement exposure is directional and risk-adjusted; the surcharge exposure is documented and certain.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Compliance & safety",
+            "body": "No STOP or SPECIALIST flags are active based on current evidence. Two ATTENTION flags are open: (1) plant flows not yet confirmed — DAF sizing gap is the primary driver of capex-range width; closes at site visit; (2) GM engagement not yet established — any scope above $500K requires upward alignment; the EHS manager's phase 1 ROI data is the designed unlock. Additionally, H2S generation potential in holding and equalization structures at poultry processing facilities is standard-practice risk; confirmation of current odor management and any near-miss history should be addressed at the site walk.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Kill-risk inventory",
+            "body": "Three ranked kill risks apply at Qualify stage. First (SPECIALIST): DAF OEM pre-empts the relationship. A DAF equipment vendor sells a hardware replacement without addressing upstream load management or equalization; surcharges reduce but persist; the full-program engagement is displaced. Mitigation: establish the treatment-economics frame — $456K/year, 5-year comparison — before equipment options are presented. Second (SPECIALIST): budget ceiling collapses scope. EHS manager acts within sole authority and approves a minimal retrofit; partial improvement only; deal never reaches full program scope. Mitigation: design phase 1 to generate documented surcharge-reduction performance data that writes the GM-level phase 2 business case. Third (ATTENTION): regulatory pressure forces emergency timeline. Formal ADEQ or POTW notice before Q3 forces a fast point-fix on the regulator's schedule. Mitigation: confirm utility posture in next call; accelerate scoping if formal action is closer than it appears.",
+            "evidenceTags": [],
+            "evidenceSource": "CALL-RECAP-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Funding pathway analysis",
+            "body": "This engagement is an industrial plant capital project. The primary vehicle is plant capex, managed through the Q3 capital cycle. CWSRF does not apply (industrial borrowers are not eligible except in specific state-authorized programs; Arkansas has not broadly extended CWSRF to industrial pretreatment). Equipment financing and performance contracting are available alternatives worth surfacing — a performance contract structure where phase 1 is financed against documented surcharge reduction could reduce the EHS manager's upfront ask and create a clean ROI narrative for the GM. This should be introduced as an option at scoping, not as the primary proposal structure.",
+            "evidenceTags": [],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not commit to yet",
+            "body": "The following are explicitly not committed at Qualify stage: (1) specific DAF sizing or model selection — requires confirmed flows and site assessment; (2) treatment performance guarantees — require confirmed inlet characterization beyond the reported averages; (3) final capex pricing — directional ranges only until site walk and scoping are complete; (4) ADEQ enforcement timeline — regulatory posture confirmation is an open gap; (5) GM-level engagement outcome — the path to GM approval is identified but not yet confirmed.",
+            "evidenceTags": [],
+            "confidenceTier": "HIGH"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "proposal-shell",
+      "payload": {
+        "customer": {
+          "name": "Poultry Processing Plant",
+          "location": "Arkansas Processing Facility",
+          "state": "Arkansas"
+        },
+        "subtitle": "Phased Wastewater Treatment Improvement — BOD/TSS Pretreatment Compliance Program",
+        "executiveSummary": "This document outlines a proposed phased wastewater treatment improvement program for a poultry processing facility in Arkansas that has experienced chronic exceedances of its municipal pretreatment permit limits following a 2023 production line expansion. Current discharge concentrations — BOD averaging 1,450 mg/L against a 300 mg/L limit and TSS averaging 620 mg/L against a 250 mg/L limit — are generating approximately $456,000 per year in sewer surcharges above base costs. Left unaddressed, this exposure is estimated at $3.7–5.5M over five years when ongoing surcharges, a forced treatment system retrofit, and risk-adjusted regulatory enforcement exposure are fully priced. The proposed program addresses the root cause — an undersized dissolved air flotation (DAF) unit combined with upstream equalization and load management deficiencies — through a two-phase structure designed to move Phase 1 within the plant's capital approval threshold and generate the documented performance data needed to support a Phase 2 capital request. Total program investment is estimated at $900K–$1.85M (directional — subject to site assessment and flow confirmation), against an estimated 2–4 year payback from surcharge elimination alone.",
+        "proposedScope": [
+          "Phase 1 — DAF Operational Optimization and Upstream Load Control: Equalization volume and configuration assessment and tuning for slug-load dampening and peak-flow management; chemical-assist optimization on the existing DAF train (coagulant/flocculant program); shift-changeover SOP development and operator training. Goal: materially reduce BOD and TSS discharge concentrations, generate measurable surcharge reduction within 60–90 days of commissioning, and produce documented performance data supporting the Phase 2 business case.",
+          "Phase 2 — DAF Replacement/Upsizing and Secondary Polishing: Replacement or upsizing of the DAF unit to match post-2023 production throughput; addition of a secondary polishing step (fine screening and/or biological roughing) for sustained BOD reduction; integration with the Phase 1 equalization and load management improvements. Goal: sustained full compliance — BOD below 300 mg/L and TSS below 250 mg/L — permanently eliminating pretreatment surcharges.",
+          "Ongoing Operational Support (optional): Performance monitoring, periodic optimization review, and operator support during commissioning and the first year of full operation. Scope and cadence to be defined at scoping."
+        ],
+        "sizingAndPricing": "Phase 1 is estimated at $300,000–$450,000 (directional, MEDIUM-LOW confidence). Phase 2 is estimated at $600,000–$1,400,000 (directional, MEDIUM-LOW confidence). Total program range: $900,000–$1,850,000. These ranges are directional and subject to site assessment, confirmed plant flow rates (gal/day, peak), and detailed engineering scoping. Plant flows are the primary driver of range width; the range tightens to approximately ±25% following site walk and flow confirmation. Ongoing operational support, if included, is estimated at $40,000–$80,000 per year.",
+        "schedule": "Phase 1 scoping and site assessment: targeted for completion prior to Q3 capital planning cycle. Phase 1 design and procurement: Q3–Q4 of current year subject to capital approval. Phase 1 commissioning: within 90–120 days of authorization. Phase 2 design, procurement, and construction: subsequent capital cycle or concurrent with Phase 1 pending GM authorization. All timelines are directional and subject to site assessment findings and capital approval dates.",
+        "commitments": [
+          {
+            "label": "Directional Sizing",
+            "text": "Phase 1 estimated at $300K–$450K; Phase 2 at $600K–$1.4M. Total program $900K–$1.85M. These are directional ranges only. Final scoped pricing follows site assessment and flow confirmation.",
+            "owner": "H2O Allegiant"
+          },
+          {
+            "label": "Phased Structure",
+            "text": "Phase 1 is specifically designed to be within the EHS manager's capital authority threshold and to generate documented performance data that supports the Phase 2 GM-level business case. Phase 2 is not contingent on a separate competitive process unless required by the plant's procurement policy.",
+            "owner": "H2O Allegiant"
+          },
+          {
+            "label": "Site Assessment Commitment",
+            "text": "Upon authorization, H2O Allegiant will conduct a full site assessment including flow measurement, DAF performance evaluation, and equalization configuration review. Site assessment findings will be delivered within [X] business days as the basis for a final scoped proposal.",
+            "date": "To be confirmed at scheduling",
+            "owner": "H2O Allegiant"
+          },
+          {
+            "label": "Surcharge Payback Basis",
+            "text": "Surcharge elimination estimate of ~$456K/year is based on documented surcharge invoices as reported by the plant. Actual payback will depend on post-Phase 2 discharge performance and prevailing POTW surcharge rates at time of compliance. The 2–4 year payback estimate is directional and will be confirmed in the final scoped proposal.",
+            "owner": "H2O Allegiant"
+          }
+        ],
+        "fundingPathway": "This engagement is expected to proceed as plant capital expenditure managed through the Q3 capital planning cycle. CWSRF financing is not applicable to industrial pretreatment borrowers in most state programs. Equipment financing and performance contracting structures — where Phase 1 investment is recovered against documented surcharge reduction — are available as alternatives and can be structured if preferred. This option is worth introducing at the scoping conversation.",
+        "riskAllocation": "Phase 1 optimization work carries performance risk primarily driven by inlet quality variability; documented inlet characterization during the site assessment establishes the performance baseline. Phase 2 equipment carries standard industrial construction risk. Risk allocation detail to be developed in the final scoped proposal.",
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — internal scoping seed only. Not for distribution. Field agent to edit and expand following site visit and flow confirmation.",
+        "workPackages": [
+          {
+            "id": "WP-1",
+            "name": "Site Assessment and Flow Confirmation",
+            "outcome": "Confirmed plant flow rates (gal/day, peak), existing DAF rated vs. actual capacity, equalization volume and configuration — inputs required to finalize Phase 1 and Phase 2 scope and pricing"
+          },
+          {
+            "id": "WP-2",
+            "name": "Phase 1: Equalization and Load Management Optimization",
+            "outcome": "Slug-load dampening and peak-flow attenuation improvements; documented inlet quality improvement to existing DAF"
+          },
+          {
+            "id": "WP-3",
+            "name": "Phase 1: DAF Chemical-Assist Optimization",
+            "outcome": "Optimized coagulant/flocculant program for existing DAF train; documented TSS and BOD removal improvement; measurable surcharge reduction within 60–90 days"
+          },
+          {
+            "id": "WP-4",
+            "name": "Phase 1: Operator SOP Development and Training",
+            "outcome": "Shift-changeover SOPs; operator training documentation; Phase 2 performance baseline established"
+          },
+          {
+            "id": "WP-5",
+            "name": "Phase 2: DAF Replacement/Upsizing",
+            "outcome": "DAF unit sized for post-2023 throughput; integrated with Phase 1 equalization improvements"
+          },
+          {
+            "id": "WP-6",
+            "name": "Phase 2: Secondary Polishing Step",
+            "outcome": "Sustained BOD removal to below 300 mg/L; TSS below 250 mg/L; permanent pretreatment surcharge elimination"
+          }
+        ],
+        "sizingRows": [
+          {
+            "label": "Phase 1 (DAF optimization + load control)",
+            "value": "$300K–$450K | MEDIUM-LOW confidence"
+          },
+          {
+            "label": "Phase 2 (DAF upsizing + secondary polishing)",
+            "value": "$600K–$1.4M | MEDIUM-LOW confidence"
+          },
+          {
+            "label": "Total program",
+            "value": "$900K–$1.85M | MEDIUM-LOW confidence"
+          },
+          {
+            "label": "Primary range driver",
+            "value": "Plant flow rate (gal/day, peak) — not yet confirmed; tightens to ±25% after site walk"
+          },
+          {
+            "label": "Surcharge payback (program)",
+            "value": "2–4 years from surcharge elimination at $456K/yr documented"
+          },
+          {
+            "label": "Optional O&M support",
+            "value": "$40K–$80K/yr"
+          }
+        ],
+        "outOfScope": [
+          {
+            "heading": "Stormwater or NPDES Direct Discharge Permitting",
+            "body": "This proposal addresses the plant's indirect discharge to the municipal POTW under local pretreatment limits. Stormwater management, NPDES direct discharge permitting, and any associated infrastructure are outside the scope of this program."
+          },
+          {
+            "heading": "Process Water or Production Equipment Changes",
+            "body": "Changes to the production line, process water systems, or manufacturing equipment are outside the scope of this engagement. Water conservation or source-reduction measures may be identified during the site assessment as complementary opportunities; these would be scoped separately."
+          },
+          {
+            "heading": "Regulatory Representation or ADEQ Liaison",
+            "body": "This proposal does not include regulatory representation, permit negotiation, or liaison with ADEQ or the receiving POTW on the plant's behalf. The field agent or the plant's environmental counsel should manage any active regulatory correspondence."
+          },
+          {
+            "heading": "Final Engineering Design or Construction Management (Phase 1)",
+            "body": "Phase 1 as described is an optimization and operational improvement program. Final engineering design and construction management are included in Phase 2 scope; Phase 1 does not require a PE-stamped design package. This boundary is subject to confirmation at scoping."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Plant flows (gal/day, peak) confirmed",
+            "closer": "Site walk — field agent to schedule before Q3 capital cycle submission"
+          },
+          {
+            "gate": "Existing DAF rated capacity vs. current throughput confirmed",
+            "closer": "Site walk — EHS manager to provide equipment specifications in advance if available"
+          },
+          {
+            "gate": "Equalization volume and configuration assessed",
+            "closer": "Site walk — field agent to walk the existing train and document"
+          },
+          {
+            "gate": "GM engagement pathway confirmed",
+            "closer": "EHS manager to identify; field agent to request in next call"
+          },
+          {
+            "gate": "ADEQ / utility regulatory posture confirmed (informal vs. formal notice)",
+            "closer": "EHS manager to confirm in next call; sewer use agreement and utility correspondence to be obtained"
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "inputTokens": 207071,
+    "outputTokens": 15842,
+    "costUsd": 0.858843
+  },
+  "stepCount": 8,
+  "finalText": "All four artifacts are ready. Here's your full package:\n\n---\n\n## Package ready — Arkansas Poultry Processing Plant | **Qualify stage**\n\n**Bottom-line headline:** The customer's do-nothing / band-aid path costs **$3.7–5.5M over five years** when $2.28M in ongoing surcharges, a forced DAF retrofit, and risk-adjusted ADEQ enforcement exposure are fully priced. The full program costs **$1.1–2.0M**. The economics make the case before you have to.\n\n---\n\n### Artifacts\n\n| # | Document | Download |\n|---|---|---|\n| 1 | **Field Brief** — Strategic decision aid, read this first | [Download PDF](?threadId=eval-happy-path-food-processing-bod-tss-surcharge-NAKEv5oulXXQ-c7hCPVw1&kind=field-brief) |\n| 2 | **Conversation Playbook** — Themed question structure for next week | [Download PDF](?threadId=eval-happy-path-food-processing-bod-tss-surcharge-NAKEv5oulXXQ-c7hCPVw1&kind=playbook) |\n| 3 | **Analytical Read** — Evidence-tagged write-up for upward send | [Download PDF](?threadId=eval-happy-path-food-processing-bod-tss-surcharge-NAKEv5oulXXQ-c7hCPVw1&kind=analytical-read) |\n| 4 | **Proposal Shell** — Scoping-language seed (field agent edits before use) | [Download PDF](?threadId=eval-happy-path-food-processing-bod-tss-surcharge-NAKEv5oulXXQ-c7hCPVw1&kind=proposal-shell) |\n\n---\n\n### Three things that will make or break next week\n\n**1. Book the site walk before you leave the call.** The advance gate to Scope is a confirmed site visit. Without confirmed flows, your capex range stays at ±40% and the GM-level business case stays directional. The site walk is also where you establish yourself as someone doing a treatment-economics analysis — not an equipment vendor.\n\n**2. Put the 5-year surcharge math on paper before anyone else does.** $456K/year is the anchor number. The EHS manager probably hasn't seen it totaled over five years with the enforcement tail included. A one-page summary sent before or at the call pre-empts the \"we just need a bigger DAF\" frame before a DAF OEM closes it.\n\n**3. Map the path to the GM.** Phase 1 can move on EHS sole authority. But the deal's full value — and the solution that actually eliminates surcharges — lives in phase 2, which needs the GM. Ask in the call: *\"If phase 1 data shows $300K+ in annual surcharge reduction, what does the path to GM approval look like?\"*"
+}
