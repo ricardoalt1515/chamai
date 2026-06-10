@@ -1,0 +1,1218 @@
+{
+  "scenarioId": "happy-path-brewery-mbr-retrofit-scoping",
+  "modelId": "claude-sonnet-4-6",
+  "recordedAt": "2026-06-09T23:55:30.796Z",
+  "toolCalls": [
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-evidence-and-context"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-stage-and-gaps"
+      }
+    },
+    {
+      "step": 2,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-positioning"
+      }
+    },
+    {
+      "step": 3,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-field-brief"
+      }
+    },
+    {
+      "step": 4,
+      "toolName": "generateFieldBrief",
+      "input": {
+        "customer": {
+          "name": "Regional Craft Brewery",
+          "location": "Brewery Production Facility",
+          "county": "Front Range",
+          "state": "Colorado",
+          "basin": "South Platte"
+        },
+        "stage": "Scope",
+        "confidence": "MEDIUM",
+        "date": "2025-07-14",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "The ops committee hasn't been in the room yet — the sustainability director is the champion, but the CAPEX comparison will land with decision-makers who haven't heard the 5-year cost story. If it reaches them as a CAPEX table, the SBR expansion wins by default.",
+          "The reuse sub-stream is the economic margin between the two paths — if it's framed as optional, the MBR premium looks unjustified. It needs to be in the deal as a core MBR benefit, not an add-on."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "The customer isn't deciding whether to invest — they're deciding which path. Your job is to make sure the ops committee prices both paths fully, not just at CAPEX line 1.",
+            "body": "A regional craft brewery doubling production capacity over 18 months faces a hard pretreatment deadline: their existing aerobic SBR is already near BOD loading capacity from spent grain liquor and CIP wastewater. The sustainability director — who has already shared two years of discharge monitoring data and hosted a site visit — has self-generated the comparison: SBR expansion vs MBR retrofit with cooling tower makeup reuse. The ops committee presentation is ~1 month out. This is a Scope-stage deal with a live procurement signal. The risk is not losing the relationship; the risk is losing the framing battle at a committee meeting we're not in the room for. The MBR path's 5-year economics are substantially better than they appear at year-0 CAPEX — but only if someone puts that number in front of the ops committee before the SBR expansion quote sets the anchor."
+          },
+          "whatWeWouldPropose": {
+            "insight": "MBR retrofit sized for 2× production from day one, with effluent polishing to cooling tower makeup. The SBR expansion is cheaper at year 0 — and likely $500K–$1.5M more expensive by year 5.",
+            "recommendedApproach": "MBR aerobic treatment train designed for 2× production flow (~15,000–25,000 gpd design capacity, directional pending confirmed flow data), retaining existing SBR tankage where feasible as anoxic/pre-aeration zone to reduce CAPEX. Effluent polishing → UV disinfection → cooling tower makeup delivery for non-potable process water reuse. MBR permeate targets BOD < 5 mg/L, TSS < 2 mg/L — structural compliance headroom regardless of POTW limit trajectory.",
+            "winWinArguments": [
+              {
+                "lead": "Built once for 2× production — the SBR expansion path builds twice.",
+                "body": "The SBR expansion sized for current 2× production will face the same constraint on the brewery's next growth cycle. MBR scales to higher loads through membrane panel additions at incremental cost, not full capital re-investment. The SBR path isn't a cheaper solution; it's the first payment on a series."
+              },
+              {
+                "lead": "Cooling tower reuse turns a compliance cost center into a water-savings asset.",
+                "body": "MBR permeate substituted for potable water in cooling tower makeup can offset ~3M–8M gallons per year of municipal water consumption. At typical Colorado municipal water and sewer rates ($5–8/kgal combined), that's $15K–$65K/year in real opex savings the sustainability director can put in the committee deck — and a sustainability metric the brewery can publish."
+              },
+              {
+                "lead": "Effluent quality headroom insulates against POTW limit tightening.",
+                "body": "Several Front Range POTWs have moved toward formal industrial pretreatment programs with BOD surcharges above $0.75/lb. The SBR operating at 2× load will have less buffer than today. MBR consistently delivers BOD < 5 mg/L and TSS < 2 mg/L — a structural compliance buffer that eliminates surcharge exposure even as limits evolve."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex, Year 0",
+                "theirPath": "$400K–$900K (SBR tank addition, blower capacity, controls)",
+                "ourProposal": "$900K–$1.8M (MBR retrofit, effluent polishing, UV, reuse delivery)"
+              },
+              {
+                "component": "BOD surcharges at 2× loading, 5yr",
+                "theirPath": "$375K–$1M (basis: marginal BOD to POTW increases materially at 2× load; $0.50–$0.75/lb CO Front Range POTW typical surcharge rate)",
+                "ourProposal": "$0–$250K (MBR effluent BOD < 5 mg/L eliminates material surcharge exposure)"
+              },
+              {
+                "component": "Potable water — cooling tower makeup, 5yr",
+                "theirPath": "$75K–$325K (no reuse capability; full potable purchase at $5–8/kgal)",
+                "ourProposal": "$0–$50K net (reuse substitutes majority of cooling tower makeup)"
+              },
+              {
+                "component": "Forced retrofit exposure, Year 3–5",
+                "theirPath": "$600K–$1.5M (POTW limit tightening or third production line forces additional SBR investment)",
+                "ourProposal": "Minimal — MBR scalable via membrane panel addition; compliance headroom built in"
+              },
+              {
+                "component": "5-year total (mid-range)",
+                "theirPath": "~$1.5M–$3.7M + retrofit tail risk",
+                "ourProposal": "~$1.0M–$2.2M, risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Primary driver: whether existing SBR tankage can be retained as MBR anoxic/aeration zone (~20–30% CAPEX reduction if reusable). Secondary: cooling tower reuse delivery infrastructure scope. Upside: operational support contract $30K–$60K/yr for MBR monitoring, compliance reporting, and operator training."
+          },
+          "whatCouldKillIt": {
+            "insight": "This deal is won or lost at the ops committee, not in the next conversation with the sustainability director. The kill risk is a CAPEX-only framing that defaults to the SBR expansion before our 5-year comparison lands.",
+            "risks": [
+              {
+                "name": "Ops committee sees CAPEX-only, awards SBR expansion",
+                "mechanism": "If the scoping comparison lands as a year-0 CAPEX table with no 5-year cost story, the committee rational-defaults to lowest upfront number. The sustainability director is the champion but may not have authority or framing to reposition the comparison before the vote.",
+                "mitigation": "Ensure the deliverable we prepare leads with the 5-year total cost comparison, not the CAPEX table. Propose a pre-committee working session with the sustainability director to walk through our comparison before it goes to committee — get the framing in place before the meeting, not during it."
+              },
+              {
+                "name": "Reuse sub-stream dismissed as optional",
+                "mechanism": "If cooling tower makeup reuse is positioned as a 'nice-to-have,' the MBR premium looks unjustified against the SBR path. The reuse economics are the margin that makes MBR the lower 5-year cost — remove it and the comparison flips.",
+                "mitigation": "Quantify reuse value in $/yr and include it as a core MBR benefit in the comparison document, not as an upsell line item. The sustainability director already knows this angle — arm them with the number."
+              },
+              {
+                "name": "Competing SBR expansion quote lands first",
+                "mechanism": "The existing SBR equipment vendor or a regional integrator may already be quoting an SBR expansion. If a low number sets the anchor before our comparison arrives, the MBR path is disadvantaged regardless of 5-year economics.",
+                "mitigation": "Deliver our scoping comparison ahead of the ops committee timeline — not at it. Move the pre-committee conversation earlier in the month."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The ops committee meeting is ~1 month out. The window to shape the framing is now — not after a competing quote lands.",
+            "actions": [
+              {
+                "title": "Secure a pre-committee working session",
+                "timeframe": "Within 7 days",
+                "body": "Contact the sustainability director and propose a 45-minute working session to walk through the draft scoping comparison before it goes to the ops committee. Objective: confirm the 5-year cost framing is in the deck the sustainability director presents, not just our deliverable. Ask directly whether any other vendors are being consulted — confirms whether we're sole-sourced or competing."
+              },
+              {
+                "title": "Confirm flow projections and POTW surcharge rates",
+                "timeframe": "7–14 days",
+                "body": "Process the two years of DMR data to pin current daily average flow and BOD loading. Ask the sustainability director for the projected 2× production flow rate and the POTW's current surcharge schedule for high-strength discharge. These two inputs move the surcharge row in the 5-year comparison from directional to defensible — critical for the ops committee presentation."
+              },
+              {
+                "title": "Quantify the reuse demand and map ops committee decision-makers",
+                "timeframe": "14–21 days",
+                "body": "Ask the sustainability director: what is current cooling tower makeup demand (gal/day) and what does the brewery pay for municipal water? This pins the reuse savings row. Simultaneously, ask who on the ops committee holds capex authority and what their approval threshold is — understanding the decision architecture before the meeting determines whether the sustainability director can close this alone or needs executive sponsor alignment."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "step": 5,
+      "toolName": "generatePlaybook",
+      "input": {
+        "customer": {
+          "name": "Regional Craft Brewery",
+          "location": "Brewery Production Facility",
+          "county": "Front Range",
+          "state": "Colorado",
+          "basin": "South Platte"
+        },
+        "stage": "Scope",
+        "subtitle": "SBR Expansion vs MBR Retrofit — Scoping Conversation Guide",
+        "header": {
+          "subStreams": [
+            "Industrial pretreatment / BOD-TSS compliance + capacity",
+            "Process water reuse / cooling tower makeup"
+          ],
+          "stageIntro": "The customer has self-generated the comparison: SBR expansion vs MBR retrofit with cooling tower reuse. The ops committee presentation is ~1 month out. Your goal this conversation is to shape the framing before the committee sees a CAPEX table.",
+          "insight": "The deal is won or lost at the ops committee, not in this conversation. Use this call to get the 5-year cost story into the sustainability director's committee deck before a competing SBR quote sets the anchor.",
+          "orientationLine": "Scope stage — customer comparing alternatives, ops committee deliverable in ~1 month"
+        },
+        "themes": [
+          {
+            "title": "Open the reframe",
+            "framing": "The customer is already in the right comparison — but the default framing is CAPEX-table, not 5-year economics. Open by acknowledging the comparison and immediately introducing the 5-year lens.",
+            "questions": [
+              "When the ops committee reviews this comparison, what's their primary lens — lowest upfront CAPEX, lowest total cost of ownership, or sustainability positioning?",
+              "Has anyone priced what the SBR expansion costs if you need to expand again in 5–7 years as you continue growing?",
+              "Are you expecting the committee to compare year-0 CAPEX, or is there appetite to see a fuller operational cost comparison?"
+            ],
+            "whyItMatters": [
+              "The SBR expansion looks cheaper at CAPEX line 1. The 5-year story flips the comparison — but only if it's in the room."
+            ],
+            "accentIndex": 0
+          },
+          {
+            "title": "Surface the committee decision architecture",
+            "framing": "The sustainability director is the champion but likely doesn't hold capex authority alone. Understanding who decides — and how they frame decisions — is critical before the deliverable is written.",
+            "questions": [
+              "Who on the ops committee holds final capex approval, and is there a dollar threshold that escalates to the board or ownership?",
+              "Is the sustainability director presenting this solo, or will engineering and finance leads also be in the room?",
+              "What objections do you expect from the committee — is the primary concern CAPEX, operational complexity, or something else?",
+              "Has the committee seen MBR technology before, or will we need to establish baseline credibility on the technology?"
+            ],
+            "whyItMatters": [
+              "If finance leads haven't been in the room, the committee defaults to lowest-CAPEX without a cost-of-alternative frame. Knowing the decision architecture determines how to write the deliverable."
+            ],
+            "accentIndex": 1
+          },
+          {
+            "title": "Anchor the capacity problem",
+            "framing": "The SBR is near capacity today. At 2× production, the capacity gap is real and time-bound. Pin the numbers.",
+            "questions": [
+              "What's your current average daily wastewater flow, and what's your projected flow at 2× production — do you have that from your expansion planning?",
+              "Is the capacity constraint primarily hydraulic, or is it specifically BOD loading — or both?",
+              "At current loading, are you seeing any POTW surcharges or informal notifications from the utility about high-strength discharge?",
+              "What's the consequence if the SBR is over-limit during the production ramp — is that a POTW enforcement exposure or an operational self-limit?"
+            ],
+            "substreamTag": "Industrial pretreatment",
+            "accentIndex": 2
+          },
+          {
+            "title": "Price the reuse opportunity",
+            "framing": "The cooling tower makeup reuse angle is the margin that makes MBR the better 5-year value. It needs a number, not a concept.",
+            "questions": [
+              "What's your cooling tower makeup demand — roughly how many gallons per day are you pulling from the municipal supply for cooling?",
+              "What do you pay for municipal water today — combined water and sewer rate per thousand gallons?",
+              "Is there a water budget or sustainability target that makes reuse attractive beyond the cost savings — water stewardship reporting, for example?",
+              "If we can show a specific annual savings number from reuse, would that be a meaningful input to the ops committee comparison?"
+            ],
+            "substreamTag": "Process water reuse",
+            "whyItMatters": [
+              "Reuse savings of $15K–$65K/yr are real opex reduction the ops committee can underwrite. Without a number, it's a concept. With a number, it closes the CAPEX gap on the MBR path."
+            ],
+            "accentIndex": 3
+          },
+          {
+            "title": "Surface the POTW relationship and surcharge exposure",
+            "framing": "No current NOV, but as BOD loading increases at 2× production, surcharge exposure grows. The sustainability director may not have priced this.",
+            "questions": [
+              "Does your POTW have a surcharge schedule for high-strength BOD and TSS discharge — and have you modeled what your surcharge exposure looks like at 2× production?",
+              "Has the POTW given any informal signals about where they're heading on industrial pretreatment requirements — any mention of tightening limits or formal pretreatment program requirements?",
+              "Are you currently paying any BOD or TSS surcharges, or are you under the threshold?"
+            ],
+            "substreamTag": "Industrial pretreatment",
+            "accentIndex": 4
+          },
+          {
+            "title": "Surface competing alternatives",
+            "framing": "Are we sole-sourced, or is a competing vendor already quoting an SBR expansion?",
+            "questions": [
+              "Are you talking to your existing SBR vendor or any other suppliers on the expansion path — or are we the primary technical resource for this comparison?",
+              "Has anyone given you a preliminary number on the SBR expansion yet, or are we building that scenario together?",
+              "Is the ops committee expecting to see a competitive comparison from multiple vendors, or a single recommended path?"
+            ],
+            "whyItMatters": [
+              "If a competing SBR expansion quote lands before our comparison, the anchor is set against us regardless of 5-year economics. Knowing the competitive landscape determines the urgency of our deliverable timeline."
+            ],
+            "accentIndex": 5
+          },
+          {
+            "title": "Anchor the timeline",
+            "framing": "18 months to production doubling is the hard constraint. Work backward to confirm when the decision needs to be made and when construction needs to start.",
+            "questions": [
+              "What's your production doubling timeline — is the 18-month target firm, or is it a planning horizon?",
+              "When does construction need to start to hit that timeline, and when does a vendor selection need to be made to feed that?",
+              "The ops committee meeting is ~1 month out — is that a decision point, or an approval-to-proceed-to-detailed-scoping point?",
+              "Is there a budget cycle or capital planning process that the decision needs to feed into?"
+            ],
+            "accentIndex": 6
+          },
+          {
+            "title": "Test the sustainability value proposition",
+            "framing": "The sustainability director is the champion. Understand how the sustainability angle plays internally — is it a tiebreaker or a primary driver?",
+            "questions": [
+              "How much weight does the ops committee put on the sustainability angle — is water reuse a decision factor, or is it a communications benefit after the decision is made on economics?",
+              "Does the brewery have published water stewardship goals or sustainability reporting that MBR reuse would contribute to?",
+              "Is there an external audience — investors, trade partners, distributors — for whom the water reuse story matters commercially?"
+            ],
+            "accentIndex": 7
+          },
+          {
+            "title": "Confirm the deliverable format and timeline",
+            "framing": "We need to deliver the right document to the right audience before the committee meeting. Confirm format, timing, and what lands in the room.",
+            "questions": [
+              "What format does the ops committee expect — a written comparison document, a presentation, or both?",
+              "When do you need the draft from us to have time to review and incorporate it into your committee materials?",
+              "Should our comparison document be written for the committee to read directly, or is it source material for a presentation you're building?",
+              "Is there a pre-meeting review we can schedule with you to walk through the comparison before it goes to the committee?"
+            ],
+            "accentIndex": 8
+          },
+          {
+            "title": "Scope the site constraints",
+            "framing": "Whether existing SBR tankage can be retained as part of the MBR retrofit is the single biggest CAPEX driver. Surface this now.",
+            "questions": [
+              "Is there physical space at the site for new tankage, or is the MBR retrofit path contingent on reusing existing SBR infrastructure?",
+              "What's the condition of the existing SBR aeration and control systems — are they candidates for retention or are they end-of-life?",
+              "Are there any permit or zoning constraints on expanding the footprint of the pretreatment system?"
+            ],
+            "substreamTag": "Industrial pretreatment",
+            "accentIndex": 9
+          },
+          {
+            "title": "Set the next step",
+            "framing": "Close the conversation with a concrete next move that advances the deal before the committee meeting.",
+            "questions": [
+              "Can we schedule a working session in the next two weeks to walk through the draft comparison together before it goes to the committee?",
+              "What's the one thing you need from us to feel confident presenting this comparison to the committee?",
+              "If we can get you a draft comparison within 10 days, is that enough lead time for your committee prep?"
+            ],
+            "accentIndex": 10
+          }
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "toolName": "generateAnalyticalRead",
+      "input": {
+        "customer": {
+          "name": "Regional Craft Brewery",
+          "location": "Brewery Production Facility",
+          "county": "Front Range",
+          "state": "Colorado",
+          "basin": "South Platte"
+        },
+        "subtitle": "Evidenced read on the SBR-vs-MBR pretreatment path decision at a growth-stage Colorado craft brewery",
+        "subStreamsLine": "Sub-streams: industrial BOD/TSS pretreatment capacity, process water reuse / cooling tower makeup",
+        "closingInsight": "The SBR expansion is not a cheaper solution — it is the first payment on a longer capital series. The MBR path closes the gap by year 5 and leaves the brewery positioned for the next growth cycle. The field agent's job in the next 30 days is to ensure the ops committee sees that comparison before a CAPEX-only number sets the anchor.",
+        "summary": "Regional craft brewery on the Colorado Front Range is doubling production capacity over 18 months. The existing aerobic SBR pretreatment system is already operating near BOD loading capacity from spent grain liquor and CIP wastewater. The sustainability director has engaged us directly, shared two years of discharge monitoring data, and requested a scoping-level comparison of SBR expansion vs MBR retrofit (with cooling tower makeup reuse) for presentation to the ops committee in approximately one month. This read covers sub-stream decomposition, the evidence base, a defended path recommendation, fully-priced 5-year comparison, and active risk inventory.",
+        "gateState": "OPEN_WITH_CONDITIONS",
+        "gateContent": "Ops committee deliverable requested for ~1 month out. Proceeding to scoping-level comparison. Conditions: confirm projected 2× production flow, POTW surcharge schedule, and cooling tower makeup demand before deliverable is finalised. Current sizing is directional pending these inputs.",
+        "flags": [
+          {
+            "id": "SPECIALIST-01",
+            "severity": "SPECIALIST",
+            "evidence": "Ops committee decision-makers (capex authority holder, finance lead) have not been directly engaged; all engagement to date is through the sustainability director. If the 5-year cost framing does not reach the committee before the meeting, the decision defaults to lowest-CAPEX (SBR expansion) without full evaluation of the MBR path economics.",
+            "status": "Open"
+          },
+          {
+            "id": "ATTENTION-01",
+            "severity": "ATTENTION",
+            "evidence": "No regulatory NOV or enforcement action documented. Urgency is growth-driven, not enforcement-driven. Cost-of-alternative framing must anchor on operational and growth economics rather than regulatory risk to resonate with the ops committee.",
+            "status": "Monitoring"
+          },
+          {
+            "id": "ATTENTION-02",
+            "severity": "ATTENTION",
+            "evidence": "Exact flow rates at 2× production not confirmed in current evidence base. DMR data covers current operations; projected flow at doubled production is a gap that widens the sizing confidence interval to MEDIUM.",
+            "status": "Open — to be closed at pre-committee working session"
+          }
+        ],
+        "subStreamLens": [
+          {
+            "subStream": "Industrial pretreatment / BOD-TSS compliance + capacity",
+            "activeCondition": "Existing aerobic SBR near BOD loading capacity; production doubling in 18 months will exceed current system capacity without capital investment. Two years of DMR data confirm current loading baseline. Regulatory driver: indirect discharger to municipal POTW under Colorado Regulation 62; BOD and TSS local limits apply; surcharge schedule operative at high-strength loads.",
+            "evidenceAnchor": "DMR-2YR"
+          },
+          {
+            "subStream": "Process water reuse / cooling tower makeup",
+            "activeCondition": "MBR retrofit path produces permeate quality (BOD < 5 mg/L, TSS < 2 mg/L) suitable for non-potable cooling tower makeup reuse, substituting municipal potable supply. Cooling tower makeup demand not yet confirmed in evidence — sizing directional. Municipal water + sewer rate applicable as value basis.",
+            "evidenceAnchor": "SITE-VISIT"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Confirm projected daily average flow at 2× production",
+            "status": "Open",
+            "source": "Expansion planning documents — request from sustainability director at working session"
+          },
+          {
+            "required": "Obtain POTW surcharge schedule for high-strength BOD/TSS discharge",
+            "status": "Open",
+            "source": "POTW industrial pretreatment coordinator or sustainability director"
+          },
+          {
+            "required": "Confirm cooling tower makeup demand (gal/day) and current municipal water rate",
+            "status": "Open",
+            "source": "Brewery operations team via sustainability director"
+          },
+          {
+            "required": "Identify capex authority holder on ops committee and approval threshold",
+            "status": "Open",
+            "source": "Sustainability director — confirm at pre-committee working session"
+          },
+          {
+            "required": "Confirm whether competing vendors are engaged (sole-sourced vs competitive)",
+            "status": "Open",
+            "source": "Direct question to sustainability director"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex, Year 0",
+            "basis": "SBR: add tankage, blower capacity, controls — no reuse capability. MBR: membrane bioreactor, effluent polishing, UV disinfection, reuse delivery. Both directional pending confirmed flow data.",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "BOD surcharges at 2× loading, 5yr: SBR $375K–$1M vs MBR $0–$250K",
+            "basis": "Basis: marginal BOD loading to POTW increases materially at 2× production; Colorado Front Range POTW typical surcharge $0.50–$0.75/lb BOD. MBR effluent BOD < 5 mg/L eliminates material surcharge exposure.",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Potable water — cooling tower makeup, 5yr: SBR $75K–$325K vs MBR $0–$50K net",
+            "basis": "SBR path: full potable purchase at $5–8/kgal combined rate. MBR path: reuse substitutes majority of cooling tower makeup. Demand volume directional pending customer confirmation.",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit exposure, Year 3–5: SBR $600K–$1.5M vs MBR minimal",
+            "basis": "SBR: POTW limit tightening or third production line requires additional SBR investment. MBR: scales via membrane panel addition at incremental cost; compliance headroom built in.",
+            "confidence": "LOW"
+          },
+          {
+            "row": "5-year total (mid-range): SBR ~$1.5M–$3.7M vs MBR ~$1.0M–$2.2M",
+            "basis": "Sum of above rows at mid-range. SBR path includes retrofit tail risk not quantified above. MBR path risk is extinguished at commissioning.",
+            "confidence": "MEDIUM"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "A regional craft brewery on the Colorado Front Range is in active capital planning for a production capacity doubling over 18 months. The existing aerobic sequencing batch reactor (SBR) pretreatment system is already operating near BOD loading capacity from spent grain liquor and CIP rinse wastewater. This engagement originated from direct outreach by the sustainability director, who has shared two years of discharge monitoring records and hosted a site visit. The sustainability director has self-framed the capital decision as a binary: SBR expansion (add tankage and blower capacity to the existing system) versus MBR retrofit (replace or augment the SBR with a membrane bioreactor capable of producing effluent suitable for cooling tower makeup reuse). The ops committee is expected to review a scoping-level comparison including rough CAPEX ranges in approximately one month. This is a Scope-stage deal with a live procurement signal and a real decision deadline.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"],
+            "evidenceSource": "DMR-2YR",
+            "confidenceTier": "HIGH"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "Two active sub-streams are identified. The first is industrial pretreatment capacity and BOD/TSS compliance (lens: industrial-discharge / indirect-discharger pretreatment). The second is process water reuse for cooling tower makeup (lens: advanced-reuse / non-potable industrial reuse). Both sub-streams are addressed by the same capital decision (SBR expansion vs MBR retrofit), are owned by the same decision-making structure, and are funded through the same brewery capex vehicle. Single engagement structure is appropriate.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"],
+            "confidenceTier": "HIGH"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "The primary lens is industrial-discharge / indirect-discharger pretreatment compliance. The brewery discharges to a municipal POTW under Colorado Regulation 62, subject to local limits on BOD, TSS, and pH. At current single-production-line loading, the SBR is operating near its design BOD loading capacity. At 2× production, the system will exceed that capacity, creating a discharge exceedance risk and material BOD surcharge exposure. The secondary lens is advanced-reuse / non-potable industrial reuse. MBR permeate quality is consistently at BOD < 5 mg/L and TSS < 2 mg/L — suitable for cooling tower makeup water without additional treatment beyond UV disinfection.",
+            "evidenceTags": ["DMR-2YR"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Evidence catalogue",
+            "body": "Two years of discharge monitoring records (DMR-2YR) provide a baseline of current BOD and TSS loading to the POTW. Site-visit observations confirm SBR configuration and approximate hydraulic loading. Sustainability director statements confirm the 18-month production doubling timeline and the binary capital comparison. Gaps in the current evidence base: (1) projected daily average flow at 2× production has not been confirmed from expansion planning documents; (2) POTW's current surcharge schedule for high-strength BOD/TSS discharge has not been provided; (3) cooling tower makeup demand in gal/day has not been quantified. These gaps are fillable at the pre-committee working session and are flagged as ATTENTION-02.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "The recommended path is an MBR retrofit designed for 2× production flow from the first day of commissioning. The proposed treatment train is: anoxic/pre-aeration zone (retaining existing SBR tankage where feasible) → MBR membrane bioreactor → effluent polishing → UV disinfection → cooling tower makeup delivery. Design capacity is directionally 15,000–25,000 gpd (subject to confirmation of projected 2× production flow from DMR analysis and expansion planning). MBR permeate targets BOD < 5 mg/L and TSS < 2 mg/L, providing a structural compliance buffer regardless of POTW limit trajectory. The SBR expansion path (add tankage and blower capacity, no reuse capability) is the customer's alternative and is priced for comparison below.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"],
+            "evidenceSource": "DMR-2YR",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three customer-side outcomes drive the MBR recommendation. First, the MBR is built once for 2× production and scales to higher loads via membrane panel additions — the SBR expansion is the first payment on a longer capital series as the brewery continues to grow. Second, MBR permeate substituted for potable water in cooling tower makeup can offset approximately 3M–8M gallons per year of municipal water consumption, translating to $15K–$65K per year in combined water and sewer cost reduction at typical Colorado Front Range municipal rates ($5–8/kgal). Third, MBR effluent quality provides a structural compliance buffer against POTW BOD/TSS limit tightening — the SBR operating at 2× loading will have materially less headroom than today, and several Front Range POTWs have moved toward formal industrial pretreatment programs with surcharges above $0.75/lb BOD.",
+            "evidenceTags": ["DMR-2YR"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The 5-year fully-priced comparison is the central analytical argument. The SBR expansion appears cheaper at CAPEX line 1 by $500K–$900K. Priced over 5 years — including BOD surcharges at 2× loading, full potable water purchase for cooling tower makeup, and forced retrofit exposure when the next growth cycle arrives or POTW limits tighten — the SBR path is directionally $500K–$1.5M more expensive than the MBR path at mid-range, while leaving the brewery capacity-constrained on its next growth move.",
+            "evidenceTags": ["DMR-2YR"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "Two active flags and one SPECIALIST risk are catalogued. SPECIALIST-01: the ops committee decision-makers have not been directly engaged. ATTENTION-01: no current NOV or enforcement action — urgency is growth-driven; framing must anchor on operational economics. ATTENTION-02: 2× production flow projection not confirmed; sizing confidence stays at MEDIUM until this gap is closed.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"]
+          },
+          {
+            "heading": "Stage classification",
+            "body": "Stage: Scope — MEDIUM confidence. The customer has completed a site visit, shared two years of DMR data, self-generated the capital comparison, and requested a scoping-level deliverable for an ops committee meeting ~1 month out. These are Scope-stage signals. Stage tension exists at the Scope/Position boundary: the customer is comparing alternatives, which is Position-stage behaviour, but no competing vendor has been named. Stage advances to Position when either a competing vendor is confirmed or the ops committee approves proceeding to detailed scoping.",
+            "evidenceTags": ["SITE-VISIT"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Gap analysis",
+            "body": "Required gaps (block advancement): (1) confirm projected daily average flow at 2× production — pins MBR sizing and surcharge row; (2) obtain POTW surcharge schedule for high-strength BOD/TSS discharge — moves surcharge row from directional to defensible; (3) confirm cooling tower makeup demand in gal/day and current municipal water rate — pins reuse savings calculation; (4) identify capex authority holder on the ops committee and confirm approval threshold. Nice-to-have: historical POTW communications on limit trends; SBR equipment vendor's preliminary expansion quote (useful competitive anchor); water stewardship targets that could amplify reuse value proposition.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"]
+          },
+          {
+            "heading": "Risk inventory",
+            "body": "Three ranked risks. (1) STOP: ops committee defaults to SBR expansion on CAPEX-only framing — mechanism: if the comparison reaches the committee as a year-0 CAPEX table, the rational default is the lower upfront number; mitigation: ensure the deliverable leads with 5-year total cost; secure pre-committee working session with sustainability director. (2) SPECIALIST: reuse sub-stream dismissed as optional — mechanism: if cooling tower reuse is positioned as an add-on, the MBR premium looks unjustified; mitigation: quantify reuse savings in $/yr and include as a core MBR benefit, not a separate line item. (3) SPECIALIST: competing SBR expansion quote arrives before our comparison — mechanism: low anchor number set by equipment vendor; mitigation: deliver the scoping comparison ahead of the committee timeline.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not promise yet",
+            "body": "This read does not commit to a firm CAPEX number, a specific engineering design, or a contract price. Sizing ranges are directional and subject to (1) confirmed 2× production flow from expansion planning; (2) site assessment confirming SBR tankage reuse feasibility; (3) detailed engineering scoping. The reuse savings calculation is directional pending confirmed cooling tower makeup demand and current municipal water rate. No vendor selection or procurement recommendation is made here.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          }
+        ]
+      }
+    },
+    {
+      "step": 7,
+      "toolName": "generateProposalShell",
+      "input": {
+        "customer": {
+          "name": "Regional Craft Brewery",
+          "location": "Brewery Production Facility",
+          "county": "Front Range",
+          "state": "Colorado",
+          "basin": "South Platte"
+        },
+        "subtitle": "Scoping-Level Comparison: SBR Expansion vs MBR Retrofit with Cooling Tower Makeup Reuse",
+        "executiveSummary": "Your production capacity is doubling in 18 months. Your existing aerobic SBR pretreatment system is already near its BOD loading limit from spent grain liquor and CIP wastewater. A capital decision is required — and it needs to be the right one for a 10-year horizon, not just the next production line.\n\nThe SBR expansion path appears cheaper at year 0 by roughly $500K–$900K. Priced over 5 years — including BOD surcharge exposure at 2× loading, continued potable water purchase for cooling tower makeup, and probable retrofit costs when your next growth cycle arrives or your POTW tightens its high-strength discharge limits — the SBR expansion path is directionally $500K–$1.5M more expensive than the MBR retrofit path at mid-range. More importantly, the SBR path leaves you capacity-constrained again at your next growth move.\n\nThe MBR retrofit, designed from day one for 2× production, closes the 5-year cost gap, eliminates material BOD surcharge exposure, and turns your pretreatment system into a water-savings asset by producing cooling tower makeup quality water from what today flows to the drain. This document provides a scoping-level comparison of both paths for your operations committee review.",
+        "proposedScope": [
+          "MBR aerobic treatment train designed for 2× production daily average flow (directional capacity: 15,000–25,000 gpd, pending confirmation of projected flow from expansion planning). Anoxic/pre-aeration zone utilizing existing SBR tankage where feasible to reduce capital cost; new MBR membrane cassette system; blower and recycle pumping upgrades.",
+          "Effluent polishing train: cartridge or disc filtration for membrane protection, UV disinfection system sized to meet cooling tower makeup quality standards for pathogen and BOD targets.",
+          "Cooling tower makeup reuse delivery: dedicated storage buffer (if required by cooling tower demand profile), transfer pumping, and piping to cooling tower makeup connection. Non-potable reuse system labeled and isolated from potable supply per applicable Colorado regulations.",
+          "Instrumentation and controls: integration with existing SCADA or standalone PLC-based controls for SBR/MBR operation, membrane integrity monitoring, UV dose management, and reuse system interlocks.",
+          "Commissioning, operator training, and 12-month post-commissioning performance monitoring period.",
+          "Regulatory documentation support: updated industrial pretreatment discharge monitoring reporting reflecting new effluent quality baseline."
+        ],
+        "sizingAndPricing": "All figures are directional and subject to site assessment, engineering scoping, and confirmation of projected 2× production flow and site constraints.\n\nMBR retrofit path (recommended): $900K–$1.8M total CAPEX. Lower end assumes existing SBR tankage is structurally sound and reusable as anoxic/pre-aeration zone (~20–30% CAPEX reduction vs full new-build). Upper end assumes new tankage required or significant site integration complexity. Reuse delivery system (WP-03) is included in this range.\n\nSBR expansion path (alternative): $400K–$900K total CAPEX. Includes additional SBR tank, blower capacity increase, and controls update. Does not include reuse capability.\n\nAnnual operating cost differential: MBR permeate quality eliminates material BOD surcharge exposure at 2× loading (directional savings: $75K–$200K/yr at Colorado Front Range POTW typical surcharge rates). Cooling tower makeup reuse provides additional $15K–$65K/yr water cost reduction (directional pending confirmed makeup demand and municipal water rate). SBR operating costs at 2× loading are materially higher due to increased aeration demand and sludge production relative to MBR.\n\n5-year total cost comparison: SBR path ~$1.5M–$3.7M (including surcharges, full potable water purchase, and retrofit exposure). MBR path ~$1.0M–$2.2M, risk extinguished at commissioning.",
+        "schedule": "Directional schedule — subject to detailed scoping and procurement lead times.\n\nMonth 0–2: Detailed scoping and engineering: site assessment, confirmed flow and loading data, SBR tankage evaluation, reuse demand confirmation, final design basis.\nMonth 2–5: Preliminary and final engineering design; equipment procurement (membrane system lead time typically 12–16 weeks).\nMonth 5–12: Construction and installation: civil/structural modifications, mechanical equipment installation, piping, electrical, and controls.\nMonth 12–14: Commissioning and performance verification; operator training.\nMonth 14 onward: Operational performance monitoring period.\n\nThis schedule accommodates the brewery's 18-month production doubling timeline if detailed scoping commences within approximately 60 days of ops committee approval.",
+        "commitments": [
+          {
+            "label": "Scoping-level comparison document",
+            "text": "We will deliver a scoping-level comparison of the SBR expansion and MBR retrofit paths, including directional CAPEX ranges and a 5-year total cost comparison, suitable for ops committee review.",
+            "date": "Prior to ops committee meeting (~30 days)",
+            "owner": "H2O Allegiant field agent"
+          },
+          {
+            "label": "Pre-committee working session",
+            "text": "We will offer a working session with the sustainability director to walk through the draft comparison before it is presented to the ops committee, and to confirm the four open gates listed above.",
+            "owner": "H2O Allegiant field agent"
+          },
+          {
+            "label": "Directional CAPEX ranges with stated confidence and caveats",
+            "text": "All CAPEX and cost-of-alternative figures in this document are directional and will be accompanied by explicit confidence labels and the specific inputs required to narrow the range. We do not commit to firm pricing at scoping stage."
+          },
+          {
+            "label": "Detailed engineering scoping proposal",
+            "text": "Upon ops committee approval to proceed, we will provide a detailed scoping and engineering proposal with fixed-price or bounded-estimate pricing for the Assessment phase, including site assessment and final design basis development."
+          }
+        ],
+        "riskAllocation": "At scoping stage, risk allocation is indicative only. Directional position: design-basis risk (confirmed flows, loading, site constraints) remains with the brewery until confirmed in detailed scoping. Performance risk (effluent quality targets) is carried by H2O Allegiant following system commissioning against agreed design basis. Reuse system performance against cooling tower makeup quality standards is warranted following commissioning performance testing.",
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — for internal review and field agent editing before external distribution. Not a formal proposal; all figures are directional and subject to site assessment and detailed engineering scoping.",
+        "workPackages": [
+          {
+            "id": "WP-01",
+            "name": "MBR Treatment Train",
+            "outcome": "Aerobic MBR designed for 2× production flow; BOD < 5 mg/L and TSS < 2 mg/L effluent quality; existing SBR tankage retained where feasible to reduce CAPEX"
+          },
+          {
+            "id": "WP-02",
+            "name": "Effluent Polishing and UV Disinfection",
+            "outcome": "Polished effluent meeting cooling tower makeup quality targets; UV system commissioned and performance-verified"
+          },
+          {
+            "id": "WP-03",
+            "name": "Cooling Tower Makeup Reuse System",
+            "outcome": "Functional non-potable reuse delivery to cooling tower makeup connection; reuse volume and annual water cost savings documented at commissioning"
+          },
+          {
+            "id": "WP-04",
+            "name": "Instrumentation, Controls, and SCADA Integration",
+            "outcome": "Integrated controls for MBR operation, membrane monitoring, UV, and reuse interlocks; operator interface commissioned and training completed"
+          },
+          {
+            "id": "WP-05",
+            "name": "Commissioning and Performance Monitoring",
+            "outcome": "System commissioned against agreed performance targets; 12-month monitoring period with compliance reporting documentation"
+          }
+        ],
+        "sizingRows": [
+          {
+            "label": "MBR retrofit CAPEX (recommended path)",
+            "value": "$900K–$1.8M | MEDIUM confidence"
+          },
+          {
+            "label": "SBR expansion CAPEX (alternative path)",
+            "value": "$400K–$900K | MEDIUM confidence"
+          },
+          {
+            "label": "BOD surcharge savings (MBR vs SBR, 5yr)",
+            "value": "$375K–$750K directional | MEDIUM confidence"
+          },
+          {
+            "label": "Water cost reduction from reuse (5yr)",
+            "value": "$75K–$325K directional | LOW confidence — pending confirmed demand"
+          },
+          {
+            "label": "MBR 5-year total cost (mid-range)",
+            "value": "~$1.0M–$2.2M"
+          },
+          {
+            "label": "SBR 5-year total cost (mid-range)",
+            "value": "~$1.5M–$3.7M + retrofit tail risk"
+          }
+        ],
+        "outOfScope": [
+          {
+            "heading": "Detailed process design and engineering",
+            "body": "This document is a scoping-level comparison only. Detailed process design, hydraulic modeling, structural assessment of existing SBR tankage, and final equipment sizing are Assessment-phase work, not included in this scoping comparison."
+          },
+          {
+            "heading": "POTW permit modification filing",
+            "body": "Coordination with the receiving POTW on any required updates to the brewery's industrial pretreatment permit as a result of system modifications is not included in this scoping document. The scope of permit coordination will be confirmed during detailed scoping."
+          },
+          {
+            "heading": "Potable water system modifications",
+            "body": "Modifications to the brewery's potable water supply or distribution system are out of scope. The reuse system delivers non-potable quality water to a dedicated cooling tower makeup connection; the potable system remains unchanged."
+          },
+          {
+            "heading": "Brewing process water reuse beyond cooling tower makeup",
+            "body": "Reuse of treated effluent for brewing process water (mash, sparge, cleaning) is not included in this scope. Phase-2 expansion of the reuse system for brewing process applications may be evaluated in a follow-on engagement."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Confirm projected daily average flow at 2× production from expansion planning documents",
+            "closer": "Sustainability director to provide from expansion planning; field agent to request at pre-committee working session"
+          },
+          {
+            "gate": "Obtain POTW surcharge schedule for high-strength BOD/TSS discharge",
+            "closer": "Sustainability director or POTW pretreatment coordinator; needed to finalise surcharge savings row"
+          },
+          {
+            "gate": "Confirm cooling tower makeup demand (gal/day) and current municipal water rate",
+            "closer": "Brewery operations team via sustainability director; needed to finalise reuse savings calculation"
+          },
+          {
+            "gate": "Confirm SBR tankage condition and reuse feasibility",
+            "closer": "Field agent site assessment during detailed scoping phase; determines MBR CAPEX range midpoint"
+          }
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "field-brief",
+      "payload": {
+        "customer": {
+          "name": "Regional Craft Brewery",
+          "location": "Brewery Production Facility",
+          "county": "Front Range",
+          "state": "Colorado",
+          "basin": "South Platte"
+        },
+        "stage": "Scope",
+        "confidence": "MEDIUM",
+        "date": "2025-07-14",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "The ops committee hasn't been in the room yet — the sustainability director is the champion, but the CAPEX comparison will land with decision-makers who haven't heard the 5-year cost story. If it reaches them as a CAPEX table, the SBR expansion wins by default.",
+          "The reuse sub-stream is the economic margin between the two paths — if it's framed as optional, the MBR premium looks unjustified. It needs to be in the deal as a core MBR benefit, not an add-on."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "The customer isn't deciding whether to invest — they're deciding which path. Your job is to make sure the ops committee prices both paths fully, not just at CAPEX line 1.",
+            "body": "A regional craft brewery doubling production capacity over 18 months faces a hard pretreatment deadline: their existing aerobic SBR is already near BOD loading capacity from spent grain liquor and CIP wastewater. The sustainability director — who has already shared two years of discharge monitoring data and hosted a site visit — has self-generated the comparison: SBR expansion vs MBR retrofit with cooling tower makeup reuse. The ops committee presentation is ~1 month out. This is a Scope-stage deal with a live procurement signal. The risk is not losing the relationship; the risk is losing the framing battle at a committee meeting we're not in the room for. The MBR path's 5-year economics are substantially better than they appear at year-0 CAPEX — but only if someone puts that number in front of the ops committee before the SBR expansion quote sets the anchor."
+          },
+          "whatWeWouldPropose": {
+            "insight": "MBR retrofit sized for 2× production from day one, with effluent polishing to cooling tower makeup. The SBR expansion is cheaper at year 0 — and likely $500K–$1.5M more expensive by year 5.",
+            "recommendedApproach": "MBR aerobic treatment train designed for 2× production flow (~15,000–25,000 gpd design capacity, directional pending confirmed flow data), retaining existing SBR tankage where feasible as anoxic/pre-aeration zone to reduce CAPEX. Effluent polishing → UV disinfection → cooling tower makeup delivery for non-potable process water reuse. MBR permeate targets BOD < 5 mg/L, TSS < 2 mg/L — structural compliance headroom regardless of POTW limit trajectory.",
+            "winWinArguments": [
+              {
+                "lead": "Built once for 2× production — the SBR expansion path builds twice.",
+                "body": "The SBR expansion sized for current 2× production will face the same constraint on the brewery's next growth cycle. MBR scales to higher loads through membrane panel additions at incremental cost, not full capital re-investment. The SBR path isn't a cheaper solution; it's the first payment on a series."
+              },
+              {
+                "lead": "Cooling tower reuse turns a compliance cost center into a water-savings asset.",
+                "body": "MBR permeate substituted for potable water in cooling tower makeup can offset ~3M–8M gallons per year of municipal water consumption. At typical Colorado municipal water and sewer rates ($5–8/kgal combined), that's $15K–$65K/year in real opex savings the sustainability director can put in the committee deck — and a sustainability metric the brewery can publish."
+              },
+              {
+                "lead": "Effluent quality headroom insulates against POTW limit tightening.",
+                "body": "Several Front Range POTWs have moved toward formal industrial pretreatment programs with BOD surcharges above $0.75/lb. The SBR operating at 2× load will have less buffer than today. MBR consistently delivers BOD < 5 mg/L and TSS < 2 mg/L — a structural compliance buffer that eliminates surcharge exposure even as limits evolve."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex, Year 0",
+                "theirPath": "$400K–$900K (SBR tank addition, blower capacity, controls)",
+                "ourProposal": "$900K–$1.8M (MBR retrofit, effluent polishing, UV, reuse delivery)"
+              },
+              {
+                "component": "BOD surcharges at 2× loading, 5yr",
+                "theirPath": "$375K–$1M (basis: marginal BOD to POTW increases materially at 2× load; $0.50–$0.75/lb CO Front Range POTW typical surcharge rate)",
+                "ourProposal": "$0–$250K (MBR effluent BOD < 5 mg/L eliminates material surcharge exposure)"
+              },
+              {
+                "component": "Potable water — cooling tower makeup, 5yr",
+                "theirPath": "$75K–$325K (no reuse capability; full potable purchase at $5–8/kgal)",
+                "ourProposal": "$0–$50K net (reuse substitutes majority of cooling tower makeup)"
+              },
+              {
+                "component": "Forced retrofit exposure, Year 3–5",
+                "theirPath": "$600K–$1.5M (POTW limit tightening or third production line forces additional SBR investment)",
+                "ourProposal": "Minimal — MBR scalable via membrane panel addition; compliance headroom built in"
+              },
+              {
+                "component": "5-year total (mid-range)",
+                "theirPath": "~$1.5M–$3.7M + retrofit tail risk",
+                "ourProposal": "~$1.0M–$2.2M, risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Primary driver: whether existing SBR tankage can be retained as MBR anoxic/aeration zone (~20–30% CAPEX reduction if reusable). Secondary: cooling tower reuse delivery infrastructure scope. Upside: operational support contract $30K–$60K/yr for MBR monitoring, compliance reporting, and operator training."
+          },
+          "whatCouldKillIt": {
+            "insight": "This deal is won or lost at the ops committee, not in the next conversation with the sustainability director. The kill risk is a CAPEX-only framing that defaults to the SBR expansion before our 5-year comparison lands.",
+            "risks": [
+              {
+                "name": "Ops committee sees CAPEX-only, awards SBR expansion",
+                "mechanism": "If the scoping comparison lands as a year-0 CAPEX table with no 5-year cost story, the committee rational-defaults to lowest upfront number. The sustainability director is the champion but may not have authority or framing to reposition the comparison before the vote.",
+                "mitigation": "Ensure the deliverable we prepare leads with the 5-year total cost comparison, not the CAPEX table. Propose a pre-committee working session with the sustainability director to walk through our comparison before it goes to committee — get the framing in place before the meeting, not during it."
+              },
+              {
+                "name": "Reuse sub-stream dismissed as optional",
+                "mechanism": "If cooling tower makeup reuse is positioned as a 'nice-to-have,' the MBR premium looks unjustified against the SBR path. The reuse economics are the margin that makes MBR the lower 5-year cost — remove it and the comparison flips.",
+                "mitigation": "Quantify reuse value in $/yr and include it as a core MBR benefit in the comparison document, not as an upsell line item. The sustainability director already knows this angle — arm them with the number."
+              },
+              {
+                "name": "Competing SBR expansion quote lands first",
+                "mechanism": "The existing SBR equipment vendor or a regional integrator may already be quoting an SBR expansion. If a low number sets the anchor before our comparison arrives, the MBR path is disadvantaged regardless of 5-year economics.",
+                "mitigation": "Deliver our scoping comparison ahead of the ops committee timeline — not at it. Move the pre-committee conversation earlier in the month."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The ops committee meeting is ~1 month out. The window to shape the framing is now — not after a competing quote lands.",
+            "actions": [
+              {
+                "title": "Secure a pre-committee working session",
+                "timeframe": "Within 7 days",
+                "body": "Contact the sustainability director and propose a 45-minute working session to walk through the draft scoping comparison before it goes to the ops committee. Objective: confirm the 5-year cost framing is in the deck the sustainability director presents, not just our deliverable. Ask directly whether any other vendors are being consulted — confirms whether we're sole-sourced or competing."
+              },
+              {
+                "title": "Confirm flow projections and POTW surcharge rates",
+                "timeframe": "7–14 days",
+                "body": "Process the two years of DMR data to pin current daily average flow and BOD loading. Ask the sustainability director for the projected 2× production flow rate and the POTW's current surcharge schedule for high-strength discharge. These two inputs move the surcharge row in the 5-year comparison from directional to defensible — critical for the ops committee presentation."
+              },
+              {
+                "title": "Quantify the reuse demand and map ops committee decision-makers",
+                "timeframe": "14–21 days",
+                "body": "Ask the sustainability director: what is current cooling tower makeup demand (gal/day) and what does the brewery pay for municipal water? This pins the reuse savings row. Simultaneously, ask who on the ops committee holds capex authority and what their approval threshold is — understanding the decision architecture before the meeting determines whether the sustainability director can close this alone or needs executive sponsor alignment."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "playbook",
+      "payload": {
+        "customer": {
+          "name": "Regional Craft Brewery",
+          "location": "Brewery Production Facility",
+          "county": "Front Range",
+          "state": "Colorado",
+          "basin": "South Platte"
+        },
+        "stage": "Scope",
+        "subtitle": "SBR Expansion vs MBR Retrofit — Scoping Conversation Guide",
+        "header": {
+          "subStreams": [
+            "Industrial pretreatment / BOD-TSS compliance + capacity",
+            "Process water reuse / cooling tower makeup"
+          ],
+          "stageIntro": "The customer has self-generated the comparison: SBR expansion vs MBR retrofit with cooling tower reuse. The ops committee presentation is ~1 month out. Your goal this conversation is to shape the framing before the committee sees a CAPEX table.",
+          "insight": "The deal is won or lost at the ops committee, not in this conversation. Use this call to get the 5-year cost story into the sustainability director's committee deck before a competing SBR quote sets the anchor.",
+          "orientationLine": "Scope stage — customer comparing alternatives, ops committee deliverable in ~1 month"
+        },
+        "themes": [
+          {
+            "title": "Open the reframe",
+            "framing": "The customer is already in the right comparison — but the default framing is CAPEX-table, not 5-year economics. Open by acknowledging the comparison and immediately introducing the 5-year lens.",
+            "questions": [
+              "When the ops committee reviews this comparison, what's their primary lens — lowest upfront CAPEX, lowest total cost of ownership, or sustainability positioning?",
+              "Has anyone priced what the SBR expansion costs if you need to expand again in 5–7 years as you continue growing?",
+              "Are you expecting the committee to compare year-0 CAPEX, or is there appetite to see a fuller operational cost comparison?"
+            ],
+            "whyItMatters": [
+              "The SBR expansion looks cheaper at CAPEX line 1. The 5-year story flips the comparison — but only if it's in the room."
+            ],
+            "accentIndex": 0
+          },
+          {
+            "title": "Surface the committee decision architecture",
+            "framing": "The sustainability director is the champion but likely doesn't hold capex authority alone. Understanding who decides — and how they frame decisions — is critical before the deliverable is written.",
+            "questions": [
+              "Who on the ops committee holds final capex approval, and is there a dollar threshold that escalates to the board or ownership?",
+              "Is the sustainability director presenting this solo, or will engineering and finance leads also be in the room?",
+              "What objections do you expect from the committee — is the primary concern CAPEX, operational complexity, or something else?",
+              "Has the committee seen MBR technology before, or will we need to establish baseline credibility on the technology?"
+            ],
+            "whyItMatters": [
+              "If finance leads haven't been in the room, the committee defaults to lowest-CAPEX without a cost-of-alternative frame. Knowing the decision architecture determines how to write the deliverable."
+            ],
+            "accentIndex": 1
+          },
+          {
+            "title": "Anchor the capacity problem",
+            "framing": "The SBR is near capacity today. At 2× production, the capacity gap is real and time-bound. Pin the numbers.",
+            "questions": [
+              "What's your current average daily wastewater flow, and what's your projected flow at 2× production — do you have that from your expansion planning?",
+              "Is the capacity constraint primarily hydraulic, or is it specifically BOD loading — or both?",
+              "At current loading, are you seeing any POTW surcharges or informal notifications from the utility about high-strength discharge?",
+              "What's the consequence if the SBR is over-limit during the production ramp — is that a POTW enforcement exposure or an operational self-limit?"
+            ],
+            "substreamTag": "Industrial pretreatment",
+            "accentIndex": 2
+          },
+          {
+            "title": "Price the reuse opportunity",
+            "framing": "The cooling tower makeup reuse angle is the margin that makes MBR the better 5-year value. It needs a number, not a concept.",
+            "questions": [
+              "What's your cooling tower makeup demand — roughly how many gallons per day are you pulling from the municipal supply for cooling?",
+              "What do you pay for municipal water today — combined water and sewer rate per thousand gallons?",
+              "Is there a water budget or sustainability target that makes reuse attractive beyond the cost savings — water stewardship reporting, for example?",
+              "If we can show a specific annual savings number from reuse, would that be a meaningful input to the ops committee comparison?"
+            ],
+            "substreamTag": "Process water reuse",
+            "whyItMatters": [
+              "Reuse savings of $15K–$65K/yr are real opex reduction the ops committee can underwrite. Without a number, it's a concept. With a number, it closes the CAPEX gap on the MBR path."
+            ],
+            "accentIndex": 3
+          },
+          {
+            "title": "Surface the POTW relationship and surcharge exposure",
+            "framing": "No current NOV, but as BOD loading increases at 2× production, surcharge exposure grows. The sustainability director may not have priced this.",
+            "questions": [
+              "Does your POTW have a surcharge schedule for high-strength BOD and TSS discharge — and have you modeled what your surcharge exposure looks like at 2× production?",
+              "Has the POTW given any informal signals about where they're heading on industrial pretreatment requirements — any mention of tightening limits or formal pretreatment program requirements?",
+              "Are you currently paying any BOD or TSS surcharges, or are you under the threshold?"
+            ],
+            "substreamTag": "Industrial pretreatment",
+            "accentIndex": 4
+          },
+          {
+            "title": "Surface competing alternatives",
+            "framing": "Are we sole-sourced, or is a competing vendor already quoting an SBR expansion?",
+            "questions": [
+              "Are you talking to your existing SBR vendor or any other suppliers on the expansion path — or are we the primary technical resource for this comparison?",
+              "Has anyone given you a preliminary number on the SBR expansion yet, or are we building that scenario together?",
+              "Is the ops committee expecting to see a competitive comparison from multiple vendors, or a single recommended path?"
+            ],
+            "whyItMatters": [
+              "If a competing SBR expansion quote lands before our comparison, the anchor is set against us regardless of 5-year economics. Knowing the competitive landscape determines the urgency of our deliverable timeline."
+            ],
+            "accentIndex": 5
+          },
+          {
+            "title": "Anchor the timeline",
+            "framing": "18 months to production doubling is the hard constraint. Work backward to confirm when the decision needs to be made and when construction needs to start.",
+            "questions": [
+              "What's your production doubling timeline — is the 18-month target firm, or is it a planning horizon?",
+              "When does construction need to start to hit that timeline, and when does a vendor selection need to be made to feed that?",
+              "The ops committee meeting is ~1 month out — is that a decision point, or an approval-to-proceed-to-detailed-scoping point?",
+              "Is there a budget cycle or capital planning process that the decision needs to feed into?"
+            ],
+            "accentIndex": 6
+          },
+          {
+            "title": "Test the sustainability value proposition",
+            "framing": "The sustainability director is the champion. Understand how the sustainability angle plays internally — is it a tiebreaker or a primary driver?",
+            "questions": [
+              "How much weight does the ops committee put on the sustainability angle — is water reuse a decision factor, or is it a communications benefit after the decision is made on economics?",
+              "Does the brewery have published water stewardship goals or sustainability reporting that MBR reuse would contribute to?",
+              "Is there an external audience — investors, trade partners, distributors — for whom the water reuse story matters commercially?"
+            ],
+            "accentIndex": 7
+          },
+          {
+            "title": "Confirm the deliverable format and timeline",
+            "framing": "We need to deliver the right document to the right audience before the committee meeting. Confirm format, timing, and what lands in the room.",
+            "questions": [
+              "What format does the ops committee expect — a written comparison document, a presentation, or both?",
+              "When do you need the draft from us to have time to review and incorporate it into your committee materials?",
+              "Should our comparison document be written for the committee to read directly, or is it source material for a presentation you're building?",
+              "Is there a pre-meeting review we can schedule with you to walk through the comparison before it goes to the committee?"
+            ],
+            "accentIndex": 8
+          },
+          {
+            "title": "Scope the site constraints",
+            "framing": "Whether existing SBR tankage can be retained as part of the MBR retrofit is the single biggest CAPEX driver. Surface this now.",
+            "questions": [
+              "Is there physical space at the site for new tankage, or is the MBR retrofit path contingent on reusing existing SBR infrastructure?",
+              "What's the condition of the existing SBR aeration and control systems — are they candidates for retention or are they end-of-life?",
+              "Are there any permit or zoning constraints on expanding the footprint of the pretreatment system?"
+            ],
+            "substreamTag": "Industrial pretreatment",
+            "accentIndex": 9
+          },
+          {
+            "title": "Set the next step",
+            "framing": "Close the conversation with a concrete next move that advances the deal before the committee meeting.",
+            "questions": [
+              "Can we schedule a working session in the next two weeks to walk through the draft comparison together before it goes to the committee?",
+              "What's the one thing you need from us to feel confident presenting this comparison to the committee?",
+              "If we can get you a draft comparison within 10 days, is that enough lead time for your committee prep?"
+            ],
+            "accentIndex": 10
+          }
+        ]
+      }
+    },
+    {
+      "kind": "analytical-read",
+      "payload": {
+        "customer": {
+          "name": "Regional Craft Brewery",
+          "location": "Brewery Production Facility",
+          "county": "Front Range",
+          "state": "Colorado",
+          "basin": "South Platte"
+        },
+        "subtitle": "Evidenced read on the SBR-vs-MBR pretreatment path decision at a growth-stage Colorado craft brewery",
+        "subStreamsLine": "Sub-streams: industrial BOD/TSS pretreatment capacity, process water reuse / cooling tower makeup",
+        "closingInsight": "The SBR expansion is not a cheaper solution — it is the first payment on a longer capital series. The MBR path closes the gap by year 5 and leaves the brewery positioned for the next growth cycle. The field agent's job in the next 30 days is to ensure the ops committee sees that comparison before a CAPEX-only number sets the anchor.",
+        "summary": "Regional craft brewery on the Colorado Front Range is doubling production capacity over 18 months. The existing aerobic SBR pretreatment system is already operating near BOD loading capacity from spent grain liquor and CIP wastewater. The sustainability director has engaged us directly, shared two years of discharge monitoring data, and requested a scoping-level comparison of SBR expansion vs MBR retrofit (with cooling tower makeup reuse) for presentation to the ops committee in approximately one month. This read covers sub-stream decomposition, the evidence base, a defended path recommendation, fully-priced 5-year comparison, and active risk inventory.",
+        "gateState": "OPEN_WITH_CONDITIONS",
+        "gateContent": "Ops committee deliverable requested for ~1 month out. Proceeding to scoping-level comparison. Conditions: confirm projected 2× production flow, POTW surcharge schedule, and cooling tower makeup demand before deliverable is finalised. Current sizing is directional pending these inputs.",
+        "flags": [
+          {
+            "id": "SPECIALIST-01",
+            "severity": "SPECIALIST",
+            "evidence": "Ops committee decision-makers (capex authority holder, finance lead) have not been directly engaged; all engagement to date is through the sustainability director. If the 5-year cost framing does not reach the committee before the meeting, the decision defaults to lowest-CAPEX (SBR expansion) without full evaluation of the MBR path economics.",
+            "status": "Open"
+          },
+          {
+            "id": "ATTENTION-01",
+            "severity": "ATTENTION",
+            "evidence": "No regulatory NOV or enforcement action documented. Urgency is growth-driven, not enforcement-driven. Cost-of-alternative framing must anchor on operational and growth economics rather than regulatory risk to resonate with the ops committee.",
+            "status": "Monitoring"
+          },
+          {
+            "id": "ATTENTION-02",
+            "severity": "ATTENTION",
+            "evidence": "Exact flow rates at 2× production not confirmed in current evidence base. DMR data covers current operations; projected flow at doubled production is a gap that widens the sizing confidence interval to MEDIUM.",
+            "status": "Open — to be closed at pre-committee working session"
+          }
+        ],
+        "subStreamLens": [
+          {
+            "subStream": "Industrial pretreatment / BOD-TSS compliance + capacity",
+            "activeCondition": "Existing aerobic SBR near BOD loading capacity; production doubling in 18 months will exceed current system capacity without capital investment. Two years of DMR data confirm current loading baseline. Regulatory driver: indirect discharger to municipal POTW under Colorado Regulation 62; BOD and TSS local limits apply; surcharge schedule operative at high-strength loads.",
+            "evidenceAnchor": "DMR-2YR"
+          },
+          {
+            "subStream": "Process water reuse / cooling tower makeup",
+            "activeCondition": "MBR retrofit path produces permeate quality (BOD < 5 mg/L, TSS < 2 mg/L) suitable for non-potable cooling tower makeup reuse, substituting municipal potable supply. Cooling tower makeup demand not yet confirmed in evidence — sizing directional. Municipal water + sewer rate applicable as value basis.",
+            "evidenceAnchor": "SITE-VISIT"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Confirm projected daily average flow at 2× production",
+            "status": "Open",
+            "source": "Expansion planning documents — request from sustainability director at working session"
+          },
+          {
+            "required": "Obtain POTW surcharge schedule for high-strength BOD/TSS discharge",
+            "status": "Open",
+            "source": "POTW industrial pretreatment coordinator or sustainability director"
+          },
+          {
+            "required": "Confirm cooling tower makeup demand (gal/day) and current municipal water rate",
+            "status": "Open",
+            "source": "Brewery operations team via sustainability director"
+          },
+          {
+            "required": "Identify capex authority holder on ops committee and approval threshold",
+            "status": "Open",
+            "source": "Sustainability director — confirm at pre-committee working session"
+          },
+          {
+            "required": "Confirm whether competing vendors are engaged (sole-sourced vs competitive)",
+            "status": "Open",
+            "source": "Direct question to sustainability director"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex, Year 0",
+            "basis": "SBR: add tankage, blower capacity, controls — no reuse capability. MBR: membrane bioreactor, effluent polishing, UV disinfection, reuse delivery. Both directional pending confirmed flow data.",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "BOD surcharges at 2× loading, 5yr: SBR $375K–$1M vs MBR $0–$250K",
+            "basis": "Basis: marginal BOD loading to POTW increases materially at 2× production; Colorado Front Range POTW typical surcharge $0.50–$0.75/lb BOD. MBR effluent BOD < 5 mg/L eliminates material surcharge exposure.",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Potable water — cooling tower makeup, 5yr: SBR $75K–$325K vs MBR $0–$50K net",
+            "basis": "SBR path: full potable purchase at $5–8/kgal combined rate. MBR path: reuse substitutes majority of cooling tower makeup. Demand volume directional pending customer confirmation.",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit exposure, Year 3–5: SBR $600K–$1.5M vs MBR minimal",
+            "basis": "SBR: POTW limit tightening or third production line requires additional SBR investment. MBR: scales via membrane panel addition at incremental cost; compliance headroom built in.",
+            "confidence": "LOW"
+          },
+          {
+            "row": "5-year total (mid-range): SBR ~$1.5M–$3.7M vs MBR ~$1.0M–$2.2M",
+            "basis": "Sum of above rows at mid-range. SBR path includes retrofit tail risk not quantified above. MBR path risk is extinguished at commissioning.",
+            "confidence": "MEDIUM"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "A regional craft brewery on the Colorado Front Range is in active capital planning for a production capacity doubling over 18 months. The existing aerobic sequencing batch reactor (SBR) pretreatment system is already operating near BOD loading capacity from spent grain liquor and CIP rinse wastewater. This engagement originated from direct outreach by the sustainability director, who has shared two years of discharge monitoring records and hosted a site visit. The sustainability director has self-framed the capital decision as a binary: SBR expansion (add tankage and blower capacity to the existing system) versus MBR retrofit (replace or augment the SBR with a membrane bioreactor capable of producing effluent suitable for cooling tower makeup reuse). The ops committee is expected to review a scoping-level comparison including rough CAPEX ranges in approximately one month. This is a Scope-stage deal with a live procurement signal and a real decision deadline.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"],
+            "evidenceSource": "DMR-2YR",
+            "confidenceTier": "HIGH"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "Two active sub-streams are identified. The first is industrial pretreatment capacity and BOD/TSS compliance (lens: industrial-discharge / indirect-discharger pretreatment). The second is process water reuse for cooling tower makeup (lens: advanced-reuse / non-potable industrial reuse). Both sub-streams are addressed by the same capital decision (SBR expansion vs MBR retrofit), are owned by the same decision-making structure, and are funded through the same brewery capex vehicle. Single engagement structure is appropriate.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"],
+            "confidenceTier": "HIGH"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "The primary lens is industrial-discharge / indirect-discharger pretreatment compliance. The brewery discharges to a municipal POTW under Colorado Regulation 62, subject to local limits on BOD, TSS, and pH. At current single-production-line loading, the SBR is operating near its design BOD loading capacity. At 2× production, the system will exceed that capacity, creating a discharge exceedance risk and material BOD surcharge exposure. The secondary lens is advanced-reuse / non-potable industrial reuse. MBR permeate quality is consistently at BOD < 5 mg/L and TSS < 2 mg/L — suitable for cooling tower makeup water without additional treatment beyond UV disinfection.",
+            "evidenceTags": ["DMR-2YR"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Evidence catalogue",
+            "body": "Two years of discharge monitoring records (DMR-2YR) provide a baseline of current BOD and TSS loading to the POTW. Site-visit observations confirm SBR configuration and approximate hydraulic loading. Sustainability director statements confirm the 18-month production doubling timeline and the binary capital comparison. Gaps in the current evidence base: (1) projected daily average flow at 2× production has not been confirmed from expansion planning documents; (2) POTW's current surcharge schedule for high-strength BOD/TSS discharge has not been provided; (3) cooling tower makeup demand in gal/day has not been quantified. These gaps are fillable at the pre-committee working session and are flagged as ATTENTION-02.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "The recommended path is an MBR retrofit designed for 2× production flow from the first day of commissioning. The proposed treatment train is: anoxic/pre-aeration zone (retaining existing SBR tankage where feasible) → MBR membrane bioreactor → effluent polishing → UV disinfection → cooling tower makeup delivery. Design capacity is directionally 15,000–25,000 gpd (subject to confirmation of projected 2× production flow from DMR analysis and expansion planning). MBR permeate targets BOD < 5 mg/L and TSS < 2 mg/L, providing a structural compliance buffer regardless of POTW limit trajectory. The SBR expansion path (add tankage and blower capacity, no reuse capability) is the customer's alternative and is priced for comparison below.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"],
+            "evidenceSource": "DMR-2YR",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three customer-side outcomes drive the MBR recommendation. First, the MBR is built once for 2× production and scales to higher loads via membrane panel additions — the SBR expansion is the first payment on a longer capital series as the brewery continues to grow. Second, MBR permeate substituted for potable water in cooling tower makeup can offset approximately 3M–8M gallons per year of municipal water consumption, translating to $15K–$65K per year in combined water and sewer cost reduction at typical Colorado Front Range municipal rates ($5–8/kgal). Third, MBR effluent quality provides a structural compliance buffer against POTW BOD/TSS limit tightening — the SBR operating at 2× loading will have materially less headroom than today, and several Front Range POTWs have moved toward formal industrial pretreatment programs with surcharges above $0.75/lb BOD.",
+            "evidenceTags": ["DMR-2YR"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The 5-year fully-priced comparison is the central analytical argument. The SBR expansion appears cheaper at CAPEX line 1 by $500K–$900K. Priced over 5 years — including BOD surcharges at 2× loading, full potable water purchase for cooling tower makeup, and forced retrofit exposure when the next growth cycle arrives or POTW limits tighten — the SBR path is directionally $500K–$1.5M more expensive than the MBR path at mid-range, while leaving the brewery capacity-constrained on its next growth move.",
+            "evidenceTags": ["DMR-2YR"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "Two active flags and one SPECIALIST risk are catalogued. SPECIALIST-01: the ops committee decision-makers have not been directly engaged. ATTENTION-01: no current NOV or enforcement action — urgency is growth-driven; framing must anchor on operational economics. ATTENTION-02: 2× production flow projection not confirmed; sizing confidence stays at MEDIUM until this gap is closed.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"]
+          },
+          {
+            "heading": "Stage classification",
+            "body": "Stage: Scope — MEDIUM confidence. The customer has completed a site visit, shared two years of DMR data, self-generated the capital comparison, and requested a scoping-level deliverable for an ops committee meeting ~1 month out. These are Scope-stage signals. Stage tension exists at the Scope/Position boundary: the customer is comparing alternatives, which is Position-stage behaviour, but no competing vendor has been named. Stage advances to Position when either a competing vendor is confirmed or the ops committee approves proceeding to detailed scoping.",
+            "evidenceTags": ["SITE-VISIT"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Gap analysis",
+            "body": "Required gaps (block advancement): (1) confirm projected daily average flow at 2× production — pins MBR sizing and surcharge row; (2) obtain POTW surcharge schedule for high-strength BOD/TSS discharge — moves surcharge row from directional to defensible; (3) confirm cooling tower makeup demand in gal/day and current municipal water rate — pins reuse savings calculation; (4) identify capex authority holder on the ops committee and confirm approval threshold. Nice-to-have: historical POTW communications on limit trends; SBR equipment vendor's preliminary expansion quote (useful competitive anchor); water stewardship targets that could amplify reuse value proposition.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"]
+          },
+          {
+            "heading": "Risk inventory",
+            "body": "Three ranked risks. (1) STOP: ops committee defaults to SBR expansion on CAPEX-only framing — mechanism: if the comparison reaches the committee as a year-0 CAPEX table, the rational default is the lower upfront number; mitigation: ensure the deliverable leads with 5-year total cost; secure pre-committee working session with sustainability director. (2) SPECIALIST: reuse sub-stream dismissed as optional — mechanism: if cooling tower reuse is positioned as an add-on, the MBR premium looks unjustified; mitigation: quantify reuse savings in $/yr and include as a core MBR benefit, not a separate line item. (3) SPECIALIST: competing SBR expansion quote arrives before our comparison — mechanism: low anchor number set by equipment vendor; mitigation: deliver the scoping comparison ahead of the committee timeline.",
+            "evidenceTags": ["DMR-2YR", "SITE-VISIT"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not promise yet",
+            "body": "This read does not commit to a firm CAPEX number, a specific engineering design, or a contract price. Sizing ranges are directional and subject to (1) confirmed 2× production flow from expansion planning; (2) site assessment confirming SBR tankage reuse feasibility; (3) detailed engineering scoping. The reuse savings calculation is directional pending confirmed cooling tower makeup demand and current municipal water rate. No vendor selection or procurement recommendation is made here.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "proposal-shell",
+      "payload": {
+        "customer": {
+          "name": "Regional Craft Brewery",
+          "location": "Brewery Production Facility",
+          "county": "Front Range",
+          "state": "Colorado",
+          "basin": "South Platte"
+        },
+        "subtitle": "Scoping-Level Comparison: SBR Expansion vs MBR Retrofit with Cooling Tower Makeup Reuse",
+        "executiveSummary": "Your production capacity is doubling in 18 months. Your existing aerobic SBR pretreatment system is already near its BOD loading limit from spent grain liquor and CIP wastewater. A capital decision is required — and it needs to be the right one for a 10-year horizon, not just the next production line.\n\nThe SBR expansion path appears cheaper at year 0 by roughly $500K–$900K. Priced over 5 years — including BOD surcharge exposure at 2× loading, continued potable water purchase for cooling tower makeup, and probable retrofit costs when your next growth cycle arrives or your POTW tightens its high-strength discharge limits — the SBR expansion path is directionally $500K–$1.5M more expensive than the MBR retrofit path at mid-range. More importantly, the SBR path leaves you capacity-constrained again at your next growth move.\n\nThe MBR retrofit, designed from day one for 2× production, closes the 5-year cost gap, eliminates material BOD surcharge exposure, and turns your pretreatment system into a water-savings asset by producing cooling tower makeup quality water from what today flows to the drain. This document provides a scoping-level comparison of both paths for your operations committee review.",
+        "proposedScope": [
+          "MBR aerobic treatment train designed for 2× production daily average flow (directional capacity: 15,000–25,000 gpd, pending confirmation of projected flow from expansion planning). Anoxic/pre-aeration zone utilizing existing SBR tankage where feasible to reduce capital cost; new MBR membrane cassette system; blower and recycle pumping upgrades.",
+          "Effluent polishing train: cartridge or disc filtration for membrane protection, UV disinfection system sized to meet cooling tower makeup quality standards for pathogen and BOD targets.",
+          "Cooling tower makeup reuse delivery: dedicated storage buffer (if required by cooling tower demand profile), transfer pumping, and piping to cooling tower makeup connection. Non-potable reuse system labeled and isolated from potable supply per applicable Colorado regulations.",
+          "Instrumentation and controls: integration with existing SCADA or standalone PLC-based controls for SBR/MBR operation, membrane integrity monitoring, UV dose management, and reuse system interlocks.",
+          "Commissioning, operator training, and 12-month post-commissioning performance monitoring period.",
+          "Regulatory documentation support: updated industrial pretreatment discharge monitoring reporting reflecting new effluent quality baseline."
+        ],
+        "sizingAndPricing": "All figures are directional and subject to site assessment, engineering scoping, and confirmation of projected 2× production flow and site constraints.\n\nMBR retrofit path (recommended): $900K–$1.8M total CAPEX. Lower end assumes existing SBR tankage is structurally sound and reusable as anoxic/pre-aeration zone (~20–30% CAPEX reduction vs full new-build). Upper end assumes new tankage required or significant site integration complexity. Reuse delivery system (WP-03) is included in this range.\n\nSBR expansion path (alternative): $400K–$900K total CAPEX. Includes additional SBR tank, blower capacity increase, and controls update. Does not include reuse capability.\n\nAnnual operating cost differential: MBR permeate quality eliminates material BOD surcharge exposure at 2× loading (directional savings: $75K–$200K/yr at Colorado Front Range POTW typical surcharge rates). Cooling tower makeup reuse provides additional $15K–$65K/yr water cost reduction (directional pending confirmed makeup demand and municipal water rate). SBR operating costs at 2× loading are materially higher due to increased aeration demand and sludge production relative to MBR.\n\n5-year total cost comparison: SBR path ~$1.5M–$3.7M (including surcharges, full potable water purchase, and retrofit exposure). MBR path ~$1.0M–$2.2M, risk extinguished at commissioning.",
+        "schedule": "Directional schedule — subject to detailed scoping and procurement lead times.\n\nMonth 0–2: Detailed scoping and engineering: site assessment, confirmed flow and loading data, SBR tankage evaluation, reuse demand confirmation, final design basis.\nMonth 2–5: Preliminary and final engineering design; equipment procurement (membrane system lead time typically 12–16 weeks).\nMonth 5–12: Construction and installation: civil/structural modifications, mechanical equipment installation, piping, electrical, and controls.\nMonth 12–14: Commissioning and performance verification; operator training.\nMonth 14 onward: Operational performance monitoring period.\n\nThis schedule accommodates the brewery's 18-month production doubling timeline if detailed scoping commences within approximately 60 days of ops committee approval.",
+        "commitments": [
+          {
+            "label": "Scoping-level comparison document",
+            "text": "We will deliver a scoping-level comparison of the SBR expansion and MBR retrofit paths, including directional CAPEX ranges and a 5-year total cost comparison, suitable for ops committee review.",
+            "date": "Prior to ops committee meeting (~30 days)",
+            "owner": "H2O Allegiant field agent"
+          },
+          {
+            "label": "Pre-committee working session",
+            "text": "We will offer a working session with the sustainability director to walk through the draft comparison before it is presented to the ops committee, and to confirm the four open gates listed above.",
+            "owner": "H2O Allegiant field agent"
+          },
+          {
+            "label": "Directional CAPEX ranges with stated confidence and caveats",
+            "text": "All CAPEX and cost-of-alternative figures in this document are directional and will be accompanied by explicit confidence labels and the specific inputs required to narrow the range. We do not commit to firm pricing at scoping stage."
+          },
+          {
+            "label": "Detailed engineering scoping proposal",
+            "text": "Upon ops committee approval to proceed, we will provide a detailed scoping and engineering proposal with fixed-price or bounded-estimate pricing for the Assessment phase, including site assessment and final design basis development."
+          }
+        ],
+        "riskAllocation": "At scoping stage, risk allocation is indicative only. Directional position: design-basis risk (confirmed flows, loading, site constraints) remains with the brewery until confirmed in detailed scoping. Performance risk (effluent quality targets) is carried by H2O Allegiant following system commissioning against agreed design basis. Reuse system performance against cooling tower makeup quality standards is warranted following commissioning performance testing.",
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — for internal review and field agent editing before external distribution. Not a formal proposal; all figures are directional and subject to site assessment and detailed engineering scoping.",
+        "workPackages": [
+          {
+            "id": "WP-01",
+            "name": "MBR Treatment Train",
+            "outcome": "Aerobic MBR designed for 2× production flow; BOD < 5 mg/L and TSS < 2 mg/L effluent quality; existing SBR tankage retained where feasible to reduce CAPEX"
+          },
+          {
+            "id": "WP-02",
+            "name": "Effluent Polishing and UV Disinfection",
+            "outcome": "Polished effluent meeting cooling tower makeup quality targets; UV system commissioned and performance-verified"
+          },
+          {
+            "id": "WP-03",
+            "name": "Cooling Tower Makeup Reuse System",
+            "outcome": "Functional non-potable reuse delivery to cooling tower makeup connection; reuse volume and annual water cost savings documented at commissioning"
+          },
+          {
+            "id": "WP-04",
+            "name": "Instrumentation, Controls, and SCADA Integration",
+            "outcome": "Integrated controls for MBR operation, membrane monitoring, UV, and reuse interlocks; operator interface commissioned and training completed"
+          },
+          {
+            "id": "WP-05",
+            "name": "Commissioning and Performance Monitoring",
+            "outcome": "System commissioned against agreed performance targets; 12-month monitoring period with compliance reporting documentation"
+          }
+        ],
+        "sizingRows": [
+          {
+            "label": "MBR retrofit CAPEX (recommended path)",
+            "value": "$900K–$1.8M | MEDIUM confidence"
+          },
+          {
+            "label": "SBR expansion CAPEX (alternative path)",
+            "value": "$400K–$900K | MEDIUM confidence"
+          },
+          {
+            "label": "BOD surcharge savings (MBR vs SBR, 5yr)",
+            "value": "$375K–$750K directional | MEDIUM confidence"
+          },
+          {
+            "label": "Water cost reduction from reuse (5yr)",
+            "value": "$75K–$325K directional | LOW confidence — pending confirmed demand"
+          },
+          {
+            "label": "MBR 5-year total cost (mid-range)",
+            "value": "~$1.0M–$2.2M"
+          },
+          {
+            "label": "SBR 5-year total cost (mid-range)",
+            "value": "~$1.5M–$3.7M + retrofit tail risk"
+          }
+        ],
+        "outOfScope": [
+          {
+            "heading": "Detailed process design and engineering",
+            "body": "This document is a scoping-level comparison only. Detailed process design, hydraulic modeling, structural assessment of existing SBR tankage, and final equipment sizing are Assessment-phase work, not included in this scoping comparison."
+          },
+          {
+            "heading": "POTW permit modification filing",
+            "body": "Coordination with the receiving POTW on any required updates to the brewery's industrial pretreatment permit as a result of system modifications is not included in this scoping document. The scope of permit coordination will be confirmed during detailed scoping."
+          },
+          {
+            "heading": "Potable water system modifications",
+            "body": "Modifications to the brewery's potable water supply or distribution system are out of scope. The reuse system delivers non-potable quality water to a dedicated cooling tower makeup connection; the potable system remains unchanged."
+          },
+          {
+            "heading": "Brewing process water reuse beyond cooling tower makeup",
+            "body": "Reuse of treated effluent for brewing process water (mash, sparge, cleaning) is not included in this scope. Phase-2 expansion of the reuse system for brewing process applications may be evaluated in a follow-on engagement."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Confirm projected daily average flow at 2× production from expansion planning documents",
+            "closer": "Sustainability director to provide from expansion planning; field agent to request at pre-committee working session"
+          },
+          {
+            "gate": "Obtain POTW surcharge schedule for high-strength BOD/TSS discharge",
+            "closer": "Sustainability director or POTW pretreatment coordinator; needed to finalise surcharge savings row"
+          },
+          {
+            "gate": "Confirm cooling tower makeup demand (gal/day) and current municipal water rate",
+            "closer": "Brewery operations team via sustainability director; needed to finalise reuse savings calculation"
+          },
+          {
+            "gate": "Confirm SBR tankage condition and reuse feasibility",
+            "closer": "Field agent site assessment during detailed scoping phase; determines MBR CAPEX range midpoint"
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "inputTokens": 224468,
+    "outputTokens": 16924,
+    "costUsd": 0.9272640000000001
+  },
+  "stepCount": 9,
+  "finalText": "All four artifacts are ready. Here's the package summary.\n\n---\n\n## Full opportunity package — Regional Craft Brewery (Colorado Front Range)\n\n**Stage: Scope | Confidence: MEDIUM**\n**Bottom line: The SBR expansion looks cheaper at year 0 by $500K–$900K. Fully priced over 5 years — BOD surcharges at 2× loading, full potable water purchase unreduced, and probable retrofit exposure at the next growth cycle — the SBR path costs the brewery ~$500K–$1.5M more than the MBR retrofit while leaving them capacity-constrained again. The MBR path is the last pretreatment investment they make at this facility for a decade.**\n\n---\n\n### Your four PDFs\n\n| Artifact | File |\n|---|---|\n| 📋 **Field Brief** | [regional-craft-brewery_field-brief.pdf](?threadId=eval-happy-path-brewery-mbr-retrofit-scoping-6W5k4KMMHK-oGx33BC1Z6&kind=field-brief) |\n| 🎯 **Playbook** | [regional-craft-brewery_playbook.pdf](?threadId=eval-happy-path-brewery-mbr-retrofit-scoping-6W5k4KMMHK-oGx33BC1Z6&kind=playbook) |\n| 📊 **Analytical Read** | [regional-craft-brewery_analytical-read.pdf](?threadId=eval-happy-path-brewery-mbr-retrofit-scoping-6W5k4KMMHK-oGx33BC1Z6&kind=analytical-read) |\n| 📄 **Proposal Shell** | [regional-craft-brewery_proposal-shell.pdf](?threadId=eval-happy-path-brewery-mbr-retrofit-scoping-6W5k4KMMHK-oGx33BC1Z6&kind=proposal-shell) |\n\n---\n\n### Three things the Field Brief will tell you to do\n\n1. **Contact the sustainability director this week** and propose a pre-committee working session. Your goal: get the 5-year cost framing into the deck the sustainability director presents to the ops committee — not as an attachment, but in the narrative. Also ask directly whether any other vendors are involved.\n\n2. **Confirm four numbers** before you finalize the deliverable: projected flow at 2× production, the POTW's BOD/TSS surcharge schedule, cooling tower makeup demand in gal/day, and the current municipal water rate. These move two rows in the 5-year comparison from directional to defensible — and defensible numbers win committee votes.\n\n3. **Deliver the scoping comparison before the committee meeting, not at it.** The Proposal Shell is your seed document — edit it and get it in the sustainability director's hands with enough lead time for their own prep. If a competing SBR expansion quote lands first, the anchor is set against you.\n\n---\n\n### One flag to carry into every conversation\n\n**SPECIALIST:** The ops committee decision-makers haven't been in the room yet. The sustainability director is your champion, but this capex decision will be made by people who've only seen the summary. If the comparison reaches them as a year-0 CAPEX table, the SBR expansion wins. Your job this month is to make sure the committee sees the 5-year picture before that happens."
+}

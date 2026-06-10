@@ -1,0 +1,842 @@
+{
+  "scenarioId": "edge-case-name-only-customer-no-company-details",
+  "modelId": "claude-sonnet-4-6",
+  "recordedAt": "2026-06-10T00:08:35.312Z",
+  "toolCalls": [
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-evidence-and-context"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-stage-and-gaps"
+      }
+    },
+    {
+      "step": 2,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-positioning"
+      }
+    },
+    {
+      "step": 3,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-field-brief"
+      }
+    },
+    {
+      "step": 4,
+      "toolName": "generateFieldBrief",
+      "input": {
+        "customer": {
+          "name": "Poultry/Meat Processing Operation",
+          "location": "Unknown — trade show lead",
+          "slug": "poultry-meat-processing-lead"
+        },
+        "stage": "Lead",
+        "confidence": "LOW",
+        "date": "2025-07-14",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "All sizing and cost figures are directional only — no flow, loading, or facility data yet in evidence. The cost-of-alternative math sharpens materially once actual surcharge invoices and discharge data are in hand.",
+          "Single point of contact with unknown authority. Every conversation risks hitting a 'I'll have to check with my boss' wall until the decision-maker landscape is confirmed."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "An operations contact at a poultry/meat processor said 'surcharge problems for years' at a trade show. That phrase is the deal — chronic POTW surcharges at food-processing scale likely run $100K–$500K/yr and compound. The reframe: 5 years of surcharges probably costs as much as the fix.",
+            "body": "A cold-to-warm trade-show lead with a single documented data point: the operations lead at an unidentified poultry or meat processing facility has been dealing with recurring sewer-use surcharges from their receiving POTW — almost certainly driven by chronic BOD, TSS, and FOG exceedances, which are the structural signature of food-processing discharge without adequate pretreatment. No company name, no facility details, and no loading data are yet in evidence, so all sizing here is directional and LOW confidence. What is confirmed: the problem is chronic ('for years'), the operations contact has enough visibility to name it unprompted, and they handed over a card — meaning they're open to a conversation. The opportunity is to reframe surcharges from a recurring line-item cost into a solvable capital problem, and to get ahead of regulatory escalation before the POTW formalizes enforcement."
+          },
+          "whatWeWouldPropose": {
+            "insight": "A full pretreatment train — equalization, DAF, biological treatment — sized to bring discharge into permanent POTW compliance. Directional capex $1.5–5M (LOW confidence). The 5-year cost of doing nothing likely meets or exceeds that range once surcharges, forced retrofits, and enforcement exposure are priced in.",
+            "recommendedApproach": "Equalization (flow and load buffering) → primary DAF (FOG and suspended-solids removal) → biological treatment stage (activated sludge or SBR for BOD/ammonia reduction) → nutrient polishing if ammonia or phosphorus limits apply. Deal anchor is the DAF + biological train. Phase-2 prize: nutrient compliance upgrade if limits tighten, or PFAS source-control work if processing chemistry warrants it. Directional capex: $1.5–5M | LOW confidence. Range driver: hydraulic loading and ammonia profile unknown; a DAF-only point-fix sits at the bottom; a full SBR installation for high-ammonia loading opens the top. Multi-facility scope is the single largest upside sensitivity.",
+            "winWinArguments": [
+              {
+                "lead": "Surcharges eliminated, not managed.",
+                "body": "A properly sized pretreatment train brings discharge into POTW compliance and ends recurring surcharge payments. At typical poultry/meat processing volumes, surcharges run $100K–$500K/yr (directional, pending actual loading data). A 5-year surcharge tail of $500K–$2.5M is the floor of the do-nothing cost — and that's before any formal enforcement action."
+              },
+              {
+                "lead": "Regulatory exposure closed before it escalates.",
+                "body": "Chronic POTW exceedances generating surcharges are one formal notice away from an NOV or Consent Order. Acting with committed capital now is materially cheaper and faster than responding under enforcement deadline. POTWs have short-order authority to suspend discharge for repeat violators — the operational risk of inaction is not just financial."
+              },
+              {
+                "lead": "Operating cost predictability restored.",
+                "body": "Surcharge invoices vary with production throughput, seasonal demand, and POTW limit changes — they're an uncontrolled liability. A properly operated pretreatment system converts that variable into a predictable operating line, which is a defensible capital story for plant finance."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex, yr 0",
+                "theirPath": "$0–$300K (incremental patches, no real fix)",
+                "ourProposal": "$1.5–5M (full pretreatment train)"
+              },
+              {
+                "component": "Ongoing surcharges, 5 yr",
+                "theirPath": "$500K–$2.5M (directional; pending actual loading and surcharge-rate data)",
+                "ourProposal": "~$0 (surcharges eliminated at compliance)"
+              },
+              {
+                "component": "Forced retrofit, yr 2–4",
+                "theirPath": "$1–3M at emergency timing if POTW tightens limits or issues NOV",
+                "ourProposal": "Included in scope at planned timing"
+              },
+              {
+                "component": "Risk-adjusted enforcement exposure",
+                "theirPath": "$50K–$500K (NOV + Consent Order + potential discharge suspension; directional)",
+                "ourProposal": "Near zero"
+              },
+              {
+                "component": "5-year total (mid-range)",
+                "theirPath": "~$1.5–$6M+ (surcharges + forced retrofit + enforcement exposure)",
+                "ourProposal": "~$1.5–5M capex + low ongoing opex",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Range is wide because hydraulic loading and ammonia profile are unknown. A DAF-only point-fix anchors the bottom at ~$500K–$1.5M; a full SBR train for high-ammonia loading opens the top past $5M. Multi-facility programmatic scope is the single biggest upside sensitivity — worth surfacing early."
+          },
+          "whatCouldKillIt": {
+            "insight": "The biggest risk isn't competition — it's normalization. If the operations contact has accepted surcharges as unavoidable, the reframe conversation never lands and there's no deal to compete for.",
+            "risks": [
+              {
+                "name": "Surcharge normalized as cost of doing business",
+                "mechanism": "The operations contact views surcharges as an unavoidable production cost, not a solvable problem. Without the reframe landing — showing the 5-year math explicitly — there's no urgency and no path to capital commitment.",
+                "mitigation": "Lead with the surcharge math before pitching any solution. The number creates urgency; the solution follows. Ask: 'What does the annual surcharge invoice actually run?' — that question starts the reframe."
+              },
+              {
+                "name": "Single-contact dead end",
+                "mechanism": "Operations contact may lack authority to drive capital investment. If the conversation stalls at 'I'll need to check with my boss' without a path to the decision-maker, the lead dies quietly.",
+                "mitigation": "Qualify the decision-maker landscape in the first real conversation. Ask directly: 'When something like this has moved forward in the past, who else has been in the room?'"
+              },
+              {
+                "name": "Warm lead goes cold post-trade-show",
+                "mechanism": "Trade-show card exchanges have low conversion rates without fast follow-up. A 2-week delay materially reduces engagement probability — the conversation loses context and urgency.",
+                "mitigation": "Reach out within 48 hours. Reference the specific 'surcharge' conversation by name. Offer a 20-minute call with a concrete value prop — not a generic intro call."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "This deal advances only if the first follow-up call produces four things: company/facility ID, annual surcharge cost, POTW relationship status, and a named decision-maker above the operations contact.",
+            "actions": [
+              {
+                "title": "Follow up within 48 hours — anchor on surcharge math",
+                "timeframe": "Within 48 hours",
+                "body": "Email or call referencing the trade-show conversation by name. Open with: 'You mentioned surcharge problems — I'd like to spend 20 minutes showing you what that cost looks like on paper over 5 years.' Goal: confirm company name, facility location, and book a scoping call. Do not pitch a solution in this touchpoint."
+              },
+              {
+                "title": "Qualify surcharge scale and regulatory posture",
+                "timeframe": "First scoping call (within 7–10 days)",
+                "body": "Three questions to answer before leaving the call: (1) What does the annual surcharge invoice actually run, and which parameters trigger it? (2) Has the POTW sent anything more formal than a surcharge invoice in the last 12 months? (3) Who else is involved when a capital decision like this gets made? These three answers pin the deal size and the decision-maker path."
+              },
+              {
+                "title": "Identify the decision-maker and map the capital path",
+                "timeframe": "Within 14–21 days",
+                "body": "Operations contacts don't close capital deals. Before the second conversation, confirm: Is this facility capex approved at the plant level or corporate? Is there an environmental/EHS role above operations? Is there a current-year capital budget window or does this need to go into next cycle? The capital path determines the timeline and the right room to be in."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "step": 5,
+      "toolName": "generatePlaybook",
+      "input": {
+        "customer": {
+          "name": "Poultry/Meat Processing Operation",
+          "location": "Unknown — trade show lead",
+          "slug": "poultry-meat-processing-lead"
+        },
+        "stage": "Lead",
+        "subtitle": "Lead-stage qualification playbook \\u2014 trade show follow-up conversation",
+        "header": {
+          "subStreams": ["Industrial discharge / high-strength organic pretreatment"],
+          "stageIntro": "This is a Lead-stage conversation. The goal is not to pitch — it's to qualify. Four things must come out of this call: company and facility ID, annual surcharge cost, POTW relationship status, and a named decision-maker above operations. Everything else is secondary.",
+          "insight": "Operations contact surfaced 'surcharge problems for years' at a trade show. Use this call to convert that phrase into numbers. The surcharge math — not a solution pitch — is what advances this deal.",
+          "orientationLine": "Lead-stage follow-up | Poultry/Meat Processing Facility | Operations Contact"
+        },
+        "themes": [
+          {
+            "title": "Open on the surcharge pain",
+            "framing": "Reference the trade-show conversation directly. Let them tell you more before you say anything about solutions.",
+            "questions": [
+              "You mentioned surcharge problems when we spoke at the show — has that been an ongoing issue for the whole facility or does it track with certain production runs?",
+              "When the surcharge invoice comes in, what parameters are usually driving it — BOD, solids, fats and oils, or something else?",
+              "Roughly what does a bad month look like in dollar terms on the surcharge side?"
+            ],
+            "whyItMatters": [
+              "This is the opening reframe moment. The surcharge dollar figure — once named aloud — anchors the rest of the conversation on economics, not technology."
+            ],
+            "accentIndex": 0
+          },
+          {
+            "title": "Quantify the annual surcharge exposure",
+            "framing": "Get to an annual number. Even a rough one. This is the foundation of the cost-of-alternative argument.",
+            "questions": [
+              "Do you have a rough sense of what the surcharges add up to in a typical year?",
+              "Does it vary a lot year to year, or is it pretty consistent?",
+              "Is the surcharge rate set by the city/utility, or is there a local industrial pretreatment programme that sets the limits?"
+            ],
+            "whyItMatters": [
+              "The annual surcharge figure is the single most valuable number in this conversation. It sets the ceiling on what the customer can justify spending on a solution and makes the 5-year math visible."
+            ],
+            "accentIndex": 1
+          },
+          {
+            "title": "Understand the POTW relationship",
+            "framing": "Find out how formal the regulatory pressure is. Surcharges alone suggest chronic exceedance; anything more formal (NOV, notice of noncompliance, IU permit violation) sharpens urgency.",
+            "questions": [
+              "Has the city or utility been in touch about anything more formal than the surcharge invoices — notices, letters, anything like that?",
+              "Do you have an industrial user permit or a pretreatment agreement with the receiving utility?",
+              "Has anyone from the utility done a compliance inspection or site visit recently?"
+            ],
+            "accentIndex": 2
+          },
+          {
+            "title": "Map the decision-maker landscape",
+            "framing": "Operations contacts rarely close capital deals. Find out who else is in the room — or needs to be — before investing more time.",
+            "questions": [
+              "When something like this has moved forward in the past — a capital project to address a compliance issue — who else has been in the room?",
+              "Is there an environmental or EHS function above you, or does operations carry that?",
+              "Does something at this scope get decided at the plant level or does it go up to corporate?"
+            ],
+            "whyItMatters": [
+              "Without a decision-maker path, this lead can't advance past Qualify. Ask this early — the answer tells you whether to invest more time and who to try to get in front of."
+            ],
+            "accentIndex": 3
+          },
+          {
+            "title": "Understand the facility and production context",
+            "framing": "Get the basics that size the problem — facility size, production volume, whether it's one plant or many.",
+            "questions": [
+              "What's the scale of the operation — single facility or a few locations?",
+              "Is the discharge volume pretty steady or does it swing a lot with production cycles?",
+              "Do you have a pretreatment system on-site currently, even if it's not fully keeping up?"
+            ],
+            "accentIndex": 4
+          },
+          {
+            "title": "Surface any current plans or prior attempts",
+            "framing": "Find out if they've tried to solve this before, or if there's an active internal initiative. Avoids walking into a conversation that's already had a vendor in it.",
+            "questions": [
+              "Has there been any internal discussion about addressing this, or has it just been absorbed as an operating cost so far?",
+              "Have you talked to anyone else about this, or is this an early conversation?",
+              "Is there a capital budget cycle coming up where this could be in scope?"
+            ],
+            "accentIndex": 5
+          },
+          {
+            "title": "Set the next step",
+            "framing": "Leave with a concrete next step — not 'I'll send you some information.' A specific follow-up with a specific person and a specific date.",
+            "questions": [
+              "Would it make sense for me to put together a quick look at what the 5-year surcharge cost looks like versus a pretreatment solution — even directionally — and walk you through it on a short call?",
+              "Is there someone else it would make sense to include in that conversation, given what you've told me about how decisions get made?",
+              "What's the best way to reach you — email or phone — and is next week workable for a 30-minute follow-up?"
+            ],
+            "whyItMatters": [
+              "The goal of this call is to earn the next one. A concrete next-step question — with a named person and a date — is the only close that matters at Lead stage."
+            ],
+            "accentIndex": 6
+          }
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "toolName": "generateAnalyticalRead",
+      "input": {
+        "customer": {
+          "name": "Poultry/Meat Processing Operation",
+          "location": "Unknown — trade show lead",
+          "slug": "poultry-meat-processing-lead"
+        },
+        "subtitle": "Evidenced read on a trade-show-sourced industrial discharge lead \\u2014 poultry/meat processing, chronic POTW surcharge history",
+        "subStreamsLine": "Sub-streams: industrial discharge / high-strength organic pretreatment (BOD, TSS, FOG, potential ammonia)",
+        "closingInsight": "The entire deal turns on one equation: what five more years of surcharges actually costs on paper versus what a permanent fix costs. Get that number in the first call and the rest follows.",
+        "summary": "Lead-stage industrial discharge opportunity at an unidentified poultry or meat processing facility. Single documented data point: operations contact disclosed chronic POTW sewer-use surcharge problems at a trade show. Sub-stream classification: industrial-discharge / high-strength organic pretreatment for indirect discharger. No facility location, flow data, or loading data yet in evidence. Directional capex range $1.5\\u20135M (LOW confidence). The 5-year cost-of-alternative analysis positions the permanent fix as economically equivalent to or cheaper than continued surcharge exposure once forced retrofits and enforcement risk are priced in. Qualification call must produce annual surcharge cost, POTW relationship status, and decision-maker path to advance to Qualify stage.",
+        "subStreamLens": [
+          {
+            "subStream": "Industrial discharge / high-strength organic pretreatment",
+            "activeCondition": "Chronic POTW sewer-use surcharges — 'surcharge problems for years' — consistent with persistent BOD, TSS, FOG exceedances at food-processing operation without adequate pretreatment",
+            "evidenceAnchor": "TRADE-SHOW-VERBAL-01"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Company name and facility location",
+            "status": "OPEN",
+            "source": "Not yet in evidence — first follow-up call"
+          },
+          {
+            "required": "Annual surcharge cost and triggering parameters",
+            "status": "OPEN",
+            "source": "Not yet in evidence — first follow-up call"
+          },
+          {
+            "required": "POTW relationship status (informal vs formal enforcement)",
+            "status": "OPEN",
+            "source": "Not yet in evidence — first follow-up call"
+          },
+          {
+            "required": "Decision-maker landscape: who approves capital above operations",
+            "status": "OPEN",
+            "source": "Not yet in evidence — first follow-up call"
+          },
+          {
+            "required": "Approximate discharge flow and loading profile",
+            "status": "OPEN",
+            "source": "Not yet in evidence — scoping call or site visit"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Customer capex, yr 0 (cheap path vs full fix)",
+            "basis": "Directional — incremental patch estimated at $0–$300K; full pretreatment train estimated at $1.5–5M using industrial-discharge lens cheat-sheet for high-strength organic loading, food processing sector",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Ongoing surcharges, 5-yr horizon",
+            "basis": "Directional — food-processing POTW surcharges typically run $0.50–$2.00/lb on BOD and TSS; FOG surcharges materially higher; $100K–$500K/yr range without loading data; LOW confidence pending actual invoice and surcharge-rate confirmation",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit, yr 2–4 (if POTW tightens limits or issues NOV)",
+            "basis": "Directional — emergency retrofit at enforcement deadline typically runs 30–50% premium over planned-timing capex; $1–3M range; qualitative until POTW relationship and limit trajectory confirmed",
+            "confidence": "QUALITATIVE"
+          },
+          {
+            "row": "Risk-adjusted enforcement exposure",
+            "basis": "NOV exposure $10–50K/day per exceeded parameter (industrial discharge, typical state enforcement pattern); Consent Order compliance costs qualitative; discharge suspension authority is material uncapped risk",
+            "confidence": "QUALITATIVE"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "This engagement originates from a single trade-show conversation in which the operations lead at an unidentified poultry or meat processing facility disclosed chronic POTW sewer-use surcharge problems. No company name, facility location, or discharge data is yet documented. The sub-stream classification is industrial-discharge / high-strength organic pretreatment for an indirect discharger to a municipal POTW. The primary regulatory driver is presumed to be sewer-use surcharges under the receiving POTW's industrial pretreatment programme, triggered by chronic BOD, TSS, and FOG exceedances — the structural signature of food-processing wastewater without adequate pretreatment infrastructure. The deal is at Lead stage (LOW confidence). All sizing and cost figures in this read are directional and subject to material revision once facility-level data is in evidence.",
+            "evidenceTags": [],
+            "evidenceSource": "TRADE-SHOW-VERBAL-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "A single sub-stream is present based on available evidence: industrial-discharge / high-strength organic pretreatment for an indirect discharger. Poultry and meat processing operations produce wastewater characterized by high BOD (commonly 1,000–5,000 mg/L raw), elevated TSS, high FOG concentrations (often 200–600 mg/L), and — depending on slaughter and rendering operations — elevated ammonia and phosphorus. These parameters routinely exceed POTW acceptance limits without pretreatment, generating sewer-use surcharges under the industrial pretreatment programme. The 'surcharge problems for years' statement is consistent with this chronic discharge profile. A second sub-stream (nutrient compliance or PFAS source control) may emerge once facility details are confirmed but is not yet evidenced.",
+            "evidenceTags": [],
+            "evidenceSource": "TRADE-SHOW-VERBAL-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "Lens: industrial-discharge. Sub-case: high-strength organic pretreatment, indirect discharger to municipal POTW. Applicable regulatory framework: POTW industrial pretreatment programme under 40 CFR Part 403 (general pretreatment regulations); local limits set by receiving POTW. Surcharges are a contractual/permit mechanism under the IU permit or sewer-use ordinance — they do not preclude formal NOV if exceedances persist or escalate. The customer's 'surcharge only' framing may understate actual regulatory exposure if the POTW has issued or is considering formal notices of noncompliance.",
+            "evidenceTags": [],
+            "evidenceSource": "TRADE-SHOW-VERBAL-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Decision-maker matrix",
+            "body": "Decision-maker landscape is not yet documented. The identified contact is an operations lead — a role with operational visibility into the surcharge problem but typically without unilateral authority to commit capital. For a pretreatment capital project in the $1.5–5M range, the expected approval chain includes plant manager (operational sign-off), environmental/EHS lead (compliance alignment), and corporate finance or engineering (capex authorization). Whether the facility is plant-managed or corporate-controlled for capital decisions is unknown. Confirming this path is a Required gap to advance from Lead to Qualify.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "The proposed solution architecture for the high-strength organic sub-stream follows the standard food-processing pretreatment sequence: equalization tank (flow and load buffering, reduces peak loading to downstream treatment) → primary DAF unit (dissolved air flotation for FOG and suspended-solids removal; typically the most immediately impactful stage for surcharge reduction) → biological treatment stage (activated sludge or sequencing batch reactor for BOD and ammonia reduction; scale and configuration determined by hydraulic and organic loading) → nutrient polishing if ammonia or phosphorus limits apply. The DAF unit is the deal anchor — it carries the primary initial capex and typically produces the most visible surcharge reduction. A biological treatment stage is required if BOD or ammonia limits are the primary surcharge drivers. Directional capex: $1.5–5M (LOW confidence; range driver is hydraulic loading and ammonia profile, both unknown).",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three customer-side outcomes anchor the case. First, surcharge elimination: a properly sized pretreatment train brings discharge parameters into POTW compliance and terminates recurring surcharge payments. At food-processing scale, surcharges commonly run $100K–$500K/yr depending on production volume and POTW rate structure — a 5-year tail of $500K–$2.5M represents the floor of the do-nothing cost before enforcement exposure is added. Second, regulatory pre-emption: chronic exceedances generating surcharges are structurally one step from formal NOV or Consent Order issuance. Committing capital under a planned timeline is materially cheaper than engineering and constructing a solution under enforcement deadline; POTWs retain authority to suspend discharge for persistent violators, an operational risk that surcharge-management alone does not address. Third, cost predictability: surcharge invoices are variable with production throughput, seasonal demand, and POTW limit revisions; a compliant pretreatment system converts that variable liability into a predictable annual operating cost, which is a defensible capital story for plant finance and corporate approvers.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The cost-of-alternative analysis below is directional and LOW confidence throughout — no loading data, surcharge invoice, or POTW rate structure is yet in evidence. The analysis will be materially refined once annual surcharge cost and discharge parameters are confirmed. The key commercial claim: the customer's 5-year cost of continuing on the current path (surcharges + probable forced retrofit + enforcement exposure) likely meets or exceeds the capex of a permanent pretreatment solution. That claim is the opening of every substantive conversation with this customer.",
+            "evidenceTags": [],
+            "evidenceSource": "TRADE-SHOW-VERBAL-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "No STOP-level or SPECIALIST-level compliance or safety flags are in evidence at this stage. The evidence base is at minimum viable level — single verbal statement, no documents. Three ATTENTION-level conditions are noted: (1) evidence base is thin; all structural assessments are provisional pending facility confirmation; (2) surcharge-only framing may understate regulatory exposure if POTW has or is considering formal enforcement action; (3) trade-show leads have low conversion rates without rapid follow-up — the 48-hour window matters.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Stage classification and advance criteria",
+            "body": "Current stage: Lead (LOW confidence). The deal is at the earliest possible stage — a verbal signal with no case file. Required gaps to advance to Qualify: (1) company name and facility location confirmed; (2) annual surcharge cost and triggering parameters named; (3) POTW relationship status confirmed (informal vs formal enforcement); (4) decision-maker landscape mapped (who approves capital above operations); (5) approximate discharge flow and loading profile established. None of these require a site visit — they can and should be obtained on the first qualification call. The deal does not advance until at least the first three are in evidence.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Kill-risk inventory",
+            "body": "Three ranked risks. Rank 1 (SPECIALIST): surcharge normalized as cost of doing business — the operations contact has absorbed surcharges as an unavoidable operating line and sees no reason to act; the reframe never lands and there is no deal. Mitigation: lead with the 5-year surcharge math before introducing any solution. Rank 2 (SPECIALIST): single-contact dead end — operations contact lacks authority to drive capital investment and there is no identified path to a decision-maker. Mitigation: qualify decision-maker landscape early in the first substantive call. Rank 3 (ATTENTION): warm lead goes cold — trade-show card exchanges have low conversion rates without rapid follow-up; the conversation loses context and urgency within 2 weeks. Mitigation: follow up within 48 hours with a specific value prop.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "What we do not commit to yet",
+            "body": "The following items are explicitly not committed to at Lead stage and will require assessment or additional evidence before they can be addressed: specific capex or opex pricing; confirmation of applicable POTW limits or IU permit conditions; technology selection within the recommended solution architecture; funding pathway eligibility (POTW pass-through grants, customer's own capex cycle); multi-facility scope; phase-2 sub-stream identification. None of these omissions block the first follow-up conversation — the qualification call answers are all that is needed to advance.",
+            "evidenceTags": []
+          }
+        ]
+      }
+    },
+    {
+      "step": 7,
+      "toolName": "generateProposalShell",
+      "input": {
+        "customer": {
+          "name": "Poultry/Meat Processing Operation",
+          "location": "Facility location TBD"
+        },
+        "executiveSummary": "This document is a placeholder only. The deal is at Lead stage — no facility name, location, discharge data, or decision-maker landscape is yet confirmed. A Proposal Shell will be drafted once the opportunity advances to Qualify stage and the following minimum information is in evidence: facility name and location, annual surcharge cost and triggering parameters, POTW relationship and permit status, and a confirmed decision-maker for capital investments. At that point, the shell will anchor on the cost-of-alternative argument: the customer's 5-year cost of continued surcharges, probable forced retrofit, and enforcement exposure likely meets or exceeds the capex of a permanent pretreatment solution ($1.5–5M directional range; LOW confidence). That comparison is the opening of the real proposal.",
+        "proposedScope": [
+          "Too early to scope. Proposed solution architecture is directionally: equalization → DAF (FOG/TSS removal) → biological treatment (BOD/ammonia reduction) → nutrient polishing if required. Scope will be defined once facility flow and loading data are confirmed."
+        ],
+        "sizingAndPricing": "Directional capex range: $1.5–5M (LOW confidence). Range is wide because hydraulic loading and ammonia profile are not yet in evidence. A DAF-only point-fix anchors the bottom of the range; a full biological treatment train for high-ammonia loading opens the top. No pricing is committed here — this placeholder will be replaced with a scoped range once the qualification call produces loading data.",
+        "schedule": "Schedule TBD pending qualification. Typical industrial pretreatment project: 3–6 months design and procurement, 6–12 months construction and commissioning. Capital cycle alignment with the customer has not yet been confirmed.",
+        "commitments": [
+          {
+            "label": "Proposal Shell activation",
+            "text": "This shell will be drafted in full once the deal advances to Qualify stage and minimum qualification data is confirmed: facility ID, annual surcharge cost, POTW status, and decision-maker path.",
+            "owner": "Field Agent"
+          }
+        ],
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "PLACEHOLDER — Lead stage. Not for distribution. Will be drafted once opportunity advances to Qualify.",
+        "gatesToClose": [
+          {
+            "gate": "Facility name and location confirmed",
+            "closer": "First follow-up call with operations contact"
+          },
+          {
+            "gate": "Annual surcharge cost and triggering parameters named",
+            "closer": "First follow-up call with operations contact"
+          },
+          {
+            "gate": "POTW relationship status confirmed (informal vs formal enforcement)",
+            "closer": "First follow-up call with operations contact"
+          },
+          {
+            "gate": "Decision-maker landscape mapped",
+            "closer": "First or second follow-up call"
+          }
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "field-brief",
+      "payload": {
+        "customer": {
+          "name": "Poultry/Meat Processing Operation",
+          "location": "Unknown — trade show lead",
+          "slug": "poultry-meat-processing-lead"
+        },
+        "stage": "Lead",
+        "confidence": "LOW",
+        "date": "2025-07-14",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "All sizing and cost figures are directional only — no flow, loading, or facility data yet in evidence. The cost-of-alternative math sharpens materially once actual surcharge invoices and discharge data are in hand.",
+          "Single point of contact with unknown authority. Every conversation risks hitting a 'I'll have to check with my boss' wall until the decision-maker landscape is confirmed."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "An operations contact at a poultry/meat processor said 'surcharge problems for years' at a trade show. That phrase is the deal — chronic POTW surcharges at food-processing scale likely run $100K–$500K/yr and compound. The reframe: 5 years of surcharges probably costs as much as the fix.",
+            "body": "A cold-to-warm trade-show lead with a single documented data point: the operations lead at an unidentified poultry or meat processing facility has been dealing with recurring sewer-use surcharges from their receiving POTW — almost certainly driven by chronic BOD, TSS, and FOG exceedances, which are the structural signature of food-processing discharge without adequate pretreatment. No company name, no facility details, and no loading data are yet in evidence, so all sizing here is directional and LOW confidence. What is confirmed: the problem is chronic ('for years'), the operations contact has enough visibility to name it unprompted, and they handed over a card — meaning they're open to a conversation. The opportunity is to reframe surcharges from a recurring line-item cost into a solvable capital problem, and to get ahead of regulatory escalation before the POTW formalizes enforcement."
+          },
+          "whatWeWouldPropose": {
+            "insight": "A full pretreatment train — equalization, DAF, biological treatment — sized to bring discharge into permanent POTW compliance. Directional capex $1.5–5M (LOW confidence). The 5-year cost of doing nothing likely meets or exceeds that range once surcharges, forced retrofits, and enforcement exposure are priced in.",
+            "recommendedApproach": "Equalization (flow and load buffering) → primary DAF (FOG and suspended-solids removal) → biological treatment stage (activated sludge or SBR for BOD/ammonia reduction) → nutrient polishing if ammonia or phosphorus limits apply. Deal anchor is the DAF + biological train. Phase-2 prize: nutrient compliance upgrade if limits tighten, or PFAS source-control work if processing chemistry warrants it. Directional capex: $1.5–5M | LOW confidence. Range driver: hydraulic loading and ammonia profile unknown; a DAF-only point-fix sits at the bottom; a full SBR installation for high-ammonia loading opens the top. Multi-facility scope is the single largest upside sensitivity.",
+            "winWinArguments": [
+              {
+                "lead": "Surcharges eliminated, not managed.",
+                "body": "A properly sized pretreatment train brings discharge into POTW compliance and ends recurring surcharge payments. At typical poultry/meat processing volumes, surcharges run $100K–$500K/yr (directional, pending actual loading data). A 5-year surcharge tail of $500K–$2.5M is the floor of the do-nothing cost — and that's before any formal enforcement action."
+              },
+              {
+                "lead": "Regulatory exposure closed before it escalates.",
+                "body": "Chronic POTW exceedances generating surcharges are one formal notice away from an NOV or Consent Order. Acting with committed capital now is materially cheaper and faster than responding under enforcement deadline. POTWs have short-order authority to suspend discharge for repeat violators — the operational risk of inaction is not just financial."
+              },
+              {
+                "lead": "Operating cost predictability restored.",
+                "body": "Surcharge invoices vary with production throughput, seasonal demand, and POTW limit changes — they're an uncontrolled liability. A properly operated pretreatment system converts that variable into a predictable operating line, which is a defensible capital story for plant finance."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex, yr 0",
+                "theirPath": "$0–$300K (incremental patches, no real fix)",
+                "ourProposal": "$1.5–5M (full pretreatment train)"
+              },
+              {
+                "component": "Ongoing surcharges, 5 yr",
+                "theirPath": "$500K–$2.5M (directional; pending actual loading and surcharge-rate data)",
+                "ourProposal": "~$0 (surcharges eliminated at compliance)"
+              },
+              {
+                "component": "Forced retrofit, yr 2–4",
+                "theirPath": "$1–3M at emergency timing if POTW tightens limits or issues NOV",
+                "ourProposal": "Included in scope at planned timing"
+              },
+              {
+                "component": "Risk-adjusted enforcement exposure",
+                "theirPath": "$50K–$500K (NOV + Consent Order + potential discharge suspension; directional)",
+                "ourProposal": "Near zero"
+              },
+              {
+                "component": "5-year total (mid-range)",
+                "theirPath": "~$1.5–$6M+ (surcharges + forced retrofit + enforcement exposure)",
+                "ourProposal": "~$1.5–5M capex + low ongoing opex",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Range is wide because hydraulic loading and ammonia profile are unknown. A DAF-only point-fix anchors the bottom at ~$500K–$1.5M; a full SBR train for high-ammonia loading opens the top past $5M. Multi-facility programmatic scope is the single biggest upside sensitivity — worth surfacing early."
+          },
+          "whatCouldKillIt": {
+            "insight": "The biggest risk isn't competition — it's normalization. If the operations contact has accepted surcharges as unavoidable, the reframe conversation never lands and there's no deal to compete for.",
+            "risks": [
+              {
+                "name": "Surcharge normalized as cost of doing business",
+                "mechanism": "The operations contact views surcharges as an unavoidable production cost, not a solvable problem. Without the reframe landing — showing the 5-year math explicitly — there's no urgency and no path to capital commitment.",
+                "mitigation": "Lead with the surcharge math before pitching any solution. The number creates urgency; the solution follows. Ask: 'What does the annual surcharge invoice actually run?' — that question starts the reframe."
+              },
+              {
+                "name": "Single-contact dead end",
+                "mechanism": "Operations contact may lack authority to drive capital investment. If the conversation stalls at 'I'll need to check with my boss' without a path to the decision-maker, the lead dies quietly.",
+                "mitigation": "Qualify the decision-maker landscape in the first real conversation. Ask directly: 'When something like this has moved forward in the past, who else has been in the room?'"
+              },
+              {
+                "name": "Warm lead goes cold post-trade-show",
+                "mechanism": "Trade-show card exchanges have low conversion rates without fast follow-up. A 2-week delay materially reduces engagement probability — the conversation loses context and urgency.",
+                "mitigation": "Reach out within 48 hours. Reference the specific 'surcharge' conversation by name. Offer a 20-minute call with a concrete value prop — not a generic intro call."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "This deal advances only if the first follow-up call produces four things: company/facility ID, annual surcharge cost, POTW relationship status, and a named decision-maker above the operations contact.",
+            "actions": [
+              {
+                "title": "Follow up within 48 hours — anchor on surcharge math",
+                "timeframe": "Within 48 hours",
+                "body": "Email or call referencing the trade-show conversation by name. Open with: 'You mentioned surcharge problems — I'd like to spend 20 minutes showing you what that cost looks like on paper over 5 years.' Goal: confirm company name, facility location, and book a scoping call. Do not pitch a solution in this touchpoint."
+              },
+              {
+                "title": "Qualify surcharge scale and regulatory posture",
+                "timeframe": "First scoping call (within 7–10 days)",
+                "body": "Three questions to answer before leaving the call: (1) What does the annual surcharge invoice actually run, and which parameters trigger it? (2) Has the POTW sent anything more formal than a surcharge invoice in the last 12 months? (3) Who else is involved when a capital decision like this gets made? These three answers pin the deal size and the decision-maker path."
+              },
+              {
+                "title": "Identify the decision-maker and map the capital path",
+                "timeframe": "Within 14–21 days",
+                "body": "Operations contacts don't close capital deals. Before the second conversation, confirm: Is this facility capex approved at the plant level or corporate? Is there an environmental/EHS role above operations? Is there a current-year capital budget window or does this need to go into next cycle? The capital path determines the timeline and the right room to be in."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "playbook",
+      "payload": {
+        "customer": {
+          "name": "Poultry/Meat Processing Operation",
+          "location": "Unknown — trade show lead",
+          "slug": "poultry-meat-processing-lead"
+        },
+        "stage": "Lead",
+        "subtitle": "Lead-stage qualification playbook \\u2014 trade show follow-up conversation",
+        "header": {
+          "subStreams": ["Industrial discharge / high-strength organic pretreatment"],
+          "stageIntro": "This is a Lead-stage conversation. The goal is not to pitch — it's to qualify. Four things must come out of this call: company and facility ID, annual surcharge cost, POTW relationship status, and a named decision-maker above operations. Everything else is secondary.",
+          "insight": "Operations contact surfaced 'surcharge problems for years' at a trade show. Use this call to convert that phrase into numbers. The surcharge math — not a solution pitch — is what advances this deal.",
+          "orientationLine": "Lead-stage follow-up | Poultry/Meat Processing Facility | Operations Contact"
+        },
+        "themes": [
+          {
+            "title": "Open on the surcharge pain",
+            "framing": "Reference the trade-show conversation directly. Let them tell you more before you say anything about solutions.",
+            "questions": [
+              "You mentioned surcharge problems when we spoke at the show — has that been an ongoing issue for the whole facility or does it track with certain production runs?",
+              "When the surcharge invoice comes in, what parameters are usually driving it — BOD, solids, fats and oils, or something else?",
+              "Roughly what does a bad month look like in dollar terms on the surcharge side?"
+            ],
+            "whyItMatters": [
+              "This is the opening reframe moment. The surcharge dollar figure — once named aloud — anchors the rest of the conversation on economics, not technology."
+            ],
+            "accentIndex": 0
+          },
+          {
+            "title": "Quantify the annual surcharge exposure",
+            "framing": "Get to an annual number. Even a rough one. This is the foundation of the cost-of-alternative argument.",
+            "questions": [
+              "Do you have a rough sense of what the surcharges add up to in a typical year?",
+              "Does it vary a lot year to year, or is it pretty consistent?",
+              "Is the surcharge rate set by the city/utility, or is there a local industrial pretreatment programme that sets the limits?"
+            ],
+            "whyItMatters": [
+              "The annual surcharge figure is the single most valuable number in this conversation. It sets the ceiling on what the customer can justify spending on a solution and makes the 5-year math visible."
+            ],
+            "accentIndex": 1
+          },
+          {
+            "title": "Understand the POTW relationship",
+            "framing": "Find out how formal the regulatory pressure is. Surcharges alone suggest chronic exceedance; anything more formal (NOV, notice of noncompliance, IU permit violation) sharpens urgency.",
+            "questions": [
+              "Has the city or utility been in touch about anything more formal than the surcharge invoices — notices, letters, anything like that?",
+              "Do you have an industrial user permit or a pretreatment agreement with the receiving utility?",
+              "Has anyone from the utility done a compliance inspection or site visit recently?"
+            ],
+            "accentIndex": 2
+          },
+          {
+            "title": "Map the decision-maker landscape",
+            "framing": "Operations contacts rarely close capital deals. Find out who else is in the room — or needs to be — before investing more time.",
+            "questions": [
+              "When something like this has moved forward in the past — a capital project to address a compliance issue — who else has been in the room?",
+              "Is there an environmental or EHS function above you, or does operations carry that?",
+              "Does something at this scope get decided at the plant level or does it go up to corporate?"
+            ],
+            "whyItMatters": [
+              "Without a decision-maker path, this lead can't advance past Qualify. Ask this early — the answer tells you whether to invest more time and who to try to get in front of."
+            ],
+            "accentIndex": 3
+          },
+          {
+            "title": "Understand the facility and production context",
+            "framing": "Get the basics that size the problem — facility size, production volume, whether it's one plant or many.",
+            "questions": [
+              "What's the scale of the operation — single facility or a few locations?",
+              "Is the discharge volume pretty steady or does it swing a lot with production cycles?",
+              "Do you have a pretreatment system on-site currently, even if it's not fully keeping up?"
+            ],
+            "accentIndex": 4
+          },
+          {
+            "title": "Surface any current plans or prior attempts",
+            "framing": "Find out if they've tried to solve this before, or if there's an active internal initiative. Avoids walking into a conversation that's already had a vendor in it.",
+            "questions": [
+              "Has there been any internal discussion about addressing this, or has it just been absorbed as an operating cost so far?",
+              "Have you talked to anyone else about this, or is this an early conversation?",
+              "Is there a capital budget cycle coming up where this could be in scope?"
+            ],
+            "accentIndex": 5
+          },
+          {
+            "title": "Set the next step",
+            "framing": "Leave with a concrete next step — not 'I'll send you some information.' A specific follow-up with a specific person and a specific date.",
+            "questions": [
+              "Would it make sense for me to put together a quick look at what the 5-year surcharge cost looks like versus a pretreatment solution — even directionally — and walk you through it on a short call?",
+              "Is there someone else it would make sense to include in that conversation, given what you've told me about how decisions get made?",
+              "What's the best way to reach you — email or phone — and is next week workable for a 30-minute follow-up?"
+            ],
+            "whyItMatters": [
+              "The goal of this call is to earn the next one. A concrete next-step question — with a named person and a date — is the only close that matters at Lead stage."
+            ],
+            "accentIndex": 6
+          }
+        ]
+      }
+    },
+    {
+      "kind": "analytical-read",
+      "payload": {
+        "customer": {
+          "name": "Poultry/Meat Processing Operation",
+          "location": "Unknown — trade show lead",
+          "slug": "poultry-meat-processing-lead"
+        },
+        "subtitle": "Evidenced read on a trade-show-sourced industrial discharge lead \\u2014 poultry/meat processing, chronic POTW surcharge history",
+        "subStreamsLine": "Sub-streams: industrial discharge / high-strength organic pretreatment (BOD, TSS, FOG, potential ammonia)",
+        "closingInsight": "The entire deal turns on one equation: what five more years of surcharges actually costs on paper versus what a permanent fix costs. Get that number in the first call and the rest follows.",
+        "summary": "Lead-stage industrial discharge opportunity at an unidentified poultry or meat processing facility. Single documented data point: operations contact disclosed chronic POTW sewer-use surcharge problems at a trade show. Sub-stream classification: industrial-discharge / high-strength organic pretreatment for indirect discharger. No facility location, flow data, or loading data yet in evidence. Directional capex range $1.5\\u20135M (LOW confidence). The 5-year cost-of-alternative analysis positions the permanent fix as economically equivalent to or cheaper than continued surcharge exposure once forced retrofits and enforcement risk are priced in. Qualification call must produce annual surcharge cost, POTW relationship status, and decision-maker path to advance to Qualify stage.",
+        "subStreamLens": [
+          {
+            "subStream": "Industrial discharge / high-strength organic pretreatment",
+            "activeCondition": "Chronic POTW sewer-use surcharges — 'surcharge problems for years' — consistent with persistent BOD, TSS, FOG exceedances at food-processing operation without adequate pretreatment",
+            "evidenceAnchor": "TRADE-SHOW-VERBAL-01"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Company name and facility location",
+            "status": "OPEN",
+            "source": "Not yet in evidence — first follow-up call"
+          },
+          {
+            "required": "Annual surcharge cost and triggering parameters",
+            "status": "OPEN",
+            "source": "Not yet in evidence — first follow-up call"
+          },
+          {
+            "required": "POTW relationship status (informal vs formal enforcement)",
+            "status": "OPEN",
+            "source": "Not yet in evidence — first follow-up call"
+          },
+          {
+            "required": "Decision-maker landscape: who approves capital above operations",
+            "status": "OPEN",
+            "source": "Not yet in evidence — first follow-up call"
+          },
+          {
+            "required": "Approximate discharge flow and loading profile",
+            "status": "OPEN",
+            "source": "Not yet in evidence — scoping call or site visit"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Customer capex, yr 0 (cheap path vs full fix)",
+            "basis": "Directional — incremental patch estimated at $0–$300K; full pretreatment train estimated at $1.5–5M using industrial-discharge lens cheat-sheet for high-strength organic loading, food processing sector",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Ongoing surcharges, 5-yr horizon",
+            "basis": "Directional — food-processing POTW surcharges typically run $0.50–$2.00/lb on BOD and TSS; FOG surcharges materially higher; $100K–$500K/yr range without loading data; LOW confidence pending actual invoice and surcharge-rate confirmation",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit, yr 2–4 (if POTW tightens limits or issues NOV)",
+            "basis": "Directional — emergency retrofit at enforcement deadline typically runs 30–50% premium over planned-timing capex; $1–3M range; qualitative until POTW relationship and limit trajectory confirmed",
+            "confidence": "QUALITATIVE"
+          },
+          {
+            "row": "Risk-adjusted enforcement exposure",
+            "basis": "NOV exposure $10–50K/day per exceeded parameter (industrial discharge, typical state enforcement pattern); Consent Order compliance costs qualitative; discharge suspension authority is material uncapped risk",
+            "confidence": "QUALITATIVE"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "This engagement originates from a single trade-show conversation in which the operations lead at an unidentified poultry or meat processing facility disclosed chronic POTW sewer-use surcharge problems. No company name, facility location, or discharge data is yet documented. The sub-stream classification is industrial-discharge / high-strength organic pretreatment for an indirect discharger to a municipal POTW. The primary regulatory driver is presumed to be sewer-use surcharges under the receiving POTW's industrial pretreatment programme, triggered by chronic BOD, TSS, and FOG exceedances — the structural signature of food-processing wastewater without adequate pretreatment infrastructure. The deal is at Lead stage (LOW confidence). All sizing and cost figures in this read are directional and subject to material revision once facility-level data is in evidence.",
+            "evidenceTags": [],
+            "evidenceSource": "TRADE-SHOW-VERBAL-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "A single sub-stream is present based on available evidence: industrial-discharge / high-strength organic pretreatment for an indirect discharger. Poultry and meat processing operations produce wastewater characterized by high BOD (commonly 1,000–5,000 mg/L raw), elevated TSS, high FOG concentrations (often 200–600 mg/L), and — depending on slaughter and rendering operations — elevated ammonia and phosphorus. These parameters routinely exceed POTW acceptance limits without pretreatment, generating sewer-use surcharges under the industrial pretreatment programme. The 'surcharge problems for years' statement is consistent with this chronic discharge profile. A second sub-stream (nutrient compliance or PFAS source control) may emerge once facility details are confirmed but is not yet evidenced.",
+            "evidenceTags": [],
+            "evidenceSource": "TRADE-SHOW-VERBAL-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "Lens: industrial-discharge. Sub-case: high-strength organic pretreatment, indirect discharger to municipal POTW. Applicable regulatory framework: POTW industrial pretreatment programme under 40 CFR Part 403 (general pretreatment regulations); local limits set by receiving POTW. Surcharges are a contractual/permit mechanism under the IU permit or sewer-use ordinance — they do not preclude formal NOV if exceedances persist or escalate. The customer's 'surcharge only' framing may understate actual regulatory exposure if the POTW has issued or is considering formal notices of noncompliance.",
+            "evidenceTags": [],
+            "evidenceSource": "TRADE-SHOW-VERBAL-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Decision-maker matrix",
+            "body": "Decision-maker landscape is not yet documented. The identified contact is an operations lead — a role with operational visibility into the surcharge problem but typically without unilateral authority to commit capital. For a pretreatment capital project in the $1.5–5M range, the expected approval chain includes plant manager (operational sign-off), environmental/EHS lead (compliance alignment), and corporate finance or engineering (capex authorization). Whether the facility is plant-managed or corporate-controlled for capital decisions is unknown. Confirming this path is a Required gap to advance from Lead to Qualify.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "The proposed solution architecture for the high-strength organic sub-stream follows the standard food-processing pretreatment sequence: equalization tank (flow and load buffering, reduces peak loading to downstream treatment) → primary DAF unit (dissolved air flotation for FOG and suspended-solids removal; typically the most immediately impactful stage for surcharge reduction) → biological treatment stage (activated sludge or sequencing batch reactor for BOD and ammonia reduction; scale and configuration determined by hydraulic and organic loading) → nutrient polishing if ammonia or phosphorus limits apply. The DAF unit is the deal anchor — it carries the primary initial capex and typically produces the most visible surcharge reduction. A biological treatment stage is required if BOD or ammonia limits are the primary surcharge drivers. Directional capex: $1.5–5M (LOW confidence; range driver is hydraulic loading and ammonia profile, both unknown).",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three customer-side outcomes anchor the case. First, surcharge elimination: a properly sized pretreatment train brings discharge parameters into POTW compliance and terminates recurring surcharge payments. At food-processing scale, surcharges commonly run $100K–$500K/yr depending on production volume and POTW rate structure — a 5-year tail of $500K–$2.5M represents the floor of the do-nothing cost before enforcement exposure is added. Second, regulatory pre-emption: chronic exceedances generating surcharges are structurally one step from formal NOV or Consent Order issuance. Committing capital under a planned timeline is materially cheaper than engineering and constructing a solution under enforcement deadline; POTWs retain authority to suspend discharge for persistent violators, an operational risk that surcharge-management alone does not address. Third, cost predictability: surcharge invoices are variable with production throughput, seasonal demand, and POTW limit revisions; a compliant pretreatment system converts that variable liability into a predictable annual operating cost, which is a defensible capital story for plant finance and corporate approvers.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The cost-of-alternative analysis below is directional and LOW confidence throughout — no loading data, surcharge invoice, or POTW rate structure is yet in evidence. The analysis will be materially refined once annual surcharge cost and discharge parameters are confirmed. The key commercial claim: the customer's 5-year cost of continuing on the current path (surcharges + probable forced retrofit + enforcement exposure) likely meets or exceeds the capex of a permanent pretreatment solution. That claim is the opening of every substantive conversation with this customer.",
+            "evidenceTags": [],
+            "evidenceSource": "TRADE-SHOW-VERBAL-01",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "No STOP-level or SPECIALIST-level compliance or safety flags are in evidence at this stage. The evidence base is at minimum viable level — single verbal statement, no documents. Three ATTENTION-level conditions are noted: (1) evidence base is thin; all structural assessments are provisional pending facility confirmation; (2) surcharge-only framing may understate regulatory exposure if POTW has or is considering formal enforcement action; (3) trade-show leads have low conversion rates without rapid follow-up — the 48-hour window matters.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Stage classification and advance criteria",
+            "body": "Current stage: Lead (LOW confidence). The deal is at the earliest possible stage — a verbal signal with no case file. Required gaps to advance to Qualify: (1) company name and facility location confirmed; (2) annual surcharge cost and triggering parameters named; (3) POTW relationship status confirmed (informal vs formal enforcement); (4) decision-maker landscape mapped (who approves capital above operations); (5) approximate discharge flow and loading profile established. None of these require a site visit — they can and should be obtained on the first qualification call. The deal does not advance until at least the first three are in evidence.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Kill-risk inventory",
+            "body": "Three ranked risks. Rank 1 (SPECIALIST): surcharge normalized as cost of doing business — the operations contact has absorbed surcharges as an unavoidable operating line and sees no reason to act; the reframe never lands and there is no deal. Mitigation: lead with the 5-year surcharge math before introducing any solution. Rank 2 (SPECIALIST): single-contact dead end — operations contact lacks authority to drive capital investment and there is no identified path to a decision-maker. Mitigation: qualify decision-maker landscape early in the first substantive call. Rank 3 (ATTENTION): warm lead goes cold — trade-show card exchanges have low conversion rates without rapid follow-up; the conversation loses context and urgency within 2 weeks. Mitigation: follow up within 48 hours with a specific value prop.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "What we do not commit to yet",
+            "body": "The following items are explicitly not committed to at Lead stage and will require assessment or additional evidence before they can be addressed: specific capex or opex pricing; confirmation of applicable POTW limits or IU permit conditions; technology selection within the recommended solution architecture; funding pathway eligibility (POTW pass-through grants, customer's own capex cycle); multi-facility scope; phase-2 sub-stream identification. None of these omissions block the first follow-up conversation — the qualification call answers are all that is needed to advance.",
+            "evidenceTags": []
+          }
+        ]
+      }
+    },
+    {
+      "kind": "proposal-shell",
+      "payload": {
+        "customer": {
+          "name": "Poultry/Meat Processing Operation",
+          "location": "Facility location TBD"
+        },
+        "executiveSummary": "This document is a placeholder only. The deal is at Lead stage — no facility name, location, discharge data, or decision-maker landscape is yet confirmed. A Proposal Shell will be drafted once the opportunity advances to Qualify stage and the following minimum information is in evidence: facility name and location, annual surcharge cost and triggering parameters, POTW relationship and permit status, and a confirmed decision-maker for capital investments. At that point, the shell will anchor on the cost-of-alternative argument: the customer's 5-year cost of continued surcharges, probable forced retrofit, and enforcement exposure likely meets or exceeds the capex of a permanent pretreatment solution ($1.5–5M directional range; LOW confidence). That comparison is the opening of the real proposal.",
+        "proposedScope": [
+          "Too early to scope. Proposed solution architecture is directionally: equalization → DAF (FOG/TSS removal) → biological treatment (BOD/ammonia reduction) → nutrient polishing if required. Scope will be defined once facility flow and loading data are confirmed."
+        ],
+        "sizingAndPricing": "Directional capex range: $1.5–5M (LOW confidence). Range is wide because hydraulic loading and ammonia profile are not yet in evidence. A DAF-only point-fix anchors the bottom of the range; a full biological treatment train for high-ammonia loading opens the top. No pricing is committed here — this placeholder will be replaced with a scoped range once the qualification call produces loading data.",
+        "schedule": "Schedule TBD pending qualification. Typical industrial pretreatment project: 3–6 months design and procurement, 6–12 months construction and commissioning. Capital cycle alignment with the customer has not yet been confirmed.",
+        "commitments": [
+          {
+            "label": "Proposal Shell activation",
+            "text": "This shell will be drafted in full once the deal advances to Qualify stage and minimum qualification data is confirmed: facility ID, annual surcharge cost, POTW status, and decision-maker path.",
+            "owner": "Field Agent"
+          }
+        ],
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "PLACEHOLDER — Lead stage. Not for distribution. Will be drafted once opportunity advances to Qualify.",
+        "gatesToClose": [
+          {
+            "gate": "Facility name and location confirmed",
+            "closer": "First follow-up call with operations contact"
+          },
+          {
+            "gate": "Annual surcharge cost and triggering parameters named",
+            "closer": "First follow-up call with operations contact"
+          },
+          {
+            "gate": "POTW relationship status confirmed (informal vs formal enforcement)",
+            "closer": "First follow-up call with operations contact"
+          },
+          {
+            "gate": "Decision-maker landscape mapped",
+            "closer": "First or second follow-up call"
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "inputTokens": 209791,
+    "outputTokens": 11430,
+    "costUsd": 0.800823
+  },
+  "stepCount": 9,
+  "finalText": "All four artifacts are ready. Here's your package.\n\n---\n\n## Package ready — Poultry/Meat Processing Lead | Lead Stage | LOW Confidence\n\n**Bottom-line headline:** The operations contact's phrase — *\"surcharge problems for years\"* — is the deal. Chronic POTW surcharges at food-processing scale typically run **$100K–$500K/yr**. Their 5-year cost of doing nothing (surcharges + probable forced retrofit + enforcement exposure) likely **meets or exceeds the capex of a permanent pretreatment fix** ($1.5–5M directional, LOW confidence). That math is what you walk in with — not a solution pitch.\n\n---\n\n### Your four artifacts\n\n| Artifact | What it is | Download |\n|---|---|---|\n| **Field Brief** | Your pre-call strategic brief — what this is, what we'd propose, kill risks, and exactly what to do in the next 48 hours | [Download PDF](?threadId=eval-edge-case-name-only-customer-no-company-details-ANco_rNlszpCeKYc9QXR7&kind=field-brief) |\n| **Playbook** | 7 themes and 20 questions for the qualification call — open on surcharge pain, get to the annual number, map the decision-maker path, close with a concrete next step | [Download PDF](?threadId=eval-edge-case-name-only-customer-no-company-details-ANco_rNlszpCeKYc9QXR7&kind=playbook) |\n| **Analytical Read** | Evidenced write-up for your manager — sub-stream decomposition, cost-of-alternative analysis, kill-risk inventory, and what we don't commit to yet | [Download PDF](?threadId=eval-edge-case-name-only-customer-no-company-details-ANco_rNlszpCeKYc9QXR7&kind=analytical-read) |\n| **Proposal Shell** | Placeholder only at Lead stage — activates and drafts in full once the deal advances to Qualify | [Download PDF](?threadId=eval-edge-case-name-only-customer-no-company-details-ANco_rNlszpCeKYc9QXR7&kind=proposal-shell) |\n\n---\n\n### Three things to do before you follow up\n\n1. **Reach out within 48 hours.** Reference the trade-show conversation specifically. The opener: *\"You mentioned surcharge problems — I'd like to spend 20 minutes showing you what that cost looks like on paper over 5 years.\"* Don't pitch. Don't send a product brochure. The surcharge math is the only value prop you need at this stage.\n\n2. **Four questions to answer on that first call.** These are the gates to Qualify: (a) What does the annual surcharge run, and which parameters drive it? (b) Has the POTW sent anything more formal than an invoice in the last 12 months? (c) Who else is in the room when a capital decision gets made? (d) Single facility or multiple locations? The deal doesn't advance without these.\n\n3. **If the surcharge normalisation is real, that's your first objection to handle.** If the response is \"it's just part of doing business,\" come back with the 5-year number: *\"Understood — let me just put a rough number on what that's been costing you. If it's in the range I'd expect for a facility your size, it changes the conversation.\"* Let the math do the reframing, not the pitch."
+}

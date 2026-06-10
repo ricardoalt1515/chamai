@@ -1,0 +1,277 @@
+{
+  "scenarioId": "edge-case-long-edmr-evidence-field-brief-only",
+  "modelId": "claude-sonnet-4-6",
+  "recordedAt": "2026-06-10T00:11:16.492Z",
+  "toolCalls": [
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-evidence-and-context"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-stage-and-gaps"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-positioning"
+      }
+    },
+    {
+      "step": 2,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-field-brief"
+      }
+    },
+    {
+      "step": 3,
+      "toolName": "generateFieldBrief",
+      "input": {
+        "customer": {
+          "name": "Municipal POTW — ~28K Population",
+          "location": "POTW Main Plant",
+          "slug": "municipal-potw-28k"
+        },
+        "stage": "Qualify",
+        "confidence": "MEDIUM",
+        "date": "2025-07-14",
+        "stopFlags": [
+          {
+            "title": "Chronic NPDES Significant Non-Compliance — 24 Consecutive Months",
+            "summary": "BOD and TSS have exceeded NPDES permit limits every single month for 24 months — at 8–13× and 3–5× limits respectively. Under EPA enforcement response policy this is a textbook SNC pattern. Formal NOV, Compliance Schedule Order, or consent agreement is a live near-term risk. Verify enforcement posture before the next conversation."
+          }
+        ],
+        "narrativeRiskCallouts": [
+          "BOD at 8–13× permit and TSS at 3–5× permit for 24 consecutive months makes this a Significant Non-Compliance case under EPA policy — the state enforcement agency is almost certainly already tracking this facility. A blower replacement alone will not resolve the BOD/TSS story; the superintendent's diagnosis is correct for NH3-N but incomplete for the full compliance picture.",
+          "The summer NH3-N limit (2.0 mg/L) has been exceeded every summer month across both years — this is chronic failure, not a creeping trend. The customer's framing understates the severity."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "This plant has been in violation of BOD, TSS, and NH3-N limits every month for two years. That's not an equipment problem — it's a treatment system problem. The blower diagnosis is right for one parameter; it doesn't explain the other two.",
+            "body": "Conventional activated sludge POTW serving ~28,000 residents. NPDES permit limits: BOD 25 mg/L / TSS 30 mg/L monthly average, NH3-N 2.0 mg/L summer / 4.0 mg/L winter. The eDMR record shows BOD ranging 210–318 mg/L (8–13× limit) and TSS ranging 95–155 mg/L (3–5× limit) across all 24 months — no month approaches compliance on either parameter. NH3-N exceeds the summer limit every summer month in both years; winter exceedances appear in Dec-2024, Apr-2025, Aug-2025, and Dec-2025. pH is consistently within range and is not a concern. The plant superintendent has flagged aging blower equipment as the driver of NH3-N exceedances — the diagnosis is plausible for NH3-N (impaired nitrification from insufficient aeration) but does not account for BOD at 8–13× permit, which points to a broader treatment capacity or process design failure. Flow is steady at 1.80–2.08 MGD; this is not a wet-weather loading event — it is a chronic steady-state compliance failure."
+          },
+          "whatWeWouldPropose": {
+            "insight": "Their BATNA — a blower swap plus continued non-compliance — carries an estimated $4–13M in enforcement costs, consent-decree capital premiums, and regulatory penalties over 5 years. A properly scoped treatment rehabilitation, CWSRF-financed, resolves the compliance picture for $2–8M with risk extinguished.",
+            "recommendedApproach": "Phase 1: Process diagnostic and treatability assessment to determine whether the compliance gap is driven by aeration capacity, SRT management, secondary clarifier hydraulics, or influent loading exceeding design capacity. Phase 2: Aeration system rehabilitation or replacement (blower upgrade as a confirmed component within corrected aeration basin design) plus nitrification enhancement (SRT extension, supplemental aeration zoning). Phase 3 (if diagnostic confirms loading-capacity gap): secondary treatment expansion via process intensification (MBR or high-rate clarification). CWSRF financing converts the capex burden to manageable annual debt service (~$150–300K/yr at current SRF rates). Sizing: $2–8M capital, MEDIUM-LOW confidence, driven by whether the diagnostic reveals a capacity expansion requirement.",
+            "winWinArguments": [
+              {
+                "lead": "Permanent compliance vs indefinite enforcement exposure.",
+                "body": "24 consecutive months of exceedances on the state's SNC radar means formal enforcement — NOV, Compliance Schedule Order, or consent agreement — is not a future risk, it is a near-term certainty. A documented, engineered compliance pathway with a committed schedule is the only credible way out of SNC status. A blower swap does not produce that pathway; the regulator will see through it."
+              },
+              {
+                "lead": "Scoping the work now is ~40–60% cheaper than doing it under consent-decree pressure.",
+                "body": "Consent-decree-driven capital projects routinely carry 20–40% cost premiums from schedule compression, limited contractor selection, and required third-party oversight costs. Engaging on the full treatment picture now — on the utility's timeline, with CWSRF financing at below-market rates — is materially cheaper than the same scope forced by an enforcement deadline."
+              },
+              {
+                "lead": "The blower fix resolves one of three failing parameters.",
+                "body": "Summer NH3-N has failed every summer month in both years. But BOD at 8–13× permit cannot be resolved by aeration improvement alone — the scale of exceedance points to a treatment capacity or process design gap. Fixing only the blowers leaves the BOD and TSS violations unresolved and the plant back in the same enforcement conversation within 12 months."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex, Year 0",
+                "theirPath": "~$200–500K (blower replacement only)",
+                "ourProposal": "$2–8M full treatment rehabilitation / expansion (CWSRF-financed; ~$150–300K/yr debt service)"
+              },
+              {
+                "component": "NPDES fines & penalties, 5yr",
+                "theirPath": "$10–50K/day per exceeded parameter under SNC enforcement escalation; realistically $500K–2M+ over 5yr given 24-month record",
+                "ourProposal": "Near-zero upon compliance; compliance pathway documented for regulator"
+              },
+              {
+                "component": "Forced retrofit under consent decree, Yr 1–2",
+                "theirPath": "Full treatment fix still required, but at 20–40% cost premium under compressed consent-decree timeline + mandatory oversight costs; estimated $3–10M",
+                "ourProposal": "Included in committed scope at current timing — no premium"
+              },
+              {
+                "component": "Risk-adjusted regulatory escalation",
+                "theirPath": "Public ECHO SNC listing, potential administrative order with accruing daily fines, state receivership risk for repeated failure — material, ongoing, uncapped",
+                "ourProposal": "Extinguished by compliance pathway"
+              },
+              {
+                "component": "5-year total (mid-range)",
+                "theirPath": "~$4–13M + uncapped enforcement tail",
+                "ourProposal": "~$2–8M, risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Range driver: process diagnostic outcome. If loading exceeds design capacity → physical expansion required ($5–8M). If process is degraded but capacity is adequate → rehabilitation-only scope ($2–4M). CWSRF financing and potential state hardship grant supplement narrow the effective cost to the utility. Biosolids handling re-scope adds optionality as phase-2."
+          },
+          "whatCouldKillIt": {
+            "insight": "The blower-fix framing is the primary threat — if it wins the budget conversation, a mechanical vendor closes a $300K equipment swap and the BOD/TSS enforcement story plays out without us.",
+            "risks": [
+              {
+                "name": "Blower-fix framing wins the budget conversation",
+                "mechanism": "The superintendent's equipment diagnosis is credible and already in circulation. If the council or finance authority hears 'blower replacement solves it,' they approve the narrow scope, the BOD/TSS violations continue, and we never get the comprehensive treatment conversation.",
+                "mitigation": "Open on the BOD/TSS exceedance magnitude — not NH3-N — in the first conversation. The regulator is watching BOD and TSS, not just NH3-N. Frame the blower as one component of a compliance pathway, not the solution."
+              },
+              {
+                "name": "Equipment vendor pre-empts on narrow scope",
+                "mechanism": "A mechanical or blower vendor may already be engaged or scoped. If they land a replacement contract first, it becomes politically difficult to argue for a broader evaluation — the money is spent and the narrative is 'we're fixing it.'",
+                "mitigation": "Move quickly to offer a process diagnostic. Position the diagnostic as a low-cost, no-regrets step that the utility needs regardless of what the blower scope turns out to be — it strengthens the regulator conversation either way."
+              },
+              {
+                "name": "Consent order timeline compresses decision-making",
+                "mechanism": "If a formal NOV or consent agreement is already in place with milestones, the utility may be forced to the fastest visible solution rather than the right one. Timeline compression favours the vendor already in the room.",
+                "mitigation": "Confirm enforcement posture in the first conversation. If a compliance schedule exists, make the case that a comprehensive approach meets the milestone schedule — and that the diagnostic phase is itself a credible deliverable to show the regulator."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The first conversation needs to move the frame from 'equipment problem' to 'treatment system evaluation before the state forces the conversation.' The enforcement clock is running.",
+            "actions": [
+              {
+                "title": "Confirm the regulatory posture",
+                "timeframe": "Before or during first call — ≤7 days",
+                "body": "Ask directly: has the state regulatory agency contacted the utility about the permit exceedances? Is there an NOV, informal warning, or agreed compliance schedule already in place? The answer determines how much urgency the customer already feels and calibrates the entire engagement strategy. If enforcement is already active, the framing shifts to 'compliance pathway for the regulator' — not 'should we do this.'"
+              },
+              {
+                "title": "Reframe BOD/TSS before the blower topic takes over",
+                "timeframe": "First customer conversation — ≤7 days",
+                "body": "Lead with: 'Your eDMR shows BOD at 8–13× permit and TSS at 3–5× permit across every month for two years. The blower work matters for NH3-N — but what's driving the BOD picture?' This surfaces the treatment system question and prevents the conversation from collapsing to a mechanical equipment discussion. The superintendent's diagnosis isn't wrong; it's incomplete."
+              },
+              {
+                "title": "Surface the capital decision-maker and budget cycle",
+                "timeframe": "First or second call — ≤14 days",
+                "body": "Confirm who signs capital expenditures at the scale of a full treatment rehabilitation ($2–8M). The superintendent likely informs but may not approve. Identify whether a council vote, public works director, or city manager is in the chain — and when the next capital budget window opens. This determines whether CWSRF financing needs to be part of the pitch from day one."
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "field-brief",
+      "payload": {
+        "customer": {
+          "name": "Municipal POTW — ~28K Population",
+          "location": "POTW Main Plant",
+          "slug": "municipal-potw-28k"
+        },
+        "stage": "Qualify",
+        "confidence": "MEDIUM",
+        "date": "2025-07-14",
+        "stopFlags": [
+          {
+            "title": "Chronic NPDES Significant Non-Compliance — 24 Consecutive Months",
+            "summary": "BOD and TSS have exceeded NPDES permit limits every single month for 24 months — at 8–13× and 3–5× limits respectively. Under EPA enforcement response policy this is a textbook SNC pattern. Formal NOV, Compliance Schedule Order, or consent agreement is a live near-term risk. Verify enforcement posture before the next conversation."
+          }
+        ],
+        "narrativeRiskCallouts": [
+          "BOD at 8–13× permit and TSS at 3–5× permit for 24 consecutive months makes this a Significant Non-Compliance case under EPA policy — the state enforcement agency is almost certainly already tracking this facility. A blower replacement alone will not resolve the BOD/TSS story; the superintendent's diagnosis is correct for NH3-N but incomplete for the full compliance picture.",
+          "The summer NH3-N limit (2.0 mg/L) has been exceeded every summer month across both years — this is chronic failure, not a creeping trend. The customer's framing understates the severity."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "This plant has been in violation of BOD, TSS, and NH3-N limits every month for two years. That's not an equipment problem — it's a treatment system problem. The blower diagnosis is right for one parameter; it doesn't explain the other two.",
+            "body": "Conventional activated sludge POTW serving ~28,000 residents. NPDES permit limits: BOD 25 mg/L / TSS 30 mg/L monthly average, NH3-N 2.0 mg/L summer / 4.0 mg/L winter. The eDMR record shows BOD ranging 210–318 mg/L (8–13× limit) and TSS ranging 95–155 mg/L (3–5× limit) across all 24 months — no month approaches compliance on either parameter. NH3-N exceeds the summer limit every summer month in both years; winter exceedances appear in Dec-2024, Apr-2025, Aug-2025, and Dec-2025. pH is consistently within range and is not a concern. The plant superintendent has flagged aging blower equipment as the driver of NH3-N exceedances — the diagnosis is plausible for NH3-N (impaired nitrification from insufficient aeration) but does not account for BOD at 8–13× permit, which points to a broader treatment capacity or process design failure. Flow is steady at 1.80–2.08 MGD; this is not a wet-weather loading event — it is a chronic steady-state compliance failure."
+          },
+          "whatWeWouldPropose": {
+            "insight": "Their BATNA — a blower swap plus continued non-compliance — carries an estimated $4–13M in enforcement costs, consent-decree capital premiums, and regulatory penalties over 5 years. A properly scoped treatment rehabilitation, CWSRF-financed, resolves the compliance picture for $2–8M with risk extinguished.",
+            "recommendedApproach": "Phase 1: Process diagnostic and treatability assessment to determine whether the compliance gap is driven by aeration capacity, SRT management, secondary clarifier hydraulics, or influent loading exceeding design capacity. Phase 2: Aeration system rehabilitation or replacement (blower upgrade as a confirmed component within corrected aeration basin design) plus nitrification enhancement (SRT extension, supplemental aeration zoning). Phase 3 (if diagnostic confirms loading-capacity gap): secondary treatment expansion via process intensification (MBR or high-rate clarification). CWSRF financing converts the capex burden to manageable annual debt service (~$150–300K/yr at current SRF rates). Sizing: $2–8M capital, MEDIUM-LOW confidence, driven by whether the diagnostic reveals a capacity expansion requirement.",
+            "winWinArguments": [
+              {
+                "lead": "Permanent compliance vs indefinite enforcement exposure.",
+                "body": "24 consecutive months of exceedances on the state's SNC radar means formal enforcement — NOV, Compliance Schedule Order, or consent agreement — is not a future risk, it is a near-term certainty. A documented, engineered compliance pathway with a committed schedule is the only credible way out of SNC status. A blower swap does not produce that pathway; the regulator will see through it."
+              },
+              {
+                "lead": "Scoping the work now is ~40–60% cheaper than doing it under consent-decree pressure.",
+                "body": "Consent-decree-driven capital projects routinely carry 20–40% cost premiums from schedule compression, limited contractor selection, and required third-party oversight costs. Engaging on the full treatment picture now — on the utility's timeline, with CWSRF financing at below-market rates — is materially cheaper than the same scope forced by an enforcement deadline."
+              },
+              {
+                "lead": "The blower fix resolves one of three failing parameters.",
+                "body": "Summer NH3-N has failed every summer month in both years. But BOD at 8–13× permit cannot be resolved by aeration improvement alone — the scale of exceedance points to a treatment capacity or process design gap. Fixing only the blowers leaves the BOD and TSS violations unresolved and the plant back in the same enforcement conversation within 12 months."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex, Year 0",
+                "theirPath": "~$200–500K (blower replacement only)",
+                "ourProposal": "$2–8M full treatment rehabilitation / expansion (CWSRF-financed; ~$150–300K/yr debt service)"
+              },
+              {
+                "component": "NPDES fines & penalties, 5yr",
+                "theirPath": "$10–50K/day per exceeded parameter under SNC enforcement escalation; realistically $500K–2M+ over 5yr given 24-month record",
+                "ourProposal": "Near-zero upon compliance; compliance pathway documented for regulator"
+              },
+              {
+                "component": "Forced retrofit under consent decree, Yr 1–2",
+                "theirPath": "Full treatment fix still required, but at 20–40% cost premium under compressed consent-decree timeline + mandatory oversight costs; estimated $3–10M",
+                "ourProposal": "Included in committed scope at current timing — no premium"
+              },
+              {
+                "component": "Risk-adjusted regulatory escalation",
+                "theirPath": "Public ECHO SNC listing, potential administrative order with accruing daily fines, state receivership risk for repeated failure — material, ongoing, uncapped",
+                "ourProposal": "Extinguished by compliance pathway"
+              },
+              {
+                "component": "5-year total (mid-range)",
+                "theirPath": "~$4–13M + uncapped enforcement tail",
+                "ourProposal": "~$2–8M, risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Range driver: process diagnostic outcome. If loading exceeds design capacity → physical expansion required ($5–8M). If process is degraded but capacity is adequate → rehabilitation-only scope ($2–4M). CWSRF financing and potential state hardship grant supplement narrow the effective cost to the utility. Biosolids handling re-scope adds optionality as phase-2."
+          },
+          "whatCouldKillIt": {
+            "insight": "The blower-fix framing is the primary threat — if it wins the budget conversation, a mechanical vendor closes a $300K equipment swap and the BOD/TSS enforcement story plays out without us.",
+            "risks": [
+              {
+                "name": "Blower-fix framing wins the budget conversation",
+                "mechanism": "The superintendent's equipment diagnosis is credible and already in circulation. If the council or finance authority hears 'blower replacement solves it,' they approve the narrow scope, the BOD/TSS violations continue, and we never get the comprehensive treatment conversation.",
+                "mitigation": "Open on the BOD/TSS exceedance magnitude — not NH3-N — in the first conversation. The regulator is watching BOD and TSS, not just NH3-N. Frame the blower as one component of a compliance pathway, not the solution."
+              },
+              {
+                "name": "Equipment vendor pre-empts on narrow scope",
+                "mechanism": "A mechanical or blower vendor may already be engaged or scoped. If they land a replacement contract first, it becomes politically difficult to argue for a broader evaluation — the money is spent and the narrative is 'we're fixing it.'",
+                "mitigation": "Move quickly to offer a process diagnostic. Position the diagnostic as a low-cost, no-regrets step that the utility needs regardless of what the blower scope turns out to be — it strengthens the regulator conversation either way."
+              },
+              {
+                "name": "Consent order timeline compresses decision-making",
+                "mechanism": "If a formal NOV or consent agreement is already in place with milestones, the utility may be forced to the fastest visible solution rather than the right one. Timeline compression favours the vendor already in the room.",
+                "mitigation": "Confirm enforcement posture in the first conversation. If a compliance schedule exists, make the case that a comprehensive approach meets the milestone schedule — and that the diagnostic phase is itself a credible deliverable to show the regulator."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The first conversation needs to move the frame from 'equipment problem' to 'treatment system evaluation before the state forces the conversation.' The enforcement clock is running.",
+            "actions": [
+              {
+                "title": "Confirm the regulatory posture",
+                "timeframe": "Before or during first call — ≤7 days",
+                "body": "Ask directly: has the state regulatory agency contacted the utility about the permit exceedances? Is there an NOV, informal warning, or agreed compliance schedule already in place? The answer determines how much urgency the customer already feels and calibrates the entire engagement strategy. If enforcement is already active, the framing shifts to 'compliance pathway for the regulator' — not 'should we do this.'"
+              },
+              {
+                "title": "Reframe BOD/TSS before the blower topic takes over",
+                "timeframe": "First customer conversation — ≤7 days",
+                "body": "Lead with: 'Your eDMR shows BOD at 8–13× permit and TSS at 3–5× permit across every month for two years. The blower work matters for NH3-N — but what's driving the BOD picture?' This surfaces the treatment system question and prevents the conversation from collapsing to a mechanical equipment discussion. The superintendent's diagnosis isn't wrong; it's incomplete."
+              },
+              {
+                "title": "Surface the capital decision-maker and budget cycle",
+                "timeframe": "First or second call — ≤14 days",
+                "body": "Confirm who signs capital expenditures at the scale of a full treatment rehabilitation ($2–8M). The superintendent likely informs but may not approve. Identify whether a council vote, public works director, or city manager is in the chain — and when the next capital budget window opens. This determines whether CWSRF financing needs to be part of the pitch from day one."
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "usage": {
+    "inputTokens": 110667,
+    "outputTokens": 6586,
+    "costUsd": 0.430791
+  },
+  "stepCount": 5,
+  "finalText": "Field Brief is ready.\n\n---\n\n**[📄 Field Brief — Municipal POTW ~28K Population](/?threadId=eval-edge-case-long-edmr-evidence-field-brief-only-mI8bo06GqEO2sCwgNQNHS&kind=field-brief)**\n\n---\n\n**Stage: Qualify — MEDIUM confidence.**\n\n**Cost-of-alternative bottom line:** Their BATNA — a blower swap plus continued non-compliance — carries an estimated **$4–13M** in enforcement penalties, consent-decree capital premiums, and risk-adjusted regulatory escalation over 5 years. A properly scoped treatment rehabilitation, CWSRF-financed, resolves the compliance picture for **$2–8M with risk extinguished.**\n\nTwo things to have front-of-mind walking into this conversation:\n\n1. **The STOP flag is real.** 24 consecutive months of BOD at 8–13× permit and TSS at 3–5× permit is textbook Significant Non-Compliance under EPA enforcement response policy. The state is almost certainly already tracking this facility. Lead with BOD and TSS — not NH3-N — to set the right frame before the blower topic takes over.\n\n2. **The superintendent's diagnosis is correct but incomplete.** Blower degradation explains impaired nitrification (NH3-N). It doesn't explain BOD at 8–13× limit. That magnitude points to a treatment capacity or process design gap. The play is to validate the superintendent's read on NH3-N, then open the aperture: *\"That matters for one parameter — help me understand what's driving the BOD picture.\"*"
+}

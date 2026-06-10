@@ -1,0 +1,1240 @@
+{
+  "scenarioId": "happy-path-industrial-laundry-fog",
+  "modelId": "claude-sonnet-4-6",
+  "recordedAt": "2026-06-09T23:51:27.016Z",
+  "toolCalls": [
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-evidence-and-context"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-stage-and-gaps"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-positioning"
+      }
+    },
+    {
+      "step": 2,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-field-brief"
+      }
+    },
+    {
+      "step": 3,
+      "toolName": "generateFieldBrief",
+      "input": {
+        "customer": {
+          "name": "Industrial Uniform Laundry Facility",
+          "location": "Laundry Operations Plant",
+          "county": "Undisclosed County",
+          "state": "North Carolina",
+          "basin": "POTW service area"
+        },
+        "stage": "Qualify",
+        "confidence": "MEDIUM",
+        "date": "2025-07-14",
+        "stopFlags": [
+          {
+            "title": "STOP-01 — Third Exceedance Imminent",
+            "summary": "Two O&G violation notices issued in six months (180 mg/L and 210 mg/L vs. 100 mg/L limit). POTW has explicitly threatened a formal compliance schedule with monthly self-monitoring on any third exceedance. One more monitoring event at current loading puts the facility into formal enforcement — the voluntary resolution window is closing now."
+          }
+        ],
+        "narrativeRiskCallouts": [
+          "Corporate approval threshold creates a structural stall risk: any engineered solution above $150K requires regional ops VP sign-off the plant manager cannot provide alone. If the VP is not pre-engaged before the third exceedance forces the issue, the timeline compresses on the worst possible terms.",
+          "Facility hydraulic loading and flow rates are not yet confirmed — sizing confidence is MEDIUM-LOW and the $150K authority ceiling may or may not clear the right-sized solution until a site visit pins the numbers."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "This isn't a maintenance failure — it's a structural capacity mismatch. The facility has added two washer-extractor lines since the 1990s without upgrading pretreatment, and the next exceedance triggers formal enforcement the plant manager cannot control.",
+            "body": "An industrial uniform laundry facility in North Carolina is in repeat O&G violation of its POTW local limit (100 mg/L), with two exceedances in six months (180 mg/L and 210 mg/L). The current pretreatment is a single gravity grease trap sized for the original 1990s facility footprint. Two additional washer-extractor lines have been added since — with no pretreatment upgrade — creating a fundamental hydraulic and loading capacity mismatch that routine maintenance cannot fix. The POTW has put the facility on notice: a third exceedance triggers a formal compliance schedule with mandatory monthly self-monitoring. The plant manager is the operational contact with informal authority up to $150K; anything above that requires regional ops VP approval. The deal is at Qualify stage — the problem is documented and the regulatory driver is real, but the plant manager has not yet committed to a scoping conversation, and flow rates needed to pin sizing are unconfirmed."
+          },
+          "whatWeWouldPropose": {
+            "insight": "A right-sized coalescing plate interceptor with equalization replaces the undersized gravity trap and closes the capacity mismatch permanently — at roughly the same five-year cost as the cheap path, but without the compliance schedule and enforcement tail.",
+            "recommendedApproach": "Replace the undersized gravity trap with an engineered coalescing plate interceptor (CPI) or high-efficiency gravity separator sized to the current hydraulic and O&G loading from all three washer-extractor lines. Add upstream equalization volume to buffer intermittent slug loading from solvent-heavy uniform batches. Install a discharge sampling tap and automated monitoring capability to support compliance documentation. Commission with verification sampling timed before the next POTW monitoring event. Phase 2: recurring compliance monitoring and service contract once the system demonstrates consistent permit compliance.",
+            "winWinArguments": [
+              {
+                "lead": "Permanent compliance — not another band-aid that sets up a third exceedance.",
+                "body": "The gravity trap is undersized for the facility's current production footprint. Cleaning or replacing it in-kind doesn't resolve the capacity mismatch — it defers the third exceedance by weeks, not permanently. A right-sized engineered system closes the capacity gap structurally and demonstrates compliance at commissioning, before the next POTW monitoring event."
+              },
+              {
+                "lead": "Self-monitoring and surcharge costs eliminated before they start.",
+                "body": "A compliance schedule triggers mandatory monthly self-monitoring — typically $2K–$5K/month in lab costs alone, or $24K–$60K over a 12-month schedule. Ongoing O&G surcharges at observed mass loading add further exposure (directional: $20K–$50K over five years). A compliant system installed now eliminates both lines of recurring cost before the POTW formalizes them."
+              },
+              {
+                "lead": "Corporate gets a planned capital upgrade, not a crisis landing on the VP's desk.",
+                "body": "If the third exceedance hits first, the regional ops VP gets involved reactively — under POTW pressure, on a compressed timeline, with limited scope flexibility. Getting VP alignment now, on a planned capital basis, produces a better outcome at lower cost and keeps the plant manager in front of the problem instead of behind it."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex — year 0",
+                "theirPath": "$15K–$40K (trap cleaning + replacement-in-kind)",
+                "ourProposal": "$80K–$220K (engineered CPI + EQ buffer + monitoring tap)"
+              },
+              {
+                "component": "Self-monitoring lab costs if compliance schedule triggered",
+                "theirPath": "$24K–$60K (12-month schedule at $2K–$5K/month)",
+                "ourProposal": "$0 — compliance demonstrated at commissioning"
+              },
+              {
+                "component": "O&G surcharges at observed loading, 5yr",
+                "theirPath": "$20K–$50K (directional — POTW surcharge rate unconfirmed)",
+                "ourProposal": "$0 — loading reduced to permit compliance"
+              },
+              {
+                "component": "Forced retrofit if compliance schedule fails (yr 1–2)",
+                "theirPath": "$80K–$220K emergency retrofit on POTW timeline",
+                "ourProposal": "$0 — included in phase 1"
+              },
+              {
+                "component": "Risk-adjusted enforcement exposure (NOV, Consent Order, SIU listing)",
+                "theirPath": "Material — public SIU listing; POTW authority to terminate discharge",
+                "ourProposal": "Substantially reduced — compliant system with documented verification"
+              },
+              {
+                "component": "5-year total (mid-range)",
+                "theirPath": "~$140K–$370K + enforcement tail risk",
+                "ourProposal": "~$80K–$220K — compliance risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "MEDIUM-LOW confidence until flows confirmed on site. Main driver: facility hydraulic loading — higher flow = larger separator = higher capex. Space constraints and civil/plumbing reuse also move the number. Phase-2 monitoring contract ($15K–$30K/yr) is a separate post-commissioning sell."
+          },
+          "whatCouldKillIt": {
+            "insight": "The biggest deal risk isn't regulatory — it's the plant manager anchoring on a cheap point-fix before we get in the room to land the capacity-mismatch reframe.",
+            "risks": [
+              {
+                "name": "Cheap point-fix anchor",
+                "mechanism": "If the plant manager sources a replacement-in-kind gravity trap before we engage — or commits mentally to that path — the deal collapses to a commodity equipment purchase. The framing battle is lost before the first call.",
+                "mitigation": "Lead the first conversation with the capacity-mismatch reframe: 'Your trap was sized for the 1990s footprint — two additional lines means the design basis is wrong, not just the equipment.' Don't let the first call be about trap sizing."
+              },
+              {
+                "name": "Third exceedance before engagement",
+                "mechanism": "A third exceedance puts the facility on a formal compliance schedule with an externally imposed timeline. The deal doesn't die, but it becomes a reactive contractor relationship — compressed scope, compressed margin, no positioning advantage.",
+                "mitigation": "Create urgency now. Offer a site visit and preliminary sizing before the next POTW monitoring event. Frame it as protecting the plant manager's ability to resolve this on their own terms."
+              },
+              {
+                "name": "Authority ceiling stall",
+                "mechanism": "If the right-sized solution lands above $150K and the regional ops VP is not pre-engaged, the plant manager hits a wall and the deal stalls. Each week of VP alignment work is a week closer to the next exceedance.",
+                "mitigation": "Ask explicitly about VP awareness in the first conversation. Offer a one-page executive summary suitable for internal escalation. Frame VP engagement as the plant manager getting ahead of the problem, not as escalating a crisis."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The compliance window is open but closing. The highest-leverage move in the next seven days is landing the capacity-mismatch reframe and booking a site visit before the next monitoring event.",
+            "actions": [
+              {
+                "title": "Book the site visit — this week",
+                "timeframe": "≤7 days",
+                "body": "Call the plant manager and open with the reframe: 'Your current trap was designed for a smaller footprint — two additional lines since the 1990s means the design basis is structurally wrong, not just dirty.' Ask when the next POTW monitoring event is scheduled and position the site visit as the first step to getting ahead of it. Objective: confirm flows, walk the pretreatment area, and understand the spatial constraints that drive the sizing range."
+              },
+              {
+                "title": "Confirm VP awareness and approval pathway",
+                "timeframe": "7–14 days",
+                "body": "Ask directly: 'If the right solution comes in above $150K, is your regional ops VP already aware of where this compliance situation stands?' If not, offer to prepare a one-page executive summary the plant manager can use for internal escalation. Getting VP pre-aligned now is the plant manager's best insurance against a reactive corporate conversation after a third exceedance."
+              },
+              {
+                "title": "Deliver preliminary sizing range with compliance timeline",
+                "timeframe": "14–21 days",
+                "body": "Following the site visit, deliver a one-page preliminary sizing range and installation schedule showing the system can be commissioned before the next high-risk monitoring event. This closes the Qualify-to-Scope advance and gives the plant manager something concrete to take to the VP if needed."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "step": 4,
+      "toolName": "generatePlaybook",
+      "input": {
+        "customer": {
+          "name": "Industrial Uniform Laundry Facility",
+          "location": "Laundry Operations Plant",
+          "state": "North Carolina"
+        },
+        "stage": "Qualify",
+        "subtitle": "Oil & Grease Pretreatment Non-Compliance — Qualify Stage",
+        "header": {
+          "subStreams": [
+            "O&G pretreatment compliance",
+            "CPI/separator sizing",
+            "compliance schedule risk",
+            "VP approval pathway"
+          ],
+          "stageIntro": "Two violation notices in six months. POTW threatening a formal compliance schedule on a third exceedance. Facility has added two washer-extractor lines since the 1990s original design — pretreatment is structurally undersized. Plant manager is your contact with a $150K informal authority ceiling. Goal this call: land the capacity-mismatch reframe, confirm flows and site access, and understand the VP approval pathway.",
+          "insight": "The framing battle is the first battle. Win it before the plant manager commits to a cheap point-fix that won't solve the capacity mismatch and sets up the third exceedance anyway."
+        },
+        "themes": [
+          {
+            "title": "Open the reframe",
+            "framing": "The goal is to shift from 'maintenance problem' to 'structural capacity mismatch' before any solution discussion begins. Every question here is designed to surface the gap between the facility's current production footprint and the system designed for the 1990s.",
+            "questions": [
+              "When your pretreatment system was originally installed, how many washer-extractor lines was it designed to serve?",
+              "Since the two additional lines were brought online, has the pretreatment system been re-assessed or re-sized in any way?",
+              "Has the POTW ever flagged whether your current trap design is appropriate for your current flow and loading — or have the notices focused only on the exceedance values?",
+              "If your current trap was cleaned and operating perfectly, do you believe it would bring you into consistent compliance given your current production volume?"
+            ],
+            "whyItMatters": [
+              "The plant manager likely frames this as a maintenance issue. If that framing survives, the deal collapses to a commodity equipment replacement. This reframe is the deal-winning move — land it early."
+            ],
+            "accentIndex": 0
+          },
+          {
+            "title": "Surface the regulatory posture",
+            "framing": "Understand the POTW's enforcement intent and the timeline pressure the facility actually faces. The difference between 'warning letter' and 'formal NOV' changes the urgency and the solution pathway.",
+            "questions": [
+              "The two notices you've received — are those formal NOVs or informal warning letters from the POTW? Do they carry a response deadline?",
+              "When is your next scheduled or anticipated monitoring event? Is it self-reported or POTW-sampled?",
+              "Has the POTW given any indication of the compliance schedule structure they'd impose — how long, what milestones, what self-monitoring frequency?",
+              "Have you had any conversations with your POTW pretreatment inspector about what a compliant solution would need to look like?"
+            ],
+            "whyItMatters": [
+              "The answer to 'when is the next monitoring event' is the single most important timeline input. If it's weeks away, urgency is real. If it's months, there's runway — but not much."
+            ],
+            "accentIndex": 1
+          },
+          {
+            "title": "Identify the decision landscape",
+            "framing": "Confirm the authority structure and understand what it takes to get the regional ops VP engaged proactively — before a third exceedance forces the issue reactively.",
+            "questions": [
+              "For a capital spend above $150K, what's the normal internal process for getting regional ops VP sign-off — is that a formal capital request, or an informal briefing?",
+              "Is your regional ops VP already aware of the two violation notices, or has this been managed at the plant level so far?",
+              "If the right solution comes in above your informal authority threshold, how much lead time would you need to get VP approval before the next monitoring event?",
+              "Who else internally has a stake in this decision — EHS, operations, finance?"
+            ],
+            "whyItMatters": [
+              "If the VP doesn't know about the violation notices, every conversation about a >$150K solution stalls the moment the plant manager escalates. Pre-engagement is the mitigation."
+            ],
+            "accentIndex": 2
+          },
+          {
+            "title": "Surface the operational reality",
+            "framing": "Confirm the flows, load patterns, and physical configuration that will drive sizing. These are the numbers that pin the capex range.",
+            "questions": [
+              "Do you have a sense of the total daily discharge flow from your washer-extractor lines — gallons per day or gallons per shift?",
+              "Do you process different load types across the three lines — shop rags and heavily soiled uniforms versus lighter garments — or is the loading fairly uniform across all three?",
+              "Is the O&G loading consistent throughout the day, or do you see peak slugs at certain shift points — for instance, when a batch of heavily soiled loads comes through?",
+              "Can you walk me through where the current trap sits physically — is it accessible, and is there space adjacent to it for a larger or secondary treatment unit?"
+            ],
+            "accentIndex": 3
+          },
+          {
+            "title": "Surface the compliance timeline pressure",
+            "framing": "Understand the plant manager's perceived urgency and whether they've already mentally committed to a solution path. This surfaces any competing vendor engagement.",
+            "questions": [
+              "Given the POTW's third-strike warning, what's your internal deadline for having a solution in place — and has any timeline been formally communicated to you by the POTW?",
+              "Have you already gotten quotes or proposals from any equipment vendors or engineering firms?",
+              "If a third exceedance occurs before a solution is installed, how does that change the conversation with your regional team?",
+              "What would 'resolved' look like to you — is it demonstrating compliance on one monitoring event, or is there a higher bar your POTW has described?"
+            ],
+            "whyItMatters": [
+              "If the plant manager has already engaged a competing vendor, the framing battle may already be in progress. Knowing this shapes the rest of the conversation."
+            ],
+            "accentIndex": 4
+          },
+          {
+            "title": "Surface the phase-2 horizon",
+            "framing": "Emerging regulatory pressures on POTW influent — PFAS, evolving O&G limit tightening, EPA ELG reviews — may mean the facility faces additional compliance requirements in the next 3-5 years. A right-sized system built now can be designed to accommodate those.",
+            "questions": [
+              "Beyond O&G, has the POTW raised any other parameters of concern — nutrients, solvents, or PFAS from the laundry chemistry you use?",
+              "Have you had any conversations with your laundry detergent or solvent suppliers about PFAS content in their products?",
+              "Is there any indication the POTW plans to tighten the O&G local limit below 100 mg/L in the near term?"
+            ],
+            "accentIndex": 5
+          },
+          {
+            "title": "Anchor the funding pathway",
+            "framing": "Understand the facility's capital cycle and how this spend gets approved. This shapes the proposal structure.",
+            "questions": [
+              "Is pretreatment a capital line item in your current budget cycle, or would this need to be a special approval?",
+              "Does your parent company have a standard mechanism for compliance-driven capital — separate from discretionary capex — that might make the approval process faster?",
+              "Are you aware of any state or regional programs that offer low-interest financing for industrial pretreatment compliance projects in North Carolina?"
+            ],
+            "accentIndex": 6
+          },
+          {
+            "title": "Anchor the timeline",
+            "framing": "Pin the concrete schedule constraints — next monitoring event, next budget cycle, VP availability — that shape the proposal's schedule section.",
+            "questions": [
+              "What's the single most important date on your calendar right now relative to this compliance situation?",
+              "If a site visit and preliminary sizing could be completed in the next two weeks, would that give you enough runway to get a solution approved before the next high-risk monitoring period?",
+              "Is there a point in your fiscal year where capital approval gets harder — an end-of-quarter freeze or a budget cycle cutoff?"
+            ],
+            "accentIndex": 7
+          },
+          {
+            "title": "Test the value proposition",
+            "framing": "Surface which win-win anchor resonates most. The plant manager's response to these questions tells you which frame to lead with in the proposal.",
+            "questions": [
+              "What concerns you more right now — the direct cost of a compliance schedule, or the internal visibility that a third exceedance would create with your regional team?",
+              "If a properly engineered solution could be commissioned and verified as compliant before your next POTW monitoring event, how does that change your evaluation of the investment?",
+              "What would it mean for your operation to have this permanently resolved — not just compliant on the next sample, but structurally solved?"
+            ],
+            "accentIndex": 8
+          },
+          {
+            "title": "Surface competing alternatives",
+            "framing": "Understand what other paths the plant manager is considering and where any competing vendor or internal engineering conversations are.",
+            "questions": [
+              "Has your maintenance team looked at any interim measures — chemical additives, more frequent pumping — and have those been tried?",
+              "Have you been approached by any pretreatment equipment vendors since the violation notices went out?",
+              "Is there any internal pressure to use a particular vendor or a preferred contractor relationship for this type of work?"
+            ],
+            "accentIndex": 9
+          },
+          {
+            "title": "Set the next step",
+            "framing": "Close the call with a specific, time-bounded commitment to advance. The goal is a site visit date and a preliminary sizing delivery date that fits before the next monitoring event.",
+            "questions": [
+              "Can we schedule a site visit in the next week or two so we can walk the pretreatment area and confirm the measurements and configuration we'd need to size the right solution?",
+              "If we came back with a preliminary sizing range and a rough installation schedule within two weeks of the site visit, would that give you what you need to move forward internally?",
+              "Is there anything that would make it hard to move quickly on this — any internal approvals or facility access constraints we should plan around?"
+            ],
+            "accentIndex": 10
+          }
+        ]
+      }
+    },
+    {
+      "step": 5,
+      "toolName": "generateAnalyticalRead",
+      "input": {
+        "customer": {
+          "name": "Industrial Uniform Laundry Facility",
+          "location": "Laundry Operations Plant",
+          "state": "North Carolina"
+        },
+        "subtitle": "Evidenced read on the O&G pretreatment compliance failure at a North Carolina industrial uniform laundry facility",
+        "subStreamsLine": "Sub-streams: O&G pretreatment compliance, gravity separator capacity mismatch, POTW compliance schedule risk, corporate authority pathway",
+        "closingInsight": "One monitoring event separates this facility from a formal compliance schedule it cannot control. The capacity mismatch is structural and the right-sized solution costs the same or less over five years as the cheap path — the field agent's job is to land that argument before the plant manager commits to a band-aid that sets up the third exceedance anyway.",
+        "summary": "Industrial uniform laundry facility in North Carolina is in repeat O&G violation of its POTW local limit — two exceedances in six months (180 mg/L and 210 mg/L vs. 100 mg/L) from a gravity grease trap sized for the original 1990s facility footprint. Two washer-extractor lines have been added since without any pretreatment upgrade. POTW has threatened a formal compliance schedule with monthly self-monitoring on a third exceedance. Deal is at Qualify stage with a MEDIUM confidence stage classification. Recommended approach is engineered coalescing plate interceptor (CPI) with upstream equalization, sized to current hydraulic and O&G loading across all three lines. Five-year cost-of-alternative analysis shows the cheap path (trap replacement-in-kind) runs ~$140K–$370K including compliance schedule costs and enforcement exposure, versus ~$80K–$220K for a right-sized engineered system that permanently closes the risk.",
+        "flags": [
+          {
+            "id": "STOP-01",
+            "severity": "STOP",
+            "evidence": "Two O&G violation notices in six months (180 mg/L and 210 mg/L vs. 100 mg/L POTW local limit). POTW has formally threatened a compliance schedule with mandatory monthly self-monitoring on any third exceedance. Facility is one monitoring event away from formal enforcement.",
+            "status": "ACTIVE"
+          },
+          {
+            "id": "SPEC-01",
+            "severity": "SPECIALIST",
+            "evidence": "Plant manager's informal authority ceiling is ~$150K. Any engineered solution above that threshold requires regional ops VP approval. VP awareness of the compliance situation is unconfirmed. Failure to pre-engage VP before a third exceedance forces the issue on the worst timeline.",
+            "status": "ACTIVE"
+          },
+          {
+            "id": "ATT-01",
+            "severity": "ATTENTION",
+            "evidence": "Facility hydraulic loading and daily O&G mass loading are not documented. Sizing confidence is MEDIUM-LOW. Capex range spans $80K–$220K until flows and space constraints are confirmed on site.",
+            "status": "OPEN"
+          }
+        ],
+        "subStreamLens": [
+          {
+            "subStream": "O&G Pretreatment Compliance",
+            "activeCondition": "Two violation notices issued (180 mg/L and 210 mg/L vs. 100 mg/L local limit); third exceedance triggers formal compliance schedule; single gravity trap structurally undersized for current production footprint after two washer-extractor line additions",
+            "evidenceAnchor": "POTW-violation-notices"
+          },
+          {
+            "subStream": "Gravity Separator Capacity Mismatch",
+            "activeCondition": "Trap sized for 1990s facility footprint; two washer-extractor lines added with no pretreatment upgrade; routine maintenance cannot resolve design-basis mismatch; peak slug loading from solvent-heavy uniform batches compounds hydraulic overloading",
+            "evidenceAnchor": "facility-description-evidence"
+          },
+          {
+            "subStream": "Compliance Schedule Risk",
+            "activeCondition": "POTW threatened formal compliance schedule + monthly self-monitoring on third exceedance; monthly lab cost exposure $2K–$5K/month; public SIU listing risk if compliance schedule is not met; POTW holds authority to terminate discharge for repeat violators",
+            "evidenceAnchor": "POTW-threat-language"
+          },
+          {
+            "subStream": "Corporate Authority Pathway",
+            "activeCondition": "Plant manager informal authority ~$150K; regional ops VP required above that threshold; VP awareness of violation notices unconfirmed; deal stall risk if VP not pre-engaged before solution scope is confirmed",
+            "evidenceAnchor": "plant-manager-authority-evidence"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Confirm facility hydraulic loading (gal/day) and daily O&G mass loading across all three washer-extractor lines",
+            "status": "OPEN — not yet in evidence",
+            "source": "Site visit / plant manager"
+          },
+          {
+            "required": "Confirm plant manager's framing of root cause (capacity mismatch vs. maintenance failure)",
+            "status": "OPEN — unconfirmed",
+            "source": "First call"
+          },
+          {
+            "required": "Confirm timing of next POTW monitoring event",
+            "status": "OPEN — not yet in evidence",
+            "source": "Plant manager / POTW inspector"
+          },
+          {
+            "required": "Confirm regional ops VP awareness of violation notices and approval pathway for >$150K capital",
+            "status": "OPEN — unconfirmed",
+            "source": "Plant manager"
+          },
+          {
+            "required": "Secure commitment to site visit or scoping discussion",
+            "status": "OPEN — not yet committed",
+            "source": "Plant manager"
+          },
+          {
+            "required": "Historical O&G monitoring trend data (is loading increasing, stable, or seasonal?)",
+            "status": "OPEN — nice-to-have",
+            "source": "Plant records / POTW eDMR data"
+          },
+          {
+            "required": "Any competing vendor quotes or equipment proposals already in circulation",
+            "status": "OPEN — not yet known",
+            "source": "Plant manager"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex — year 0 (trap cleaning + replacement-in-kind vs. engineered CPI system)",
+            "basis": "Lens-industrial-discharge cheat sheet; replacement-in-kind gravity trap $15K–$40K; engineered CPI with EQ buffer $80K–$220K",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Self-monitoring lab costs if compliance schedule triggered (12-month schedule)",
+            "basis": "$2K–$5K/month typical lab cost for monthly composite sampling under POTW compliance schedule; 12-month duration assumed",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "O&G surcharges at observed loading, 5-year exposure",
+            "basis": "Directional — POTW surcharge rate not in evidence; typical industrial POTW O&G surcharges $0.50–$2.00/lb over limit; mass loading at 180–210 mg/L not yet flow-confirmed",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit if compliance schedule fails (year 1–2)",
+            "basis": "If cheap path fails to achieve compliance, POTW-imposed timeline triggers emergency engineering and install; same scope as engineered path but at compressed emergency schedule premium",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Risk-adjusted enforcement exposure (NOV, Consent Order, public SIU listing)",
+            "basis": "Qualitative — POTW holds administrative authority to issue formal NOV ($10K–$50K/day per exceeded parameter in NC), place facility on SIU public list, and ultimately terminate discharge authorization for repeat violators",
+            "confidence": "QUALITATIVE"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "This engagement involves a single industrial uniform laundry facility in North Carolina operating under a local pretreatment limit of 100 mg/L for oil and grease at its POTW discharge point. Two violation notices have been issued in the past six months, with measured exceedances of 180 mg/L and 210 mg/L respectively. The POTW has communicated a third-strike policy: any additional exceedance triggers a formal compliance schedule with mandatory monthly self-monitoring. The facility's current pretreatment infrastructure is a single gravity grease trap originally sized for the 1990s facility configuration. Two additional washer-extractor lines have been brought online since that time, materially increasing hydraulic and O&G loading without any corresponding pretreatment upgrade. The primary commercial contact is the plant manager, who holds informal capital authority up to approximately $150K. Capital requirements above that threshold require regional operations VP sign-off. This is a Qualify-stage opportunity. The problem is documented, the regulatory driver is real, and the decision-maker landscape is partially mapped. Required gaps are primarily operational (flows, timing of next monitoring event) and organizational (VP awareness and approval pathway).",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "One primary engagement sub-stream has been identified at this stage. The O&G pretreatment compliance sub-stream encompasses the gravity separator capacity mismatch, the active compliance schedule risk, and the corporate authority pathway required to close a solution above the plant manager's informal threshold. All four sub-stream lenses are in scope for a single engagement — the decision-maker (plant manager + regional ops VP) and procurement vehicle (facility capital) are shared across all. See the sub-stream lens table below.",
+            "evidenceTags": [],
+            "evidenceSource": "facility-description-evidence, POTW-violation-notices",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "Primary lens: industrial-discharge / local-limit pretreatment non-compliance. The facility is an indirect discharger to a municipal POTW, subject to the POTW's pretreatment program and local O&G limit. This is not a categorical pretreatment standard case under 40 CFR (commercial laundry is not among the categorical industrial user categories); the applicable standard is the POTW's locally-derived limit of 100 mg/L. The root cause is a hydraulic and loading capacity mismatch — two additional washer-extractor lines added to a fixed pretreatment footprint — rather than a process chemistry failure or operator error.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence",
+            "confidenceTier": "HIGH"
+          },
+          {
+            "heading": "Evidence catalogue",
+            "body": "The following load-bearing facts are extracted from the case file. O&G exceedance values: 180 mg/L (reading 1) and 210 mg/L (reading 2) against a 100 mg/L POTW local limit — 1.8× and 2.1× exceedance respectively. Pretreatment infrastructure: single gravity grease trap, original 1990s sizing. Production expansion: two additional washer-extractor lines added after original pretreatment installation with no pretreatment upgrade. Regulatory posture: two violation notices issued; POTW third-strike policy communicated (formal compliance schedule + monthly self-monitoring). Decision-maker: plant manager, informal authority ~$150K; regional ops VP required above that threshold. Evidence gaps: facility hydraulic loading (gal/day) not documented; O&G mass loading not calculable until flow confirmed; VP awareness of violation notices unconfirmed; competing vendor engagement unknown.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence, plant-manager-authority-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Compliance & safety",
+            "body": "Three flags are active at this stage. STOP-01 is the primary enforcement risk: the facility is one monitoring event from a formal compliance schedule. SPEC-01 is the authority ceiling risk: the right-sized solution likely exceeds the plant manager's informal threshold, requiring VP engagement that is not yet confirmed. ATT-01 is the sizing confidence gap: capex range spans $80K–$220K and will not narrow until facility flows are confirmed on site. See the flag inventory table below.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, plant-manager-authority-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "See flag table above for full inventory. STOP-01 is the deal-driving urgency signal. SPEC-01 is the structural organizational risk that requires proactive management in the first conversation. ATT-01 does not block advancement but widens the commercial range until closed by a site visit.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, plant-manager-authority-evidence, facility-description-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "Replace the undersized gravity grease trap with an engineered coalescing plate interceptor (CPI) or high-efficiency gravity separator sized to the combined hydraulic and O&G loading from all three washer-extractor lines. Incorporate a small upstream equalization volume to buffer intermittent slug loading from solvent-heavy uniform batches — peak loading events are characteristic of industrial laundry operations and can exceed the hydraulic design point of an undersized separator even when average daily loading is within range. Install a discharge sampling tap and automated monitoring capability to support self-reported compliance documentation and reduce the labor burden of future POTW-required sampling. Commission with verification sampling timed to occur before the next high-risk POTW monitoring event. Phase-2 scope (post-commissioning): recurring compliance monitoring, O&G trend analysis, and service contract to sustain demonstrated compliance. Sizing range: $80K–$220K capex (MEDIUM-LOW confidence pending flow confirmation). Phase-2 monitoring contract: $15K–$30K/year.",
+            "evidenceTags": [],
+            "evidenceSource": "facility-description-evidence, POTW-violation-notices",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three customer-side outcomes are relevant at this stage. First: permanent compliance versus a band-aid that sets up the third exceedance anyway. The existing trap is undersized for the current production footprint. Replacement-in-kind does not resolve the capacity mismatch; it defers the third exceedance by weeks at most. A right-sized system closes the capacity gap structurally and demonstrates compliance at commissioning, before the next POTW monitoring event. Second: self-monitoring and surcharge costs eliminated before they start. A compliance schedule triggers mandatory monthly self-monitoring at $2K–$5K/month in lab costs alone — $24K–$60K over a 12-month schedule — plus any O&G surcharges the POTW levies at observed mass loading. A compliant system installed now eliminates both. Third: corporate gets a planned capital upgrade, not a reactive crisis. If the third exceedance hits before a solution is in place, the regional ops VP enters the conversation under POTW pressure on a compressed timeline. Pre-engagement as a planned capital investment produces a better outcome for the plant manager and for the VP.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The customer's BATNA is a trap-cleaning or trap-replacement-in-kind path. Fully priced over five years, this path does not resolve the underlying capacity mismatch, sets up a third exceedance with high probability, and triggers a compliance schedule that adds $24K–$60K in self-monitoring costs and ongoing surcharge exposure. If the compliance schedule is not met, the facility faces an emergency-timeline retrofit at essentially the same capex as the engineered solution — but without the positioning advantage of voluntary action. The risk-adjusted enforcement exposure (formal NOV, Consent Order, public SIU listing) is material and uncapped under the cheap path. See the cost comparison table below. Bottom line: their cheap path costs ~$140K–$370K over five years plus enforcement tail risk; our engineered path costs ~$80K–$220K with compliance risk substantially extinguished.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Decision-maker matrix",
+            "body": "Two roles have been identified. The plant manager is the primary operational and commercial contact, holds informal capital authority up to approximately $150K, and is the first conversation. The regional operations VP is the approver for capital above the plant manager's informal threshold; VP awareness of the violation notices is unconfirmed. No EHS lead, finance contact, or corporate procurement contact has been identified at this stage. The absence of an EHS-level contact is consistent with a plant-level compliance management pattern — common at industrial facilities where environmental compliance is managed operationally rather than through a dedicated EHS function.",
+            "evidenceTags": [],
+            "evidenceSource": "plant-manager-authority-evidence",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Stage classification",
+            "body": "This opportunity is classified at Qualify stage with MEDIUM confidence. The problem is documented (two exceedance values, named regulatory threat), the lens is supported by evidence, and the primary decision-maker is identified by role with authority ceiling known. The deal has not yet advanced to Scope because the customer has not committed to engaging on the work itself — no site visit, no scoping discussion, and no procurement vehicle has been surfaced. See the stage gap analysis table below.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence, plant-manager-authority-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Kill-risk inventory",
+            "body": "Three kill risks are ranked by severity. Rank 1 (STOP): the plant manager anchors on a cheap point-fix — trap cleaning or replacement-in-kind — before the capacity-mismatch reframe lands. This collapses the deal to a commodity equipment purchase with no engineering value-add. Mitigation: lead the first conversation with the structural capacity argument; do not let the first call become a sizing conversation. Rank 2 (SPECIALIST): a third exceedance occurs before engagement converts to a scoping commitment. The deal doesn't die but becomes a reactive forced-timeline contractor relationship. Mitigation: create urgency in the first call; offer a site visit before the next monitoring event. Rank 3 (SPECIALIST): the deal lands above the plant manager's $150K informal authority and the VP is not pre-engaged. Every week of VP alignment work is a week closer to the next exceedance. Mitigation: ask explicitly about VP awareness in the first conversation; offer a one-page executive summary the plant manager can use for internal escalation.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, plant-manager-authority-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Funding pathway analysis",
+            "body": "This is an industrial facility capital project, not a municipal or publicly financed engagement. CWSRF and federal grant programs are not applicable to a private industrial user's pretreatment compliance capital. The relevant funding pathway is the parent company's internal capital cycle. Two pathways are possible: (1) plant-level approval within the plant manager's $150K informal authority, if the scoped solution lands below that threshold (possible but not guaranteed pending flow confirmation); (2) regional capital approval via the ops VP for solutions above that threshold. North Carolina does not operate a state cost-share program specifically for industrial pretreatment compliance capital at this scale. The most relevant positioning move is framing the capital request as compliance-driven — many corporate capital approval frameworks carry a lower threshold or expedited process for regulatory compliance spend versus discretionary capex.",
+            "evidenceTags": [],
+            "evidenceSource": "plant-manager-authority-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not promise yet",
+            "body": "The following are not yet committed in this engagement record. Final capex figure: range is $80K–$220K (MEDIUM-LOW confidence) and will not narrow until facility hydraulic loading and space constraints are confirmed on site. Compliance schedule guarantee: we cannot commit to a specific permit compliance demonstration date until the system is designed, the POTW's monitoring calendar is confirmed, and construction schedule is validated. Equipment selection: CPI vs. high-efficiency gravity separator selection depends on site-specific constraints, flow rate, and space availability — this is an Assessment deliverable, not a Discovery deliverable. POTW negotiation outcome: the POTW's enforcement posture and any informal flexibility on the third-strike timeline are unknown; this engagement does not commit to a regulatory outcome, only to a technically sound compliant system.",
+            "evidenceTags": [],
+            "evidenceSource": "facility-description-evidence",
+            "confidenceTier": "LOW"
+          }
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "toolName": "generateProposalShell",
+      "input": {
+        "customer": {
+          "name": "Industrial Uniform Laundry Facility",
+          "location": "Laundry Operations Plant",
+          "state": "North Carolina"
+        },
+        "subtitle": "O&G Pretreatment System Upgrade — Preliminary Scoping Outline",
+        "executiveSummary": "This document outlines the preliminary proposed scope for an oil-and-grease pretreatment system upgrade at an industrial uniform laundry facility in North Carolina. The facility has received two violation notices in the past six months for oil-and-grease exceedances at its POTW discharge point (180 mg/L and 210 mg/L against a 100 mg/L local limit). The root cause is a structural hydraulic and loading capacity mismatch: the facility's current gravity grease trap was designed for the original 1990s configuration, and two additional washer-extractor lines have been added since without any pretreatment upgrade. The POTW has communicated that a third exceedance will trigger a formal compliance schedule with mandatory monthly self-monitoring. The proposed solution is a properly engineered coalescing plate interceptor (CPI) with upstream equalization, sized to the combined hydraulic and O&G loading from all three washer-extractor lines, with discharge monitoring capability. The indicative scope range is $80K–$220K capital (MEDIUM-LOW confidence pending facility flow confirmation and site assessment). A right-sized system eliminates the compliance schedule risk, avoids $24K–$60K in self-monitoring costs if the compliance schedule were triggered, and permanently closes the O&G exceedance exposure — at a five-year total cost that is comparable to, or less than, a deferred emergency retrofit on the POTW's timeline.",
+        "proposedScope": [
+          "Remove and dispose of the existing undersized gravity grease trap.",
+          "Engineer and install a coalescing plate interceptor (CPI) or high-efficiency gravity separator sized to the combined hydraulic and oil-and-grease loading from all three washer-extractor lines (sizing to be confirmed following site assessment and flow measurement).",
+          "Design and install upstream equalization volume to buffer peak slug loading from heavy-soil laundry batches — protecting the hydraulic design point of the separator during high-loading periods.",
+          "Install a discharge sampling tap and automated monitoring capability at the pretreatment discharge point to support compliance documentation and self-reporting.",
+          "Conduct commissioning verification sampling and produce a compliance demonstration report suitable for submission to the POTW."
+        ],
+        "sizingAndPricing": "Indicative capital range: $80K–$220K (MEDIUM-LOW confidence). The primary driver of range is facility hydraulic loading, which has not yet been confirmed. Secondary drivers include site space constraints, existing civil/plumbing leverage, and separator technology selection (CPI vs. high-efficiency gravity). These variables will be quantified during a site visit and preliminary engineering assessment. No firm pricing is committed in this document. The sizing range and confidence tier will be updated following site assessment. Phase-2 recurring service (compliance monitoring and O&G trend reporting): $15K–$30K/year — separate engagement, scoped and priced after commissioning.",
+        "schedule": "Indicative schedule pending site visit confirmation. Site visit and flow measurement: within 2 weeks of engagement commitment. Preliminary sizing and equipment selection: 2–3 weeks following site visit. Engineering design and permitting (if required by local jurisdiction): 4–8 weeks. Equipment procurement and installation: 6–12 weeks. Commissioning and verification sampling: 2–4 weeks post-installation. Total indicative timeline from commitment to commissioning: approximately 14–27 weeks. Note: schedule will be refined and calibrated against the timing of the next POTW monitoring event.",
+        "commitments": [
+          {
+            "label": "Scope delivery",
+            "text": "Following site visit and flow confirmation, we will deliver a formal scoping proposal with firm capex range, equipment selection, installation schedule, and commissioning plan — calibrated against the timing of the next POTW monitoring event.",
+            "owner": "Field agent + proposal team"
+          },
+          {
+            "label": "Preliminary sizing",
+            "text": "A preliminary sizing range and indicative installation schedule will be delivered within 2–3 weeks of the site visit. This will form the basis for any internal capital approval process at the facility level.",
+            "owner": "Field agent + engineering"
+          },
+          {
+            "label": "No commitment to regulatory outcome",
+            "text": "This engagement produces a technically sound compliant pretreatment system. Compliance demonstration will be supported by commissioning verification sampling and a POTW-ready documentation package. Regulatory outcome (POTW acceptance, formal compliance schedule withdrawal) is not guaranteed."
+          }
+        ],
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — for internal use only; not for external distribution. To be revised by the field agent and proposal team following site visit and flow confirmation.",
+        "sizingRows": [
+          {
+            "label": "Capex range (indicative)",
+            "value": "$80K–$220K (MEDIUM-LOW confidence — pending flow confirmation)"
+          },
+          {
+            "label": "Primary range driver",
+            "value": "Facility hydraulic loading across 3 washer-extractor lines (not yet measured)"
+          },
+          {
+            "label": "Secondary range drivers",
+            "value": "Site space constraints, civil/plumbing reuse, separator technology selection"
+          },
+          {
+            "label": "Phase-2 monitoring contract",
+            "value": "$15K–$30K/year (separate post-commissioning engagement)"
+          },
+          {
+            "label": "Confidence tier",
+            "value": "MEDIUM-LOW — will update to MEDIUM or HIGH following site assessment"
+          }
+        ],
+        "outOfScope": [
+          {
+            "heading": "Regulatory negotiations with the POTW",
+            "body": "This scope does not include formal representation in POTW enforcement proceedings, negotiation of compliance schedule milestones, or any regulatory outcome guarantee. The scope produces a technically sound compliant system; regulatory acceptance is the customer's responsibility."
+          },
+          {
+            "heading": "Assessment of non-O&G discharge parameters",
+            "body": "This scope addresses oil-and-grease exceedances only. Any other POTW discharge parameters (nutrients, metals, solvents, PFAS, or other local limits) are out of scope unless specifically added following a full pretreatment assessment."
+          },
+          {
+            "heading": "Laundry process chemistry modifications",
+            "body": "Modifications to detergent formulations, solvent use, or laundry process chemistry are not included in this scope. If process chemistry changes are recommended following site assessment, they would be scoped separately."
+          },
+          {
+            "heading": "Firm pricing or contract commitment",
+            "body": "This document is a scoping intent outline only. No firm pricing, contractual commitment, or binding schedule is established herein. A formal proposal will follow site assessment and flow confirmation."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Facility hydraulic loading (gal/day) and O&G mass loading confirmed across all 3 washer-extractor lines",
+            "closer": "Site visit — field agent + plant manager"
+          },
+          {
+            "gate": "Site space constraints and existing civil/plumbing configuration assessed",
+            "closer": "Site visit — field agent"
+          },
+          {
+            "gate": "Timing of next POTW monitoring event confirmed",
+            "closer": "Plant manager"
+          },
+          {
+            "gate": "Regional ops VP awareness confirmed and approval pathway for >$150K capital mapped",
+            "closer": "Plant manager + field agent first call"
+          },
+          {
+            "gate": "Customer commitment to proceed to scoping / site visit secured",
+            "closer": "Field agent — first call close"
+          }
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "field-brief",
+      "payload": {
+        "customer": {
+          "name": "Industrial Uniform Laundry Facility",
+          "location": "Laundry Operations Plant",
+          "county": "Undisclosed County",
+          "state": "North Carolina",
+          "basin": "POTW service area"
+        },
+        "stage": "Qualify",
+        "confidence": "MEDIUM",
+        "date": "2025-07-14",
+        "stopFlags": [
+          {
+            "title": "STOP-01 — Third Exceedance Imminent",
+            "summary": "Two O&G violation notices issued in six months (180 mg/L and 210 mg/L vs. 100 mg/L limit). POTW has explicitly threatened a formal compliance schedule with monthly self-monitoring on any third exceedance. One more monitoring event at current loading puts the facility into formal enforcement — the voluntary resolution window is closing now."
+          }
+        ],
+        "narrativeRiskCallouts": [
+          "Corporate approval threshold creates a structural stall risk: any engineered solution above $150K requires regional ops VP sign-off the plant manager cannot provide alone. If the VP is not pre-engaged before the third exceedance forces the issue, the timeline compresses on the worst possible terms.",
+          "Facility hydraulic loading and flow rates are not yet confirmed — sizing confidence is MEDIUM-LOW and the $150K authority ceiling may or may not clear the right-sized solution until a site visit pins the numbers."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "This isn't a maintenance failure — it's a structural capacity mismatch. The facility has added two washer-extractor lines since the 1990s without upgrading pretreatment, and the next exceedance triggers formal enforcement the plant manager cannot control.",
+            "body": "An industrial uniform laundry facility in North Carolina is in repeat O&G violation of its POTW local limit (100 mg/L), with two exceedances in six months (180 mg/L and 210 mg/L). The current pretreatment is a single gravity grease trap sized for the original 1990s facility footprint. Two additional washer-extractor lines have been added since — with no pretreatment upgrade — creating a fundamental hydraulic and loading capacity mismatch that routine maintenance cannot fix. The POTW has put the facility on notice: a third exceedance triggers a formal compliance schedule with mandatory monthly self-monitoring. The plant manager is the operational contact with informal authority up to $150K; anything above that requires regional ops VP approval. The deal is at Qualify stage — the problem is documented and the regulatory driver is real, but the plant manager has not yet committed to a scoping conversation, and flow rates needed to pin sizing are unconfirmed."
+          },
+          "whatWeWouldPropose": {
+            "insight": "A right-sized coalescing plate interceptor with equalization replaces the undersized gravity trap and closes the capacity mismatch permanently — at roughly the same five-year cost as the cheap path, but without the compliance schedule and enforcement tail.",
+            "recommendedApproach": "Replace the undersized gravity trap with an engineered coalescing plate interceptor (CPI) or high-efficiency gravity separator sized to the current hydraulic and O&G loading from all three washer-extractor lines. Add upstream equalization volume to buffer intermittent slug loading from solvent-heavy uniform batches. Install a discharge sampling tap and automated monitoring capability to support compliance documentation. Commission with verification sampling timed before the next POTW monitoring event. Phase 2: recurring compliance monitoring and service contract once the system demonstrates consistent permit compliance.",
+            "winWinArguments": [
+              {
+                "lead": "Permanent compliance — not another band-aid that sets up a third exceedance.",
+                "body": "The gravity trap is undersized for the facility's current production footprint. Cleaning or replacing it in-kind doesn't resolve the capacity mismatch — it defers the third exceedance by weeks, not permanently. A right-sized engineered system closes the capacity gap structurally and demonstrates compliance at commissioning, before the next POTW monitoring event."
+              },
+              {
+                "lead": "Self-monitoring and surcharge costs eliminated before they start.",
+                "body": "A compliance schedule triggers mandatory monthly self-monitoring — typically $2K–$5K/month in lab costs alone, or $24K–$60K over a 12-month schedule. Ongoing O&G surcharges at observed mass loading add further exposure (directional: $20K–$50K over five years). A compliant system installed now eliminates both lines of recurring cost before the POTW formalizes them."
+              },
+              {
+                "lead": "Corporate gets a planned capital upgrade, not a crisis landing on the VP's desk.",
+                "body": "If the third exceedance hits first, the regional ops VP gets involved reactively — under POTW pressure, on a compressed timeline, with limited scope flexibility. Getting VP alignment now, on a planned capital basis, produces a better outcome at lower cost and keeps the plant manager in front of the problem instead of behind it."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex — year 0",
+                "theirPath": "$15K–$40K (trap cleaning + replacement-in-kind)",
+                "ourProposal": "$80K–$220K (engineered CPI + EQ buffer + monitoring tap)"
+              },
+              {
+                "component": "Self-monitoring lab costs if compliance schedule triggered",
+                "theirPath": "$24K–$60K (12-month schedule at $2K–$5K/month)",
+                "ourProposal": "$0 — compliance demonstrated at commissioning"
+              },
+              {
+                "component": "O&G surcharges at observed loading, 5yr",
+                "theirPath": "$20K–$50K (directional — POTW surcharge rate unconfirmed)",
+                "ourProposal": "$0 — loading reduced to permit compliance"
+              },
+              {
+                "component": "Forced retrofit if compliance schedule fails (yr 1–2)",
+                "theirPath": "$80K–$220K emergency retrofit on POTW timeline",
+                "ourProposal": "$0 — included in phase 1"
+              },
+              {
+                "component": "Risk-adjusted enforcement exposure (NOV, Consent Order, SIU listing)",
+                "theirPath": "Material — public SIU listing; POTW authority to terminate discharge",
+                "ourProposal": "Substantially reduced — compliant system with documented verification"
+              },
+              {
+                "component": "5-year total (mid-range)",
+                "theirPath": "~$140K–$370K + enforcement tail risk",
+                "ourProposal": "~$80K–$220K — compliance risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "MEDIUM-LOW confidence until flows confirmed on site. Main driver: facility hydraulic loading — higher flow = larger separator = higher capex. Space constraints and civil/plumbing reuse also move the number. Phase-2 monitoring contract ($15K–$30K/yr) is a separate post-commissioning sell."
+          },
+          "whatCouldKillIt": {
+            "insight": "The biggest deal risk isn't regulatory — it's the plant manager anchoring on a cheap point-fix before we get in the room to land the capacity-mismatch reframe.",
+            "risks": [
+              {
+                "name": "Cheap point-fix anchor",
+                "mechanism": "If the plant manager sources a replacement-in-kind gravity trap before we engage — or commits mentally to that path — the deal collapses to a commodity equipment purchase. The framing battle is lost before the first call.",
+                "mitigation": "Lead the first conversation with the capacity-mismatch reframe: 'Your trap was sized for the 1990s footprint — two additional lines means the design basis is wrong, not just the equipment.' Don't let the first call be about trap sizing."
+              },
+              {
+                "name": "Third exceedance before engagement",
+                "mechanism": "A third exceedance puts the facility on a formal compliance schedule with an externally imposed timeline. The deal doesn't die, but it becomes a reactive contractor relationship — compressed scope, compressed margin, no positioning advantage.",
+                "mitigation": "Create urgency now. Offer a site visit and preliminary sizing before the next POTW monitoring event. Frame it as protecting the plant manager's ability to resolve this on their own terms."
+              },
+              {
+                "name": "Authority ceiling stall",
+                "mechanism": "If the right-sized solution lands above $150K and the regional ops VP is not pre-engaged, the plant manager hits a wall and the deal stalls. Each week of VP alignment work is a week closer to the next exceedance.",
+                "mitigation": "Ask explicitly about VP awareness in the first conversation. Offer a one-page executive summary suitable for internal escalation. Frame VP engagement as the plant manager getting ahead of the problem, not as escalating a crisis."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The compliance window is open but closing. The highest-leverage move in the next seven days is landing the capacity-mismatch reframe and booking a site visit before the next monitoring event.",
+            "actions": [
+              {
+                "title": "Book the site visit — this week",
+                "timeframe": "≤7 days",
+                "body": "Call the plant manager and open with the reframe: 'Your current trap was designed for a smaller footprint — two additional lines since the 1990s means the design basis is structurally wrong, not just dirty.' Ask when the next POTW monitoring event is scheduled and position the site visit as the first step to getting ahead of it. Objective: confirm flows, walk the pretreatment area, and understand the spatial constraints that drive the sizing range."
+              },
+              {
+                "title": "Confirm VP awareness and approval pathway",
+                "timeframe": "7–14 days",
+                "body": "Ask directly: 'If the right solution comes in above $150K, is your regional ops VP already aware of where this compliance situation stands?' If not, offer to prepare a one-page executive summary the plant manager can use for internal escalation. Getting VP pre-aligned now is the plant manager's best insurance against a reactive corporate conversation after a third exceedance."
+              },
+              {
+                "title": "Deliver preliminary sizing range with compliance timeline",
+                "timeframe": "14–21 days",
+                "body": "Following the site visit, deliver a one-page preliminary sizing range and installation schedule showing the system can be commissioned before the next high-risk monitoring event. This closes the Qualify-to-Scope advance and gives the plant manager something concrete to take to the VP if needed."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "playbook",
+      "payload": {
+        "customer": {
+          "name": "Industrial Uniform Laundry Facility",
+          "location": "Laundry Operations Plant",
+          "state": "North Carolina"
+        },
+        "stage": "Qualify",
+        "subtitle": "Oil & Grease Pretreatment Non-Compliance — Qualify Stage",
+        "header": {
+          "subStreams": [
+            "O&G pretreatment compliance",
+            "CPI/separator sizing",
+            "compliance schedule risk",
+            "VP approval pathway"
+          ],
+          "stageIntro": "Two violation notices in six months. POTW threatening a formal compliance schedule on a third exceedance. Facility has added two washer-extractor lines since the 1990s original design — pretreatment is structurally undersized. Plant manager is your contact with a $150K informal authority ceiling. Goal this call: land the capacity-mismatch reframe, confirm flows and site access, and understand the VP approval pathway.",
+          "insight": "The framing battle is the first battle. Win it before the plant manager commits to a cheap point-fix that won't solve the capacity mismatch and sets up the third exceedance anyway."
+        },
+        "themes": [
+          {
+            "title": "Open the reframe",
+            "framing": "The goal is to shift from 'maintenance problem' to 'structural capacity mismatch' before any solution discussion begins. Every question here is designed to surface the gap between the facility's current production footprint and the system designed for the 1990s.",
+            "questions": [
+              "When your pretreatment system was originally installed, how many washer-extractor lines was it designed to serve?",
+              "Since the two additional lines were brought online, has the pretreatment system been re-assessed or re-sized in any way?",
+              "Has the POTW ever flagged whether your current trap design is appropriate for your current flow and loading — or have the notices focused only on the exceedance values?",
+              "If your current trap was cleaned and operating perfectly, do you believe it would bring you into consistent compliance given your current production volume?"
+            ],
+            "whyItMatters": [
+              "The plant manager likely frames this as a maintenance issue. If that framing survives, the deal collapses to a commodity equipment replacement. This reframe is the deal-winning move — land it early."
+            ],
+            "accentIndex": 0
+          },
+          {
+            "title": "Surface the regulatory posture",
+            "framing": "Understand the POTW's enforcement intent and the timeline pressure the facility actually faces. The difference between 'warning letter' and 'formal NOV' changes the urgency and the solution pathway.",
+            "questions": [
+              "The two notices you've received — are those formal NOVs or informal warning letters from the POTW? Do they carry a response deadline?",
+              "When is your next scheduled or anticipated monitoring event? Is it self-reported or POTW-sampled?",
+              "Has the POTW given any indication of the compliance schedule structure they'd impose — how long, what milestones, what self-monitoring frequency?",
+              "Have you had any conversations with your POTW pretreatment inspector about what a compliant solution would need to look like?"
+            ],
+            "whyItMatters": [
+              "The answer to 'when is the next monitoring event' is the single most important timeline input. If it's weeks away, urgency is real. If it's months, there's runway — but not much."
+            ],
+            "accentIndex": 1
+          },
+          {
+            "title": "Identify the decision landscape",
+            "framing": "Confirm the authority structure and understand what it takes to get the regional ops VP engaged proactively — before a third exceedance forces the issue reactively.",
+            "questions": [
+              "For a capital spend above $150K, what's the normal internal process for getting regional ops VP sign-off — is that a formal capital request, or an informal briefing?",
+              "Is your regional ops VP already aware of the two violation notices, or has this been managed at the plant level so far?",
+              "If the right solution comes in above your informal authority threshold, how much lead time would you need to get VP approval before the next monitoring event?",
+              "Who else internally has a stake in this decision — EHS, operations, finance?"
+            ],
+            "whyItMatters": [
+              "If the VP doesn't know about the violation notices, every conversation about a >$150K solution stalls the moment the plant manager escalates. Pre-engagement is the mitigation."
+            ],
+            "accentIndex": 2
+          },
+          {
+            "title": "Surface the operational reality",
+            "framing": "Confirm the flows, load patterns, and physical configuration that will drive sizing. These are the numbers that pin the capex range.",
+            "questions": [
+              "Do you have a sense of the total daily discharge flow from your washer-extractor lines — gallons per day or gallons per shift?",
+              "Do you process different load types across the three lines — shop rags and heavily soiled uniforms versus lighter garments — or is the loading fairly uniform across all three?",
+              "Is the O&G loading consistent throughout the day, or do you see peak slugs at certain shift points — for instance, when a batch of heavily soiled loads comes through?",
+              "Can you walk me through where the current trap sits physically — is it accessible, and is there space adjacent to it for a larger or secondary treatment unit?"
+            ],
+            "accentIndex": 3
+          },
+          {
+            "title": "Surface the compliance timeline pressure",
+            "framing": "Understand the plant manager's perceived urgency and whether they've already mentally committed to a solution path. This surfaces any competing vendor engagement.",
+            "questions": [
+              "Given the POTW's third-strike warning, what's your internal deadline for having a solution in place — and has any timeline been formally communicated to you by the POTW?",
+              "Have you already gotten quotes or proposals from any equipment vendors or engineering firms?",
+              "If a third exceedance occurs before a solution is installed, how does that change the conversation with your regional team?",
+              "What would 'resolved' look like to you — is it demonstrating compliance on one monitoring event, or is there a higher bar your POTW has described?"
+            ],
+            "whyItMatters": [
+              "If the plant manager has already engaged a competing vendor, the framing battle may already be in progress. Knowing this shapes the rest of the conversation."
+            ],
+            "accentIndex": 4
+          },
+          {
+            "title": "Surface the phase-2 horizon",
+            "framing": "Emerging regulatory pressures on POTW influent — PFAS, evolving O&G limit tightening, EPA ELG reviews — may mean the facility faces additional compliance requirements in the next 3-5 years. A right-sized system built now can be designed to accommodate those.",
+            "questions": [
+              "Beyond O&G, has the POTW raised any other parameters of concern — nutrients, solvents, or PFAS from the laundry chemistry you use?",
+              "Have you had any conversations with your laundry detergent or solvent suppliers about PFAS content in their products?",
+              "Is there any indication the POTW plans to tighten the O&G local limit below 100 mg/L in the near term?"
+            ],
+            "accentIndex": 5
+          },
+          {
+            "title": "Anchor the funding pathway",
+            "framing": "Understand the facility's capital cycle and how this spend gets approved. This shapes the proposal structure.",
+            "questions": [
+              "Is pretreatment a capital line item in your current budget cycle, or would this need to be a special approval?",
+              "Does your parent company have a standard mechanism for compliance-driven capital — separate from discretionary capex — that might make the approval process faster?",
+              "Are you aware of any state or regional programs that offer low-interest financing for industrial pretreatment compliance projects in North Carolina?"
+            ],
+            "accentIndex": 6
+          },
+          {
+            "title": "Anchor the timeline",
+            "framing": "Pin the concrete schedule constraints — next monitoring event, next budget cycle, VP availability — that shape the proposal's schedule section.",
+            "questions": [
+              "What's the single most important date on your calendar right now relative to this compliance situation?",
+              "If a site visit and preliminary sizing could be completed in the next two weeks, would that give you enough runway to get a solution approved before the next high-risk monitoring period?",
+              "Is there a point in your fiscal year where capital approval gets harder — an end-of-quarter freeze or a budget cycle cutoff?"
+            ],
+            "accentIndex": 7
+          },
+          {
+            "title": "Test the value proposition",
+            "framing": "Surface which win-win anchor resonates most. The plant manager's response to these questions tells you which frame to lead with in the proposal.",
+            "questions": [
+              "What concerns you more right now — the direct cost of a compliance schedule, or the internal visibility that a third exceedance would create with your regional team?",
+              "If a properly engineered solution could be commissioned and verified as compliant before your next POTW monitoring event, how does that change your evaluation of the investment?",
+              "What would it mean for your operation to have this permanently resolved — not just compliant on the next sample, but structurally solved?"
+            ],
+            "accentIndex": 8
+          },
+          {
+            "title": "Surface competing alternatives",
+            "framing": "Understand what other paths the plant manager is considering and where any competing vendor or internal engineering conversations are.",
+            "questions": [
+              "Has your maintenance team looked at any interim measures — chemical additives, more frequent pumping — and have those been tried?",
+              "Have you been approached by any pretreatment equipment vendors since the violation notices went out?",
+              "Is there any internal pressure to use a particular vendor or a preferred contractor relationship for this type of work?"
+            ],
+            "accentIndex": 9
+          },
+          {
+            "title": "Set the next step",
+            "framing": "Close the call with a specific, time-bounded commitment to advance. The goal is a site visit date and a preliminary sizing delivery date that fits before the next monitoring event.",
+            "questions": [
+              "Can we schedule a site visit in the next week or two so we can walk the pretreatment area and confirm the measurements and configuration we'd need to size the right solution?",
+              "If we came back with a preliminary sizing range and a rough installation schedule within two weeks of the site visit, would that give you what you need to move forward internally?",
+              "Is there anything that would make it hard to move quickly on this — any internal approvals or facility access constraints we should plan around?"
+            ],
+            "accentIndex": 10
+          }
+        ]
+      }
+    },
+    {
+      "kind": "analytical-read",
+      "payload": {
+        "customer": {
+          "name": "Industrial Uniform Laundry Facility",
+          "location": "Laundry Operations Plant",
+          "state": "North Carolina"
+        },
+        "subtitle": "Evidenced read on the O&G pretreatment compliance failure at a North Carolina industrial uniform laundry facility",
+        "subStreamsLine": "Sub-streams: O&G pretreatment compliance, gravity separator capacity mismatch, POTW compliance schedule risk, corporate authority pathway",
+        "closingInsight": "One monitoring event separates this facility from a formal compliance schedule it cannot control. The capacity mismatch is structural and the right-sized solution costs the same or less over five years as the cheap path — the field agent's job is to land that argument before the plant manager commits to a band-aid that sets up the third exceedance anyway.",
+        "summary": "Industrial uniform laundry facility in North Carolina is in repeat O&G violation of its POTW local limit — two exceedances in six months (180 mg/L and 210 mg/L vs. 100 mg/L) from a gravity grease trap sized for the original 1990s facility footprint. Two washer-extractor lines have been added since without any pretreatment upgrade. POTW has threatened a formal compliance schedule with monthly self-monitoring on a third exceedance. Deal is at Qualify stage with a MEDIUM confidence stage classification. Recommended approach is engineered coalescing plate interceptor (CPI) with upstream equalization, sized to current hydraulic and O&G loading across all three lines. Five-year cost-of-alternative analysis shows the cheap path (trap replacement-in-kind) runs ~$140K–$370K including compliance schedule costs and enforcement exposure, versus ~$80K–$220K for a right-sized engineered system that permanently closes the risk.",
+        "flags": [
+          {
+            "id": "STOP-01",
+            "severity": "STOP",
+            "evidence": "Two O&G violation notices in six months (180 mg/L and 210 mg/L vs. 100 mg/L POTW local limit). POTW has formally threatened a compliance schedule with mandatory monthly self-monitoring on any third exceedance. Facility is one monitoring event away from formal enforcement.",
+            "status": "ACTIVE"
+          },
+          {
+            "id": "SPEC-01",
+            "severity": "SPECIALIST",
+            "evidence": "Plant manager's informal authority ceiling is ~$150K. Any engineered solution above that threshold requires regional ops VP approval. VP awareness of the compliance situation is unconfirmed. Failure to pre-engage VP before a third exceedance forces the issue on the worst timeline.",
+            "status": "ACTIVE"
+          },
+          {
+            "id": "ATT-01",
+            "severity": "ATTENTION",
+            "evidence": "Facility hydraulic loading and daily O&G mass loading are not documented. Sizing confidence is MEDIUM-LOW. Capex range spans $80K–$220K until flows and space constraints are confirmed on site.",
+            "status": "OPEN"
+          }
+        ],
+        "subStreamLens": [
+          {
+            "subStream": "O&G Pretreatment Compliance",
+            "activeCondition": "Two violation notices issued (180 mg/L and 210 mg/L vs. 100 mg/L local limit); third exceedance triggers formal compliance schedule; single gravity trap structurally undersized for current production footprint after two washer-extractor line additions",
+            "evidenceAnchor": "POTW-violation-notices"
+          },
+          {
+            "subStream": "Gravity Separator Capacity Mismatch",
+            "activeCondition": "Trap sized for 1990s facility footprint; two washer-extractor lines added with no pretreatment upgrade; routine maintenance cannot resolve design-basis mismatch; peak slug loading from solvent-heavy uniform batches compounds hydraulic overloading",
+            "evidenceAnchor": "facility-description-evidence"
+          },
+          {
+            "subStream": "Compliance Schedule Risk",
+            "activeCondition": "POTW threatened formal compliance schedule + monthly self-monitoring on third exceedance; monthly lab cost exposure $2K–$5K/month; public SIU listing risk if compliance schedule is not met; POTW holds authority to terminate discharge for repeat violators",
+            "evidenceAnchor": "POTW-threat-language"
+          },
+          {
+            "subStream": "Corporate Authority Pathway",
+            "activeCondition": "Plant manager informal authority ~$150K; regional ops VP required above that threshold; VP awareness of violation notices unconfirmed; deal stall risk if VP not pre-engaged before solution scope is confirmed",
+            "evidenceAnchor": "plant-manager-authority-evidence"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Confirm facility hydraulic loading (gal/day) and daily O&G mass loading across all three washer-extractor lines",
+            "status": "OPEN — not yet in evidence",
+            "source": "Site visit / plant manager"
+          },
+          {
+            "required": "Confirm plant manager's framing of root cause (capacity mismatch vs. maintenance failure)",
+            "status": "OPEN — unconfirmed",
+            "source": "First call"
+          },
+          {
+            "required": "Confirm timing of next POTW monitoring event",
+            "status": "OPEN — not yet in evidence",
+            "source": "Plant manager / POTW inspector"
+          },
+          {
+            "required": "Confirm regional ops VP awareness of violation notices and approval pathway for >$150K capital",
+            "status": "OPEN — unconfirmed",
+            "source": "Plant manager"
+          },
+          {
+            "required": "Secure commitment to site visit or scoping discussion",
+            "status": "OPEN — not yet committed",
+            "source": "Plant manager"
+          },
+          {
+            "required": "Historical O&G monitoring trend data (is loading increasing, stable, or seasonal?)",
+            "status": "OPEN — nice-to-have",
+            "source": "Plant records / POTW eDMR data"
+          },
+          {
+            "required": "Any competing vendor quotes or equipment proposals already in circulation",
+            "status": "OPEN — not yet known",
+            "source": "Plant manager"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex — year 0 (trap cleaning + replacement-in-kind vs. engineered CPI system)",
+            "basis": "Lens-industrial-discharge cheat sheet; replacement-in-kind gravity trap $15K–$40K; engineered CPI with EQ buffer $80K–$220K",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Self-monitoring lab costs if compliance schedule triggered (12-month schedule)",
+            "basis": "$2K–$5K/month typical lab cost for monthly composite sampling under POTW compliance schedule; 12-month duration assumed",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "O&G surcharges at observed loading, 5-year exposure",
+            "basis": "Directional — POTW surcharge rate not in evidence; typical industrial POTW O&G surcharges $0.50–$2.00/lb over limit; mass loading at 180–210 mg/L not yet flow-confirmed",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit if compliance schedule fails (year 1–2)",
+            "basis": "If cheap path fails to achieve compliance, POTW-imposed timeline triggers emergency engineering and install; same scope as engineered path but at compressed emergency schedule premium",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Risk-adjusted enforcement exposure (NOV, Consent Order, public SIU listing)",
+            "basis": "Qualitative — POTW holds administrative authority to issue formal NOV ($10K–$50K/day per exceeded parameter in NC), place facility on SIU public list, and ultimately terminate discharge authorization for repeat violators",
+            "confidence": "QUALITATIVE"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "This engagement involves a single industrial uniform laundry facility in North Carolina operating under a local pretreatment limit of 100 mg/L for oil and grease at its POTW discharge point. Two violation notices have been issued in the past six months, with measured exceedances of 180 mg/L and 210 mg/L respectively. The POTW has communicated a third-strike policy: any additional exceedance triggers a formal compliance schedule with mandatory monthly self-monitoring. The facility's current pretreatment infrastructure is a single gravity grease trap originally sized for the 1990s facility configuration. Two additional washer-extractor lines have been brought online since that time, materially increasing hydraulic and O&G loading without any corresponding pretreatment upgrade. The primary commercial contact is the plant manager, who holds informal capital authority up to approximately $150K. Capital requirements above that threshold require regional operations VP sign-off. This is a Qualify-stage opportunity. The problem is documented, the regulatory driver is real, and the decision-maker landscape is partially mapped. Required gaps are primarily operational (flows, timing of next monitoring event) and organizational (VP awareness and approval pathway).",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "One primary engagement sub-stream has been identified at this stage. The O&G pretreatment compliance sub-stream encompasses the gravity separator capacity mismatch, the active compliance schedule risk, and the corporate authority pathway required to close a solution above the plant manager's informal threshold. All four sub-stream lenses are in scope for a single engagement — the decision-maker (plant manager + regional ops VP) and procurement vehicle (facility capital) are shared across all. See the sub-stream lens table below.",
+            "evidenceTags": [],
+            "evidenceSource": "facility-description-evidence, POTW-violation-notices",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "Primary lens: industrial-discharge / local-limit pretreatment non-compliance. The facility is an indirect discharger to a municipal POTW, subject to the POTW's pretreatment program and local O&G limit. This is not a categorical pretreatment standard case under 40 CFR (commercial laundry is not among the categorical industrial user categories); the applicable standard is the POTW's locally-derived limit of 100 mg/L. The root cause is a hydraulic and loading capacity mismatch — two additional washer-extractor lines added to a fixed pretreatment footprint — rather than a process chemistry failure or operator error.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence",
+            "confidenceTier": "HIGH"
+          },
+          {
+            "heading": "Evidence catalogue",
+            "body": "The following load-bearing facts are extracted from the case file. O&G exceedance values: 180 mg/L (reading 1) and 210 mg/L (reading 2) against a 100 mg/L POTW local limit — 1.8× and 2.1× exceedance respectively. Pretreatment infrastructure: single gravity grease trap, original 1990s sizing. Production expansion: two additional washer-extractor lines added after original pretreatment installation with no pretreatment upgrade. Regulatory posture: two violation notices issued; POTW third-strike policy communicated (formal compliance schedule + monthly self-monitoring). Decision-maker: plant manager, informal authority ~$150K; regional ops VP required above that threshold. Evidence gaps: facility hydraulic loading (gal/day) not documented; O&G mass loading not calculable until flow confirmed; VP awareness of violation notices unconfirmed; competing vendor engagement unknown.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence, plant-manager-authority-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Compliance & safety",
+            "body": "Three flags are active at this stage. STOP-01 is the primary enforcement risk: the facility is one monitoring event from a formal compliance schedule. SPEC-01 is the authority ceiling risk: the right-sized solution likely exceeds the plant manager's informal threshold, requiring VP engagement that is not yet confirmed. ATT-01 is the sizing confidence gap: capex range spans $80K–$220K and will not narrow until facility flows are confirmed on site. See the flag inventory table below.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, plant-manager-authority-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "See flag table above for full inventory. STOP-01 is the deal-driving urgency signal. SPEC-01 is the structural organizational risk that requires proactive management in the first conversation. ATT-01 does not block advancement but widens the commercial range until closed by a site visit.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, plant-manager-authority-evidence, facility-description-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "Replace the undersized gravity grease trap with an engineered coalescing plate interceptor (CPI) or high-efficiency gravity separator sized to the combined hydraulic and O&G loading from all three washer-extractor lines. Incorporate a small upstream equalization volume to buffer intermittent slug loading from solvent-heavy uniform batches — peak loading events are characteristic of industrial laundry operations and can exceed the hydraulic design point of an undersized separator even when average daily loading is within range. Install a discharge sampling tap and automated monitoring capability to support self-reported compliance documentation and reduce the labor burden of future POTW-required sampling. Commission with verification sampling timed to occur before the next high-risk POTW monitoring event. Phase-2 scope (post-commissioning): recurring compliance monitoring, O&G trend analysis, and service contract to sustain demonstrated compliance. Sizing range: $80K–$220K capex (MEDIUM-LOW confidence pending flow confirmation). Phase-2 monitoring contract: $15K–$30K/year.",
+            "evidenceTags": [],
+            "evidenceSource": "facility-description-evidence, POTW-violation-notices",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three customer-side outcomes are relevant at this stage. First: permanent compliance versus a band-aid that sets up the third exceedance anyway. The existing trap is undersized for the current production footprint. Replacement-in-kind does not resolve the capacity mismatch; it defers the third exceedance by weeks at most. A right-sized system closes the capacity gap structurally and demonstrates compliance at commissioning, before the next POTW monitoring event. Second: self-monitoring and surcharge costs eliminated before they start. A compliance schedule triggers mandatory monthly self-monitoring at $2K–$5K/month in lab costs alone — $24K–$60K over a 12-month schedule — plus any O&G surcharges the POTW levies at observed mass loading. A compliant system installed now eliminates both. Third: corporate gets a planned capital upgrade, not a reactive crisis. If the third exceedance hits before a solution is in place, the regional ops VP enters the conversation under POTW pressure on a compressed timeline. Pre-engagement as a planned capital investment produces a better outcome for the plant manager and for the VP.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The customer's BATNA is a trap-cleaning or trap-replacement-in-kind path. Fully priced over five years, this path does not resolve the underlying capacity mismatch, sets up a third exceedance with high probability, and triggers a compliance schedule that adds $24K–$60K in self-monitoring costs and ongoing surcharge exposure. If the compliance schedule is not met, the facility faces an emergency-timeline retrofit at essentially the same capex as the engineered solution — but without the positioning advantage of voluntary action. The risk-adjusted enforcement exposure (formal NOV, Consent Order, public SIU listing) is material and uncapped under the cheap path. See the cost comparison table below. Bottom line: their cheap path costs ~$140K–$370K over five years plus enforcement tail risk; our engineered path costs ~$80K–$220K with compliance risk substantially extinguished.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Decision-maker matrix",
+            "body": "Two roles have been identified. The plant manager is the primary operational and commercial contact, holds informal capital authority up to approximately $150K, and is the first conversation. The regional operations VP is the approver for capital above the plant manager's informal threshold; VP awareness of the violation notices is unconfirmed. No EHS lead, finance contact, or corporate procurement contact has been identified at this stage. The absence of an EHS-level contact is consistent with a plant-level compliance management pattern — common at industrial facilities where environmental compliance is managed operationally rather than through a dedicated EHS function.",
+            "evidenceTags": [],
+            "evidenceSource": "plant-manager-authority-evidence",
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Stage classification",
+            "body": "This opportunity is classified at Qualify stage with MEDIUM confidence. The problem is documented (two exceedance values, named regulatory threat), the lens is supported by evidence, and the primary decision-maker is identified by role with authority ceiling known. The deal has not yet advanced to Scope because the customer has not committed to engaging on the work itself — no site visit, no scoping discussion, and no procurement vehicle has been surfaced. See the stage gap analysis table below.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, facility-description-evidence, plant-manager-authority-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Kill-risk inventory",
+            "body": "Three kill risks are ranked by severity. Rank 1 (STOP): the plant manager anchors on a cheap point-fix — trap cleaning or replacement-in-kind — before the capacity-mismatch reframe lands. This collapses the deal to a commodity equipment purchase with no engineering value-add. Mitigation: lead the first conversation with the structural capacity argument; do not let the first call become a sizing conversation. Rank 2 (SPECIALIST): a third exceedance occurs before engagement converts to a scoping commitment. The deal doesn't die but becomes a reactive forced-timeline contractor relationship. Mitigation: create urgency in the first call; offer a site visit before the next monitoring event. Rank 3 (SPECIALIST): the deal lands above the plant manager's $150K informal authority and the VP is not pre-engaged. Every week of VP alignment work is a week closer to the next exceedance. Mitigation: ask explicitly about VP awareness in the first conversation; offer a one-page executive summary the plant manager can use for internal escalation.",
+            "evidenceTags": [],
+            "evidenceSource": "POTW-violation-notices, plant-manager-authority-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Funding pathway analysis",
+            "body": "This is an industrial facility capital project, not a municipal or publicly financed engagement. CWSRF and federal grant programs are not applicable to a private industrial user's pretreatment compliance capital. The relevant funding pathway is the parent company's internal capital cycle. Two pathways are possible: (1) plant-level approval within the plant manager's $150K informal authority, if the scoped solution lands below that threshold (possible but not guaranteed pending flow confirmation); (2) regional capital approval via the ops VP for solutions above that threshold. North Carolina does not operate a state cost-share program specifically for industrial pretreatment compliance capital at this scale. The most relevant positioning move is framing the capital request as compliance-driven — many corporate capital approval frameworks carry a lower threshold or expedited process for regulatory compliance spend versus discretionary capex.",
+            "evidenceTags": [],
+            "evidenceSource": "plant-manager-authority-evidence",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not promise yet",
+            "body": "The following are not yet committed in this engagement record. Final capex figure: range is $80K–$220K (MEDIUM-LOW confidence) and will not narrow until facility hydraulic loading and space constraints are confirmed on site. Compliance schedule guarantee: we cannot commit to a specific permit compliance demonstration date until the system is designed, the POTW's monitoring calendar is confirmed, and construction schedule is validated. Equipment selection: CPI vs. high-efficiency gravity separator selection depends on site-specific constraints, flow rate, and space availability — this is an Assessment deliverable, not a Discovery deliverable. POTW negotiation outcome: the POTW's enforcement posture and any informal flexibility on the third-strike timeline are unknown; this engagement does not commit to a regulatory outcome, only to a technically sound compliant system.",
+            "evidenceTags": [],
+            "evidenceSource": "facility-description-evidence",
+            "confidenceTier": "LOW"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "proposal-shell",
+      "payload": {
+        "customer": {
+          "name": "Industrial Uniform Laundry Facility",
+          "location": "Laundry Operations Plant",
+          "state": "North Carolina"
+        },
+        "subtitle": "O&G Pretreatment System Upgrade — Preliminary Scoping Outline",
+        "executiveSummary": "This document outlines the preliminary proposed scope for an oil-and-grease pretreatment system upgrade at an industrial uniform laundry facility in North Carolina. The facility has received two violation notices in the past six months for oil-and-grease exceedances at its POTW discharge point (180 mg/L and 210 mg/L against a 100 mg/L local limit). The root cause is a structural hydraulic and loading capacity mismatch: the facility's current gravity grease trap was designed for the original 1990s configuration, and two additional washer-extractor lines have been added since without any pretreatment upgrade. The POTW has communicated that a third exceedance will trigger a formal compliance schedule with mandatory monthly self-monitoring. The proposed solution is a properly engineered coalescing plate interceptor (CPI) with upstream equalization, sized to the combined hydraulic and O&G loading from all three washer-extractor lines, with discharge monitoring capability. The indicative scope range is $80K–$220K capital (MEDIUM-LOW confidence pending facility flow confirmation and site assessment). A right-sized system eliminates the compliance schedule risk, avoids $24K–$60K in self-monitoring costs if the compliance schedule were triggered, and permanently closes the O&G exceedance exposure — at a five-year total cost that is comparable to, or less than, a deferred emergency retrofit on the POTW's timeline.",
+        "proposedScope": [
+          "Remove and dispose of the existing undersized gravity grease trap.",
+          "Engineer and install a coalescing plate interceptor (CPI) or high-efficiency gravity separator sized to the combined hydraulic and oil-and-grease loading from all three washer-extractor lines (sizing to be confirmed following site assessment and flow measurement).",
+          "Design and install upstream equalization volume to buffer peak slug loading from heavy-soil laundry batches — protecting the hydraulic design point of the separator during high-loading periods.",
+          "Install a discharge sampling tap and automated monitoring capability at the pretreatment discharge point to support compliance documentation and self-reporting.",
+          "Conduct commissioning verification sampling and produce a compliance demonstration report suitable for submission to the POTW."
+        ],
+        "sizingAndPricing": "Indicative capital range: $80K–$220K (MEDIUM-LOW confidence). The primary driver of range is facility hydraulic loading, which has not yet been confirmed. Secondary drivers include site space constraints, existing civil/plumbing leverage, and separator technology selection (CPI vs. high-efficiency gravity). These variables will be quantified during a site visit and preliminary engineering assessment. No firm pricing is committed in this document. The sizing range and confidence tier will be updated following site assessment. Phase-2 recurring service (compliance monitoring and O&G trend reporting): $15K–$30K/year — separate engagement, scoped and priced after commissioning.",
+        "schedule": "Indicative schedule pending site visit confirmation. Site visit and flow measurement: within 2 weeks of engagement commitment. Preliminary sizing and equipment selection: 2–3 weeks following site visit. Engineering design and permitting (if required by local jurisdiction): 4–8 weeks. Equipment procurement and installation: 6–12 weeks. Commissioning and verification sampling: 2–4 weeks post-installation. Total indicative timeline from commitment to commissioning: approximately 14–27 weeks. Note: schedule will be refined and calibrated against the timing of the next POTW monitoring event.",
+        "commitments": [
+          {
+            "label": "Scope delivery",
+            "text": "Following site visit and flow confirmation, we will deliver a formal scoping proposal with firm capex range, equipment selection, installation schedule, and commissioning plan — calibrated against the timing of the next POTW monitoring event.",
+            "owner": "Field agent + proposal team"
+          },
+          {
+            "label": "Preliminary sizing",
+            "text": "A preliminary sizing range and indicative installation schedule will be delivered within 2–3 weeks of the site visit. This will form the basis for any internal capital approval process at the facility level.",
+            "owner": "Field agent + engineering"
+          },
+          {
+            "label": "No commitment to regulatory outcome",
+            "text": "This engagement produces a technically sound compliant pretreatment system. Compliance demonstration will be supported by commissioning verification sampling and a POTW-ready documentation package. Regulatory outcome (POTW acceptance, formal compliance schedule withdrawal) is not guaranteed."
+          }
+        ],
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — for internal use only; not for external distribution. To be revised by the field agent and proposal team following site visit and flow confirmation.",
+        "sizingRows": [
+          {
+            "label": "Capex range (indicative)",
+            "value": "$80K–$220K (MEDIUM-LOW confidence — pending flow confirmation)"
+          },
+          {
+            "label": "Primary range driver",
+            "value": "Facility hydraulic loading across 3 washer-extractor lines (not yet measured)"
+          },
+          {
+            "label": "Secondary range drivers",
+            "value": "Site space constraints, civil/plumbing reuse, separator technology selection"
+          },
+          {
+            "label": "Phase-2 monitoring contract",
+            "value": "$15K–$30K/year (separate post-commissioning engagement)"
+          },
+          {
+            "label": "Confidence tier",
+            "value": "MEDIUM-LOW — will update to MEDIUM or HIGH following site assessment"
+          }
+        ],
+        "outOfScope": [
+          {
+            "heading": "Regulatory negotiations with the POTW",
+            "body": "This scope does not include formal representation in POTW enforcement proceedings, negotiation of compliance schedule milestones, or any regulatory outcome guarantee. The scope produces a technically sound compliant system; regulatory acceptance is the customer's responsibility."
+          },
+          {
+            "heading": "Assessment of non-O&G discharge parameters",
+            "body": "This scope addresses oil-and-grease exceedances only. Any other POTW discharge parameters (nutrients, metals, solvents, PFAS, or other local limits) are out of scope unless specifically added following a full pretreatment assessment."
+          },
+          {
+            "heading": "Laundry process chemistry modifications",
+            "body": "Modifications to detergent formulations, solvent use, or laundry process chemistry are not included in this scope. If process chemistry changes are recommended following site assessment, they would be scoped separately."
+          },
+          {
+            "heading": "Firm pricing or contract commitment",
+            "body": "This document is a scoping intent outline only. No firm pricing, contractual commitment, or binding schedule is established herein. A formal proposal will follow site assessment and flow confirmation."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Facility hydraulic loading (gal/day) and O&G mass loading confirmed across all 3 washer-extractor lines",
+            "closer": "Site visit — field agent + plant manager"
+          },
+          {
+            "gate": "Site space constraints and existing civil/plumbing configuration assessed",
+            "closer": "Site visit — field agent"
+          },
+          {
+            "gate": "Timing of next POTW monitoring event confirmed",
+            "closer": "Plant manager"
+          },
+          {
+            "gate": "Regional ops VP awareness confirmed and approval pathway for >$150K capital mapped",
+            "closer": "Plant manager + field agent first call"
+          },
+          {
+            "gate": "Customer commitment to proceed to scoping / site visit secured",
+            "closer": "Field agent — first call close"
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "inputTokens": 208578,
+    "outputTokens": 16108,
+    "costUsd": 0.867354
+  },
+  "stepCount": 8,
+  "finalText": "All four artifacts are ready. Here's the full package.\n\n---\n\n## Package Ready — Industrial Uniform Laundry Facility, NC | **Qualify Stage**\n\n**Bottom line:** Their cheap path — cleaning or replacing the trap in-kind — doesn't resolve the structural capacity mismatch. Fully priced over five years it runs **~$140K–$370K plus enforcement tail risk**. A right-sized engineered system comes in at **~$80K–$220K with compliance risk permanently extinguished**. That's the executive sentence you walk in with.\n\n---\n\n### ⛔ STOP-01 — Third Exceedance Imminent\nTwo violation notices in six months. POTW has explicitly threatened a formal compliance schedule with mandatory monthly self-monitoring on the next exceedance. The voluntary resolution window is open right now — and it won't stay open.\n\n---\n\n### Your Four-Artifact Package\n\n| Artifact | File | Purpose |\n|---|---|---|\n| **Field Brief** | [Download PDF](?threadId=eval-happy-path-industrial-laundry-fog-cX_T3yQOgMVy3d2v-K-RH&kind=field-brief) | Read before the call. Strategic decision aid. |\n| **Conversation Playbook** | [Download PDF](?threadId=eval-happy-path-industrial-laundry-fog-cX_T3yQOgMVy3d2v-K-RH&kind=playbook) | Have open during the call. 11 themed question sets. |\n| **Analytical Read** | [Download PDF](?threadId=eval-happy-path-industrial-laundry-fog-cX_T3yQOgMVy3d2v-K-RH&kind=analytical-read) | Send to your manager. Evidence-tagged write-up. |\n| **Proposal Shell** | [Download PDF](?threadId=eval-happy-path-industrial-laundry-fog-cX_T3yQOgMVy3d2v-K-RH&kind=proposal-shell) | Draft intent only — edit before sharing externally. |\n\n---\n\n### What the Field Brief will tell you to do (top 3 actions)\n\n1. **Book the site visit this week (≤7 days).** Call the plant manager and open with the reframe: *\"Your trap was designed for the 1990s footprint — two additional lines means the design basis is wrong, not just the equipment.\"* Get a site visit date before the next POTW monitoring event. Flows and space constraints are the only things standing between MEDIUM-LOW and MEDIUM confidence on sizing.\n\n2. **Confirm VP awareness and the approval pathway (7–14 days).** Ask directly: *\"Is your regional ops VP already aware of the two notices?\"* If not, offer to prepare a one-page executive summary the plant manager can use to get ahead of it internally. A deal above $150K stalls without VP pre-engagement — and the right-sized solution probably lands in that territory.\n\n3. **Deliver a preliminary sizing range with a compliance timeline (14–21 days).** After the site visit, come back with a rough capex range and an installation schedule showing the system can be commissioned before the next high-risk monitoring period. That's what converts Qualify to Scope and gives the plant manager something concrete for internal approval.\n\n---\n\n### The framing battle to win\n\n**Land this before anything else:** *\"This isn't a maintenance failure — it's a structural capacity mismatch. You've added two lines since the 1990s. Cleaning it more often can't fix a design-basis problem, and the next exceedance puts you on a compliance schedule you can't control the timeline of.\"*\n\n**The anti-frame to defeat:** *\"We just need a bigger trap — we can source that ourselves.\"* If that framing wins, you lose the engineering value-add entirely."
+}

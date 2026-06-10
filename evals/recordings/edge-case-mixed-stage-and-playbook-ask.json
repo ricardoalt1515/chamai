@@ -1,0 +1,346 @@
+{
+  "scenarioId": "edge-case-mixed-stage-and-playbook-ask",
+  "modelId": "claude-sonnet-4-6",
+  "recordedAt": "2026-06-10T00:13:03.423Z",
+  "toolCalls": [
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-evidence-and-context"
+      }
+    },
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-stage-and-gaps"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-field-brief"
+      }
+    },
+    {
+      "step": 2,
+      "toolName": "generatePlaybook",
+      "input": {
+        "customer": {
+          "name": "Industrial Laundry Account",
+          "state": "NC",
+          "basin": "Piedmont / Coastal Plain"
+        },
+        "stage": "Scope",
+        "subtitle": "Site Walk-Through Conversation Guide — Oil & Grease Pretreatment",
+        "header": {
+          "subStreams": [
+            "Industrial discharge / categorical pretreatment compliance — oil & grease"
+          ],
+          "stageIntro": "Deal is at Scope. Customer has shared pretreatment layout and agreed to a site walk-through. Regional Ops VP is confirmed engaged at >$150K. This conversation must close the three Required gaps: loading data, competitive landscape, and budget/procurement vehicle.",
+          "insight": "The plant manager sharing their pretreatment drawings signals solution-orientation, not just violation management. Use the site walk to pin the loading numbers, surface what alternatives they're weighing, and earn the framing the Ops VP will hear."
+        },
+        "themes": [
+          {
+            "title": "Open on the operational reality",
+            "framing": "Start by walking the existing pretreatment train with the plant manager. Get them describing the system in their own words before you say anything about solutions.",
+            "questions": [
+              "Walk me through your current pretreatment setup — what's running, in what order, and what was it originally designed to handle?",
+              "Where in the process do you think the oil and grease is coming from — wash chemistry, rinse carryover, something upstream?",
+              "How often are you pulling samples today, and who's doing the sampling — your team or the POTW?"
+            ],
+            "whyItMatters": [
+              "Loading data (concentrations + flow) is the single gap that widens the deal size range most. Get them talking about it operationally — the numbers will follow."
+            ],
+            "accentIndex": 0
+          },
+          {
+            "title": "Pin the regulatory exposure",
+            "framing": "Understand the exact enforcement state — how many NOVs, what the POTW's posture is, and whether a consent order or compliance schedule is already in play.",
+            "questions": [
+              "How many violation notices have you received, and how are they framed — informal warning, formal NOV, something else?",
+              "Has the POTW said anything about a compliance schedule or consent order, or are you still in the informal-response window?",
+              "Are they charging you surcharges on top of the standard discharge rate today, or does the violation just trigger the NOV letter?",
+              "What's your sense of how much runway you have before this escalates — do you have a re-inspection date or a response deadline?"
+            ],
+            "whyItMatters": [
+              "Surcharge history and enforcement timeline are the two inputs that anchor the cost-of-alternative table. If the POTW is already billing surcharges, that's recurring cash bleed we can quantify."
+            ],
+            "accentIndex": 1
+          },
+          {
+            "title": "Surface the cost they're already carrying",
+            "framing": "This is the cost-of-alternative conversation in disguise. You're not pitching yet — you're helping them account for what doing nothing (or the cheap path) is actually costing.",
+            "questions": [
+              "What's the POTW charging you for the O&G overages — surcharge per unit, flat penalty, reinspection fees?",
+              "What have you spent internally managing this so far — operator time, lab costs, any temporary fixes or chemical trials?",
+              "If the situation stays where it is for another year, what does that look like financially and operationally for the plant?",
+              "Has anyone put a number on what a consent order compliance timeline might cost you — legal, engineering, reporting?"
+            ],
+            "accentIndex": 2
+          },
+          {
+            "title": "Understand the current pretreatment config in detail",
+            "framing": "Walk the physical system. You need the treatment-train layout to size the solution. The plant manager shared drawings — verify against what's actually installed.",
+            "questions": [
+              "Is what you sent me the current as-built, or has anything been modified since those drawings?",
+              "What's your approximate flow rate through the pretreatment system — average day vs. peak wash cycle?",
+              "What's the condition of the existing equipment — is it maintaining its design performance, or are you seeing degradation?",
+              "Is there any segregation between wash water and rinse water streams, or does everything combine before pretreatment?"
+            ],
+            "whyItMatters": [
+              "Flow rate, treatment train condition, and stream segregation are the three variables that pin whether we're talking about an upgrade to the existing system or a parallel/replacement installation."
+            ],
+            "accentIndex": 3
+          },
+          {
+            "title": "Surface what alternatives they're weighing",
+            "framing": "You need to know what else is in the conversation — other vendors, an internal fix, or doing nothing. Don't assume you're the only call they've made.",
+            "questions": [
+              "Have you talked to anyone else about addressing this — other equipment suppliers, your POTW's preferred vendor list, your corporate engineering team?",
+              "Has anyone proposed a solution yet, even informally — and if so, what did it look like?",
+              "Is there an internal option being considered — a DIY upgrade, a process change, switching detergent chemistry?",
+              "What would make you feel confident that whatever you do actually solves it — are you looking for a guaranteed compliance outcome or the lowest-cost first step?"
+            ],
+            "whyItMatters": [
+              "If another vendor is already proposing, this deal is closer to Position than Scope and the competitive framing needs to shift now."
+            ],
+            "accentIndex": 4
+          },
+          {
+            "title": "Anchor the budget and procurement path",
+            "framing": "You know the Ops VP threshold is $150K. Get clarity on how capital decisions work at this plant — cycle timing, approval process, and whether there are any funding mechanisms in play.",
+            "questions": [
+              "How does a capital project like this typically get funded at your facilities — is this a plant-level capex decision or does it go through a corporate capital cycle?",
+              "Is there a budget cycle coming up where this would need to be approved — do you have a window in mind?",
+              "Would you approach this as a traditional capex purchase, or is there any appetite for a financed or service-based structure where the upfront is lower?",
+              "If this comes in above $150K, is the regional ops VP already briefed enough to move quickly, or would they need a full presentation?"
+            ],
+            "accentIndex": 5
+          },
+          {
+            "title": "Understand the operations and maintenance reality",
+            "framing": "The right solution has to fit the team running it. Understand operator capacity and skill level — it shapes both the solution design and the ongoing service scope.",
+            "questions": [
+              "Who runs the pretreatment system day-to-day — a dedicated operator, a maintenance tech, or does it rotate?",
+              "How much time are they spending on it right now, and what's their background — water treatment experience or more general maintenance?",
+              "If we add or upgrade the system, what level of ongoing support would you want from us versus handling it internally?",
+              "Have you had issues in the past with pretreatment systems that looked good on paper but were hard to operate consistently?"
+            ],
+            "accentIndex": 6
+          },
+          {
+            "title": "Surface the phase-2 horizon",
+            "framing": "Oil and grease is the presenting problem, but industrial laundry operations have emerging exposure on other parameters. Surface awareness without creating noise — this is a credibility builder, not a scope expansion pitch.",
+            "questions": [
+              "Have you had any other parameters come up on your discharge reports — pH swings, surfactants, anything else the POTW has flagged?",
+              "Are you tracking any changes in your wash chemistry or product mix that might affect your effluent profile going forward?",
+              "Has your POTW said anything about tightening their local limits or changing their pretreatment program requirements in the next few years?"
+            ],
+            "whyItMatters": [
+              "An O&G fix that leaves the customer exposed on surfactants or pH in 18 months is a short-term win and a long-term relationship problem. Surface it now."
+            ],
+            "accentIndex": 7
+          },
+          {
+            "title": "Frame what success looks like for the Ops VP",
+            "framing": "You need to understand the Ops VP's success frame before you propose — because the proposal will need to clear their review. The plant manager can tell you how to land it.",
+            "questions": [
+              "When you bring this to the regional ops VP, what's the story you want to be able to tell — compliance fix, cost savings, operational reliability?",
+              "Is there a format or level of detail they'd expect — a one-pager, a full engineering proposal, references from other sites?",
+              "What's the biggest concern they're likely to raise — upfront cost, disruption to operations, confidence it'll actually work?",
+              "Would it be useful to have us present directly to the ops VP, or is it better if you bring the recommendation internally?"
+            ],
+            "accentIndex": 8
+          },
+          {
+            "title": "Test the value frame",
+            "framing": "Before you close the site visit, test which win-win anchor lands hardest — compliance certainty, cost of the alternative, or operational simplicity. This tells you how to lead the proposal.",
+            "questions": [
+              "If I could show you that fixing this definitively costs less over five years than the ongoing surcharges plus the enforcement exposure, would that be the right frame for the ops VP?",
+              "Or is the bigger concern operational — making sure this doesn't create a new headache for the plant team?",
+              "What would make this an easy yes for you internally — a performance guarantee, a phased approach, something else?"
+            ],
+            "accentIndex": 9
+          },
+          {
+            "title": "Lock the next step",
+            "framing": "Leave the site visit with a committed next step, a timeline, and clarity on whether the Ops VP needs to be in the room before you propose.",
+            "questions": [
+              "Based on what we've seen today, would it make sense for us to come back with a scoped proposal — or is there another step you'd want first?",
+              "What's a realistic timeline for you — when would you want to have a solution in place, and does that work back to a decision point we should hit?",
+              "Is there anything you'd want from us before you take this to the ops VP — a one-page summary, a rough cost range, something else?",
+              "Can we schedule a follow-up call with the ops VP included, or does that happen after you've reviewed what we put together?"
+            ],
+            "accentIndex": 10
+          }
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "playbook",
+      "payload": {
+        "customer": {
+          "name": "Industrial Laundry Account",
+          "state": "NC",
+          "basin": "Piedmont / Coastal Plain"
+        },
+        "stage": "Scope",
+        "subtitle": "Site Walk-Through Conversation Guide — Oil & Grease Pretreatment",
+        "header": {
+          "subStreams": [
+            "Industrial discharge / categorical pretreatment compliance — oil & grease"
+          ],
+          "stageIntro": "Deal is at Scope. Customer has shared pretreatment layout and agreed to a site walk-through. Regional Ops VP is confirmed engaged at >$150K. This conversation must close the three Required gaps: loading data, competitive landscape, and budget/procurement vehicle.",
+          "insight": "The plant manager sharing their pretreatment drawings signals solution-orientation, not just violation management. Use the site walk to pin the loading numbers, surface what alternatives they're weighing, and earn the framing the Ops VP will hear."
+        },
+        "themes": [
+          {
+            "title": "Open on the operational reality",
+            "framing": "Start by walking the existing pretreatment train with the plant manager. Get them describing the system in their own words before you say anything about solutions.",
+            "questions": [
+              "Walk me through your current pretreatment setup — what's running, in what order, and what was it originally designed to handle?",
+              "Where in the process do you think the oil and grease is coming from — wash chemistry, rinse carryover, something upstream?",
+              "How often are you pulling samples today, and who's doing the sampling — your team or the POTW?"
+            ],
+            "whyItMatters": [
+              "Loading data (concentrations + flow) is the single gap that widens the deal size range most. Get them talking about it operationally — the numbers will follow."
+            ],
+            "accentIndex": 0
+          },
+          {
+            "title": "Pin the regulatory exposure",
+            "framing": "Understand the exact enforcement state — how many NOVs, what the POTW's posture is, and whether a consent order or compliance schedule is already in play.",
+            "questions": [
+              "How many violation notices have you received, and how are they framed — informal warning, formal NOV, something else?",
+              "Has the POTW said anything about a compliance schedule or consent order, or are you still in the informal-response window?",
+              "Are they charging you surcharges on top of the standard discharge rate today, or does the violation just trigger the NOV letter?",
+              "What's your sense of how much runway you have before this escalates — do you have a re-inspection date or a response deadline?"
+            ],
+            "whyItMatters": [
+              "Surcharge history and enforcement timeline are the two inputs that anchor the cost-of-alternative table. If the POTW is already billing surcharges, that's recurring cash bleed we can quantify."
+            ],
+            "accentIndex": 1
+          },
+          {
+            "title": "Surface the cost they're already carrying",
+            "framing": "This is the cost-of-alternative conversation in disguise. You're not pitching yet — you're helping them account for what doing nothing (or the cheap path) is actually costing.",
+            "questions": [
+              "What's the POTW charging you for the O&G overages — surcharge per unit, flat penalty, reinspection fees?",
+              "What have you spent internally managing this so far — operator time, lab costs, any temporary fixes or chemical trials?",
+              "If the situation stays where it is for another year, what does that look like financially and operationally for the plant?",
+              "Has anyone put a number on what a consent order compliance timeline might cost you — legal, engineering, reporting?"
+            ],
+            "accentIndex": 2
+          },
+          {
+            "title": "Understand the current pretreatment config in detail",
+            "framing": "Walk the physical system. You need the treatment-train layout to size the solution. The plant manager shared drawings — verify against what's actually installed.",
+            "questions": [
+              "Is what you sent me the current as-built, or has anything been modified since those drawings?",
+              "What's your approximate flow rate through the pretreatment system — average day vs. peak wash cycle?",
+              "What's the condition of the existing equipment — is it maintaining its design performance, or are you seeing degradation?",
+              "Is there any segregation between wash water and rinse water streams, or does everything combine before pretreatment?"
+            ],
+            "whyItMatters": [
+              "Flow rate, treatment train condition, and stream segregation are the three variables that pin whether we're talking about an upgrade to the existing system or a parallel/replacement installation."
+            ],
+            "accentIndex": 3
+          },
+          {
+            "title": "Surface what alternatives they're weighing",
+            "framing": "You need to know what else is in the conversation — other vendors, an internal fix, or doing nothing. Don't assume you're the only call they've made.",
+            "questions": [
+              "Have you talked to anyone else about addressing this — other equipment suppliers, your POTW's preferred vendor list, your corporate engineering team?",
+              "Has anyone proposed a solution yet, even informally — and if so, what did it look like?",
+              "Is there an internal option being considered — a DIY upgrade, a process change, switching detergent chemistry?",
+              "What would make you feel confident that whatever you do actually solves it — are you looking for a guaranteed compliance outcome or the lowest-cost first step?"
+            ],
+            "whyItMatters": [
+              "If another vendor is already proposing, this deal is closer to Position than Scope and the competitive framing needs to shift now."
+            ],
+            "accentIndex": 4
+          },
+          {
+            "title": "Anchor the budget and procurement path",
+            "framing": "You know the Ops VP threshold is $150K. Get clarity on how capital decisions work at this plant — cycle timing, approval process, and whether there are any funding mechanisms in play.",
+            "questions": [
+              "How does a capital project like this typically get funded at your facilities — is this a plant-level capex decision or does it go through a corporate capital cycle?",
+              "Is there a budget cycle coming up where this would need to be approved — do you have a window in mind?",
+              "Would you approach this as a traditional capex purchase, or is there any appetite for a financed or service-based structure where the upfront is lower?",
+              "If this comes in above $150K, is the regional ops VP already briefed enough to move quickly, or would they need a full presentation?"
+            ],
+            "accentIndex": 5
+          },
+          {
+            "title": "Understand the operations and maintenance reality",
+            "framing": "The right solution has to fit the team running it. Understand operator capacity and skill level — it shapes both the solution design and the ongoing service scope.",
+            "questions": [
+              "Who runs the pretreatment system day-to-day — a dedicated operator, a maintenance tech, or does it rotate?",
+              "How much time are they spending on it right now, and what's their background — water treatment experience or more general maintenance?",
+              "If we add or upgrade the system, what level of ongoing support would you want from us versus handling it internally?",
+              "Have you had issues in the past with pretreatment systems that looked good on paper but were hard to operate consistently?"
+            ],
+            "accentIndex": 6
+          },
+          {
+            "title": "Surface the phase-2 horizon",
+            "framing": "Oil and grease is the presenting problem, but industrial laundry operations have emerging exposure on other parameters. Surface awareness without creating noise — this is a credibility builder, not a scope expansion pitch.",
+            "questions": [
+              "Have you had any other parameters come up on your discharge reports — pH swings, surfactants, anything else the POTW has flagged?",
+              "Are you tracking any changes in your wash chemistry or product mix that might affect your effluent profile going forward?",
+              "Has your POTW said anything about tightening their local limits or changing their pretreatment program requirements in the next few years?"
+            ],
+            "whyItMatters": [
+              "An O&G fix that leaves the customer exposed on surfactants or pH in 18 months is a short-term win and a long-term relationship problem. Surface it now."
+            ],
+            "accentIndex": 7
+          },
+          {
+            "title": "Frame what success looks like for the Ops VP",
+            "framing": "You need to understand the Ops VP's success frame before you propose — because the proposal will need to clear their review. The plant manager can tell you how to land it.",
+            "questions": [
+              "When you bring this to the regional ops VP, what's the story you want to be able to tell — compliance fix, cost savings, operational reliability?",
+              "Is there a format or level of detail they'd expect — a one-pager, a full engineering proposal, references from other sites?",
+              "What's the biggest concern they're likely to raise — upfront cost, disruption to operations, confidence it'll actually work?",
+              "Would it be useful to have us present directly to the ops VP, or is it better if you bring the recommendation internally?"
+            ],
+            "accentIndex": 8
+          },
+          {
+            "title": "Test the value frame",
+            "framing": "Before you close the site visit, test which win-win anchor lands hardest — compliance certainty, cost of the alternative, or operational simplicity. This tells you how to lead the proposal.",
+            "questions": [
+              "If I could show you that fixing this definitively costs less over five years than the ongoing surcharges plus the enforcement exposure, would that be the right frame for the ops VP?",
+              "Or is the bigger concern operational — making sure this doesn't create a new headache for the plant team?",
+              "What would make this an easy yes for you internally — a performance guarantee, a phased approach, something else?"
+            ],
+            "accentIndex": 9
+          },
+          {
+            "title": "Lock the next step",
+            "framing": "Leave the site visit with a committed next step, a timeline, and clarity on whether the Ops VP needs to be in the room before you propose.",
+            "questions": [
+              "Based on what we've seen today, would it make sense for us to come back with a scoped proposal — or is there another step you'd want first?",
+              "What's a realistic timeline for you — when would you want to have a solution in place, and does that work back to a decision point we should hit?",
+              "Is there anything you'd want from us before you take this to the ops VP — a one-page summary, a rough cost range, something else?",
+              "Can we schedule a follow-up call with the ops VP included, or does that happen after you've reviewed what we put together?"
+            ],
+            "accentIndex": 10
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "inputTokens": 64930,
+    "outputTokens": 4701,
+    "costUsd": 0.265305
+  },
+  "stepCount": 4,
+  "finalText": "---\n\n**Stage: Scope — MEDIUM confidence.** Here's the read and your Playbook:\n\n---\n\n### Stage call\n\nThis deal is at **Scope**. The advance signals are clean: the plant manager has shared pretreatment drawings (operational engagement on the work itself), two follow-up calls are in, and — most importantly — the site walk-through has been agreed. That last step is the textbook Qualify→Scope transition event. MEDIUM confidence rather than HIGH because we don't yet have loading data, competitive landscape clarity, or budget/procurement vehicle confirmed.\n\n**What advances you to Position** is exactly what the site walk-through should close:\n1. Actual O&G concentrations + flow rate (pins deal sizing)\n2. Whether other vendors or an internal fix are in the conversation\n3. Budget envelope and procurement vehicle (capex cycle, financed, EaaS?)\n4. A direct line to the Ops VP before you propose — not after\n\nThe $150K threshold being volunteered by the plant manager is a meaningful tell: they already have a deal size in mind that clears the VP approval bar. That's not a red flag — it's positioning signal. Use it.\n\n---\n\n### Site Walk-Through Playbook\n\n📄 **[Download Playbook PDF](?threadId=eval-edge-case-mixed-stage-and-playbook-ask-Tt53T1XCvqkPWLCW6ZaSA&kind=playbook)**\n\nThe Playbook is organised around 11 themes calibrated for this Scope-stage site visit. The three must-hit questions on the day:\n\n1. **\"What is the POTW charging you for the O&G overages — surcharges, reinspection fees, any consent order commitments?\"** — this is your cost-of-alternative anchor; don't leave the site without it.\n2. **\"Have you talked to anyone else about addressing this — another vendor, your corporate engineering team, an internal fix?\"** — if another vendor is already proposing, you're at Position and the competitive framing needs to shift now.\n3. **\"When you bring this to the regional ops VP, what's the story you want to tell — compliance fix, cost savings, operational reliability?\"** — earns VP-level framing before you propose, not after.\n\nThe Playbook also covers: walking the existing pretreatment config in detail, surfacing the phase-2 horizon (surfactants, pH, wash chemistry changes), anchoring the budget and procurement path, and locking a committed next step before you leave the site."
+}

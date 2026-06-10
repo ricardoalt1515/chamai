@@ -1,0 +1,1130 @@
+{
+  "scenarioId": "tool-selection-explicit-full-package",
+  "modelId": "claude-sonnet-4-6",
+  "recordedAt": "2026-06-10T00:01:14.883Z",
+  "toolCalls": [
+    {
+      "step": 0,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-evidence-and-context"
+      }
+    },
+    {
+      "step": 1,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-stage-and-gaps"
+      }
+    },
+    {
+      "step": 2,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-positioning"
+      }
+    },
+    {
+      "step": 3,
+      "toolName": "loadSkill",
+      "input": {
+        "name": "h2o-field-brief"
+      }
+    },
+    {
+      "step": 4,
+      "toolName": "generateFieldBrief",
+      "input": {
+        "customer": {
+          "name": "Chemical Manufacturing Plant",
+          "location": "Louisiana Facility",
+          "state": "Louisiana",
+          "basin": "Gulf Coast"
+        },
+        "stage": "Scope",
+        "confidence": "MEDIUM",
+        "date": "2025-07-14",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "Flows and batch cycle frequency are not yet confirmed — the $1.5–6M capex range narrows 2× once these are pinned in the scoping engagement.",
+          "Budget authority has not been confirmed — the environmental compliance manager is the engaged contact but is unlikely to be the capital signatory for a project of this size."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "The customer is in a proactive window — six months of trending data hasn't triggered a formal NOV yet. Every month that passes without a solution, that window narrows and the cost of the same project goes up.",
+            "body": "A Louisiana chemical manufacturing plant is trending toward a COD permit exceedance driven by batch process changeovers that produce both organic loading spikes and intermittent pH swings. The environmental compliance manager has shared six months of effluent sampling data confirming the trajectory and agreed to a paid scoping engagement. The problem is structural — batch changeovers create predictable, repeating load shocks that operator adjustments cannot reliably dampen. The customer is self-identified and self-motivated, still ahead of formal enforcement, and already committed to scoping. The conversation tomorrow is about shaping what gets built and pulling in the decision-makers who will approve capital."
+          },
+          "whatWeWouldPropose": {
+            "insight": "An engineered three-stage train — equalization, pH neutralization, and biological treatment — closes the COD gap structurally and eliminates recurring surcharge and enforcement exposure. Their band-aid alternative costs ~$3.5–12M over 5 years; our path costs ~$1.5–6M with risk extinguished.",
+            "recommendedApproach": "Equalization (4–12 hr HRT, sized to batch cycle) to buffer hydraulic and organic load shocks → automated pH neutralization (acid/caustic dosing, dual-probe redundancy) to eliminate changeover swings → biological treatment stage (activated sludge, SBR, or MBR based on site footprint) targeting 85–95% COD removal → SCADA-integrated effluent monitoring to build the compliance data record. Deal anchor: equalization + bio stage. Phase-2 prize: additional discharge streams or PFAS source-control horizon common at chemical manufacturers.",
+            "winWinArguments": [
+              {
+                "lead": "Permanent compliance, not a band-aid.",
+                "body": "Six months of trending data already builds the evidentiary record the permit authority needs to escalate. Engineered equalization and biological treatment closes the COD gap structurally — the trend line stops. Operator adjustments haven't stopped it; a designed system will."
+              },
+              {
+                "lead": "Proactive timing is materially cheaper than enforcement-forced retrofit.",
+                "body": "The customer is still in a self-identified window before any formal NOV. Acting now means they control the schedule, the design, and the capital budget. A forced retrofit after a Consent Order compresses the timeline to 12–18 months and typically adds 30–50% to project cost through emergency engineering and accelerated procurement."
+              },
+              {
+                "lead": "Operational burden eliminated, not just managed.",
+                "body": "Batch changeover pH swings create chronic operator burden and daily monitoring anxiety. A properly sized equalization and neutralization train removes the firefighting and lets the environmental compliance manager focus on compliance documentation and permit reporting rather than reactive batch-by-batch adjustments."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex (Year 0)",
+                "theirPath": "~$50–150K (chemistry adjustments, minimal controls)",
+                "ourProposal": "~$1.5–6M (engineered EQ + pH + biological stage)"
+              },
+              {
+                "component": "Ongoing COD surcharges, 5yr",
+                "theirPath": "~$500K–2M (POTW surcharge rates $0.50–2.00/lb over limit; band-aid path does not eliminate structural exceedance)",
+                "ourProposal": "Eliminated — COD brought to permit compliance structurally"
+              },
+              {
+                "component": "Risk-adjusted enforcement exposure (NOV → Consent Order), Yrs 1–3",
+                "theirPath": "~$300K–1.5M probability-weighted (stipulated penalties $10–50K/day per event + external oversight costs)",
+                "ourProposal": "Near-zero — compliance record established before escalation"
+              },
+              {
+                "component": "Forced retrofit under Consent Order, Yr 2–3",
+                "theirPath": "~$2.5–9M at emergency timing (30–50% premium on compressed schedule)",
+                "ourProposal": "Not applicable — planned project captures full schedule savings"
+              },
+              {
+                "component": "5-Year Total (mid-range)",
+                "theirPath": "~$3.5–12M + uncapped enforcement tail",
+                "ourProposal": "~$1.5–6M, risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Range driver: plant flows and batch cycle frequency — confirm in scoping. <50K gpd may close with EQ + chemistry alone (~$800K–1.5M); >200K gpd with aggressive COD loading requires full bio stage ($3–6M+). Phase-2 (additional streams, PFAS horizon) could double engagement value. Recurring operational support contract adds ~$80–200K/yr."
+          },
+          "whatCouldKillIt": {
+            "insight": "The most likely deal-stopper isn't the customer's willingness — it's budget authority sitting outside the room. The environmental compliance manager is engaged and motivated; the capital signatory probably isn't in the conversation yet.",
+            "risks": [
+              {
+                "name": "Budget authority not in the room",
+                "mechanism": "A $1.5–6M capital project requires sign-off from operations or finance leadership who haven't participated in this conversation. Scoping without them produces a proposal that hits a wall at budget approval — or worse, restarts with a competing vendor once internal stakeholders are engaged.",
+                "mitigation": "Tomorrow: explicitly ask who else needs to be in the room when a capital solution is on the table. Name it as a scoping-engagement step, not a gatekeeping move. Get the operations lead and financial authority identified by role before the scoping engagement ends."
+              },
+              {
+                "name": "Regulatory clock slower than expected",
+                "mechanism": "If the POTW is slow to escalate trending data to a formal enforcement action, the customer's urgency softens. The proactive-window argument loses force, the timeline stretches, and budget competition from other plant priorities fills the gap.",
+                "mitigation": "Surface the POTW's enforcement posture early in tomorrow's conversation — has the permit authority seen this data? Has any informal outreach occurred? Use the answer to calibrate urgency framing."
+              },
+              {
+                "name": "Scope collapses to point-fix",
+                "mechanism": "Customer decides equalization alone is 'good enough for now,' skipping the biological treatment stage. Deal compresses to <$500K with no phase-2 hook and no recurring support contract.",
+                "mitigation": "Hold the cost-of-alternative argument — a point-fix that doesn't close the COD gap structurally still incurs the surcharge and enforcement exposure. Show the 5-year math before agreeing to any scope reduction."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The paid scoping engagement is confirmed — tomorrow's meeting is about shaping scope and pulling in the capital decision-makers before the scoping engagement ends. Don't leave without knowing who approves capital.",
+            "actions": [
+              {
+                "title": "Identify the capital decision-maker",
+                "timeframe": "Tomorrow — first 15 minutes",
+                "body": "Before diving into technical scoping, ask directly: 'When a capital project of this size goes to approval, who needs to be in that conversation — operations lead, plant manager, finance?' Frame it as a scoping-engagement step. Get names by role and a commitment to include them before the scoping work product is presented."
+              },
+              {
+                "title": "Pin plant flows and batch cycle to narrow the range",
+                "timeframe": "During scoping engagement — within 7 days",
+                "body": "The capex range is $1.5–6M until flows and batch changeover frequency are confirmed. Request access to DCS/SCADA flow data and the batch production schedule as a scoping deliverable. This single data pull narrows the range by ~2× and makes the cost-of-alternative argument defensible at the capital approval meeting."
+              },
+              {
+                "title": "Confirm POTW enforcement posture",
+                "timeframe": "Tomorrow or within 7 days",
+                "body": "Ask whether the POTW permit authority is already aware of the trending data — informal outreach, pretreatment coordinator contact, or anything in writing. The answer calibrates how much urgency the proactive-window argument can carry and whether the 5-year enforcement exposure in the cost-of-alternative table needs to be accelerated."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "step": 5,
+      "toolName": "generatePlaybook",
+      "input": {
+        "customer": {
+          "name": "Chemical Manufacturing Plant",
+          "location": "Louisiana Facility",
+          "state": "Louisiana",
+          "basin": "Gulf Coast"
+        },
+        "stage": "Scope",
+        "subtitle": "Paid Scoping Engagement — Batch-Process COD & pH Compliance",
+        "header": {
+          "subStreams": ["Industrial discharge — COD & pH compliance"],
+          "stageIntro": "Deal is at Scope. Customer has agreed to a paid scoping engagement. Conversation tomorrow is about shaping what gets built and pulling capital decision-makers into the room.",
+          "insight": "The customer is in a proactive window — still ahead of formal enforcement. The paid scoping commitment is strong. The risk is that the conversation stays at the environmental manager level and never reaches the capital signatory.",
+          "orientationLine": "Environmental compliance manager is the primary contact. Financial and operations decision-makers are not yet confirmed participants. Use this conversation to identify them by role and set the stage for a complete capital approval path."
+        },
+        "themes": [
+          {
+            "title": "Open with the data, not the solution",
+            "framing": "The six months of effluent data is the customer's own evidence. Open by anchoring on what the data shows before proposing anything. Gets the customer nodding at the problem before the solution is on the table.",
+            "questions": [
+              "Walk me through what you're seeing in the six-month data — where are the COD spikes most pronounced?",
+              "Are the pH swings correlated with specific batch changeover sequences, or is the pattern less predictable than that?",
+              "What does the trend line look like to you — is it linear, or are there step changes after specific events?",
+              "Has anything changed operationally in the last six months that lines up with the trend?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance",
+            "whyItMatters": [
+              "The customer's own data is the most credible framing tool available — let them describe the problem before you characterize it.",
+              "Batch-correlated pH swings signal an equalization design problem, not a chemistry-adjustment problem. Establishing this distinction early prevents scope collapse to a point-fix."
+            ]
+          },
+          {
+            "title": "Surface the regulatory posture",
+            "framing": "The proactive-window argument depends on the permit authority not yet being formally engaged. Confirm this before relying on it.",
+            "questions": [
+              "Has the POTW or permit authority seen this data yet, or has this been an internal identification so far?",
+              "Have you had any informal conversations with the pretreatment coordinator at the receiving POTW?",
+              "Is there anything in your permit — a compliance schedule, a footnote on COD limits — that you're watching relative to this trend?",
+              "What's your read on how quickly the POTW moves from informal observation to formal notice in situations like this?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance",
+            "whyItMatters": [
+              "If the POTW is already aware, the urgency window may be shorter than assumed — or a formal enforcement clock may already be running.",
+              "The answer determines whether the cost-of-alternative enforcement exposure rows are near-term or theoretical."
+            ]
+          },
+          {
+            "title": "Identify the capital decision landscape",
+            "framing": "The environmental compliance manager is engaged and motivated. A $1.5–6M capital project will require operations and finance sign-off. Identify the path now.",
+            "questions": [
+              "When a capital project of this size goes to approval at your facility, who else needs to be in that conversation — plant manager, operations lead, finance?",
+              "Is capital for environmental compliance projects run through a separate budget track, or does it compete with production capex?",
+              "What does your typical approval timeline look like from scoping recommendation to capital authorization?",
+              "Is there a budget cycle coming up that we should be targeting for capital authorization?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance",
+            "whyItMatters": [
+              "Scoping without the capital decision-maker in the room produces a recommendation that hits a wall at budget approval.",
+              "Understanding the approval timeline now lets us sequence the scoping deliverable to land before the next budget gate."
+            ],
+            "accentIndex": 2
+          },
+          {
+            "title": "Scope the operational reality",
+            "framing": "Flow rates and batch changeover frequency are the primary unknowns that drive the capex range. Closing these turns a $1.5–6M range into a $1.5–3M or $3–6M range.",
+            "questions": [
+              "What are your average daily flows through the wastewater treatment system, and how much do they vary across your batch cycle?",
+              "How many batch changeovers are happening per day or per week, and what's the typical pH excursion profile — how wide, how fast, how long?",
+              "Do you have any existing equalization capacity — a holding tank, a buffer vessel — or are we starting from scratch?",
+              "What's the current treatment train configuration — is there any biological stage in place, or is it primarily physical-chemical?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance"
+          },
+          {
+            "title": "Surface competing alternatives",
+            "framing": "Confirm this is a sole-source engagement, or identify what else is in the conversation early.",
+            "questions": [
+              "Is this a sole-source scoping engagement with us, or are you also talking to other vendors or consultants?",
+              "Has your team looked at any internal options — additional operator controls, batch sequencing changes, chemistry modifications — as a near-term path?",
+              "Have you seen any proposals or recommendations from your corporate EHS group on this?",
+              "What would 'good enough for now' look like internally, and why isn't that the path you're taking?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance",
+            "whyItMatters": [
+              "If internal alternatives are being seriously considered, the cost-of-alternative argument needs to price those out, not just the do-nothing path.",
+              "A sole-source confirmation changes how aggressively we structure the scoping deliverable."
+            ]
+          },
+          {
+            "title": "Test the 5-year cost frame",
+            "framing": "The cost-of-alternative argument is the executive headline. Test which version of it lands hardest before deciding how to lead at the capital approval meeting.",
+            "questions": [
+              "If you stay on the current trajectory, what does the next 12 months look like from a permit compliance standpoint?",
+              "Has anyone at your facility put a number on what sustained COD surcharges cost annually at your current loading levels?",
+              "How does your finance team typically look at environmental compliance capex — as a cost center, or as risk mitigation with a calculable avoided-cost ROI?",
+              "If we could show that the 5-year cost of doing nothing is materially higher than the project investment, would that argument carry weight at the capital approval level?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance"
+          },
+          {
+            "title": "Anchor the scoping engagement deliverables",
+            "framing": "The paid scoping engagement needs a clear deliverable that lands at the right decision-maker level. Define it now so the work product is built for the right audience.",
+            "questions": [
+              "What does a successful scoping deliverable look like to you — a technical recommendation, a capital estimate, a compliance pathway document, or a combination?",
+              "Who is the audience for the scoping deliverable — just you, or do you need something that can go to plant leadership or corporate EHS?",
+              "Are there any constraints on the scoping engagement — site access, timing, data availability — that we should know about now?",
+              "What would need to be true at the end of the scoping engagement for you to feel confident recommending capital authorization?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance",
+            "accentIndex": 3
+          },
+          {
+            "title": "Surface the phase-2 horizon",
+            "framing": "Chemical manufacturers frequently have additional discharge streams, PFAS exposure, or regulatory horizon changes that make a phase-2 scope natural. Surface this without over-reaching.",
+            "questions": [
+              "Are there other wastewater streams at this facility that have their own compliance considerations, or is this COD stream the primary one?",
+              "Has your facility had any conversations about PFAS in your process chemistry or discharge streams?",
+              "Are there any upcoming process changes — new product lines, capacity expansions — that would affect the discharge profile we're scoping for?",
+              "Is this facility part of a multi-site organization where other plants might have similar challenges?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance"
+          },
+          {
+            "title": "Set the concrete next step",
+            "framing": "Leave tomorrow's meeting with a defined next step, a date, and the right people committed. Don't let 'we'll be in touch' be the close.",
+            "questions": [
+              "Who should be in the room when we present the scoping deliverable — can we make sure the capital decision-maker is included?",
+              "What's a realistic timeline for the scoping work given our access to flow data and site access?",
+              "Can we set a date now for the scoping deliverable presentation?",
+              "Is there anything on your end — internal approvals, data pulls, site scheduling — that we should coordinate around?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance"
+          }
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "toolName": "generateAnalyticalRead",
+      "input": {
+        "customer": {
+          "name": "Chemical Manufacturing Plant",
+          "location": "Louisiana Facility",
+          "state": "Louisiana",
+          "basin": "Gulf Coast"
+        },
+        "subtitle": "Evidenced read on batch-process COD and pH compliance at a Louisiana chemical manufacturing facility",
+        "subStreamsLine": "Sub-streams: industrial discharge COD compliance, batch changeover pH management, equalization design gap, regulatory posture, decision-maker landscape, phase-2 horizon",
+        "closingInsight": "The customer is in the best possible posture — self-identified, data-sharing, paid-scoping committed, and still ahead of formal enforcement. The single highest-leverage move tomorrow is not technical; it is identifying who approves capital and getting them in the room before the scoping engagement ends.",
+        "summary": "A Louisiana chemical manufacturing plant has self-identified a trending COD permit exceedance in its process wastewater discharge, driven by batch process changeovers that produce repeating organic load spikes and intermittent pH swings. Six months of effluent sampling data provided by the environmental compliance manager confirms the trajectory. The customer has agreed to a paid scoping engagement. This read classifies the deal at Scope stage (MEDIUM confidence), decomposes the single sub-stream under the industrial-discharge lens, and sizes the engagement at $1.5–6M directional (MEDIUM-LOW confidence, pending flow confirmation). The cost-of-alternative analysis shows the customer's band-aid path costs ~$3.5–12M over 5 years versus our path at ~$1.5–6M with enforcement risk extinguished. Kill risks are budget authority outside the room and regulatory clock slower than expected.",
+        "gateState": "OPEN_WITH_CONDITIONS",
+        "gateContent": "Paid scoping engagement confirmed. Qualification gate is open with conditions: capital decision-maker (operations/finance authority) not yet confirmed as a participant. Advance criteria require their identification before scoping deliverable is presented.",
+        "flags": [
+          {
+            "id": "DM-001",
+            "severity": "SPECIALIST",
+            "evidence": "Environmental compliance manager is the sole confirmed contact. A $1.5–6M capital project requires operations and/or finance sign-off. Budget authority has not been identified or engaged.",
+            "status": "Open"
+          },
+          {
+            "id": "DATA-001",
+            "severity": "ATTENTION",
+            "evidence": "Plant flow rates and batch changeover frequency not in evidence. Capex range spans $1.5–6M until these are confirmed. Sizing narrows approximately 2× once flows are pinned.",
+            "status": "Open"
+          },
+          {
+            "id": "REG-001",
+            "severity": "ATTENTION",
+            "evidence": "POTW enforcement posture not characterized. Unknown whether permit authority has seen trending data or issued informal notice. Proactive-window argument calibration depends on this confirmation.",
+            "status": "Open"
+          }
+        ],
+        "subStreamLens": [
+          {
+            "subStream": "Industrial discharge — COD & pH compliance",
+            "activeCondition": "Six months of effluent data trending toward permit exceedance. Batch changeover-driven COD spikes and pH swings confirmed. Paid scoping engagement agreed. Formal NOV not yet issued.",
+            "evidenceAnchor": "ECM-01"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Confirm capital decision-maker (operations lead, plant manager, or finance authority) by role and secure their participation before scoping deliverable presentation",
+            "status": "OPEN",
+            "source": "DM-001"
+          },
+          {
+            "required": "Obtain plant flow rates and batch changeover frequency to narrow capex range from $1.5–6M to a defensible ±50% estimate",
+            "status": "OPEN",
+            "source": "DATA-001"
+          },
+          {
+            "required": "Confirm POTW enforcement posture — has permit authority seen trending data or issued informal notice?",
+            "status": "OPEN",
+            "source": "REG-001"
+          },
+          {
+            "required": "Confirm whether competing vendors or internal alternatives are being evaluated alongside this scoping engagement",
+            "status": "OPEN",
+            "source": "Field observation"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex (Year 0) — band-aid path vs. engineered solution",
+            "basis": "Band-aid: chemistry adjustments, minimal controls (~$50–150K). Engineered: equalization + pH neutralization + biological stage ($1.5–6M per industrial-discharge lens cheat sheet at this facility scale)",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Ongoing COD surcharges, 5-year cumulative",
+            "basis": "POTW surcharge rates $0.50–2.00/lb COD over permit limit; sustained exceedance at a medium chemical plant estimated at $100K–400K/yr; band-aid path does not close structural COD gap. Engineered path eliminates surcharge exposure.",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Risk-adjusted enforcement exposure (NOV → Consent Order), Years 1–3",
+            "basis": "Louisiana industrial pretreatment enforcement arc: informal notice to formal NOV to Consent Order typically 12–24 months. Stipulated penalties $10–50K/day per exceedance event plus mandatory external oversight. Probability-weighted on continued trending trajectory.",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit under Consent Order, Year 2–3",
+            "basis": "Engineering + construction under compressed Consent Order schedule carries 30–50% premium over planned project. Forced version of this scope estimated at $2.5–9M vs. $1.5–6M on planned path.",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "5-Year Total (mid-range)",
+            "basis": "Band-aid path: surcharges + enforcement + forced retrofit = ~$3.5–12M. Engineered path: ~$1.5–6M with enforcement risk extinguished. Net advantage to engineered path: $1.5–6M+ over 5 years, plus risk tail eliminated.",
+            "confidence": "LOW"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "A Louisiana chemical manufacturing facility is trending toward a permit exceedance on COD in its process wastewater discharge. The driver is batch process changeovers that produce repeating organic load spikes and intermittent pH swings — a structural equalization gap, not isolated events. The environmental compliance manager self-identified the trajectory from six months of effluent sampling data and shared that data proactively. The customer agreed to a paid scoping engagement, placing the deal at Scope stage. This analytical read covers the single active sub-stream (industrial-discharge / COD and pH compliance), stages the deal, sizes the engagement directionally, and records the active flag inventory for upward review.",
+            "evidenceTags": ["ECM-01"],
+            "evidenceSource": "ECM-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "One sub-stream is active at this facility based on available evidence. The lens is industrial-discharge; the sub-case is indirect-discharger local-limits compliance for COD and pH. The sub-stream encompasses the entire process wastewater discharge from batch manufacturing operations. The environmental compliance manager has confirmed the COD trend and the pH excursion pattern. No additional discharge streams have been identified in the evidence base, but the chemical manufacturing context creates a credible phase-2 horizon (additional streams, PFAS source-control) that has not yet been explored.",
+            "evidenceTags": ["ECM-01"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "The industrial-discharge lens applies. Sub-case: indirect discharger to POTW under local pretreatment limits for COD and pH. Treatment design must achieve permit compliance at the fence line before discharge to the receiving POTW. Regulatory driver is the local pretreatment program enforced by the receiving POTW, backed by 40 CFR Part 403 general pretreatment standards. Louisiana DEQ provides secondary oversight. No categorical pretreatment standard (40 CFR effluent guideline subcategory) has been identified in the evidence base for this facility — local limits appear to be the operative constraint. The phase-2 horizon may include categorical ELG exposure depending on product chemistry, which has not been confirmed.",
+            "evidenceTags": ["ECM-01"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Decision-maker matrix",
+            "body": "The environmental compliance manager is the sole confirmed contact. This role is the operational decision-maker for compliance strategy but is unlikely to be the capital budget signatory for a project in the $1.5–6M range. The capital decision-maker — typically the plant manager, operations director, or a finance/EHS lead depending on the customer's org structure — has not been identified or engaged. Corporate EHS involvement (for a multi-site organization) has not been confirmed. This is the primary deal-stage risk: scoping without the capital decision-maker in the room produces a deliverable that hits a wall at budget approval.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "The proposed solution architecture for this sub-stream comprises four stages in process order. First, equalization sized at 4–12 hours hydraulic retention time (HRT) calibrated to the batch changeover cycle, to buffer both hydraulic and organic load shocks before any treatment stage. Second, automated pH neutralization with acid and caustic dosing and dual-probe redundancy, to eliminate changeover-driven pH swings that currently create both permit exposure and operator burden. Third, a biological treatment stage — technology to be confirmed during scoping (activated sludge, sequencing batch reactor, or membrane bioreactor depending on site footprint and effluent target) — targeting 85–95% COD removal to achieve structural permit compliance. Fourth, SCADA-integrated effluent monitoring to produce the compliance data record the POTW and permit authority will require. The deal anchor is the equalization and biological treatment combination. The phase-2 prize is additional discharge streams or a PFAS source-control scope, common at chemical manufacturing facilities.",
+            "evidenceTags": ["ECM-01"],
+            "evidenceSource": "ECM-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three customer-side outcomes anchor the value proposition. First: permanent compliance rather than episodic band-aids. Six months of trending data has already built the evidentiary record the permit authority needs to escalate; an engineered solution closes the trend line structurally. Operator adjustments have not stopped the trend; a designed equalization and biological system will. Second: proactive timing is materially cheaper than enforcement-forced retrofit. The customer is still in a self-identified window before any formal NOV. Acting now means they control the schedule, design, and capital allocation. A Consent Order-forced retrofit compresses the timeline to 12–18 months and typically adds 30–50% to project cost through emergency engineering and accelerated procurement. Third: operational burden eliminated. Batch changeover pH swings create chronic operator anxiety and daily monitoring load. A properly sized equalization and neutralization train removes the firefighting and lets the environmental compliance team focus on compliance documentation rather than reactive management.",
+            "evidenceTags": ["ECM-01"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The cost-of-alternative analysis is structured as a five-year comparison between the customer's band-aid path (chemistry adjustments, minimal controls) and the engineered solution path. The table below presents each cost category with basis and confidence tier. The executive bottom line: the band-aid path costs approximately $3.5–12M over five years inclusive of ongoing surcharges, risk-adjusted enforcement escalation, and the premium associated with a forced retrofit under a Consent Order schedule. The engineered path costs approximately $1.5–6M with enforcement risk extinguished. The net present value advantage of acting now is material even at the low end of the range.",
+            "evidenceTags": ["ECM-01"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "Three active flags are recorded in the current evidence base. DM-001 (SPECIALIST): the capital decision-maker has not been identified or engaged. This flag must be closed before the scoping deliverable is presented. DATA-001 (ATTENTION): plant flow rates and batch changeover frequency are not in evidence; the capex range remains wide at $1.5–6M until these are confirmed. REG-001 (ATTENTION): POTW enforcement posture is not characterized; whether the permit authority has seen the trending data or issued informal notice is unknown. The proactive-window argument and the urgency framing of the cost-of-alternative table both depend on this confirmation.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Risks",
+            "body": "Three kill risks are ranked in order of severity. First (SPECIALIST): budget authority not in the room. A capital project of this size requires operations or finance sign-off that has not yet been secured. Mitigation: explicitly identify the capital decision-maker by role in tomorrow's meeting and commit to their inclusion before the scoping deliverable is presented. Second (SPECIALIST): regulatory clock slower than expected. If the POTW is slow to escalate the trending data to formal enforcement, the customer's urgency may soften before capital authorization is secured. Mitigation: surface the POTW's enforcement posture early in tomorrow's conversation and use the answer to calibrate urgency framing. Third (ATTENTION): scope collapse to a point-fix. If the customer decides equalization alone is sufficient for now, the biological stage and the recurring support contract are lost, compressing the deal to under $500K with no phase-2 hook. Mitigation: hold the cost-of-alternative argument — a point-fix that doesn't close the COD gap structurally still incurs the full surcharge and enforcement exposure.",
+            "evidenceTags": [],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Funding pathway",
+            "body": "The industrial-discharge lens does not carry a natural public funding pathway (CWSRF, WIFIA, or federal grants are structured for public utilities, not private industrial dischargers). The customer's own capital program is the primary funding vehicle. Environmental compliance capex at chemical manufacturing facilities is typically categorized as risk-mitigation investment with a calculable avoided-cost ROI; the 5-year cost-of-alternative analysis provides the ROI framing. If the facility is part of a multi-site organization, corporate EHS capital programs may provide an alternative authorization path. No CWSRF or grant pathway has been identified as applicable.",
+            "evidenceTags": [],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not commit to yet",
+            "body": "This analytical read does not commit to specific flow-based sizing, technology selection, or firm pricing — those require plant flow data, a batch changeover profile, and a site walk that are deliverables of the paid scoping engagement. The capex range of $1.5–6M is directional and subject to a 2× narrowing once flows are confirmed. The regulatory posture characterization (proactive window duration, enforcement escalation timeline) is based on Louisiana pretreatment enforcement patterns and has not been confirmed against this specific facility's permit authority relationship. Final regulatory determinations are the province of Assessment-stage work.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          }
+        ]
+      }
+    },
+    {
+      "step": 7,
+      "toolName": "generateProposalShell",
+      "input": {
+        "customer": {
+          "name": "Chemical Manufacturing Plant",
+          "state": "Louisiana",
+          "basin": "Gulf Coast"
+        },
+        "subtitle": "Wastewater Compliance Scoping Engagement — Batch-Process COD & pH Treatment",
+        "executiveSummary": "Your facility has self-identified a structural compliance risk: six months of effluent sampling data show a trajectory toward permit exceedance on COD, driven by batch process changeovers that produce repeating organic load spikes and intermittent pH swings. Operator adjustments have not stopped the trend. The good news is that you are still in a proactive window — ahead of any formal Notice of Violation — which means you control the schedule, the design, and the capital budget for addressing this. The purpose of this scoping engagement is to characterize the discharge profile, size the right treatment architecture, and produce a capital recommendation you can take to authorization. The fully-engineered solution — equalization, automated pH neutralization, and a biological treatment stage — is projected to cost $1.5–6M directionally (range narrows once flows and batch cycle are confirmed), which compares favorably to the 5-year cost of the alternative: approximately $3.5–12M in ongoing surcharges, risk-adjusted enforcement exposure, and the premium of a forced retrofit under a regulatory compliance schedule. Acting now is the economically rational choice.",
+        "proposedScope": [
+          "Phase 1 — Scoping and Characterization: Review six months of effluent sampling data; obtain and analyze plant flow rates, hydraulic loading profile, and batch changeover schedule; characterize COD mass loading and pH excursion profile by batch type; assess existing treatment infrastructure and site footprint constraints; confirm regulatory posture with POTW pretreatment coordinator.",
+          "Phase 1 Deliverable: Scoping report presenting discharge characterization, treatment train alternatives analysis, directional capital cost estimates (±50% confidence), compliance pathway, and recommended approach for capital authorization.",
+          "Phase 2 — Engineering and Construction (upon authorization): Detailed design of equalization system (sized to batch cycle HRT), automated pH neutralization system (acid/caustic dosing with dual-probe redundancy and SCADA integration), and biological treatment stage (technology to be confirmed in Phase 1 — activated sludge, SBR, or MBR based on site footprint and effluent target). Construction, commissioning, and startup support included.",
+          "Phase 2 Deliverable: Permitted, operating treatment system achieving 85–95% COD removal and sustained pH control, with integrated SCADA-based effluent monitoring and compliance data record."
+        ],
+        "sizingAndPricing": "Phase 1 (Scoping Engagement): Paid scoping engagement, scope and fee to be confirmed with customer. Phase 2 (Engineering and Construction): $1.5–6M directional (MEDIUM-LOW confidence). Range driver: plant flow rates and batch changeover frequency — the primary unknowns that move the number 2× in either direction. Range narrows to approximately ±50% once Phase 1 characterization is complete. At flows below ~50K gpd, equalization and pH neutralization alone may achieve compliance (~$800K–1.5M); at flows above ~200K gpd with aggressive COD loading, a full biological stage is required ($3–6M+). All figures are directional and subject to site assessment, engineering scoping, and decision-maker confirmation. Firm pricing will be issued following Phase 1 completion.",
+        "schedule": "Phase 1 (Scoping): 4–8 weeks from engagement kick-off, dependent on data availability and site-access scheduling. Phase 2 (Engineering and Construction): 12–24 months from capital authorization, dependent on permitting timeline, technology selection, and site constraints. Target: Phase 2 capital authorization before end of current budget cycle to maintain the proactive compliance window ahead of any formal permit enforcement action. Schedule to be confirmed with customer at scoping kick-off.",
+        "commitments": [
+          {
+            "label": "Scoping engagement kick-off",
+            "text": "H2O Allegiant will initiate the Phase 1 scoping engagement within [X] days of executed agreement, including a kick-off meeting with the environmental compliance manager and any identified capital decision-makers.",
+            "owner": "H2O Allegiant project lead"
+          },
+          {
+            "label": "Phase 1 scoping deliverable",
+            "text": "H2O Allegiant will deliver the Phase 1 scoping report and capital authorization package within 4–8 weeks of kick-off, subject to timely provision of plant flow data, effluent sampling data, and site access.",
+            "owner": "H2O Allegiant project lead"
+          },
+          {
+            "label": "Cost-of-alternative analysis",
+            "text": "The Phase 1 deliverable will include a defensible 5-year cost-of-alternative comparison (band-aid path vs. engineered solution) structured for presentation at the capital authorization level.",
+            "owner": "H2O Allegiant project lead"
+          },
+          {
+            "label": "Phase 2 firm pricing",
+            "text": "Following Phase 1 completion and capital authorization, H2O Allegiant will issue a firm-priced Phase 2 engineering and construction proposal within [X] days.",
+            "owner": "H2O Allegiant project lead"
+          }
+        ],
+        "fundingPathway": "This project is funded through the customer's own environmental compliance capital program. As a private industrial discharger, the facility is not eligible for CWSRF or federal public-utility grant programs. Capital authorization follows the customer's internal approval process; the Phase 1 scoping deliverable is structured to serve as a capital authorization package for plant leadership. If the facility is part of a multi-site organization, corporate EHS capital programs may provide an alternative or supplemental authorization path.",
+        "riskAllocation": "H2O Allegiant scope of work covers scoping characterization, alternatives analysis, and engineering and construction of the treatment system as defined in this shell. Customer responsibilities include provision of representative effluent sampling data, site access for characterization and construction, and timely capital authorization following Phase 1 completion. Permitting responsibility, permit-agency coordination, and POTW notification strategy to be confirmed during Phase 1. Technology performance guarantees (COD removal and pH compliance) are subject to characterization of the actual discharge profile in Phase 1; performance commitments will be specified in the Phase 2 contract.",
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — internal use only; not for distribution to customer without field agent review and edit",
+        "workPackages": [
+          {
+            "id": "WP-1",
+            "name": "Discharge Characterization",
+            "outcome": "Confirmed flow rates, COD mass loading profile, and pH excursion characterization by batch type — sufficient to size equalization and biological stages within ±50%"
+          },
+          {
+            "id": "WP-2",
+            "name": "Existing Infrastructure Assessment",
+            "outcome": "Site walk and infrastructure review confirming available footprint, existing treatment assets, utility connections, and site constraints affecting treatment train layout"
+          },
+          {
+            "id": "WP-3",
+            "name": "Regulatory Posture Confirmation",
+            "outcome": "Written or documented confirmation of POTW pretreatment coordinator's awareness and enforcement posture; permit limit review; local-limits applicability confirmed"
+          },
+          {
+            "id": "WP-4",
+            "name": "Treatment Alternatives Analysis",
+            "outcome": "Three-option alternatives analysis (minimal controls, equalization + chemistry, full equalization + bio stage) with capital cost ranges, compliance confidence, and recommendation"
+          },
+          {
+            "id": "WP-5",
+            "name": "Scoping Report and Capital Recommendation",
+            "outcome": "Standalone capital authorization package suitable for plant leadership review, including directional capex range, compliance pathway, schedule, and risk-adjusted cost-of-alternative comparison"
+          }
+        ],
+        "sizingRows": [
+          {
+            "label": "Phase 2 Capex Range (directional)",
+            "value": "$1.5M – $6.0M"
+          },
+          {
+            "label": "Confidence",
+            "value": "MEDIUM-LOW — narrows ~2× once flows confirmed in Phase 1"
+          },
+          {
+            "label": "Primary Range Driver",
+            "value": "Plant flow rates and batch changeover frequency"
+          },
+          {
+            "label": "Low-End Scenario (<50K gpd)",
+            "value": "~$800K – $1.5M (EQ + pH neutralization only)"
+          },
+          {
+            "label": "High-End Scenario (>200K gpd, aggressive COD)",
+            "value": "~$3M – $6M+ (full EQ + bio stage)"
+          },
+          {
+            "label": "Recurring Operational Support (optional)",
+            "value": "~$80K – $200K/yr (monitoring, SOP, compliance reporting)"
+          }
+        ],
+        "outOfScope": [
+          {
+            "heading": "Assessment-stage regulatory determinations",
+            "body": "This scoping engagement does not constitute a final regulatory determination regarding permit compliance status, POTW enforcement posture, or categorical pretreatment standard applicability. Regulatory confirmation is a Phase 1 deliverable; formal legal or regulatory opinions are outside this scope."
+          },
+          {
+            "heading": "Process chemistry changes or batch sequencing modifications",
+            "body": "This scope addresses end-of-pipe wastewater treatment. Process-side changes to batch changeover chemistry, sequencing, or production scheduling are outside this scope, though they may be identified as complementary recommendations in the Phase 1 report."
+          },
+          {
+            "heading": "Multi-site or corporate-level EHS program design",
+            "body": "This engagement is scoped to a single Louisiana facility. Multi-site program design, corporate EHS compliance frameworks, or other facilities are not included in this scope of work."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Capital decision-maker (operations lead, plant manager, or finance authority) identified by role and committed to participation in scoping deliverable review",
+            "closer": "Field agent to identify in tomorrow's meeting"
+          },
+          {
+            "gate": "Plant flow rates and batch changeover frequency confirmed for Phase 1 sizing",
+            "closer": "Customer to provide DCS/SCADA data as Phase 1 input"
+          },
+          {
+            "gate": "POTW enforcement posture confirmed (informal vs. formal notice status)",
+            "closer": "Field agent to surface in tomorrow's meeting; Phase 1 WP-3 to document formally"
+          }
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "field-brief",
+      "payload": {
+        "customer": {
+          "name": "Chemical Manufacturing Plant",
+          "location": "Louisiana Facility",
+          "state": "Louisiana",
+          "basin": "Gulf Coast"
+        },
+        "stage": "Scope",
+        "confidence": "MEDIUM",
+        "date": "2025-07-14",
+        "stopFlags": [],
+        "narrativeRiskCallouts": [
+          "Flows and batch cycle frequency are not yet confirmed — the $1.5–6M capex range narrows 2× once these are pinned in the scoping engagement.",
+          "Budget authority has not been confirmed — the environmental compliance manager is the engaged contact but is unlikely to be the capital signatory for a project of this size."
+        ],
+        "sections": {
+          "whatThisIs": {
+            "insight": "The customer is in a proactive window — six months of trending data hasn't triggered a formal NOV yet. Every month that passes without a solution, that window narrows and the cost of the same project goes up.",
+            "body": "A Louisiana chemical manufacturing plant is trending toward a COD permit exceedance driven by batch process changeovers that produce both organic loading spikes and intermittent pH swings. The environmental compliance manager has shared six months of effluent sampling data confirming the trajectory and agreed to a paid scoping engagement. The problem is structural — batch changeovers create predictable, repeating load shocks that operator adjustments cannot reliably dampen. The customer is self-identified and self-motivated, still ahead of formal enforcement, and already committed to scoping. The conversation tomorrow is about shaping what gets built and pulling in the decision-makers who will approve capital."
+          },
+          "whatWeWouldPropose": {
+            "insight": "An engineered three-stage train — equalization, pH neutralization, and biological treatment — closes the COD gap structurally and eliminates recurring surcharge and enforcement exposure. Their band-aid alternative costs ~$3.5–12M over 5 years; our path costs ~$1.5–6M with risk extinguished.",
+            "recommendedApproach": "Equalization (4–12 hr HRT, sized to batch cycle) to buffer hydraulic and organic load shocks → automated pH neutralization (acid/caustic dosing, dual-probe redundancy) to eliminate changeover swings → biological treatment stage (activated sludge, SBR, or MBR based on site footprint) targeting 85–95% COD removal → SCADA-integrated effluent monitoring to build the compliance data record. Deal anchor: equalization + bio stage. Phase-2 prize: additional discharge streams or PFAS source-control horizon common at chemical manufacturers.",
+            "winWinArguments": [
+              {
+                "lead": "Permanent compliance, not a band-aid.",
+                "body": "Six months of trending data already builds the evidentiary record the permit authority needs to escalate. Engineered equalization and biological treatment closes the COD gap structurally — the trend line stops. Operator adjustments haven't stopped it; a designed system will."
+              },
+              {
+                "lead": "Proactive timing is materially cheaper than enforcement-forced retrofit.",
+                "body": "The customer is still in a self-identified window before any formal NOV. Acting now means they control the schedule, the design, and the capital budget. A forced retrofit after a Consent Order compresses the timeline to 12–18 months and typically adds 30–50% to project cost through emergency engineering and accelerated procurement."
+              },
+              {
+                "lead": "Operational burden eliminated, not just managed.",
+                "body": "Batch changeover pH swings create chronic operator burden and daily monitoring anxiety. A properly sized equalization and neutralization train removes the firefighting and lets the environmental compliance manager focus on compliance documentation and permit reporting rather than reactive batch-by-batch adjustments."
+              }
+            ],
+            "costOfAlternativeRows": [
+              {
+                "component": "Capex (Year 0)",
+                "theirPath": "~$50–150K (chemistry adjustments, minimal controls)",
+                "ourProposal": "~$1.5–6M (engineered EQ + pH + biological stage)"
+              },
+              {
+                "component": "Ongoing COD surcharges, 5yr",
+                "theirPath": "~$500K–2M (POTW surcharge rates $0.50–2.00/lb over limit; band-aid path does not eliminate structural exceedance)",
+                "ourProposal": "Eliminated — COD brought to permit compliance structurally"
+              },
+              {
+                "component": "Risk-adjusted enforcement exposure (NOV → Consent Order), Yrs 1–3",
+                "theirPath": "~$300K–1.5M probability-weighted (stipulated penalties $10–50K/day per event + external oversight costs)",
+                "ourProposal": "Near-zero — compliance record established before escalation"
+              },
+              {
+                "component": "Forced retrofit under Consent Order, Yr 2–3",
+                "theirPath": "~$2.5–9M at emergency timing (30–50% premium on compressed schedule)",
+                "ourProposal": "Not applicable — planned project captures full schedule savings"
+              },
+              {
+                "component": "5-Year Total (mid-range)",
+                "theirPath": "~$3.5–12M + uncapped enforcement tail",
+                "ourProposal": "~$1.5–6M, risk extinguished",
+                "isTotal": true
+              }
+            ],
+            "dealSizeSensitivity": "Range driver: plant flows and batch cycle frequency — confirm in scoping. <50K gpd may close with EQ + chemistry alone (~$800K–1.5M); >200K gpd with aggressive COD loading requires full bio stage ($3–6M+). Phase-2 (additional streams, PFAS horizon) could double engagement value. Recurring operational support contract adds ~$80–200K/yr."
+          },
+          "whatCouldKillIt": {
+            "insight": "The most likely deal-stopper isn't the customer's willingness — it's budget authority sitting outside the room. The environmental compliance manager is engaged and motivated; the capital signatory probably isn't in the conversation yet.",
+            "risks": [
+              {
+                "name": "Budget authority not in the room",
+                "mechanism": "A $1.5–6M capital project requires sign-off from operations or finance leadership who haven't participated in this conversation. Scoping without them produces a proposal that hits a wall at budget approval — or worse, restarts with a competing vendor once internal stakeholders are engaged.",
+                "mitigation": "Tomorrow: explicitly ask who else needs to be in the room when a capital solution is on the table. Name it as a scoping-engagement step, not a gatekeeping move. Get the operations lead and financial authority identified by role before the scoping engagement ends."
+              },
+              {
+                "name": "Regulatory clock slower than expected",
+                "mechanism": "If the POTW is slow to escalate trending data to a formal enforcement action, the customer's urgency softens. The proactive-window argument loses force, the timeline stretches, and budget competition from other plant priorities fills the gap.",
+                "mitigation": "Surface the POTW's enforcement posture early in tomorrow's conversation — has the permit authority seen this data? Has any informal outreach occurred? Use the answer to calibrate urgency framing."
+              },
+              {
+                "name": "Scope collapses to point-fix",
+                "mechanism": "Customer decides equalization alone is 'good enough for now,' skipping the biological treatment stage. Deal compresses to <$500K with no phase-2 hook and no recurring support contract.",
+                "mitigation": "Hold the cost-of-alternative argument — a point-fix that doesn't close the COD gap structurally still incurs the surcharge and enforcement exposure. Show the 5-year math before agreeing to any scope reduction."
+              }
+            ]
+          },
+          "doThisNext": {
+            "insight": "The paid scoping engagement is confirmed — tomorrow's meeting is about shaping scope and pulling in the capital decision-makers before the scoping engagement ends. Don't leave without knowing who approves capital.",
+            "actions": [
+              {
+                "title": "Identify the capital decision-maker",
+                "timeframe": "Tomorrow — first 15 minutes",
+                "body": "Before diving into technical scoping, ask directly: 'When a capital project of this size goes to approval, who needs to be in that conversation — operations lead, plant manager, finance?' Frame it as a scoping-engagement step. Get names by role and a commitment to include them before the scoping work product is presented."
+              },
+              {
+                "title": "Pin plant flows and batch cycle to narrow the range",
+                "timeframe": "During scoping engagement — within 7 days",
+                "body": "The capex range is $1.5–6M until flows and batch changeover frequency are confirmed. Request access to DCS/SCADA flow data and the batch production schedule as a scoping deliverable. This single data pull narrows the range by ~2× and makes the cost-of-alternative argument defensible at the capital approval meeting."
+              },
+              {
+                "title": "Confirm POTW enforcement posture",
+                "timeframe": "Tomorrow or within 7 days",
+                "body": "Ask whether the POTW permit authority is already aware of the trending data — informal outreach, pretreatment coordinator contact, or anything in writing. The answer calibrates how much urgency the proactive-window argument can carry and whether the 5-year enforcement exposure in the cost-of-alternative table needs to be accelerated."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "playbook",
+      "payload": {
+        "customer": {
+          "name": "Chemical Manufacturing Plant",
+          "location": "Louisiana Facility",
+          "state": "Louisiana",
+          "basin": "Gulf Coast"
+        },
+        "stage": "Scope",
+        "subtitle": "Paid Scoping Engagement — Batch-Process COD & pH Compliance",
+        "header": {
+          "subStreams": ["Industrial discharge — COD & pH compliance"],
+          "stageIntro": "Deal is at Scope. Customer has agreed to a paid scoping engagement. Conversation tomorrow is about shaping what gets built and pulling capital decision-makers into the room.",
+          "insight": "The customer is in a proactive window — still ahead of formal enforcement. The paid scoping commitment is strong. The risk is that the conversation stays at the environmental manager level and never reaches the capital signatory.",
+          "orientationLine": "Environmental compliance manager is the primary contact. Financial and operations decision-makers are not yet confirmed participants. Use this conversation to identify them by role and set the stage for a complete capital approval path."
+        },
+        "themes": [
+          {
+            "title": "Open with the data, not the solution",
+            "framing": "The six months of effluent data is the customer's own evidence. Open by anchoring on what the data shows before proposing anything. Gets the customer nodding at the problem before the solution is on the table.",
+            "questions": [
+              "Walk me through what you're seeing in the six-month data — where are the COD spikes most pronounced?",
+              "Are the pH swings correlated with specific batch changeover sequences, or is the pattern less predictable than that?",
+              "What does the trend line look like to you — is it linear, or are there step changes after specific events?",
+              "Has anything changed operationally in the last six months that lines up with the trend?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance",
+            "whyItMatters": [
+              "The customer's own data is the most credible framing tool available — let them describe the problem before you characterize it.",
+              "Batch-correlated pH swings signal an equalization design problem, not a chemistry-adjustment problem. Establishing this distinction early prevents scope collapse to a point-fix."
+            ]
+          },
+          {
+            "title": "Surface the regulatory posture",
+            "framing": "The proactive-window argument depends on the permit authority not yet being formally engaged. Confirm this before relying on it.",
+            "questions": [
+              "Has the POTW or permit authority seen this data yet, or has this been an internal identification so far?",
+              "Have you had any informal conversations with the pretreatment coordinator at the receiving POTW?",
+              "Is there anything in your permit — a compliance schedule, a footnote on COD limits — that you're watching relative to this trend?",
+              "What's your read on how quickly the POTW moves from informal observation to formal notice in situations like this?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance",
+            "whyItMatters": [
+              "If the POTW is already aware, the urgency window may be shorter than assumed — or a formal enforcement clock may already be running.",
+              "The answer determines whether the cost-of-alternative enforcement exposure rows are near-term or theoretical."
+            ]
+          },
+          {
+            "title": "Identify the capital decision landscape",
+            "framing": "The environmental compliance manager is engaged and motivated. A $1.5–6M capital project will require operations and finance sign-off. Identify the path now.",
+            "questions": [
+              "When a capital project of this size goes to approval at your facility, who else needs to be in that conversation — plant manager, operations lead, finance?",
+              "Is capital for environmental compliance projects run through a separate budget track, or does it compete with production capex?",
+              "What does your typical approval timeline look like from scoping recommendation to capital authorization?",
+              "Is there a budget cycle coming up that we should be targeting for capital authorization?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance",
+            "whyItMatters": [
+              "Scoping without the capital decision-maker in the room produces a recommendation that hits a wall at budget approval.",
+              "Understanding the approval timeline now lets us sequence the scoping deliverable to land before the next budget gate."
+            ],
+            "accentIndex": 2
+          },
+          {
+            "title": "Scope the operational reality",
+            "framing": "Flow rates and batch changeover frequency are the primary unknowns that drive the capex range. Closing these turns a $1.5–6M range into a $1.5–3M or $3–6M range.",
+            "questions": [
+              "What are your average daily flows through the wastewater treatment system, and how much do they vary across your batch cycle?",
+              "How many batch changeovers are happening per day or per week, and what's the typical pH excursion profile — how wide, how fast, how long?",
+              "Do you have any existing equalization capacity — a holding tank, a buffer vessel — or are we starting from scratch?",
+              "What's the current treatment train configuration — is there any biological stage in place, or is it primarily physical-chemical?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance"
+          },
+          {
+            "title": "Surface competing alternatives",
+            "framing": "Confirm this is a sole-source engagement, or identify what else is in the conversation early.",
+            "questions": [
+              "Is this a sole-source scoping engagement with us, or are you also talking to other vendors or consultants?",
+              "Has your team looked at any internal options — additional operator controls, batch sequencing changes, chemistry modifications — as a near-term path?",
+              "Have you seen any proposals or recommendations from your corporate EHS group on this?",
+              "What would 'good enough for now' look like internally, and why isn't that the path you're taking?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance",
+            "whyItMatters": [
+              "If internal alternatives are being seriously considered, the cost-of-alternative argument needs to price those out, not just the do-nothing path.",
+              "A sole-source confirmation changes how aggressively we structure the scoping deliverable."
+            ]
+          },
+          {
+            "title": "Test the 5-year cost frame",
+            "framing": "The cost-of-alternative argument is the executive headline. Test which version of it lands hardest before deciding how to lead at the capital approval meeting.",
+            "questions": [
+              "If you stay on the current trajectory, what does the next 12 months look like from a permit compliance standpoint?",
+              "Has anyone at your facility put a number on what sustained COD surcharges cost annually at your current loading levels?",
+              "How does your finance team typically look at environmental compliance capex — as a cost center, or as risk mitigation with a calculable avoided-cost ROI?",
+              "If we could show that the 5-year cost of doing nothing is materially higher than the project investment, would that argument carry weight at the capital approval level?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance"
+          },
+          {
+            "title": "Anchor the scoping engagement deliverables",
+            "framing": "The paid scoping engagement needs a clear deliverable that lands at the right decision-maker level. Define it now so the work product is built for the right audience.",
+            "questions": [
+              "What does a successful scoping deliverable look like to you — a technical recommendation, a capital estimate, a compliance pathway document, or a combination?",
+              "Who is the audience for the scoping deliverable — just you, or do you need something that can go to plant leadership or corporate EHS?",
+              "Are there any constraints on the scoping engagement — site access, timing, data availability — that we should know about now?",
+              "What would need to be true at the end of the scoping engagement for you to feel confident recommending capital authorization?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance",
+            "accentIndex": 3
+          },
+          {
+            "title": "Surface the phase-2 horizon",
+            "framing": "Chemical manufacturers frequently have additional discharge streams, PFAS exposure, or regulatory horizon changes that make a phase-2 scope natural. Surface this without over-reaching.",
+            "questions": [
+              "Are there other wastewater streams at this facility that have their own compliance considerations, or is this COD stream the primary one?",
+              "Has your facility had any conversations about PFAS in your process chemistry or discharge streams?",
+              "Are there any upcoming process changes — new product lines, capacity expansions — that would affect the discharge profile we're scoping for?",
+              "Is this facility part of a multi-site organization where other plants might have similar challenges?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance"
+          },
+          {
+            "title": "Set the concrete next step",
+            "framing": "Leave tomorrow's meeting with a defined next step, a date, and the right people committed. Don't let 'we'll be in touch' be the close.",
+            "questions": [
+              "Who should be in the room when we present the scoping deliverable — can we make sure the capital decision-maker is included?",
+              "What's a realistic timeline for the scoping work given our access to flow data and site access?",
+              "Can we set a date now for the scoping deliverable presentation?",
+              "Is there anything on your end — internal approvals, data pulls, site scheduling — that we should coordinate around?"
+            ],
+            "substreamTag": "Industrial discharge — COD & pH compliance"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "analytical-read",
+      "payload": {
+        "customer": {
+          "name": "Chemical Manufacturing Plant",
+          "location": "Louisiana Facility",
+          "state": "Louisiana",
+          "basin": "Gulf Coast"
+        },
+        "subtitle": "Evidenced read on batch-process COD and pH compliance at a Louisiana chemical manufacturing facility",
+        "subStreamsLine": "Sub-streams: industrial discharge COD compliance, batch changeover pH management, equalization design gap, regulatory posture, decision-maker landscape, phase-2 horizon",
+        "closingInsight": "The customer is in the best possible posture — self-identified, data-sharing, paid-scoping committed, and still ahead of formal enforcement. The single highest-leverage move tomorrow is not technical; it is identifying who approves capital and getting them in the room before the scoping engagement ends.",
+        "summary": "A Louisiana chemical manufacturing plant has self-identified a trending COD permit exceedance in its process wastewater discharge, driven by batch process changeovers that produce repeating organic load spikes and intermittent pH swings. Six months of effluent sampling data provided by the environmental compliance manager confirms the trajectory. The customer has agreed to a paid scoping engagement. This read classifies the deal at Scope stage (MEDIUM confidence), decomposes the single sub-stream under the industrial-discharge lens, and sizes the engagement at $1.5–6M directional (MEDIUM-LOW confidence, pending flow confirmation). The cost-of-alternative analysis shows the customer's band-aid path costs ~$3.5–12M over 5 years versus our path at ~$1.5–6M with enforcement risk extinguished. Kill risks are budget authority outside the room and regulatory clock slower than expected.",
+        "gateState": "OPEN_WITH_CONDITIONS",
+        "gateContent": "Paid scoping engagement confirmed. Qualification gate is open with conditions: capital decision-maker (operations/finance authority) not yet confirmed as a participant. Advance criteria require their identification before scoping deliverable is presented.",
+        "flags": [
+          {
+            "id": "DM-001",
+            "severity": "SPECIALIST",
+            "evidence": "Environmental compliance manager is the sole confirmed contact. A $1.5–6M capital project requires operations and/or finance sign-off. Budget authority has not been identified or engaged.",
+            "status": "Open"
+          },
+          {
+            "id": "DATA-001",
+            "severity": "ATTENTION",
+            "evidence": "Plant flow rates and batch changeover frequency not in evidence. Capex range spans $1.5–6M until these are confirmed. Sizing narrows approximately 2× once flows are pinned.",
+            "status": "Open"
+          },
+          {
+            "id": "REG-001",
+            "severity": "ATTENTION",
+            "evidence": "POTW enforcement posture not characterized. Unknown whether permit authority has seen trending data or issued informal notice. Proactive-window argument calibration depends on this confirmation.",
+            "status": "Open"
+          }
+        ],
+        "subStreamLens": [
+          {
+            "subStream": "Industrial discharge — COD & pH compliance",
+            "activeCondition": "Six months of effluent data trending toward permit exceedance. Batch changeover-driven COD spikes and pH swings confirmed. Paid scoping engagement agreed. Formal NOV not yet issued.",
+            "evidenceAnchor": "ECM-01"
+          }
+        ],
+        "stageGapAnalysis": [
+          {
+            "required": "Confirm capital decision-maker (operations lead, plant manager, or finance authority) by role and secure their participation before scoping deliverable presentation",
+            "status": "OPEN",
+            "source": "DM-001"
+          },
+          {
+            "required": "Obtain plant flow rates and batch changeover frequency to narrow capex range from $1.5–6M to a defensible ±50% estimate",
+            "status": "OPEN",
+            "source": "DATA-001"
+          },
+          {
+            "required": "Confirm POTW enforcement posture — has permit authority seen trending data or issued informal notice?",
+            "status": "OPEN",
+            "source": "REG-001"
+          },
+          {
+            "required": "Confirm whether competing vendors or internal alternatives are being evaluated alongside this scoping engagement",
+            "status": "OPEN",
+            "source": "Field observation"
+          }
+        ],
+        "costRows": [
+          {
+            "row": "Capex (Year 0) — band-aid path vs. engineered solution",
+            "basis": "Band-aid: chemistry adjustments, minimal controls (~$50–150K). Engineered: equalization + pH neutralization + biological stage ($1.5–6M per industrial-discharge lens cheat sheet at this facility scale)",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "Ongoing COD surcharges, 5-year cumulative",
+            "basis": "POTW surcharge rates $0.50–2.00/lb COD over permit limit; sustained exceedance at a medium chemical plant estimated at $100K–400K/yr; band-aid path does not close structural COD gap. Engineered path eliminates surcharge exposure.",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Risk-adjusted enforcement exposure (NOV → Consent Order), Years 1–3",
+            "basis": "Louisiana industrial pretreatment enforcement arc: informal notice to formal NOV to Consent Order typically 12–24 months. Stipulated penalties $10–50K/day per exceedance event plus mandatory external oversight. Probability-weighted on continued trending trajectory.",
+            "confidence": "LOW"
+          },
+          {
+            "row": "Forced retrofit under Consent Order, Year 2–3",
+            "basis": "Engineering + construction under compressed Consent Order schedule carries 30–50% premium over planned project. Forced version of this scope estimated at $2.5–9M vs. $1.5–6M on planned path.",
+            "confidence": "MEDIUM"
+          },
+          {
+            "row": "5-Year Total (mid-range)",
+            "basis": "Band-aid path: surcharges + enforcement + forced retrofit = ~$3.5–12M. Engineered path: ~$1.5–6M with enforcement risk extinguished. Net advantage to engineered path: $1.5–6M+ over 5 years, plus risk tail eliminated.",
+            "confidence": "LOW"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Engagement summary",
+            "body": "A Louisiana chemical manufacturing facility is trending toward a permit exceedance on COD in its process wastewater discharge. The driver is batch process changeovers that produce repeating organic load spikes and intermittent pH swings — a structural equalization gap, not isolated events. The environmental compliance manager self-identified the trajectory from six months of effluent sampling data and shared that data proactively. The customer agreed to a paid scoping engagement, placing the deal at Scope stage. This analytical read covers the single active sub-stream (industrial-discharge / COD and pH compliance), stages the deal, sizes the engagement directionally, and records the active flag inventory for upward review.",
+            "evidenceTags": ["ECM-01"],
+            "evidenceSource": "ECM-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Sub-stream decomposition",
+            "body": "One sub-stream is active at this facility based on available evidence. The lens is industrial-discharge; the sub-case is indirect-discharger local-limits compliance for COD and pH. The sub-stream encompasses the entire process wastewater discharge from batch manufacturing operations. The environmental compliance manager has confirmed the COD trend and the pH excursion pattern. No additional discharge streams have been identified in the evidence base, but the chemical manufacturing context creates a credible phase-2 horizon (additional streams, PFAS source-control) that has not yet been explored.",
+            "evidenceTags": ["ECM-01"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Lens classification",
+            "body": "The industrial-discharge lens applies. Sub-case: indirect discharger to POTW under local pretreatment limits for COD and pH. Treatment design must achieve permit compliance at the fence line before discharge to the receiving POTW. Regulatory driver is the local pretreatment program enforced by the receiving POTW, backed by 40 CFR Part 403 general pretreatment standards. Louisiana DEQ provides secondary oversight. No categorical pretreatment standard (40 CFR effluent guideline subcategory) has been identified in the evidence base for this facility — local limits appear to be the operative constraint. The phase-2 horizon may include categorical ELG exposure depending on product chemistry, which has not been confirmed.",
+            "evidenceTags": ["ECM-01"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Decision-maker matrix",
+            "body": "The environmental compliance manager is the sole confirmed contact. This role is the operational decision-maker for compliance strategy but is unlikely to be the capital budget signatory for a project in the $1.5–6M range. The capital decision-maker — typically the plant manager, operations director, or a finance/EHS lead depending on the customer's org structure — has not been identified or engaged. Corporate EHS involvement (for a multi-site organization) has not been confirmed. This is the primary deal-stage risk: scoping without the capital decision-maker in the room produces a deliverable that hits a wall at budget approval.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Recommended approach",
+            "body": "The proposed solution architecture for this sub-stream comprises four stages in process order. First, equalization sized at 4–12 hours hydraulic retention time (HRT) calibrated to the batch changeover cycle, to buffer both hydraulic and organic load shocks before any treatment stage. Second, automated pH neutralization with acid and caustic dosing and dual-probe redundancy, to eliminate changeover-driven pH swings that currently create both permit exposure and operator burden. Third, a biological treatment stage — technology to be confirmed during scoping (activated sludge, sequencing batch reactor, or membrane bioreactor depending on site footprint and effluent target) — targeting 85–95% COD removal to achieve structural permit compliance. Fourth, SCADA-integrated effluent monitoring to produce the compliance data record the POTW and permit authority will require. The deal anchor is the equalization and biological treatment combination. The phase-2 prize is additional discharge streams or a PFAS source-control scope, common at chemical manufacturing facilities.",
+            "evidenceTags": ["ECM-01"],
+            "evidenceSource": "ECM-01",
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Win-win argument",
+            "body": "Three customer-side outcomes anchor the value proposition. First: permanent compliance rather than episodic band-aids. Six months of trending data has already built the evidentiary record the permit authority needs to escalate; an engineered solution closes the trend line structurally. Operator adjustments have not stopped the trend; a designed equalization and biological system will. Second: proactive timing is materially cheaper than enforcement-forced retrofit. The customer is still in a self-identified window before any formal NOV. Acting now means they control the schedule, design, and capital allocation. A Consent Order-forced retrofit compresses the timeline to 12–18 months and typically adds 30–50% to project cost through emergency engineering and accelerated procurement. Third: operational burden eliminated. Batch changeover pH swings create chronic operator anxiety and daily monitoring load. A properly sized equalization and neutralization train removes the firefighting and lets the environmental compliance team focus on compliance documentation rather than reactive management.",
+            "evidenceTags": ["ECM-01"],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Cost of the alternative",
+            "body": "The cost-of-alternative analysis is structured as a five-year comparison between the customer's band-aid path (chemistry adjustments, minimal controls) and the engineered solution path. The table below presents each cost category with basis and confidence tier. The executive bottom line: the band-aid path costs approximately $3.5–12M over five years inclusive of ongoing surcharges, risk-adjusted enforcement escalation, and the premium associated with a forced retrofit under a Consent Order schedule. The engineered path costs approximately $1.5–6M with enforcement risk extinguished. The net present value advantage of acting now is material even at the low end of the range.",
+            "evidenceTags": ["ECM-01"],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Active flag inventory",
+            "body": "Three active flags are recorded in the current evidence base. DM-001 (SPECIALIST): the capital decision-maker has not been identified or engaged. This flag must be closed before the scoping deliverable is presented. DATA-001 (ATTENTION): plant flow rates and batch changeover frequency are not in evidence; the capex range remains wide at $1.5–6M until these are confirmed. REG-001 (ATTENTION): POTW enforcement posture is not characterized; whether the permit authority has seen the trending data or issued informal notice is unknown. The proactive-window argument and the urgency framing of the cost-of-alternative table both depend on this confirmation.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          },
+          {
+            "heading": "Risks",
+            "body": "Three kill risks are ranked in order of severity. First (SPECIALIST): budget authority not in the room. A capital project of this size requires operations or finance sign-off that has not yet been secured. Mitigation: explicitly identify the capital decision-maker by role in tomorrow's meeting and commit to their inclusion before the scoping deliverable is presented. Second (SPECIALIST): regulatory clock slower than expected. If the POTW is slow to escalate the trending data to formal enforcement, the customer's urgency may soften before capital authorization is secured. Mitigation: surface the POTW's enforcement posture early in tomorrow's conversation and use the answer to calibrate urgency framing. Third (ATTENTION): scope collapse to a point-fix. If the customer decides equalization alone is sufficient for now, the biological stage and the recurring support contract are lost, compressing the deal to under $500K with no phase-2 hook. Mitigation: hold the cost-of-alternative argument — a point-fix that doesn't close the COD gap structurally still incurs the full surcharge and enforcement exposure.",
+            "evidenceTags": [],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "Funding pathway",
+            "body": "The industrial-discharge lens does not carry a natural public funding pathway (CWSRF, WIFIA, or federal grants are structured for public utilities, not private industrial dischargers). The customer's own capital program is the primary funding vehicle. Environmental compliance capex at chemical manufacturing facilities is typically categorized as risk-mitigation investment with a calculable avoided-cost ROI; the 5-year cost-of-alternative analysis provides the ROI framing. If the facility is part of a multi-site organization, corporate EHS capital programs may provide an alternative authorization path. No CWSRF or grant pathway has been identified as applicable.",
+            "evidenceTags": [],
+            "confidenceTier": "MEDIUM"
+          },
+          {
+            "heading": "What we do not commit to yet",
+            "body": "This analytical read does not commit to specific flow-based sizing, technology selection, or firm pricing — those require plant flow data, a batch changeover profile, and a site walk that are deliverables of the paid scoping engagement. The capex range of $1.5–6M is directional and subject to a 2× narrowing once flows are confirmed. The regulatory posture characterization (proactive window duration, enforcement escalation timeline) is based on Louisiana pretreatment enforcement patterns and has not been confirmed against this specific facility's permit authority relationship. Final regulatory determinations are the province of Assessment-stage work.",
+            "evidenceTags": [],
+            "confidenceTier": "LOW"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "proposal-shell",
+      "payload": {
+        "customer": {
+          "name": "Chemical Manufacturing Plant",
+          "state": "Louisiana",
+          "basin": "Gulf Coast"
+        },
+        "subtitle": "Wastewater Compliance Scoping Engagement — Batch-Process COD & pH Treatment",
+        "executiveSummary": "Your facility has self-identified a structural compliance risk: six months of effluent sampling data show a trajectory toward permit exceedance on COD, driven by batch process changeovers that produce repeating organic load spikes and intermittent pH swings. Operator adjustments have not stopped the trend. The good news is that you are still in a proactive window — ahead of any formal Notice of Violation — which means you control the schedule, the design, and the capital budget for addressing this. The purpose of this scoping engagement is to characterize the discharge profile, size the right treatment architecture, and produce a capital recommendation you can take to authorization. The fully-engineered solution — equalization, automated pH neutralization, and a biological treatment stage — is projected to cost $1.5–6M directionally (range narrows once flows and batch cycle are confirmed), which compares favorably to the 5-year cost of the alternative: approximately $3.5–12M in ongoing surcharges, risk-adjusted enforcement exposure, and the premium of a forced retrofit under a regulatory compliance schedule. Acting now is the economically rational choice.",
+        "proposedScope": [
+          "Phase 1 — Scoping and Characterization: Review six months of effluent sampling data; obtain and analyze plant flow rates, hydraulic loading profile, and batch changeover schedule; characterize COD mass loading and pH excursion profile by batch type; assess existing treatment infrastructure and site footprint constraints; confirm regulatory posture with POTW pretreatment coordinator.",
+          "Phase 1 Deliverable: Scoping report presenting discharge characterization, treatment train alternatives analysis, directional capital cost estimates (±50% confidence), compliance pathway, and recommended approach for capital authorization.",
+          "Phase 2 — Engineering and Construction (upon authorization): Detailed design of equalization system (sized to batch cycle HRT), automated pH neutralization system (acid/caustic dosing with dual-probe redundancy and SCADA integration), and biological treatment stage (technology to be confirmed in Phase 1 — activated sludge, SBR, or MBR based on site footprint and effluent target). Construction, commissioning, and startup support included.",
+          "Phase 2 Deliverable: Permitted, operating treatment system achieving 85–95% COD removal and sustained pH control, with integrated SCADA-based effluent monitoring and compliance data record."
+        ],
+        "sizingAndPricing": "Phase 1 (Scoping Engagement): Paid scoping engagement, scope and fee to be confirmed with customer. Phase 2 (Engineering and Construction): $1.5–6M directional (MEDIUM-LOW confidence). Range driver: plant flow rates and batch changeover frequency — the primary unknowns that move the number 2× in either direction. Range narrows to approximately ±50% once Phase 1 characterization is complete. At flows below ~50K gpd, equalization and pH neutralization alone may achieve compliance (~$800K–1.5M); at flows above ~200K gpd with aggressive COD loading, a full biological stage is required ($3–6M+). All figures are directional and subject to site assessment, engineering scoping, and decision-maker confirmation. Firm pricing will be issued following Phase 1 completion.",
+        "schedule": "Phase 1 (Scoping): 4–8 weeks from engagement kick-off, dependent on data availability and site-access scheduling. Phase 2 (Engineering and Construction): 12–24 months from capital authorization, dependent on permitting timeline, technology selection, and site constraints. Target: Phase 2 capital authorization before end of current budget cycle to maintain the proactive compliance window ahead of any formal permit enforcement action. Schedule to be confirmed with customer at scoping kick-off.",
+        "commitments": [
+          {
+            "label": "Scoping engagement kick-off",
+            "text": "H2O Allegiant will initiate the Phase 1 scoping engagement within [X] days of executed agreement, including a kick-off meeting with the environmental compliance manager and any identified capital decision-makers.",
+            "owner": "H2O Allegiant project lead"
+          },
+          {
+            "label": "Phase 1 scoping deliverable",
+            "text": "H2O Allegiant will deliver the Phase 1 scoping report and capital authorization package within 4–8 weeks of kick-off, subject to timely provision of plant flow data, effluent sampling data, and site access.",
+            "owner": "H2O Allegiant project lead"
+          },
+          {
+            "label": "Cost-of-alternative analysis",
+            "text": "The Phase 1 deliverable will include a defensible 5-year cost-of-alternative comparison (band-aid path vs. engineered solution) structured for presentation at the capital authorization level.",
+            "owner": "H2O Allegiant project lead"
+          },
+          {
+            "label": "Phase 2 firm pricing",
+            "text": "Following Phase 1 completion and capital authorization, H2O Allegiant will issue a firm-priced Phase 2 engineering and construction proposal within [X] days.",
+            "owner": "H2O Allegiant project lead"
+          }
+        ],
+        "fundingPathway": "This project is funded through the customer's own environmental compliance capital program. As a private industrial discharger, the facility is not eligible for CWSRF or federal public-utility grant programs. Capital authorization follows the customer's internal approval process; the Phase 1 scoping deliverable is structured to serve as a capital authorization package for plant leadership. If the facility is part of a multi-site organization, corporate EHS capital programs may provide an alternative or supplemental authorization path.",
+        "riskAllocation": "H2O Allegiant scope of work covers scoping characterization, alternatives analysis, and engineering and construction of the treatment system as defined in this shell. Customer responsibilities include provision of representative effluent sampling data, site access for characterization and construction, and timely capital authorization following Phase 1 completion. Permitting responsibility, permit-agency coordination, and POTW notification strategy to be confirmed during Phase 1. Technology performance guarantees (COD removal and pH compliance) are subject to characterization of the actual discharge profile in Phase 1; performance commitments will be specified in the Phase 2 contract.",
+        "draftIntentBanner": true,
+        "internalOnlyFooterBanner": true,
+        "statusOfDocument": "DRAFT INTENT — internal use only; not for distribution to customer without field agent review and edit",
+        "workPackages": [
+          {
+            "id": "WP-1",
+            "name": "Discharge Characterization",
+            "outcome": "Confirmed flow rates, COD mass loading profile, and pH excursion characterization by batch type — sufficient to size equalization and biological stages within ±50%"
+          },
+          {
+            "id": "WP-2",
+            "name": "Existing Infrastructure Assessment",
+            "outcome": "Site walk and infrastructure review confirming available footprint, existing treatment assets, utility connections, and site constraints affecting treatment train layout"
+          },
+          {
+            "id": "WP-3",
+            "name": "Regulatory Posture Confirmation",
+            "outcome": "Written or documented confirmation of POTW pretreatment coordinator's awareness and enforcement posture; permit limit review; local-limits applicability confirmed"
+          },
+          {
+            "id": "WP-4",
+            "name": "Treatment Alternatives Analysis",
+            "outcome": "Three-option alternatives analysis (minimal controls, equalization + chemistry, full equalization + bio stage) with capital cost ranges, compliance confidence, and recommendation"
+          },
+          {
+            "id": "WP-5",
+            "name": "Scoping Report and Capital Recommendation",
+            "outcome": "Standalone capital authorization package suitable for plant leadership review, including directional capex range, compliance pathway, schedule, and risk-adjusted cost-of-alternative comparison"
+          }
+        ],
+        "sizingRows": [
+          {
+            "label": "Phase 2 Capex Range (directional)",
+            "value": "$1.5M – $6.0M"
+          },
+          {
+            "label": "Confidence",
+            "value": "MEDIUM-LOW — narrows ~2× once flows confirmed in Phase 1"
+          },
+          {
+            "label": "Primary Range Driver",
+            "value": "Plant flow rates and batch changeover frequency"
+          },
+          {
+            "label": "Low-End Scenario (<50K gpd)",
+            "value": "~$800K – $1.5M (EQ + pH neutralization only)"
+          },
+          {
+            "label": "High-End Scenario (>200K gpd, aggressive COD)",
+            "value": "~$3M – $6M+ (full EQ + bio stage)"
+          },
+          {
+            "label": "Recurring Operational Support (optional)",
+            "value": "~$80K – $200K/yr (monitoring, SOP, compliance reporting)"
+          }
+        ],
+        "outOfScope": [
+          {
+            "heading": "Assessment-stage regulatory determinations",
+            "body": "This scoping engagement does not constitute a final regulatory determination regarding permit compliance status, POTW enforcement posture, or categorical pretreatment standard applicability. Regulatory confirmation is a Phase 1 deliverable; formal legal or regulatory opinions are outside this scope."
+          },
+          {
+            "heading": "Process chemistry changes or batch sequencing modifications",
+            "body": "This scope addresses end-of-pipe wastewater treatment. Process-side changes to batch changeover chemistry, sequencing, or production scheduling are outside this scope, though they may be identified as complementary recommendations in the Phase 1 report."
+          },
+          {
+            "heading": "Multi-site or corporate-level EHS program design",
+            "body": "This engagement is scoped to a single Louisiana facility. Multi-site program design, corporate EHS compliance frameworks, or other facilities are not included in this scope of work."
+          }
+        ],
+        "gatesToClose": [
+          {
+            "gate": "Capital decision-maker (operations lead, plant manager, or finance authority) identified by role and committed to participation in scoping deliverable review",
+            "closer": "Field agent to identify in tomorrow's meeting"
+          },
+          {
+            "gate": "Plant flow rates and batch changeover frequency confirmed for Phase 1 sizing",
+            "closer": "Customer to provide DCS/SCADA data as Phase 1 input"
+          },
+          {
+            "gate": "POTW enforcement posture confirmed (informal vs. formal notice status)",
+            "closer": "Field agent to surface in tomorrow's meeting; Phase 1 WP-3 to document formally"
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "inputTokens": 214437,
+    "outputTokens": 13829,
+    "costUsd": 0.850746
+  },
+  "stepCount": 9,
+  "finalText": "All four artifacts are ready. Here's your complete package for tomorrow.\n\n---\n\n## Your package is ready — Louisiana Chemical Plant, Scope Stage\n\n**The headline going into tomorrow's meeting:**\n\nThe customer's band-aid path costs **~$3.5–12M over 5 years** (ongoing surcharges + risk-adjusted enforcement exposure + the premium of a Consent Order-forced retrofit). Your engineered solution costs **~$1.5–6M with enforcement risk extinguished.** The proactive window is open — and it narrows every month without a solution on the table.\n\n---\n\n### Four artifacts, in read order:\n\n| # | Artifact | File |\n|---|----------|------|\n| 1 | **Field Brief** — read this first, 3-5 minutes | `chemical-manufacturing-plant_field-brief.pdf` |\n| 2 | **Playbook** — 9 themed question sets, have open during the call | `chemical-manufacturing-plant_playbook.pdf` |\n| 3 | **Analytical Read** — evidence-tagged write-up for sending upward | `chemical-manufacturing-plant_analytical-read.pdf` |\n| 4 | **Proposal Shell** — scoping-language seed, edit before any customer use | `chemical-manufacturing-plant_proposal-shell.pdf` |\n\n---\n\n### The three things that matter most tomorrow:\n\n1. **Identify the capital decision-maker in the first 15 minutes.** The environmental compliance manager is engaged and motivated, but a $1.5–6M project won't clear budget on their authority alone. Ask directly: *\"When a capital project of this size goes to approval, who else needs to be in that conversation?\"* Don't leave without a name by role and a commitment to include them before the scoping deliverable is presented.\n\n2. **Get flow rates and batch changeover data committed as a scoping input.** That single data pull narrows the capex range by ~2× and makes the cost-of-alternative argument defensible at the capital approval level.\n\n3. **Surface the POTW enforcement posture early.** The urgency framing — and how hard the 5-year math needs to hit — depends on whether the permit authority has already seen the trending data or not.\n\n---\n\n*Deal stage: **Scope** (MEDIUM confidence). No STOP flags active. Two SPECIALIST flags open: budget authority not yet in the room; regulatory clock pace unconfirmed.*"
+}

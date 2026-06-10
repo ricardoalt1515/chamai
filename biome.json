@@ -12,6 +12,7 @@
       "**/app/**/*",
       "!**/.next/**/*",
       "**/amplify/**/*",
+      "**/evals/**/*",
       "**/.vscode/**/*",
       "**/index.html",
       "**/middleware.ts",
