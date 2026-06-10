@@ -12,6 +12,8 @@
     "test": "vitest run",
     "eval": "vitest run --config evals/vitest.config.ts",
     "eval:live": "EVALS_LIVE=1 vitest run --config evals/vitest.config.ts",
+    "eval:judge": "EVALS_JUDGE=1 vitest run --config evals/vitest.config.ts evals/judge.eval.ts",
+    "eval:calibration": "vitest run --config evals/vitest.config.ts evals/calibration.eval.ts",
     "auth:create-user": "bun src/config/cognito-create-user.ts",
     "amplify:sandbox": "npx ampx sandbox",
     "verify:amplify-config": "bun src/config/amplify-runtime.ts",
