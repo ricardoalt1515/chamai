@@ -88,6 +88,15 @@ match, within-one-point, and mean absolute error. With N=12, kappa-style statist
 unstable; MAE and within-1 degrade gracefully instead. The calibration gate asserts overall
 within-1 agreement ≥ 70% once labels exist.
 
+**Status: human calibration is pending.** The labels in `labels/human-labels.json` have not been
+filled yet, so no judge–human agreement number exists and none is claimed here. Two related
+caveats until that happens: the judge's first-run scores skew 4–5 (the typical LLM-judge
+leniency pattern — quantifying that skew against human labels is the point of the calibration
+loop), and the nightly workflow is defined but stays disarmed until its OIDC role secret
+(`AWS_BEDROCK_EVAL_ROLE_ARN`) is configured — so live model/prompt drift is currently caught
+only by manually-run `eval:live`, not automatically. The PR gate (deterministic replay) is
+active and enforced.
+
 ## What the first runs actually caught
 
 This suite found real problems before it was a day old — in rough order of embarrassment:
