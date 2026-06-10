@@ -51,7 +51,7 @@ describe("App Router route parity", () => {
     };
 
     const landingBody = element.props.children.find((child) =>
-      child.props?.dangerouslySetInnerHTML?.__html.includes("H2O Allegiant"),
+      child.props?.dangerouslySetInnerHTML?.__html?.includes("H2O Allegiant"),
     );
     expect(landingBody).toBeDefined();
   });
