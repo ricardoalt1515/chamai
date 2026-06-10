@@ -1,0 +1,74 @@
+{
+  "happy-path-food-processing-bod-tss-surcharge": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "happy-path-municipality-npdes-renewal": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "happy-path-industrial-laundry-fog": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "happy-path-brewery-mbr-retrofit-scoping": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "tool-selection-analytical-read-only": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "tool-selection-what-stage-question": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "tool-selection-explicit-full-package": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "tool-selection-follow-up-email-draft": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "edge-case-minimal-evidence-lead-full-package": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "edge-case-name-only-customer-no-company-details": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "edge-case-long-edmr-evidence-field-brief-only": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  },
+  "edge-case-mixed-stage-and-playbook-ask": {
+    "groundedness": null,
+    "stageAppropriateness": null,
+    "actionability": null,
+    "notes": ""
+  }
+}
