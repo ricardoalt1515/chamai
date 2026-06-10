@@ -1,0 +1,12 @@
+{
+  "scenarioId": "tool-selection-what-stage-question",
+  "modelId": "claude-sonnet-4-6",
+  "judgedAt": "2026-06-10T00:36:48.789Z",
+  "scores": {
+    "groundedness": 5,
+    "stageAppropriateness": 5,
+    "actionability": 4,
+    "rationale": "Groundedness: Every factual claim in the response maps directly to the scenario prompt — the site visit, the NORM disposal logs, the SWD well capacity constraint, and the ops manager's soft commitment are all sourced from the scenario. No invented figures, contacts, or context appear, and the one speculative point (\"if the NORM logs show you enough to size the sub-stream\") is explicitly framed as a conditional/hypothetical rather than a stated fact. Stageappropriateness: The Qualify designation with MEDIUM confidence is precisely calibrated to the evidence: a documented operational problem and proactive data-sharing push toward Scope, while the absence of a committed next meeting anchors it at Qualify. The artifact explicitly articulates the Scope threshold and the \"stage tension\" note handles the edge case honestly without overclaiming. Actionability: The follow-up call guidance is concrete and sequenced — confirm SWD runway, surface alternatives, ask for a working session — and the single gate-clearing action (commit the ops manager to a structured scoping conversation) is clearly named. A minor deduction applies because no explicit owner, timeframe, or outreach channel is specified for booking the follow-up call, leaving a field agent to determine those logistics independently."
+  },
+  "judgeCostUsd": 0.011682000000000001
+}

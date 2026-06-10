@@ -1,0 +1,12 @@
+{
+  "scenarioId": "edge-case-long-edmr-evidence-field-brief-only",
+  "modelId": "claude-sonnet-4-6",
+  "judgedAt": "2026-06-10T00:43:02.931Z",
+  "scores": {
+    "groundedness": 4,
+    "stageAppropriateness": 5,
+    "actionability": 5,
+    "rationale": "**Groundedness (4):** Nearly all factual claims trace directly to the eDMR data in the prompt — the four consecutive summer 2025 exceedances (2.2–2.4 mg/L vs. 2.0 mg/L limit), the 2024 peak of 1.8 mg/L, BOD/TSS headroom figures, the superintendent's blower diagnosis, and population/process type are all grounded. The artifact correctly flags the budget authority gap and regulatory posture as unknowns. The one minor deduction: the cost-of-alternative figures ($800K–$2.5M capex, $15K–$40K/month rental aeration, 20–40% emergency procurement premium, $5K–$25K/event penalty ranges) are introduced as estimates without an explicit \"assumption\" flag in the artifact body — they appear as reasonably industry-informed ballparks but have no basis in the prompt. The `dealSizeSensitivity` note does caveat the capex range as \"MEDIUM-LOW confidence; site visit needed,\" which partially mitigates this, but the penalty and rental figures are stated without equivalent flagging.\n\n**Stage Appropriateness (5):** The brief is precisely calibrated to Qualify/MEDIUM confidence. It acknowledges the two key gaps — budget authority not yet engaged, regulatory posture unknown — and explicitly builds its next actions around closing those gaps rather than advancing to proposal-level commitments. The artifact avoids over-reaching into scope or pricing certainty, and the narrative correctly positions the superintendent as entry point vs. closing contact. This is exactly the right depth for the evidence available.\n\n**Actionability (5):** The three next actions are concrete, sequenced with explicit timeframes (≤7 days, 7–14 days, 14–21 days), carry clear implied ownership (the field agent), and include specific qualifying questions the agent can ask verbatim (e.g., \"has the state permitting authority been notified… and have they indicated what corrective action or timeline they expect?\"). The kill-risk mitigations also translate directly into tactical behaviors the agent can execute. A field agent could act on this immediately without further interpretation."
+  },
+  "judgeCostUsd": 0.027075000000000002
+}

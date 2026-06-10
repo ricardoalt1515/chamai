@@ -1,0 +1,12 @@
+{
+  "scenarioId": "tool-selection-follow-up-email-draft",
+  "modelId": "claude-sonnet-4-6",
+  "judgedAt": "2026-06-10T00:37:16.918Z",
+  "scores": {
+    "groundedness": 3,
+    "stageAppropriateness": 4,
+    "actionability": 4,
+    "rationale": "**Groundedness (3):** The artifact correctly reflects the scenario's confirmed elements — Wisconsin dairy facility, whey permeate discharge, and a surcharge true-up — but several claims are stated as fact without being flagged as assumptions. Specifically, \"the trajectory suggests that exposure will grow,\" \"a treatment or segregation intervention now is meaningfully cheaper than absorbing the true-up,\" and \"we talked directionally about what an intervention could look like\" all assert specific call outcomes that were never established in the scenario prompt. The prompt only confirms a call happened and that those topics were discussed; the artifact presents inferred conclusions as things mutually agreed upon. The notes section does partially mitigate this by prompting the sender to adjust if the call content differed, but the body text itself does not flag these as assumptions. **Stage Appropriateness (4):** This is clearly an early-stage (Lead/Discovery) scenario — a single inbound call — and the artifact correctly avoids pricing, scoping, or proposal-level content, positions the site visit as a precondition to any concrete recommendation, and uses hedged language like \"directionally.\" The minor over-reach is asserting a shared sense of urgency (\"we aligned on the urgency\") without that being confirmed in the prompt, which slightly overstates deal advancement. **Actionability (4):** The next steps are clear and concrete: send the email, fill in two date placeholders 2–3 weeks out, adjust the recap if needed, and schedule a site visit. The owner (the field agent) is implicit throughout, and the follow-on offer (site-visit prep checklist, full opportunity package) adds useful forward momentum. Minor ambiguity exists in that no timeframe is given for sending the email itself, and the date placeholders require the agent to act before the artifact is usable."
+  },
+  "judgeCostUsd": 0.013937999999999999
+}
