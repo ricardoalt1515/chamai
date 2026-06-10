@@ -43,10 +43,23 @@ vi.mock("@/lib/storage/chat-store", () => ({
 }));
 
 describe("App Router route parity", () => {
-  it("renders the root workspace with a new thread id and empty initial history", async () => {
+  it("renders the static marketing landing at the root route", async () => {
     const { default: Page } = await import("./page");
 
-    const element = (await Page({
+    const element = Page() as {
+      props: { children: Array<{ props: { dangerouslySetInnerHTML?: { __html: string } } }> };
+    };
+
+    const landingBody = element.props.children.find((child) =>
+      child.props?.dangerouslySetInnerHTML?.__html?.includes("H2O Allegiant"),
+    );
+    expect(landingBody).toBeDefined();
+  });
+
+  it("renders the chat workspace with a new thread id and empty initial history", async () => {
+    const { default: ChatPage } = await import("./chat/page");
+
+    const element = (await ChatPage({
       searchParams: Promise.resolve({}),
     })) as { key: string };
 

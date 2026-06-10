@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      # Node is still required: vitest, next, and tsc binaries run on the
+      # Node runtime pinned in .nvmrc; bun is the package manager and
+      # script runner.
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/cache@v5
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # amplify_outputs.json is gitignored (environment-specific, generated
+      # by ampx). Several modules import it statically, so typecheck and
+      # tests need a structurally valid stand-in with placeholder values.
+      - name: Provide Amplify outputs stub
+        run: cp amplify_outputs.ci.json amplify_outputs.json
+
+      - name: Lint and format (biome)
+        run: bun run check
+
+      - name: Generated prompts drift check
+        run: bun run prompts:check
+
+      - name: Typecheck
+        run: bunx next typegen && bunx tsc --noEmit
+
+      - name: Unit tests
+        run: bun run test

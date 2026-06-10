@@ -190,7 +190,12 @@ describe("Amplify backend", () => {
           "x-request-id",
         ],
         allowedMethods: ["GET", "POST"],
-        allowedOrigins: ["https://main.d22icjbzj7x471.amplifyapp.com", "http://localhost:3000"],
+        allowedOrigins: [
+          "https://www.h2oassistant.com",
+          "https://h2oassistant.com",
+          "https://main.d22icjbzj7x471.amplifyapp.com",
+          "http://localhost:3000",
+        ],
         exposedHeaders: ["x-error-code", "x-request-id"],
         maxAge: { seconds: 600 },
       },
